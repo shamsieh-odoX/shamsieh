@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Projects overview pivot -->
+    <record id="project_dashboard_overview_pivot" model="ir.ui.view">
+        <field name="name">project.dashboard.overview.pivot</field>
+        <field name="model">project.project</field>
+        <field name="arch" type="xml">
+            <pivot string="Projects Overview">
+                <field name="stage_id" type="row"/>
+                <field name="user_id" type="row"/>
+                <field name="country_id" type="col"/>
+                <field name="progress_percentage" type="measure"/>
+                <field name="estimated_hours" type="measure"/>
+                <field name="spent_hours" type="measure"/>
+                <field name="remaining_hours" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <record id="project_dashboard_by_stage_graph" model="ir.ui.view">
+        <field name="name">project.dashboard.by.stage.graph</field>
+        <field name="model">project.project</field>
+        <field name="arch" type="xml">
+            <graph string="Projects by Stage" type="bar">
+                <field name="stage_id"/>
+            </graph>
+        </field>
+    </record>
+
+    <record id="project_dashboard_by_manager_graph" model="ir.ui.view">
+        <field name="name">project.dashboard.by.manager.graph</field>
+        <field name="model">project.project</field>
+        <field name="arch" type="xml">
+            <graph string="Projects by Project Manager" type="bar">
+                <field name="user_id"/>
+                <field name="progress_percentage" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <record id="project_dashboard_by_country_graph" model="ir.ui.view">
+        <field name="name">project.dashboard.by.country.graph</field>
+        <field name="model">project.project</field>
+        <field name="arch" type="xml">
+            <graph string="Projects by Country" type="bar">
+                <field name="country_id"/>
+                <field name="progress_percentage" type="measure"/>
+                <field name="estimated_hours" type="measure"/>
+                <field name="spent_hours" type="measure"/>
+                <field name="remaining_hours" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <record id="project_dashboard_progress_graph" model="ir.ui.view">
+        <field name="name">project.dashboard.progress.graph</field>
+        <field name="model">project.project</field>
+        <field name="arch" type="xml">
+            <graph string="Project Progress %" type="bar">
+                <field name="progress_range"/>
+                <field name="progress_percentage" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <record id="project_dashboard_tasks_by_status_graph" model="ir.ui.view">
+        <field name="name">project.dashboard.tasks.by.status.graph</field>
+        <field name="model">project.task</field>
+        <field name="arch" type="xml">
+            <graph string="Tasks by Status" type="pie">
+                <field name="state"/>
+            </graph>
+        </field>
+    </record>
+
+    <record id="project_dashboard_timesheet_employee_pivot" model="ir.ui.view">
+        <field name="name">project.dashboard.timesheet.employee.pivot</field>
+        <field name="model">account.analytic.line</field>
+        <field name="arch" type="xml">
+            <pivot string="Timesheet by Employee">
+                <field name="employee_id" type="row"/>
+                <field name="date" interval="month" type="col"/>
+                <field name="unit_amount" type="measure" widget="timesheet_uom"/>
+            </pivot>
+        </field>
+    </record>
+
+    <record id="project_dashboard_timesheet_project_pivot" model="ir.ui.view">
+        <field name="name">project.dashboard.timesheet.project.pivot</field>
+        <field name="model">account.analytic.line</field>
+        <field name="arch" type="xml">
+            <pivot string="Timesheet by Project">
+                <field name="project_id" type="row"/>
+                <field name="date" interval="month" type="col"/>
+                <field name="unit_amount" type="measure" widget="timesheet_uom"/>
+            </pivot>
+        </field>
+    </record>
+
+    <!-- Main dashboard action -->
+    <record id="project_custom_dashboard_action" model="ir.actions.act_window">
+        <field name="name">Project Dashboard</field>
+        <field name="res_model">project.project</field>
+        <field name="view_mode">pivot,graph,list,form</field>
+        <field name="view_id" ref="project_dashboard_overview_pivot"/>
+        <field name="context">{'search_default_group_project_stage': 1}</field>
+    </record>
+
+    <record id="project_dashboard_by_stage_action" model="ir.actions.act_window">
+        <field name="name">Projects by Stage</field>
+        <field name="res_model">project.project</field>
+        <field name="view_mode">graph,pivot,list</field>
+        <field name="view_id" ref="project_dashboard_by_stage_graph"/>
+        <field name="context">{'search_default_group_project_stage': 1}</field>
+    </record>
+
+    <record id="project_dashboard_by_manager_action" model="ir.actions.act_window">
+        <field name="name">Projects by Manager</field>
+        <field name="res_model">project.project</field>
+        <field name="view_mode">graph,pivot,list</field>
+        <field name="view_id" ref="project_dashboard_by_manager_graph"/>
+        <field name="context">{'search_default_Manager': 1}</field>
+    </record>
+
+    <record id="project_dashboard_progress_action" model="ir.actions.act_window">
+        <field name="name">Project Progress %</field>
+        <field name="res_model">project.project</field>
+        <field name="view_mode">graph,pivot,list</field>
+        <field name="view_id" ref="project_dashboard_progress_graph"/>
+        <field name="context">{'search_default_group_progress_range': 1}</field>
+    </record>
+
+    <record id="project_dashboard_overdue_tasks_action" model="ir.actions.act_window">
+        <field name="name">Overdue Tasks</field>
+        <field name="res_model">project.task</field>
+        <field name="view_mode">list,kanban,form,graph,pivot</field>
+        <field name="context">{'search_default_overdue_tasks': 1}</field>
+    </record>
+
+    <record id="project_dashboard_tasks_status_action" model="ir.actions.act_window">
+        <field name="name">Tasks by Status</field>
+        <field name="res_model">project.task</field>
+        <field name="view_mode">graph,pivot,kanban,list</field>
+        <field name="view_id" ref="project_dashboard_tasks_by_status_graph"/>
+        <field name="context">{'search_default_group_state': 1}</field>
+    </record>
+
+    <record id="project_dashboard_timesheet_employee_action" model="ir.actions.act_window">
+        <field name="name">Timesheet by Employee</field>
+        <field name="res_model">account.analytic.line</field>
+        <field name="view_mode">pivot,graph,list</field>
+        <field name="view_id" ref="project_dashboard_timesheet_employee_pivot"/>
+        <field name="domain">[('project_id', '!=', False)]</field>
+        <field name="context">{'group_by': ['employee_id']}</field>
+    </record>
+
+    <record id="project_dashboard_timesheet_project_action" model="ir.actions.act_window">
+        <field name="name">Timesheet by Project</field>
+        <field name="res_model">account.analytic.line</field>
+        <field name="view_mode">pivot,graph,list</field>
+        <field name="view_id" ref="project_dashboard_timesheet_project_pivot"/>
+        <field name="domain">[('project_id', '!=', False)]</field>
+        <field name="context">{'group_by': ['project_id']}</field>
+    </record>
+
+</odoo>
