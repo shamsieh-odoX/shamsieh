@@ -2,7 +2,7 @@
 
     'name': 'Project Custom Extensions',
 
-    'version': '19.0.2.1.0',
+    'version': '19.0.2.1.2',
 
     'category': 'Services/Project',
 
@@ -10,7 +10,7 @@
 
     'author': 'Custom',
 
-    'depends': ['project', 'crm', 'hr_timesheet', 'sale'],
+    'depends': ['project', 'crm', 'hr_timesheet', 'sale', 'spreadsheet_dashboard_hr_timesheet'],
 
     'data': [
 
@@ -37,6 +37,8 @@
         'data/project_closing_stage_data.xml',
 
         'data/project_task_template_data.xml',
+
+        'data/spreadsheet_dashboard_override.xml',
 
     ],
 

@@ -54,7 +54,7 @@
     />
     <menuitem
         id="menu_project_dashboard_tasks_status"
-        name="Tasks by Status"
+        name="Tasks by Stage"
         parent="menu_project_custom_dashboard_root"
         action="project_custom_ext.project_dashboard_tasks_status_action"
         sequence="6"

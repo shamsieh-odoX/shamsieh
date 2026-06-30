@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Override native Project spreadsheet dashboard: group tasks by kanban stage, not workflow state. -->
+    <record id="spreadsheet_dashboard_hr_timesheet.spreadsheet_dashboard_tasks" model="spreadsheet.dashboard">
+        <field name="spreadsheet_binary_data" type="base64" file="project_custom_ext/data/files/project_tasks_dashboard.json"/>
+    </record>
+</odoo>

@@ -13,7 +13,6 @@
             <xpath expr="//filter[@name='deadline']" position="after">
                 <filter string="Employee" name="group_employee" context="{'group_by': 'user_ids'}"/>
                 <filter string="Project" name="group_project" context="{'group_by': 'project_id'}"/>
-                <filter string="Task Status" name="group_state" context="{'group_by': 'state'}"/>
             </xpath>
         </field>
     </record>
