@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="crm_dashboard_leads_by_stage_graph" model="ir.ui.view">
+        <field name="name">crm.dashboard.leads.by.stage.graph</field>
+        <field name="model">crm.lead</field>
+        <field name="arch" type="xml">
+            <graph string="Leads by Status" type="bar">
+                <field name="stage_id"/>
+            </graph>
+        </field>
+    </record>
+
+    <record id="crm_dashboard_leads_by_owner_graph" model="ir.ui.view">
+        <field name="name">crm.dashboard.leads.by.owner.graph</field>
+        <field name="model">crm.lead</field>
+        <field name="arch" type="xml">
+            <graph string="Leads by Sales Owner" type="bar">
+                <field name="user_id"/>
+            </graph>
+        </field>
+    </record>
+
+    <record id="crm_dashboard_leads_by_team_graph" model="ir.ui.view">
+        <field name="name">crm.dashboard.leads.by.team.graph</field>
+        <field name="model">crm.lead</field>
+        <field name="arch" type="xml">
+            <graph string="Leads by Sales Team" type="bar">
+                <field name="team_id"/>
+            </graph>
+        </field>
+    </record>
+
+    <record id="crm_dashboard_leads_by_country_graph" model="ir.ui.view">
+        <field name="name">crm.dashboard.leads.by.country.graph</field>
+        <field name="model">crm.lead</field>
+        <field name="arch" type="xml">
+            <graph string="Leads by Country" type="bar">
+                <field name="country_id"/>
+            </graph>
+        </field>
+    </record>
+
+    <record id="crm_dashboard_overview_pivot" model="ir.ui.view">
+        <field name="name">crm.dashboard.overview.pivot</field>
+        <field name="model">crm.lead</field>
+        <field name="arch" type="xml">
+            <pivot string="CRM Overview">
+                <field name="team_id" type="row"/>
+                <field name="stage_id" type="row"/>
+                <field name="user_id" type="col"/>
+                <field name="expected_revenue" type="measure"/>
+                <field name="prorated_revenue" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <record id="crm_dashboard_target_pivot" model="ir.ui.view">
+        <field name="name">crm.dashboard.target.pivot</field>
+        <field name="model">crm.team.target</field>
+        <field name="arch" type="xml">
+            <pivot string="Target vs Actual">
+                <field name="team_id" type="row"/>
+                <field name="period" type="col"/>
+                <field name="target_amount" type="measure"/>
+                <field name="actual_won_revenue" type="measure"/>
+                <field name="expected_revenue_total" type="measure"/>
+                <field name="achievement_pct" type="measure"/>
+                <field name="remaining_target" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <record id="crm_dashboard_target_graph" model="ir.ui.view">
+        <field name="name">crm.dashboard.target.graph</field>
+        <field name="model">crm.team.target</field>
+        <field name="arch" type="xml">
+            <graph string="Achievement by Sales Team" type="bar">
+                <field name="team_id"/>
+                <field name="target_amount" type="measure"/>
+                <field name="actual_won_revenue" type="measure"/>
+                <field name="achievement_pct" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <record id="crm_custom_dashboard_action" model="ir.actions.act_window">
+        <field name="name">CRM Dashboard</field>
+        <field name="res_model">crm.lead</field>
+        <field name="view_mode">pivot,graph,list,kanban,form</field>
+        <field name="view_id" ref="crm_dashboard_overview_pivot"/>
+        <field name="context">{'search_default_group_stage': 1}</field>
+    </record>
+
+    <record id="crm_dashboard_leads_by_stage_action" model="ir.actions.act_window">
+        <field name="name">Leads by Status</field>
+        <field name="res_model">crm.lead</field>
+        <field name="view_mode">graph,pivot,list</field>
+        <field name="view_id" ref="crm_dashboard_leads_by_stage_graph"/>
+        <field name="context">{'search_default_group_stage': 1}</field>
+    </record>
+
+    <record id="crm_dashboard_leads_by_owner_action" model="ir.actions.act_window">
+        <field name="name">Leads by Sales Owner</field>
+        <field name="res_model">crm.lead</field>
+        <field name="view_mode">graph,pivot,list</field>
+        <field name="view_id" ref="crm_dashboard_leads_by_owner_graph"/>
+        <field name="context">{'search_default_salesperson': 1}</field>
+    </record>
+
+    <record id="crm_dashboard_leads_by_team_action" model="ir.actions.act_window">
+        <field name="name">Leads by Sales Team</field>
+        <field name="res_model">crm.lead</field>
+        <field name="view_mode">graph,pivot,list</field>
+        <field name="view_id" ref="crm_dashboard_leads_by_team_graph"/>
+        <field name="context">{'search_default_saleschannel': 1}</field>
+    </record>
+
+    <record id="crm_dashboard_leads_by_country_action" model="ir.actions.act_window">
+        <field name="name">Leads by Country</field>
+        <field name="res_model">crm.lead</field>
+        <field name="view_mode">graph,pivot,list</field>
+        <field name="view_id" ref="crm_dashboard_leads_by_country_graph"/>
+        <field name="context">{'search_default_country': 1}</field>
+    </record>
+
+    <record id="crm_dashboard_hot_leads_action" model="ir.actions.act_window">
+        <field name="name">Hot Leads</field>
+        <field name="res_model">crm.lead</field>
+        <field name="view_mode">list,kanban,graph,pivot,form</field>
+        <field name="context">{'search_default_filter_hot_leads': 1}</field>
+    </record>
+
+    <record id="crm_dashboard_followups_today_action" model="ir.actions.act_window">
+        <field name="name">Follow-ups Today</field>
+        <field name="res_model">crm.lead</field>
+        <field name="view_mode">list,kanban,graph,pivot,form</field>
+        <field name="context">{'search_default_filter_followups_today': 1}</field>
+    </record>
+
+    <record id="crm_dashboard_followups_overdue_action" model="ir.actions.act_window">
+        <field name="name">Overdue Follow-ups</field>
+        <field name="res_model">crm.lead</field>
+        <field name="view_mode">list,kanban,graph,pivot,form</field>
+        <field name="context">{'search_default_filter_followups_overdue': 1}</field>
+    </record>
+
+    <record id="crm_dashboard_won_leads_action" model="ir.actions.act_window">
+        <field name="name">Won Leads</field>
+        <field name="res_model">crm.lead</field>
+        <field name="view_mode">list,kanban,graph,pivot,form</field>
+        <field name="context">{'search_default_filter_won_status_won': 1}</field>
+    </record>
+
+    <record id="crm_dashboard_lost_leads_action" model="ir.actions.act_window">
+        <field name="name">Lost Leads</field>
+        <field name="res_model">crm.lead</field>
+        <field name="view_mode">list,kanban,graph,pivot,form</field>
+        <field name="context">{'search_default_filter_won_status_lost': 1}</field>
+    </record>
+
+    <record id="crm_dashboard_target_action" model="ir.actions.act_window">
+        <field name="name">Target Dashboard</field>
+        <field name="res_model">crm.team.target</field>
+        <field name="view_mode">pivot,graph,list,form</field>
+        <field name="view_id" ref="crm_dashboard_target_pivot"/>
+        <field name="context">{'search_default_group_team': 1}</field>
+    </record>
+
+    <record id="crm_dashboard_expected_revenue_action" model="ir.actions.act_window">
+        <field name="name">Expected Revenue</field>
+        <field name="res_model">crm.lead</field>
+        <field name="view_mode">pivot,graph,list</field>
+        <field name="view_id" ref="crm_dashboard_overview_pivot"/>
+        <field name="context">{'search_default_saleschannel': 1}</field>
+    </record>
+
+</odoo>

@@ -1,0 +1,2 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_crm_team_target_crm_create,crm.team.target.crm.create,model_crm_team_target,crm_custom_ext.group_crm_create,1,0,0,0

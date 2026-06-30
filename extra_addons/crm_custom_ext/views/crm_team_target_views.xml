@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="crm_team_target_view_tree" model="ir.ui.view">
+        <field name="name">crm.team.target.list</field>
+        <field name="model">crm.team.target</field>
+        <field name="arch" type="xml">
+            <list string="Sales Team Targets">
+                <field name="team_id"/>
+                <field name="country_id"/>
+                <field name="period"/>
+                <field name="currency_id" column_invisible="True"/>
+                <field name="target_amount" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                <field name="date_start"/>
+                <field name="date_end"/>
+                <field name="actual_won_revenue" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                <field name="expected_revenue_total" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                <field name="achievement_pct"/>
+                <field name="remaining_target" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="crm_team_target_view_form" model="ir.ui.view">
+        <field name="name">crm.team.target.form</field>
+        <field name="model">crm.team.target</field>
+        <field name="arch" type="xml">
+            <form string="Sales Team Target">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="team_id"/>
+                            <field name="country_id"/>
+                            <field name="period"/>
+                            <field name="currency_id"/>
+                            <field name="target_amount"/>
+                        </group>
+                        <group>
+                            <field name="date_start"/>
+                            <field name="date_end"/>
+                            <field name="actual_won_revenue"/>
+                            <field name="expected_revenue_total"/>
+                            <field name="achievement_pct"/>
+                            <field name="remaining_target"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="crm_team_target_view_search" model="ir.ui.view">
+        <field name="name">crm.team.target.search</field>
+        <field name="model">crm.team.target</field>
+        <field name="arch" type="xml">
+            <search string="Search Targets">
+                <field name="team_id"/>
+                <field name="country_id"/>
+                <field name="period"/>
+                <group>
+                    <filter string="Sales Team" name="group_team" context="{'group_by': 'team_id'}"/>
+                    <filter string="Country" name="group_country" context="{'group_by': 'country_id'}"/>
+                    <filter string="Target Period" name="group_period" context="{'group_by': 'period'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="crm_team_target_action" model="ir.actions.act_window">
+        <field name="name">Sales Team Targets</field>
+        <field name="res_model">crm.team.target</field>
+        <field name="view_mode">list,form,pivot,graph</field>
+    </record>
+
+</odoo>
