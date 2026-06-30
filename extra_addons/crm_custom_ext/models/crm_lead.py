@@ -2,28 +2,6 @@
 
 from odoo import api, fields, models
 
-SECTOR_SELECTION = [
-    ('retail', 'Retail'),
-    ('manufacturing', 'Manufacturing'),
-    ('services', 'Services'),
-    ('construction', 'Construction'),
-    ('healthcare', 'Healthcare'),
-    ('education', 'Education'),
-    ('technology', 'Technology'),
-    ('other', 'Other'),
-]
-
-CHANNEL_SELECTION = [
-    ('call', 'Call'),
-    ('whatsapp', 'WhatsApp'),
-    ('email', 'Email'),
-    ('linkedin', 'LinkedIn'),
-    ('website', 'Website'),
-    ('visit', 'Visit'),
-    ('referral', 'Referral'),
-    ('other', 'Other'),
-]
-
 INTEREST_LEVEL_SELECTION = [
     ('hot', 'Hot'),
     ('warm', 'Warm'),
@@ -52,19 +30,19 @@ class CrmLead(models.Model):
         copy=False,
         index=True,
     )
-    sector = fields.Selection(
-        SECTOR_SELECTION,
+    sector_id = fields.Many2one(
+        'crm.lead.sector',
         string='Sector',
         tracking=True,
+        ondelete='set null',
+        index=True,
     )
-    channel = fields.Selection(
-        CHANNEL_SELECTION,
+    channel_id = fields.Many2one(
+        'crm.lead.channel',
         string='Channel',
         tracking=True,
-    )
-    channel_other = fields.Char(
-        string='Other Channel',
-        tracking=True,
+        ondelete='set null',
+        index=True,
     )
     interest_level = fields.Selection(
         INTEREST_LEVEL_SELECTION,
@@ -111,8 +89,6 @@ class CrmLead(models.Model):
         return super().create(vals_list)
 
     def write(self, vals):
-        if vals.get('channel') and vals['channel'] != 'other':
-            vals['channel_other'] = False
         if 'country_id' in vals and 'team_id' not in vals:
             team_vals = {}
             self._apply_team_from_country_vals(team_vals, country_id=vals['country_id'])
@@ -122,11 +98,6 @@ class CrmLead(models.Model):
         if any(key in vals for key in ('activity_ids', 'activity_date_deadline')):
             self._sync_next_followup_from_activities()
         return result
-
-    @api.onchange('channel')
-    def _onchange_channel(self):
-        if self.channel != 'other':
-            self.channel_other = False
 
     @api.onchange('country_id')
     def _onchange_country_id_team(self):

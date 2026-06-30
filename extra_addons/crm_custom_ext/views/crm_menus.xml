@@ -95,6 +95,15 @@
     />
 
     <menuitem
+        id="menu_crm_lead_sectors"
+        name="Sectors"
+        parent="crm.crm_menu_config"
+        action="crm_custom_ext.crm_lead_sector_action"
+        sequence="24"
+        groups="sales_team.group_sale_manager"
+    />
+
+    <menuitem
         id="menu_crm_team_targets"
         name="Sales Team Targets"
         parent="crm.crm_menu_config"
