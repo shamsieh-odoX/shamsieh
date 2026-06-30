@@ -273,11 +273,37 @@
         <field name="model">crm.lead</field>
         <field name="inherit_id" ref="crm.crm_case_kanban_view_leads"/>
         <field name="arch" type="xml">
-            <xpath expr="//field[@name='team_id']" position="after">
-                <field name="sector"/>
+            <xpath expr="//kanban" position="attributes">
+                <attribute name="class" add="o_crm_custom_kanban" separator=" "/>
             </xpath>
-            <xpath expr="//field[@name='partner_id']" position="after">
-                <field name="sector" invisible="not sector"/>
+            <xpath expr="//field[@name='team_id']" position="after">
+                <field name="lead_ref"/>
+                <field name="sector"/>
+                <field name="channel"/>
+                <field name="interest_level"/>
+                <field name="next_followup_date"/>
+            </xpath>
+            <xpath expr="//t[@t-name='card']/field[@name='name']" position="before">
+                <div class="o_crm_custom_kanban_header d-flex flex-wrap align-items-center justify-content-between gap-1 mb-2">
+                    <span class="o_crm_lead_ref_badge" invisible="not lead_ref">
+                        <field name="lead_ref"/>
+                    </span>
+                    <field name="interest_level"
+                        widget="label_selection"
+                        invisible="not interest_level"
+                        options="{'classes': {'hot': 'danger', 'warm': 'warning', 'cold': 'info', 'not_interested': 'secondary'}}"/>
+                </div>
+            </xpath>
+            <xpath expr="//field[@name='tag_ids']" position="before">
+                <div class="o_crm_custom_kanban_meta d-flex flex-wrap align-items-center gap-1 mb-2" invisible="not sector and not channel">
+                    <field name="sector" widget="badge" invisible="not sector"/>
+                    <field name="channel" widget="badge" invisible="not channel"/>
+                </div>
+                <div class="o_crm_custom_kanban_followup d-flex align-items-center text-muted small mb-2" invisible="not next_followup_date">
+                    <i class="fa fa-clock-o me-1"/>
+                    <span class="me-1">Follow-up</span>
+                    <field name="next_followup_date"/>
+                </div>
             </xpath>
         </field>
     </record>
@@ -287,11 +313,37 @@
         <field name="model">crm.lead</field>
         <field name="inherit_id" ref="crm.view_crm_lead_kanban"/>
         <field name="arch" type="xml">
-            <xpath expr="//field[@name='name']" position="before">
-                <field name="lead_ref"/>
+            <xpath expr="//kanban" position="attributes">
+                <attribute name="class" add="o_crm_custom_kanban" separator=" "/>
             </xpath>
-            <xpath expr="//field[@name='priority']" position="after">
+            <xpath expr="//kanban" position="inside">
+                <field name="lead_ref"/>
+                <field name="sector"/>
+                <field name="channel"/>
                 <field name="interest_level"/>
+                <field name="next_followup_date"/>
+            </xpath>
+            <xpath expr="//t[@t-name='card']/field[@name='name']" position="before">
+                <div class="o_crm_custom_kanban_header d-flex flex-wrap align-items-center justify-content-between gap-1 mb-2">
+                    <span class="o_crm_lead_ref_badge" invisible="not lead_ref">
+                        <field name="lead_ref"/>
+                    </span>
+                    <field name="interest_level"
+                        widget="label_selection"
+                        invisible="not interest_level"
+                        options="{'classes': {'hot': 'danger', 'warm': 'warning', 'cold': 'info', 'not_interested': 'secondary'}}"/>
+                </div>
+            </xpath>
+            <xpath expr="//field[@name='tag_ids']" position="before">
+                <div class="o_crm_custom_kanban_meta d-flex flex-wrap align-items-center gap-1 mb-2" invisible="not sector and not channel">
+                    <field name="sector" widget="badge" invisible="not sector"/>
+                    <field name="channel" widget="badge" invisible="not channel"/>
+                </div>
+                <div class="o_crm_custom_kanban_followup d-flex align-items-center text-muted small mb-2" invisible="not next_followup_date">
+                    <i class="fa fa-clock-o me-1"/>
+                    <span class="me-1">Follow-up</span>
+                    <field name="next_followup_date"/>
+                </div>
             </xpath>
         </field>
     </record>

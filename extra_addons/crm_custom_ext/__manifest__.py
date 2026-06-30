@@ -24,4 +24,9 @@
     'installable': True,
     'application': False,
     'license': 'LGPL-3',
+    'assets': {
+        'web.assets_backend': [
+            'crm_custom_ext/static/src/crm_kanban.scss',
+        ],
+    },
 }

@@ -1,0 +1,49 @@
+.o_crm_custom_kanban {
+    .o_kanban_record {
+        .o_crm_custom_kanban_header {
+            min-height: 1.25rem;
+        }
+
+        .o_crm_lead_ref_badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.15rem 0.55rem;
+            border-radius: 999px;
+            background: linear-gradient(135deg, #eef2ff 0%, #e0e7ff 100%);
+            border: 1px solid #c7d2fe;
+            color: #4338ca;
+            font-size: 0.72rem;
+            font-weight: 600;
+            font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+            letter-spacing: 0.02em;
+            line-height: 1.2;
+
+            .o_field_widget {
+                margin: 0;
+            }
+        }
+
+        .o_crm_custom_kanban_meta {
+            .badge {
+                font-size: 0.7rem;
+                font-weight: 500;
+                background-color: #f3f4f6 !important;
+                color: #4b5563 !important;
+                border: 1px solid #e5e7eb;
+            }
+        }
+
+        .o_crm_custom_kanban_followup {
+            padding: 0.2rem 0.5rem;
+            border-radius: 0.35rem;
+            background: #fafafa;
+            border: 1px dashed #e5e7eb;
+            width: fit-content;
+            max-width: 100%;
+        }
+
+        .o_crm_custom_kanban_header .o_field_widget[name="interest_level"] {
+            margin: 0;
+        }
+    }
+}
