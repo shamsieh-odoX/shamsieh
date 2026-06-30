@@ -9,17 +9,6 @@ INTEREST_LEVEL_SELECTION = [
     ('not_interested', 'Not Interested'),
 ]
 
-NEXT_ACTION_SELECTION = [
-    ('call_again', 'Call Again'),
-    ('send_whatsapp', 'Send WhatsApp'),
-    ('send_email', 'Send Email'),
-    ('schedule_demo', 'Schedule Demo'),
-    ('send_proposal', 'Send Proposal'),
-    ('followup_after_demo', 'Follow-up After Demo'),
-    ('close_as_lost', 'Close as Lost'),
-    ('no_action', 'No Action'),
-]
-
 
 class CrmLead(models.Model):
     _inherit = 'crm.lead'
@@ -59,11 +48,6 @@ class CrmLead(models.Model):
     )
     next_followup_date = fields.Date(
         string='Next Follow-up Date',
-        tracking=True,
-    )
-    next_action = fields.Selection(
-        NEXT_ACTION_SELECTION,
-        string='Next Action',
         tracking=True,
     )
     demo_date = fields.Date(

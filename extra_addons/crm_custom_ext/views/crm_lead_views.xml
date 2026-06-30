@@ -51,7 +51,6 @@
                     </group>
                     <group>
                         <field name="next_followup_date"/>
-                        <field name="next_action"/>
                     </group>
                 </group>
                 <group string="Classification" invisible="type == 'lead'" colspan="2">
@@ -70,18 +69,11 @@
                         <field name="last_contact_date"/>
                         <field name="next_followup_date"/>
                     </group>
-                    <group>
-                        <field name="next_action"/>
-                    </group>
                 </group>
                 <group string="Deal Milestones" invisible="type == 'lead'" colspan="2">
                     <group>
                         <field name="demo_date"/>
                         <field name="proposal_sent_date"/>
-                    </group>
-                    <group>
-                        <field name="company_currency" invisible="1"/>
-                        <field name="prorated_revenue" string="Expected Revenue" widget="monetary" options="{'currency_field': 'company_currency'}"/>
                     </group>
                 </group>
             </xpath>
@@ -101,7 +93,6 @@
                 <field name="channel_id" optional="hide"/>
                 <field name="interest_level" optional="show"/>
                 <field name="next_followup_date" optional="show"/>
-                <field name="next_action" optional="hide"/>
                 <field name="stage_id" optional="show"/>
             </xpath>
             <xpath expr="//field[@name='user_id']" position="attributes">
@@ -123,7 +114,6 @@
                 <field name="channel_id" optional="hide"/>
                 <field name="interest_level" optional="show"/>
                 <field name="next_followup_date" optional="show"/>
-                <field name="next_action" optional="hide"/>
             </xpath>
             <xpath expr="//field[@name='user_id']" position="attributes">
                 <attribute name="string">Sales Owner</attribute>
@@ -150,7 +140,6 @@
                 <field name="channel_id" string="Channel"/>
                 <field name="interest_level" string="Interest Level"/>
                 <field name="next_followup_date"/>
-                <field name="next_action"/>
                 <field name="stage_id"/>
             </xpath>
             <xpath expr="//filter[@name='lost']" position="before">
@@ -177,7 +166,6 @@
                 <filter string="Channel" name="group_channel" context="{'group_by': 'channel_id'}"/>
                 <filter string="Interest Level" name="group_interest_level" context="{'group_by': 'interest_level'}"/>
                 <filter string="Next Follow-up Date" name="group_next_followup" context="{'group_by': 'next_followup_date'}"/>
-                <filter string="Next Action" name="group_next_action" context="{'group_by': 'next_action'}"/>
                 <filter string="Status" name="group_stage" context="{'group_by': 'stage_id'}"/>
             </xpath>
         </field>
@@ -199,7 +187,6 @@
                 <field name="channel_id" string="Channel"/>
                 <field name="interest_level" string="Interest Level"/>
                 <field name="next_followup_date"/>
-                <field name="next_action"/>
             </xpath>
             <xpath expr="//filter[@name='filter_won_status_won']" position="before">
                 <separator string="Follow-ups"/>
@@ -225,7 +212,6 @@
                 <filter string="Channel" name="group_channel" context="{'group_by': 'channel_id'}"/>
                 <filter string="Interest Level" name="group_interest_level" context="{'group_by': 'interest_level'}"/>
                 <filter string="Next Follow-up Date" name="group_next_followup" context="{'group_by': 'next_followup_date'}"/>
-                <filter string="Next Action" name="group_next_action" context="{'group_by': 'next_action'}"/>
             </xpath>
         </field>
     </record>
