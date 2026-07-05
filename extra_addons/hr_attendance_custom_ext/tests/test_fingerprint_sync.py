@@ -31,8 +31,9 @@ class TestFingerprintSync(TransactionCase):
         connector_logs = self.device.env['fingerprint.device.log']
         from odoo.addons.hr_attendance_custom_ext.services.hikvision_connector import HikvisionConnector
         connector = HikvisionConnector(self.device)
-        logs = connector.sync_device_logs()
+        logs, stats = connector.sync_device_logs()
         self.assertTrue(logs)
+        self.assertEqual(stats['stored'], 2)
         processed = logs._process_pending_logs()
         self.assertTrue(processed)
         attendance = self.env['hr.attendance'].search([
@@ -48,14 +49,14 @@ class TestFingerprintSync(TransactionCase):
             'device_id': self.device.id,
             'external_id': 'EXT001',
             'device_user_id': 'FP001',
-            'punch_time': datetime(2026, 6, 1, 8, 0, 0),
+            'event_time': datetime(2026, 6, 1, 8, 0, 0),
             'punch_type': 'check_in',
             'state': 'processed',
             'employee_id': self.employee.id,
         })
         from odoo.addons.hr_attendance_custom_ext.services.hikvision_connector import HikvisionConnector
         connector = HikvisionConnector(self.device)
-        created = connector.sync_device_logs()
+        created, stats = connector.sync_device_logs()
         self.assertFalse(created.filtered(lambda log: log.external_id == 'EXT001'))
         self.assertEqual(
             Log.search_count([

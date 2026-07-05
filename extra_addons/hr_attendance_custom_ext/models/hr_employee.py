@@ -35,6 +35,29 @@ class HrEmployee(models.Model):
         help='Allows remote check-in/out via face verification (§9).',
     )
 
+    def write(self, vals):
+        res = super().write(vals)
+        if 'biometric_device_user_id' in vals:
+            self._relink_fingerprint_logs()
+        return res
+
+    def _relink_fingerprint_logs(self):
+        Log = self.env['fingerprint.device.log']
+        for employee in self.filtered('biometric_device_user_id'):
+            logs = Log.search([
+                ('device_user_id', '=', employee.biometric_device_user_id),
+                ('company_id', '=', employee.company_id.id),
+                ('employee_id', '=', False),
+                ('state', 'in', ('draft', 'error')),
+            ])
+            if not logs:
+                continue
+            logs.write({'employee_id': employee.id})
+            logs.filtered(lambda log: log.state == 'error').write({
+                'state': 'draft',
+                'error_message': False,
+            })
+
     def _attendance_action_change(self, geo_information=None):
         attendance = super()._attendance_action_change(geo_information=geo_information)
         if attendance and not attendance.attendance_source:

@@ -24,32 +24,58 @@
                 <header>
                     <button name="action_sync_now" type="object" string="Sync Now" class="btn-primary"
                             groups="hr_attendance_custom_ext.group_fingerprint_device_manager"/>
+                    <button name="action_process_logs" type="object" string="Process Logs"
+                            groups="hr_attendance_custom_ext.group_fingerprint_device_manager"/>
+                    <button name="action_sync_and_process" type="object" string="Sync and Process"
+                            groups="hr_attendance_custom_ext.group_fingerprint_device_manager"/>
+                    <button name="action_reprocess_errors" type="object" string="Reprocess Errors"
+                            groups="hr_attendance_custom_ext.group_fingerprint_device_manager"/>
                     <button name="action_test_connection" type="object" string="Test Connection"
                             groups="hr_attendance_custom_ext.group_fingerprint_device_manager"/>
+                    <button name="action_view_logs" type="object" string="View Logs"
+                            groups="hr_attendance.group_hr_attendance_officer"/>
                     <field name="sync_status" widget="statusbar" statusbar_visible="idle,running,success,error"/>
                 </header>
                 <sheet>
                     <div class="oe_button_box" name="button_box">
-                        <button class="oe_stat_button" type="action"
-                                name="%(hr_attendance_custom_ext.action_fingerprint_device_log)d"
-                                icon="fa-list" context="{'default_device_id': id}">
+                        <button class="oe_stat_button" type="object" name="action_view_logs"
+                                icon="fa-list" groups="hr_attendance.group_hr_attendance_officer">
                             <field name="log_count" widget="statinfo" string="Logs"/>
+                        </button>
+                        <button class="oe_stat_button" type="object" name="action_view_draft_logs"
+                                icon="fa-pencil" groups="hr_attendance.group_hr_attendance_officer">
+                            <field name="draft_log_count" widget="statinfo" string="Draft"/>
+                        </button>
+                        <button class="oe_stat_button" type="object" name="action_view_error_logs"
+                                icon="fa-exclamation-triangle" groups="hr_attendance.group_hr_attendance_officer">
+                            <field name="error_log_count" widget="statinfo" string="Errors"/>
+                        </button>
+                        <button class="oe_stat_button" type="object" name="action_view_processed_logs"
+                                icon="fa-check" groups="hr_attendance.group_hr_attendance_officer">
+                            <field name="processed_log_count" widget="statinfo" string="Processed"/>
                         </button>
                     </div>
                     <group>
                         <group>
                             <field name="name"/>
                             <field name="company_id" groups="base.group_multi_company"/>
+                            <field name="policy_id"/>
                             <field name="api_type"/>
                             <field name="active"/>
                             <field name="auto_sync"/>
+                            <field name="sync_lookback_hours" invisible="api_type != 'hikvision'"/>
+                            <field name="device_timezone" invisible="api_type != 'hikvision'"
+                                   placeholder="e.g. Asia/Amman"/>
+                            <field name="connection_timeout" invisible="api_type != 'hikvision'"/>
+                            <field name="sync_retry_count" invisible="api_type != 'hikvision'"/>
+                            <field name="store_ignored_events" invisible="api_type != 'hikvision'"/>
                         </group>
                         <group>
                             <field name="device_ip"/>
                             <field name="device_port"/>
                             <field name="username"/>
                             <field name="password" password="True"/>
-                            <field name="api_key" password="True"/>
+                            <field name="api_key" password="True" invisible="api_type != 'custom_api'"/>
                         </group>
                     </group>
                     <group string="File Import" invisible="api_type != 'file_import'">
@@ -58,6 +84,8 @@
                     </group>
                     <group string="Last Sync">
                         <field name="last_sync_at" readonly="1"/>
+                        <field name="last_sync_checkpoint" readonly="1"/>
+                        <field name="last_successful_event_serial" readonly="1"/>
                         <field name="last_sync_message" readonly="1"/>
                     </group>
                 </sheet>
