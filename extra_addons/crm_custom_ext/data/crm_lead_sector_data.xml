@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+
+    <record id="sector_retail" model="crm.lead.sector">
+        <field name="name">Retail</field>
+        <field name="code">retail</field>
+        <field name="sequence">10</field>
+    </record>
+    <record id="sector_manufacturing" model="crm.lead.sector">
+        <field name="name">Manufacturing</field>
+        <field name="code">manufacturing</field>
+        <field name="sequence">20</field>
+    </record>
+    <record id="sector_services" model="crm.lead.sector">
+        <field name="name">Services</field>
+        <field name="code">services</field>
+        <field name="sequence">30</field>
+    </record>
+    <record id="sector_construction" model="crm.lead.sector">
+        <field name="name">Construction</field>
+        <field name="code">construction</field>
+        <field name="sequence">40</field>
+    </record>
+    <record id="sector_healthcare" model="crm.lead.sector">
+        <field name="name">Healthcare</field>
+        <field name="code">healthcare</field>
+        <field name="sequence">50</field>
+    </record>
+    <record id="sector_education" model="crm.lead.sector">
+        <field name="name">Education</field>
+        <field name="code">education</field>
+        <field name="sequence">60</field>
+    </record>
+    <record id="sector_technology" model="crm.lead.sector">
+        <field name="name">Technology</field>
+        <field name="code">technology</field>
+        <field name="sequence">70</field>
+    </record>
+    <record id="sector_other" model="crm.lead.sector">
+        <field name="name">Other</field>
+        <field name="code">other</field>
+        <field name="sequence">99</field>
+    </record>
+
+</odoo>
