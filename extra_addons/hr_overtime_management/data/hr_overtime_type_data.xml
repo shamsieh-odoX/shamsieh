@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+
+    <record id="overtime_type_regular" model="hr.overtime.type">
+        <field name="name">Regular Overtime</field>
+        <field name="code">regular</field>
+        <field name="category">regular</field>
+        <field name="rate_multiplier">1.5</field>
+        <field name="sequence">1</field>
+    </record>
+
+    <record id="overtime_type_weekend" model="hr.overtime.type">
+        <field name="name">Weekend Overtime</field>
+        <field name="code">weekend</field>
+        <field name="category">weekend</field>
+        <field name="rate_multiplier">2.0</field>
+        <field name="sequence">2</field>
+    </record>
+
+    <record id="overtime_type_holiday" model="hr.overtime.type">
+        <field name="name">Day Off Overtime</field>
+        <field name="code">holiday</field>
+        <field name="category">day_off</field>
+        <field name="rate_multiplier">2.5</field>
+        <field name="sequence">3</field>
+    </record>
+
+    <function model="res.company" name="write">
+        <value model="res.company" search="[]"/>
+        <value eval="{
+            'overtime_default_type_id': ref('overtime_type_regular'),
+            'overtime_weekend_type_id': ref('overtime_type_weekend'),
+            'overtime_holiday_type_id': ref('overtime_type_holiday'),
+        }"/>
+    </function>
+
+</odoo>

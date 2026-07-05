@@ -1,0 +1,39 @@
+{
+    'name': 'HR Overtime Management',
+    'version': '19.0.1.3.0',
+    'category': 'Human Resources/Overtime',
+    'summary': 'Overtime requests with multi-level approval and timesheet integration',
+    'author': 'Custom',
+    'depends': [
+        'hr',
+        'hr_timesheet',
+        'project',
+        'mail',
+        'resource',
+    ],
+    'data': [
+        'security/security.xml',
+        'security/ir.model.access.csv',
+        'data/hr_overtime_type_data.xml',
+        'data/hr_overtime_sequence.xml',
+        'data/mail_activity_data.xml',
+        'views/hr_overtime_type_views.xml',
+        'views/hr_overtime_request_views.xml',
+        'views/res_config_settings_views.xml',
+        'views/hr_overtime_menus.xml',
+        'report/hr_overtime_report.xml',
+        'report/hr_overtime_report_views.xml',
+        'wizard/hr_overtime_refuse_wizard_views.xml',
+    ],
+    'demo': [
+        'demo/hr_overtime_demo.xml',
+    ],
+    'assets': {
+        'web.assets_backend': [
+            'hr_overtime_management/static/src/overtime_error_handler.js',
+        ],
+    },
+    'installable': True,
+    'application': True,
+    'license': 'LGPL-3',
+}

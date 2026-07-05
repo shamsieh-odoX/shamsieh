@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <menuitem id="menu_hr_overtime_root"
+        name="Overtime"
+        sequence="226"
+        web_icon="hr,static/description/icon.png"
+        groups="base.group_user"/>
+
+    <menuitem id="menu_hr_overtime_my_requests"
+        name="My Overtime"
+        parent="menu_hr_overtime_root"
+        sequence="1"/>
+
+    <menuitem id="menu_hr_overtime_requests"
+        name="My Requests"
+        parent="menu_hr_overtime_my_requests"
+        action="action_hr_overtime_open_my_requests"
+        sequence="10"/>
+
+    <menuitem id="menu_hr_overtime_my_approvals"
+        name="My Approvals"
+        parent="menu_hr_overtime_root"
+        action="action_hr_overtime_open_my_approvals"
+        sequence="20"/>
+
+    <menuitem id="menu_hr_overtime_all_requests"
+        name="All Requests"
+        parent="menu_hr_overtime_root"
+        action="action_hr_overtime_request_window"
+        sequence="30"
+        groups="hr_overtime_management.group_overtime_hr_officer"/>
+
+    <menuitem id="menu_hr_overtime_configuration"
+        name="Configuration"
+        parent="menu_hr_overtime_root"
+        sequence="90"
+        groups="hr_overtime_management.group_overtime_admin"/>
+
+    <menuitem id="menu_hr_overtime_types"
+        name="Overtime Types"
+        parent="menu_hr_overtime_configuration"
+        action="action_hr_overtime_type"
+        sequence="10"/>
+
+</odoo>

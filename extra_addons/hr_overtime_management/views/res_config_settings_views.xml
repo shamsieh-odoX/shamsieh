@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="res_config_settings_view_form_overtime" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.overtime</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="hr.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//app[@name='hr']" position="inside">
+                <block title="Overtime" name="overtime_settings">
+                    <setting string="Timesheet Integration" help="Automatically create a timesheet line when overtime is fully approved.">
+                        <field name="overtime_generate_analytic_line"/>
+                    </setting>
+                    <setting string="Regular Overtime Type" help="Rate applied on normal working days. Change the multiplier in Overtime → Configuration → Overtime Types.">
+                        <field name="overtime_default_type_id"/>
+                    </setting>
+                    <setting string="Weekend Overtime Type" help="Rate applied on weekend days (see weekdays below).">
+                        <field name="overtime_weekend_type_id"/>
+                    </setting>
+                    <setting string="Day Off Overtime Type" help="Rate applied on public holidays and calendar days off.">
+                        <field name="overtime_holiday_type_id"/>
+                    </setting>
+                    <setting string="Weekend Weekdays" help="Weekdays treated as weekend overtime (Monday=0 … Sunday=6). Default: 4,5 = Friday &amp; Saturday.">
+                        <field name="overtime_weekend_weekdays" placeholder="4,5"/>
+                    </setting>
+                    <setting string="Daily Hours Warning Cap" help="Show a warning when a request exceeds this number of hours.">
+                        <field name="overtime_daily_hours_cap"/>
+                    </setting>
+                    <setting string="Hourly Cost Divisor" help="Monthly working hours used to convert contract wage to hourly cost (wage ÷ hours).">
+                        <field name="overtime_hours_per_month"/>
+                    </setting>
+                    <setting string="Payroll Integration" help="Install the payroll glue module to push overtime costs to payslips."
+                        id="overtime_payroll_setting">
+                        <field name="module_hr_overtime_payroll"/>
+                    </setting>
+                </block>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>
