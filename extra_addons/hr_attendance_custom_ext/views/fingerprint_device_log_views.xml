@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_fingerprint_device_log_tree" model="ir.ui.view">
+        <field name="name">fingerprint.device.log.list</field>
+        <field name="model">fingerprint.device.log</field>
+        <field name="arch" type="xml">
+            <list decoration-danger="state == 'error'" decoration-muted="state == 'duplicate'">
+                <field name="punch_time"/>
+                <field name="device_id"/>
+                <field name="device_user_id"/>
+                <field name="employee_id"/>
+                <field name="punch_type"/>
+                <field name="state" widget="badge"/>
+                <field name="attendance_id"/>
+                <field name="error_message"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_fingerprint_device_log_form" model="ir.ui.view">
+        <field name="name">fingerprint.device.log.form</field>
+        <field name="model">fingerprint.device.log</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="device_id"/>
+                            <field name="external_id"/>
+                            <field name="device_user_id"/>
+                            <field name="employee_id"/>
+                            <field name="punch_time"/>
+                            <field name="punch_type"/>
+                            <field name="state"/>
+                        </group>
+                        <group>
+                            <field name="attendance_id"/>
+                            <field name="error_message"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_fingerprint_device_log_search" model="ir.ui.view">
+        <field name="name">fingerprint.device.log.search</field>
+        <field name="model">fingerprint.device.log</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="device_user_id"/>
+                <field name="employee_id"/>
+                <field name="device_id"/>
+                <filter string="Error" name="filter_error" domain="[('state', '=', 'error')]"/>
+                <filter string="Unmapped" name="filter_unmapped" domain="[('state', '=', 'error'), ('employee_id', '=', False)]"/>
+                <filter string="Duplicate" name="filter_duplicate" domain="[('state', '=', 'duplicate')]"/>
+                <filter string="Today" name="filter_today" domain="[('punch_time', '&gt;=', (context_today()).strftime('%Y-%m-%d 00:00:00'))]"/>
+                <filter string="Draft" name="filter_draft" domain="[('state', '=', 'draft')]"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_fingerprint_device_log" model="ir.actions.act_window">
+        <field name="name">Fingerprint Sync Logs</field>
+        <field name="res_model">fingerprint.device.log</field>
+        <field name="view_mode">list,form</field>
+        <field name="context">{'search_default_filter_today': 1}</field>
+    </record>
+</odoo>

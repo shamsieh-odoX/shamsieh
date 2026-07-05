@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_attendance_tree_custom" model="ir.ui.view">
+        <field name="name">hr.attendance.list.custom</field>
+        <field name="model">hr.attendance</field>
+        <field name="inherit_id" ref="hr_attendance.view_attendance_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='worked_hours']" position="after">
+                <field name="attendance_source" optional="show"/>
+                <field name="attendance_status" optional="show" widget="badge"/>
+                <field name="late_minutes" optional="show"/>
+                <field name="early_checkout_minutes" optional="show"/>
+                <field name="missing_checkout" optional="show"/>
+                <field name="face_verified" optional="hide"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="hr_attendance_view_form_custom" model="ir.ui.view">
+        <field name="name">hr.attendance.form.custom</field>
+        <field name="model">hr.attendance</field>
+        <field name="inherit_id" ref="hr_attendance.hr_attendance_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='worked_hours']" position="before">
+                <field name="attendance_source" readonly="1"/>
+                <field name="attendance_status" readonly="1"/>
+                <field name="late_minutes" readonly="1"/>
+                <field name="early_checkout_minutes" readonly="1"/>
+                <field name="missing_checkout" readonly="1"/>
+                <field name="face_verified" readonly="1"/>
+                <field name="device_id" readonly="1"/>
+                <field name="device_user_id" readonly="1"/>
+                <field name="external_log_id" readonly="1"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="hr_attendance_view_filter_custom" model="ir.ui.view">
+        <field name="name">hr.attendance.search.custom</field>
+        <field name="model">hr.attendance</field>
+        <field name="inherit_id" ref="hr_attendance.hr_attendance_view_filter"/>
+        <field name="arch" type="xml">
+            <xpath expr="//filter[@name='nocheckout']" position="after">
+                <filter string="Late" name="filter_late" domain="[('attendance_status', '=', 'late')]"/>
+                <filter string="Early Checkout" name="filter_early" domain="[('attendance_status', '=', 'early_leave')]"/>
+                <filter string="Missing Checkout" name="filter_missing_checkout" domain="[('missing_checkout', '=', True)]"/>
+                <filter string="Fingerprint" name="filter_source_fingerprint" domain="[('attendance_source', '=', 'fingerprint')]"/>
+                <filter string="Face" name="filter_source_face" domain="[('attendance_source', '=', 'face')]"/>
+                <filter string="Manual" name="filter_source_manual" domain="[('attendance_source', '=', 'manual')]"/>
+            </xpath>
+            <xpath expr="//filter[@name='groupby_mode_in']" position="after">
+                <filter string="Attendance Source" name="groupby_attendance_source" context="{'group_by': 'attendance_source'}"/>
+                <filter string="Attendance Status" name="groupby_attendance_status" context="{'group_by': 'attendance_status'}"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

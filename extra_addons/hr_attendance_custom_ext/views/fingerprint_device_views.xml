@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_fingerprint_device_tree" model="ir.ui.view">
+        <field name="name">fingerprint.device.list</field>
+        <field name="model">fingerprint.device</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="device_ip"/>
+                <field name="api_type"/>
+                <field name="sync_status"/>
+                <field name="last_sync_at"/>
+                <field name="auto_sync"/>
+                <field name="active"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_fingerprint_device_form" model="ir.ui.view">
+        <field name="name">fingerprint.device.form</field>
+        <field name="model">fingerprint.device</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_sync_now" type="object" string="Sync Now" class="btn-primary"
+                            groups="hr_attendance_custom_ext.group_fingerprint_device_manager"/>
+                    <button name="action_test_connection" type="object" string="Test Connection"
+                            groups="hr_attendance_custom_ext.group_fingerprint_device_manager"/>
+                    <field name="sync_status" widget="statusbar" statusbar_visible="idle,running,success,error"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button class="oe_stat_button" type="action"
+                                name="%(hr_attendance_custom_ext.action_fingerprint_device_log)d"
+                                icon="fa-list" context="{'default_device_id': id}">
+                            <field name="log_count" widget="statinfo" string="Logs"/>
+                        </button>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                            <field name="api_type"/>
+                            <field name="active"/>
+                            <field name="auto_sync"/>
+                        </group>
+                        <group>
+                            <field name="device_ip"/>
+                            <field name="device_port"/>
+                            <field name="username"/>
+                            <field name="password" password="True"/>
+                            <field name="api_key" password="True"/>
+                        </group>
+                    </group>
+                    <group string="File Import" invisible="api_type != 'file_import'">
+                        <field name="import_file_name" invisible="1"/>
+                        <field name="import_file_data" filename="import_file_name"/>
+                    </group>
+                    <group string="Last Sync">
+                        <field name="last_sync_at" readonly="1"/>
+                        <field name="last_sync_message" readonly="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_fingerprint_device" model="ir.actions.act_window">
+        <field name="name">Fingerprint Devices</field>
+        <field name="res_model">fingerprint.device</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

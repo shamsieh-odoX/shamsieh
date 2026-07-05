@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_fingerprint_devices"
+              name="Fingerprint Devices"
+              parent="hr_attendance.menu_hr_attendance_configuration"
+              action="action_fingerprint_device"
+              sequence="20"
+              groups="hr_attendance_custom_ext.group_fingerprint_device_manager"/>
+
+    <menuitem id="menu_fingerprint_sync_logs"
+              name="Fingerprint Sync Logs"
+              parent="hr_attendance.menu_hr_attendance_reporting"
+              action="action_fingerprint_device_log"
+              sequence="25"
+              groups="hr_attendance.group_hr_attendance_officer"/>
+
+    <menuitem id="menu_face_attendance_logs"
+              name="Face Attendance Logs"
+              parent="hr_attendance.menu_hr_attendance_reporting"
+              action="action_face_attendance_log"
+              sequence="26"
+              groups="hr_attendance.group_hr_attendance_officer"/>
+
+    <menuitem id="menu_lateness_report"
+              name="Lateness Report"
+              parent="hr_attendance.menu_hr_attendance_reporting"
+              action="action_attendance_lateness_report"
+              sequence="30"
+              groups="hr_attendance.group_hr_attendance_officer"/>
+
+    <menuitem id="menu_missing_checkout_report"
+              name="Missing Checkout Report"
+              parent="hr_attendance.menu_hr_attendance_reporting"
+              action="action_attendance_missing_checkout_report"
+              sequence="31"
+              groups="hr_attendance.group_hr_attendance_officer"/>
+</odoo>
