@@ -5,6 +5,8 @@
         <field name="model">res.config.settings</field>
         <field name="inherit_id" ref="hr_attendance.res_config_settings_view_form"/>
         <field name="arch" type="xml">
+            <xpath expr="//app[@name='hr_attendance']/block[.//field[@name='attendance_kiosk_url']]" position="replace"/>
+            <xpath expr="//field[@name='attendance_kiosk_mode']/ancestor::setting[1]" position="replace"/>
             <xpath expr="//app[@name='hr_attendance']/block[@name='kiosk_mode_setting_container']" position="after">
                 <block title="Shamsieh Custom Attendance" name="shamsieh_attendance_custom_block">
                     <setting string="Missing Checkout Tolerance" company_dependent="1"

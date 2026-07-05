@@ -5,6 +5,14 @@
         <field name="model">hr.attendance</field>
         <field name="inherit_id" ref="hr_attendance.view_attendance_tree"/>
         <field name="arch" type="xml">
+            <xpath expr="//field[@name='in_mode']" position="replace"/>
+            <xpath expr="//field[@name='out_mode']" position="replace"/>
+            <xpath expr="//field[@name='in_latitude']" position="replace"/>
+            <xpath expr="//field[@name='in_longitude']" position="replace"/>
+            <xpath expr="//field[@name='in_location']" position="replace"/>
+            <xpath expr="//field[@name='out_latitude']" position="replace"/>
+            <xpath expr="//field[@name='out_longitude']" position="replace"/>
+            <xpath expr="//field[@name='out_location']" position="replace"/>
             <xpath expr="//field[@name='worked_hours']" position="after">
                 <field name="attendance_source" optional="show"/>
                 <field name="attendance_status" optional="show" widget="badge"/>

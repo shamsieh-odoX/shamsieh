@@ -11,8 +11,6 @@
         <field name="active" eval="True"/>
     </record>
 
-    <delete model="ir.cron" id="ir_cron_fingerprint_process_pending"/>
-
     <record id="ir_cron_generate_daily_attendance_status" model="ir.cron">
         <field name="name">Attendance: Generate Daily Attendance Status</field>
         <field name="model_id" ref="model_hr_attendance_daily_status"/>
