@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_hr_employee_face_template_tree" model="ir.ui.view">
+        <field name="name">hr.employee.face.template.list</field>
+        <field name="model">hr.employee.face.template</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="employee_id"/>
+                <field name="provider"/>
+                <field name="active"/>
+                <field name="enrolled_at"/>
+                <field name="enrolled_by"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_hr_employee_face_template_form" model="ir.ui.view">
+        <field name="name">hr.employee.face.template.form</field>
+        <field name="model">hr.employee.face.template</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="employee_id"/>
+                            <field name="provider"/>
+                            <field name="active"/>
+                            <field name="enrolled_at"/>
+                            <field name="enrolled_by"/>
+                        </group>
+                        <group>
+                            <field name="image_attachment_id"/>
+                            <field name="notes"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_hr_employee_face_template_search" model="ir.ui.view">
+        <field name="name">hr.employee.face.template.search</field>
+        <field name="model">hr.employee.face.template</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="employee_id"/>
+                <filter name="active" string="Active" domain="[('active', '=', True)]"/>
+                <filter name="inactive" string="Inactive" domain="[('active', '=', False)]"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_hr_employee_face_template" model="ir.actions.act_window">
+        <field name="name">Face Templates</field>
+        <field name="res_model">hr.employee.face.template</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>
