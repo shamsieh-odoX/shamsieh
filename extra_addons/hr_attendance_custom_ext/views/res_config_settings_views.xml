@@ -13,20 +13,45 @@
                         <field name="missing_checkout_tolerance_hours" class="text-center" style="width: 5ch;"/>
                         <span class="ms-2">Hours</span>
                     </setting>
+                    <setting string="Face Provider" company_dependent="1">
+                        <field name="face_provider"/>
+                    </setting>
                     <setting string="Face Attendance Stub (Development)" company_dependent="1"
-                             help="Auto-pass face verification without an external provider. Disable in production when a real face recognition service is connected.">
+                             help="Auto-pass face verification without InsightFace. Disable in production.">
                         <field name="face_attendance_stub_enabled"/>
                     </setting>
                     <setting string="Face Match Threshold" company_dependent="1"
                              invisible="face_attendance_stub_enabled"
-                             help="Minimum confidence score required when a face provider is configured.">
+                             help="Minimum cosine similarity required for face verification.">
                         <field name="face_match_threshold" class="text-center" style="width: 6ch;"/>
+                    </setting>
+                    <setting string="Face Quality Checks" company_dependent="1"
+                             invisible="face_attendance_stub_enabled">
+                        <field name="face_quality_check_enabled"/>
+                    </setting>
+                    <setting string="Store Raw Face Images" company_dependent="1"
+                             invisible="face_attendance_stub_enabled"
+                             help="When enabled, enrollment images may be stored as attachments.">
+                        <field name="face_store_raw_images"/>
+                    </setting>
+                    <setting string="Face Geo Reference Point" company_dependent="1"
+                             invisible="face_attendance_stub_enabled"
+                             help="Remote face checks are rejected when outside the configured radius of this point.">
+                        <div class="d-flex gap-2 align-items-center">
+                            <field name="face_allowed_latitude" placeholder="Latitude"/>
+                            <field name="face_allowed_longitude" placeholder="Longitude"/>
+                        </div>
                     </setting>
                     <setting string="Face Geo Radius" company_dependent="1"
                              invisible="face_attendance_stub_enabled"
-                             help="Allowed geolocation distance (meters) for remote face check-in/out. Enforcement pending provider integration.">
+                             help="Allowed geolocation distance in meters from the reference point.">
                         <field name="face_geo_radius_meters" class="text-center" style="width: 6ch;"/>
                         <span class="ms-2">meters</span>
+                    </setting>
+                    <setting string="Liveness Required" company_dependent="1"
+                             invisible="face_attendance_stub_enabled"
+                             help="Reserved for future advanced liveness detection.">
+                        <field name="face_liveness_required" readonly="1"/>
                     </setting>
                 </block>
             </xpath>

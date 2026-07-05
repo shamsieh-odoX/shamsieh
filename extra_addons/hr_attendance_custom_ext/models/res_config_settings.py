@@ -22,3 +22,27 @@ class ResConfigSettings(models.TransientModel):
         related='company_id.face_geo_radius_meters',
         readonly=False,
     )
+    face_provider = fields.Selection(
+        related='company_id.face_provider',
+        readonly=False,
+    )
+    face_allowed_latitude = fields.Float(
+        related='company_id.face_allowed_latitude',
+        readonly=False,
+    )
+    face_allowed_longitude = fields.Float(
+        related='company_id.face_allowed_longitude',
+        readonly=False,
+    )
+    face_store_raw_images = fields.Boolean(
+        related='company_id.face_store_raw_images',
+        readonly=False,
+    )
+    face_quality_check_enabled = fields.Boolean(
+        related='company_id.face_quality_check_enabled',
+        readonly=False,
+    )
+    face_liveness_required = fields.Boolean(
+        related='company_id.face_liveness_required',
+        readonly=False,
+    )

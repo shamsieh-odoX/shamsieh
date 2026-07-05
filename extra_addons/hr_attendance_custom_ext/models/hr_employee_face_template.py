@@ -47,6 +47,25 @@ class HrEmployeeFaceTemplate(models.Model):
         self.ensure_one()
         self.embedding_json = json.dumps(vector)
 
+    @api.model
+    def get_active_for_employee(self, employee):
+        if not employee:
+            return self.browse()
+        return self.search([
+            ('employee_id', '=', employee.id),
+            ('active', '=', True),
+        ], limit=1)
+
+    def deactivate_others_for_employee(self):
+        for template in self:
+            others = self.search([
+                ('employee_id', '=', template.employee_id.id),
+                ('active', '=', True),
+                ('id', '!=', template.id),
+            ])
+            if others:
+                others.write({'active': False})
+
     @api.constrains('active', 'employee_id')
     def _check_single_active_template(self):
         for template in self.filtered('active'):
