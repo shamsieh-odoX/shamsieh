@@ -45,3 +45,18 @@ class TestAttendanceCalendarCompute(TransactionCase):
         })
         self.assertEqual(attendance.late_minutes, 0)
         self.assertEqual(attendance.attendance_status, 'present')
+
+    def test_late_grace_from_policy(self):
+        policy = self.env['fingerprint.attendance.policy'].get_company_default(
+            self.employee.company_id,
+        )
+        policy.late_grace_minutes = 15
+        monday = datetime(2026, 6, 1, 8, 10, 0)
+        attendance = self.env['hr.attendance'].create({
+            'employee_id': self.employee.id,
+            'check_in': monday,
+            'check_out': monday + timedelta(hours=8),
+            'attendance_source': 'manual',
+        })
+        self.assertEqual(attendance.late_minutes, 0)
+        self.assertEqual(attendance.attendance_status, 'present')

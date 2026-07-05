@@ -4,15 +4,28 @@
         <field name="name">fingerprint.device.log.list</field>
         <field name="model">fingerprint.device.log</field>
         <field name="arch" type="xml">
-            <list decoration-danger="state == 'error'" decoration-muted="state == 'duplicate'">
-                <field name="punch_time"/>
+            <list decoration-danger="state == 'error'"
+                  decoration-muted="state in ('duplicate', 'ignored')"
+                  decoration-success="state == 'draft'">
+                <header>
+                    <button name="action_process_selected" type="object" string="Process Selected"
+                            groups="hr_attendance_custom_ext.group_fingerprint_device_manager"/>
+                    <button name="action_reset_to_draft" type="object" string="Reset to Draft"
+                            groups="hr_attendance_custom_ext.group_fingerprint_device_manager"/>
+                </header>
+                <field name="event_time"/>
                 <field name="device_id"/>
+                <field name="serial_no" optional="show"/>
                 <field name="device_user_id"/>
+                <field name="employee_name" optional="show"/>
                 <field name="employee_id"/>
-                <field name="punch_type"/>
+                <field name="event_type"/>
+                <field name="minor" optional="hide"/>
+                <field name="authentication_method" optional="show"/>
                 <field name="state" widget="badge"/>
-                <field name="attendance_id"/>
+                <field name="attendance_id" optional="hide"/>
                 <field name="error_message"/>
+                <field name="processed_at" optional="hide"/>
             </list>
         </field>
     </record>
@@ -22,21 +35,40 @@
         <field name="model">fingerprint.device.log</field>
         <field name="arch" type="xml">
             <form>
+                <header>
+                    <button name="action_process_selected" type="object" string="Process Selected"
+                            groups="hr_attendance_custom_ext.group_fingerprint_device_manager"/>
+                    <button name="action_reset_to_draft" type="object" string="Reset to Draft"
+                            groups="hr_attendance_custom_ext.group_fingerprint_device_manager"
+                            invisible="state not in ('error', 'ignored')"/>
+                </header>
                 <sheet>
                     <group>
                         <group>
                             <field name="device_id"/>
                             <field name="external_id"/>
+                            <field name="serial_no"/>
                             <field name="device_user_id"/>
+                            <field name="employee_name"/>
                             <field name="employee_id"/>
-                            <field name="punch_time"/>
-                            <field name="punch_type"/>
+                            <field name="event_time"/>
+                            <field name="event_type"/>
+                            <field name="major"/>
+                            <field name="minor"/>
+                            <field name="authentication_method"/>
                             <field name="state"/>
                         </group>
                         <group>
                             <field name="attendance_id"/>
                             <field name="error_message"/>
+                            <field name="processed_at"/>
+                            <field name="processed_by"/>
+                            <field name="attempt_count"/>
+                            <field name="last_attempt_at"/>
                         </group>
+                    </group>
+                    <group string="Debug" groups="base.group_no_one">
+                        <field name="raw_payload" widget="json"/>
                     </group>
                 </sheet>
             </form>
@@ -49,13 +81,26 @@
         <field name="arch" type="xml">
             <search>
                 <field name="device_user_id"/>
+                <field name="employee_name"/>
                 <field name="employee_id"/>
                 <field name="device_id"/>
-                <filter string="Error" name="filter_error" domain="[('state', '=', 'error')]"/>
-                <filter string="Unmapped" name="filter_unmapped" domain="[('state', '=', 'error'), ('employee_id', '=', False)]"/>
-                <filter string="Duplicate" name="filter_duplicate" domain="[('state', '=', 'duplicate')]"/>
-                <filter string="Today" name="filter_today" domain="[('punch_time', '&gt;=', (context_today()).strftime('%Y-%m-%d 00:00:00'))]"/>
+                <field name="serial_no"/>
                 <filter string="Draft" name="filter_draft" domain="[('state', '=', 'draft')]"/>
+                <filter string="Ignored" name="filter_ignored" domain="[('state', '=', 'ignored')]"/>
+                <filter string="Error" name="filter_error" domain="[('state', '=', 'error')]"/>
+                <filter string="Unmapped" name="filter_unmapped" domain="[('state', '=', 'draft'), ('employee_id', '=', False)]"/>
+                <filter string="Duplicate" name="filter_duplicate" domain="[('state', '=', 'duplicate')]"/>
+                <filter string="Today" name="filter_today" domain="[('event_time', '&gt;=', (context_today()).strftime('%Y-%m-%d 00:00:00'))]"/>
+                <filter string="Last 7 Days" name="filter_last_7_days" domain="[('event_time', '&gt;=', (context_today() - relativedelta(days=7)).strftime('%Y-%m-%d 00:00:00'))]"/>
+                <separator/>
+                <filter string="Attendance-relevant" name="filter_relevant" domain="[('state', 'in', ('draft', 'processed', 'error'))]"/>
+                <filter string="Processed" name="filter_processed" domain="[('state', '=', 'processed')]"/>
+                <separator/>
+                <group>
+                    <filter string="Device" name="group_device" context="{'group_by': 'device_id'}"/>
+                    <filter string="State" name="group_state" context="{'group_by': 'state'}"/>
+                    <filter string="Authentication" name="group_auth" context="{'group_by': 'authentication_method'}"/>
+                </group>
             </search>
         </field>
     </record>
@@ -64,6 +109,5 @@
         <field name="name">Fingerprint Sync Logs</field>
         <field name="res_model">fingerprint.device.log</field>
         <field name="view_mode">list,form</field>
-        <field name="context">{'search_default_filter_today': 1}</field>
     </record>
 </odoo>

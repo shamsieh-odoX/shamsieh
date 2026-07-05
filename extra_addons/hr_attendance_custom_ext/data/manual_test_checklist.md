@@ -1,18 +1,46 @@
-# Manual test checklist — HR Attendance Custom Extension (§2, §8, §9)
+# Phases 4–11 implementation checklist and Phase 11 design pointer.
 
-1. [ ] Employee scans fingerprint on Hikvision device (or import CSV via File Import device).
-2. [ ] Device log is imported into `fingerprint.device.log` (state = draft).
-3. [ ] Device user ID maps to `hr.employee.biometric_device_user_id`.
-4. [ ] `hr.attendance` record is created with correct check_in/check_out.
-5. [ ] Duplicate scan with same `external_id` is not duplicated (state = duplicate).
-6. [ ] Late minutes are calculated from employee `resource.calendar` (not hardcoded 08:00).
-7. [ ] Early checkout minutes are calculated from employee `resource.calendar`.
-8. [ ] Missing checkout is flagged when check_out is empty past tolerance.
-9. [ ] Attendance source shows `fingerprint` on synced records.
-10. [ ] Sync errors are logged clearly on device (`last_sync_message`) and log (`error_message`).
+See [hikvision_http_listening_design.md](../../../docs/hikvision_http_listening_design.md) for optional real-time push (not implemented).
 
-### Face attendance (stub)
+## Phase 4 — Policy engine
 
-11. [ ] Enable **Face Attendance Stub** in Settings → Attendances → Shamsieh Custom Attendance (development only).
-12. [ ] Employee has `remote_attendance_allowed` = True.
-13. [ ] Call JSON-RPC `/hr_attendance_custom/face/check` — log created, attendance updated, source = face.
+- [ ] Default attendance policy exists per company (Configuration → Attendance Policies)
+- [ ] Device can override policy via `policy_id`
+- [ ] first_last: 3 scans → check_in, unknown middle, check_out
+- [ ] Duplicate scans within window marked duplicate
+- [ ] Checkout gap enforced
+
+## Phase 5 — Calculations
+
+- [ ] late_minutes uses resource.calendar (not hardcoded)
+- [ ] Policy grace minutes suppress late/early flags
+- [ ] missing_checkout uses policy tolerance minutes
+
+## Phase 6 — Daily status
+
+- [ ] Cron generates yesterday's daily status
+- [ ] Absent on workday with no attendance
+- [ ] Present/late copied from hr.attendance
+
+## Phase 7 — Reports
+
+- [ ] Lateness / Missing / Source / Department / Fingerprint logs reports open
+
+## Phase 8 — UI & security
+
+- [ ] Device smart buttons: Draft, Error, Processed
+- [ ] Log error_message visible; raw_payload debug-only
+- [ ] Employees cannot read device logs
+
+## Phase 9 — Notifications
+
+- [ ] Sync failure creates HR activity
+- [ ] Unmapped events create HR activity
+- [ ] Missing checkout creates activity
+
+## Phase 10 — Hardening
+
+- [ ] Sync retry and checkpoint fields on device
+- [ ] Log audit fields populated on process
+- [ ] Reprocess Errors button works
+- [ ] Raw payload purge cron

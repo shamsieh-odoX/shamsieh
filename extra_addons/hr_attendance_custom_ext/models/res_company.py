@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from odoo import fields, models
+from odoo import api, fields, models
 
 
 class ResCompany(models.Model):
@@ -26,3 +26,11 @@ class ResCompany(models.Model):
         default=False,
         help='Development only: auto-pass face verification without external provider.',
     )
+
+    @api.model_create_multi
+    def create(self, vals_list):
+        companies = super().create(vals_list)
+        Policy = self.env['fingerprint.attendance.policy']
+        for company in companies:
+            Policy.create_default_for_company(company)
+        return companies

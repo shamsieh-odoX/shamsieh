@@ -4,7 +4,17 @@
         <field name="name">Fingerprint Device Manager</field>
         <field name="comment">Configure fingerprint devices and run manual sync.</field>
         <field name="privilege_id" ref="hr_attendance.res_groups_privilege_attendances"/>
+        <field name="sequence">17</field>
         <field name="implied_ids" eval="[(4, ref('hr_attendance.group_hr_attendance_user'))]"/>
+    </record>
+
+    <!-- Attendance Administrators and Settings admins can manage fingerprint devices. -->
+    <record id="hr_attendance.group_hr_attendance_manager" model="res.groups">
+        <field name="implied_ids" eval="[(4, ref('group_fingerprint_device_manager'))]"/>
+    </record>
+
+    <record id="base.group_system" model="res.groups">
+        <field name="implied_ids" eval="[(4, ref('group_fingerprint_device_manager'))]"/>
     </record>
 
     <data noupdate="1">
@@ -38,6 +48,13 @@
             <field name="model_id" ref="model_face_attendance_log"/>
             <field name="domain_force">[(1, '=', 1)]</field>
             <field name="groups" eval="[(4, ref('hr_attendance.group_hr_attendance_officer'))]"/>
+        </record>
+
+        <record id="hr_attendance_daily_status_company_rule" model="ir.rule">
+            <field name="name">Daily Attendance Status: multi-company</field>
+            <field name="model_id" ref="model_hr_attendance_daily_status"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+            <field name="global" eval="True"/>
         </record>
     </data>
 </odoo>
