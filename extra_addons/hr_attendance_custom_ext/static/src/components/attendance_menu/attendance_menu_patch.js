@@ -3,6 +3,7 @@
 import { patch } from "@web/core/utils/patch";
 import { _t } from "@web/core/l10n/translation";
 import { rpc, ConnectionLostError } from "@web/core/network/rpc";
+import { ConfirmationDialog } from "@web/core/confirmation_dialog/confirmation_dialog";
 import { ActivityMenu } from "@hr_attendance/components/attendance_menu/attendance_menu";
 import { FaceCheckDialog } from "@hr_attendance_custom_ext/components/face_check_dialog/face_check_dialog";
 import { isIosApp } from "@web/core/browser/feature_detection";
@@ -15,22 +16,24 @@ patch(ActivityMenu.prototype, {
         }
         this._attendanceInProgress = true;
 
-        const isCheckIn = !this.state.checkedIn;
-        if (isCheckIn && this.employee?.check_in_requires_face) {
-            try {
-                this.dialogService.add(FaceCheckDialog, {
-                    actionType: "check_in",
-                    onSuccess: async () => {
-                        await this.searchReadEmployee();
-                    },
-                });
-            } finally {
-                this._attendanceInProgress = false;
-            }
+        await this.searchReadEmployee();
+
+        if (this.state.checkedIn) {
+            return this._confirmCheckOut();
+        }
+
+        if (this.employee?.check_in_requires_face) {
+            this._attendanceInProgress = false;
+            this.dialogService.add(FaceCheckDialog, {
+                actionType: "check_in",
+                onSuccess: async () => {
+                    await this.searchReadEmployee();
+                },
+            });
             return;
         }
 
-        if (isCheckIn && this.employee?.check_in_requires_office_geo) {
+        if (this.employee?.check_in_requires_office_geo) {
             if (!this.employee.office_geo_configured) {
                 this.notification.add(
                     _t("Office geolocation is not configured. Please contact HR."),
@@ -39,11 +42,35 @@ patch(ActivityMenu.prototype, {
                 this._attendanceInProgress = false;
                 return;
             }
-            await this._officeGeoCheckInOut();
-            return;
+            return this._officeGeoCheckInOut();
         }
 
         return super.signInOut(...arguments);
+    },
+
+    _confirmCheckOut() {
+        const proceed = async () => {
+            this._attendanceInProgress = true;
+            await this.checking();
+        };
+
+        if (!this.employee?.single_check_in_per_day) {
+            return proceed();
+        }
+
+        this._attendanceInProgress = false;
+        this.dialogService.add(ConfirmationDialog, {
+            title: _t("Check out"),
+            body: _t(
+                "Are you sure you want to check out now? You will not be able to check in again today."
+            ),
+            confirmLabel: _t("Check out"),
+            cancelLabel: _t("Stay checked in"),
+            confirm: proceed,
+            cancel: () => {
+                this._attendanceInProgress = false;
+            },
+        });
     },
 
     async _officeGeoCheckInOut() {
@@ -93,8 +120,7 @@ patch(ActivityMenu.prototype, {
             } else {
                 const message = error.data?.message || error.message;
                 this.notification.add(message || _t("Check in/out could not be recorded."), {
-                    title: _t("Attendance Error"),
-                    type: "danger",
+                    title: _t("Attendance Error"), type: "danger",
                 });
             }
         } finally {

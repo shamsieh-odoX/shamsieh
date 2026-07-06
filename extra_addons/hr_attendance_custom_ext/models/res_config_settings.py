@@ -18,10 +18,6 @@ class ResConfigSettings(models.TransientModel):
         related='company_id.face_match_threshold',
         readonly=False,
     )
-    face_geo_radius_meters = fields.Integer(
-        related='company_id.face_geo_radius_meters',
-        readonly=False,
-    )
     office_geo_latitude = fields.Float(
         related='company_id.office_geo_latitude',
         readonly=False,
@@ -36,14 +32,6 @@ class ResConfigSettings(models.TransientModel):
     )
     face_provider = fields.Selection(
         related='company_id.face_provider',
-        readonly=False,
-    )
-    face_allowed_latitude = fields.Float(
-        related='company_id.face_allowed_latitude',
-        readonly=False,
-    )
-    face_allowed_longitude = fields.Float(
-        related='company_id.face_allowed_longitude',
         readonly=False,
     )
     face_store_raw_images = fields.Boolean(

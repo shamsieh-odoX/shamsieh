@@ -93,6 +93,7 @@ class TestWorkLocationCheckIn(TransactionCase):
             'longitude': 35.9101,
             'mode': 'systray',
         })
+        self.employee.invalidate_recordset(['attendance_state'])
         with self.assertRaises(UserError):
             self.employee.with_context(
                 attendance_device_location=True,
@@ -101,3 +102,7 @@ class TestWorkLocationCheckIn(TransactionCase):
                 'longitude': 35.9101,
                 'mode': 'systray',
             })
+
+    def test_effective_work_location_uses_work_location_id(self):
+        self.employee.work_location_id = self.home_location
+        self.assertEqual(self.employee._get_effective_work_location_type(), 'home')

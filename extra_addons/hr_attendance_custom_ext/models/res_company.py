@@ -16,11 +16,6 @@ class ResCompany(models.Model):
         default=0.85,
         help='Minimum cosine similarity score required for face verification.',
     )
-    face_geo_radius_meters = fields.Integer(
-        string='Face Geo Radius (meters)',
-        default=500,
-        help='Allowed geolocation distance from the configured reference point.',
-    )
     office_geo_latitude = fields.Float(
         string='Office Latitude',
         digits=(10, 7),
@@ -41,16 +36,6 @@ class ResCompany(models.Model):
         string='Face Provider',
         default='insightface',
         required=True,
-    )
-    face_allowed_latitude = fields.Float(
-        string='Allowed Latitude',
-        digits=(10, 7),
-        help='Reference latitude for remote face attendance geofencing.',
-    )
-    face_allowed_longitude = fields.Float(
-        string='Allowed Longitude',
-        digits=(10, 7),
-        help='Reference longitude for remote face attendance geofencing.',
     )
     face_store_raw_images = fields.Boolean(
         string='Store Raw Face Images',

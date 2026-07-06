@@ -163,13 +163,8 @@ class TestFaceAttendanceInsightFace(TransactionCase):
         self.assertEqual(first.id, second.id)
         self.assertEqual(self.Log.search_count([('external_token', '=', token)]), 1)
 
-    def test_geo_outside_radius_fails_for_remote_non_home(self):
+    def test_face_check_fails_for_non_home_work_location(self):
         self.employee.work_location_id = self.env.ref('hr.home_work_other')
-        self.company.write({
-            'face_allowed_latitude': 31.9500,
-            'face_allowed_longitude': 35.9100,
-            'face_geo_radius_meters': 100,
-        })
         log = self.Log.create_face_check(
             employee=self.employee,
             action_type='check_in',

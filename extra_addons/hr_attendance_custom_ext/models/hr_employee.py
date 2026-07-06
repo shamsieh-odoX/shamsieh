@@ -165,10 +165,10 @@ class HrEmployee(models.Model):
 
     def _get_effective_work_location_type(self):
         self.ensure_one()
-        try:
-            return self.work_location_type or 'other'
-        except Exception:
-            return 'other'
+        work_location = self.work_location_id
+        if work_location and work_location.location_type:
+            return work_location.location_type
+        return self.work_location_type or 'other'
 
     def _is_office_geo_configured(self):
         self.ensure_one()
@@ -207,11 +207,13 @@ class HrEmployee(models.Model):
         self.ensure_one()
         response = HrAttendance._get_user_attendance_data(self)
         location_type = self._get_effective_work_location_type()
+        policy = self.env['fingerprint.attendance.policy'].get_company_default(self.company_id)
         response.update({
             'work_location_type': location_type,
             'check_in_requires_face': location_type == 'home',
             'check_in_requires_office_geo': location_type == 'office',
             'office_geo_configured': self._is_office_geo_configured(),
+            'single_check_in_per_day': not policy.allow_multiple_attendances_per_day,
         })
         return response
 
@@ -220,10 +222,19 @@ class HrEmployee(models.Model):
         policy = self.env['fingerprint.attendance.policy'].get_company_default(self.company_id)
         if policy.allow_multiple_attendances_per_day:
             return
+        if self.attendance_state == 'checked_in':
+            raise UserError(_('You are already checked in.'))
         today = fields.Date.context_today(self)
         if self.env['hr.attendance'].search_count([
             ('employee_id', '=', self.id),
             ('date', '=', today),
+            ('check_out', '=', False),
+        ]):
+            raise UserError(_('You are already checked in.'))
+        if self.env['hr.attendance'].search_count([
+            ('employee_id', '=', self.id),
+            ('date', '=', today),
+            ('check_out', '!=', False),
         ]):
             raise UserError(_('You have already checked in today. Only one check-in per day is allowed.'))
 
@@ -268,11 +279,12 @@ class HrEmployee(models.Model):
             self._validate_office_geolocation(latitude, longitude, device_location=device_location)
 
     def _attendance_action_change(self, geo_information=None):
-        self._validate_attendance_check_in(
-            geo_information,
-            via_face=self.env.context.get('attendance_via_face'),
-            device_location=self.env.context.get('attendance_device_location'),
-        )
+        if self.attendance_state != 'checked_in':
+            self._validate_attendance_check_in(
+                geo_information,
+                via_face=self.env.context.get('attendance_via_face'),
+                device_location=self.env.context.get('attendance_device_location'),
+            )
         attendance = super()._attendance_action_change(geo_information=geo_information)
         if attendance and not attendance.attendance_source:
             mode_map = {

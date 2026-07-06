@@ -12,7 +12,6 @@ from ..services.face_provider_insightface import (
     FaceProviderUnavailable,
     InsightFaceProvider,
     UNAVAILABLE_MESSAGE,
-    haversine_distance_meters,
 )
 
 _logger = logging.getLogger(__name__)
@@ -105,36 +104,6 @@ class FaceAttendanceLog(models.Model):
             self.error_message = _('No active face template is enrolled for this employee.')
             return False
         return template
-
-    def _validate_geolocation(self):
-        self.ensure_one()
-        if self.employee_id._get_effective_work_location_type() == 'home':
-            return True
-        company = self.employee_id.company_id
-        if not (company.face_allowed_latitude and company.face_allowed_longitude):
-            return True
-        if not (self.latitude and self.longitude):
-            self.verification_status = 'failed'
-            self.error_message = _('Location is required for remote face attendance.')
-            return False
-
-        distance = haversine_distance_meters(
-            company.face_allowed_latitude,
-            company.face_allowed_longitude,
-            self.latitude,
-            self.longitude,
-        )
-        self.distance_meters = distance
-        radius = company.face_geo_radius_meters or 0
-        if radius and distance > radius:
-            self.verification_status = 'failed'
-            self.error_message = _(
-                'Location is outside the allowed radius (%(distance).0f m > %(radius)s m).',
-                distance=distance,
-                radius=radius,
-            )
-            return False
-        return True
 
     def _run_verification_stub(self):
         self.ensure_one()
@@ -284,8 +253,6 @@ class FaceAttendanceLog(models.Model):
         if not log._validate_work_location_rules():
             return log
         if not log._validate_single_daily_check_in():
-            return log
-        if not log._validate_geolocation():
             return log
         company = employee.company_id
         if not company.face_attendance_stub_enabled and not log._validate_active_template():
