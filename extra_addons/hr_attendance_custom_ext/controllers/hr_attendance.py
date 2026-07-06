@@ -10,16 +10,9 @@ class HrAttendanceCustom(HrAttendance):
 
     @staticmethod
     def _get_user_attendance_data(employee):
-        response = HrAttendance._get_user_attendance_data(employee)
         if employee:
-            location_type = employee._get_effective_work_location_type()
-            response.update({
-                'work_location_type': location_type,
-                'check_in_requires_face': location_type == 'home',
-                'check_in_requires_office_geo': location_type == 'office',
-                'office_geo_configured': employee._is_office_geo_configured(),
-            })
-        return response
+            return employee._get_attendance_systray_user_data()
+        return HrAttendance._get_user_attendance_data(employee)
 
     @http.route('/hr_attendance/systray_check_in_out', type='jsonrpc', auth='user')
     def systray_attendance(self, latitude=False, longitude=False):

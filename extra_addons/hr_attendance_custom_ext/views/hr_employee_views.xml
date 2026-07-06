@@ -8,7 +8,7 @@
             <xpath expr="//group[@name='identification_group']" position="after">
                 <group string="Attendance &amp; Face Recognition"
                        name="attendance_face_group"
-                       col="2"
+                       colspan="2"
                        groups="hr_attendance.group_hr_attendance_officer">
                     <group string="Device &amp; Policy">
                         <field name="biometric_device_user_id"
@@ -16,32 +16,41 @@
                         <field name="attendance_required"/>
                         <field name="remote_attendance_allowed"/>
                     </group>
-                    <group string="Face Enrollment">
-                        <label for="face_enrollment_status" string="Status"/>
-                        <div class="o_row align-items-center">
+                    <group string="InsightFace Provider">
+                        <field name="face_provider" readonly="1"/>
+                        <field name="face_provider_available" readonly="1"/>
+                        <field name="face_attendance_stub_enabled"
+                               readonly="1"
+                               invisible="face_provider_available"/>
+                    </group>
+                    <group string="Face Enrollment" colspan="2">
+                        <group>
                             <field name="face_enrollment_status"
-                                   nolabel="1"
                                    readonly="1"
-                                   widget="label_selection"
-                                   options="{'classes': {'none': 'secondary', 'enrolled': 'success', 'reset': 'warning'}}"/>
-                        </div>
-                        <field name="face_enrolled_at"
-                               readonly="1"
-                               invisible="face_enrollment_status != 'enrolled'"/>
-                        <field name="face_enrolled_by"
-                               readonly="1"
-                               widget="many2one_avatar_user"
-                               invisible="face_enrollment_status != 'enrolled'"/>
-                        <field name="active_face_template_id"
-                               readonly="1"
-                               invisible="face_enrollment_status != 'enrolled'"/>
-                        <field name="face_reference_id"
-                               placeholder="Optional external reference"
-                               invisible="face_enrollment_status == 'none'"/>
-                        <field name="face_template_id"
-                               readonly="1"
-                               invisible="face_enrollment_status != 'enrolled'"/>
-                        <div class="d-flex flex-wrap gap-2 mt-3">
+                                   widget="badge"
+                                   decoration-success="face_enrollment_status == 'enrolled'"
+                                   decoration-warning="face_enrollment_status == 'reset'"
+                                   decoration-muted="face_enrollment_status == 'none'"/>
+                            <field name="face_enrolled_at"
+                                   readonly="1"
+                                   invisible="face_enrollment_status != 'enrolled'"/>
+                            <field name="face_enrolled_by"
+                                   readonly="1"
+                                   widget="many2one_avatar_user"
+                                   invisible="face_enrollment_status != 'enrolled'"/>
+                            <field name="active_face_template_id"
+                                   readonly="1"
+                                   invisible="face_enrollment_status != 'enrolled'"/>
+                        </group>
+                        <group>
+                            <field name="face_template_id"
+                                   readonly="1"
+                                   invisible="face_enrollment_status != 'enrolled'"/>
+                            <field name="face_reference_id"
+                                   placeholder="Optional external reference"
+                                   invisible="face_enrollment_status == 'none'"/>
+                        </group>
+                        <div class="d-flex flex-wrap gap-2 mt-2" colspan="2">
                             <button name="action_open_face_enroll_wizard"
                                     type="object"
                                     string="Enroll Face"

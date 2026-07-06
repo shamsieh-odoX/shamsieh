@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 
+import logging
+
 from odoo import api, models
 
-from odoo.addons.hr_attendance_custom_ext.controllers.hr_attendance import HrAttendanceCustom
+_logger = logging.getLogger(__name__)
 
 
 class IrHttp(models.AbstractModel):
@@ -11,7 +13,15 @@ class IrHttp(models.AbstractModel):
     @api.model
     def lazy_session_info(self):
         res = super().lazy_session_info()
-        if self.env.user and self.env.user.employee_id:
-            employee = self.env.user.employee_id
-            res['attendance_user_data'] = HrAttendanceCustom._get_user_attendance_data(employee)
+        employee = self.env.user.employee_id
+        if not employee:
+            return res
+        try:
+            res['attendance_user_data'] = employee._get_attendance_systray_user_data()
+        except Exception:
+            # Keep the backend usable if DB schema is behind code (module not upgraded yet).
+            _logger.exception(
+                'Failed to load attendance systray data for employee %s',
+                employee.id,
+            )
         return res

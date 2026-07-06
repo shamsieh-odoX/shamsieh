@@ -70,6 +70,31 @@ class HrEmployee(models.Model):
         groups='hr_attendance.group_hr_attendance_officer',
         help='Allows remote check-in/out via face verification (§9).',
     )
+    face_provider = fields.Selection(
+        related='company_id.face_provider',
+        string='Face Provider',
+        readonly=True,
+        groups='hr_attendance.group_hr_attendance_officer',
+    )
+    face_provider_available = fields.Boolean(
+        string='InsightFace Available',
+        compute='_compute_face_provider_available',
+        groups='hr_attendance.group_hr_attendance_officer',
+    )
+    face_attendance_stub_enabled = fields.Boolean(
+        related='company_id.face_attendance_stub_enabled',
+        string='Face Attendance Stub Enabled',
+        readonly=True,
+        groups='hr_attendance.group_hr_attendance_officer',
+    )
+
+    @api.depends('company_id')
+    def _compute_face_provider_available(self):
+        from odoo.addons.hr_attendance_custom_ext.services.face_provider_insightface import (
+            InsightFaceProvider,
+        )
+        for employee in self:
+            employee.face_provider_available = InsightFaceProvider.is_available()
 
     @api.depends('face_template_ids', 'face_template_ids.active')
     def _compute_active_face_template_id(self):
@@ -140,7 +165,10 @@ class HrEmployee(models.Model):
 
     def _get_effective_work_location_type(self):
         self.ensure_one()
-        return self.work_location_type or 'other'
+        try:
+            return self.work_location_type or 'other'
+        except Exception:
+            return 'other'
 
     def _is_office_geo_configured(self):
         self.ensure_one()
@@ -149,23 +177,43 @@ class HrEmployee(models.Model):
 
     def _get_office_geo_reference(self):
         self.ensure_one()
-        company = self.company_id
-        if company.office_geo_latitude and company.office_geo_longitude:
-            return (
-                company.office_geo_latitude,
-                company.office_geo_longitude,
-                company.office_geo_radius_meters or 500,
-            )
-        work_location = self.work_location_id
-        if work_location and work_location.location_type == 'office' and work_location.address_id:
-            partner = work_location.address_id
-            if partner.partner_latitude and partner.partner_longitude:
+        try:
+            company = self.company_id
+            if company.office_geo_latitude and company.office_geo_longitude:
                 return (
-                    partner.partner_latitude,
-                    partner.partner_longitude,
+                    company.office_geo_latitude,
+                    company.office_geo_longitude,
                     company.office_geo_radius_meters or 500,
                 )
+            work_location = self.work_location_id
+            if work_location and work_location.location_type == 'office' and work_location.address_id:
+                partner = work_location.address_id
+                latitude = getattr(partner, 'partner_latitude', False)
+                longitude = getattr(partner, 'partner_longitude', False)
+                if latitude and longitude:
+                    return (
+                        latitude,
+                        longitude,
+                        company.office_geo_radius_meters or 500,
+                    )
+        except Exception:
+            return False, False, 0
         return False, False, 0
+
+    def _get_attendance_systray_user_data(self):
+        """Extend standard systray payload with work-location check-in rules."""
+        from odoo.addons.hr_attendance.controllers.main import HrAttendance
+
+        self.ensure_one()
+        response = HrAttendance._get_user_attendance_data(self)
+        location_type = self._get_effective_work_location_type()
+        response.update({
+            'work_location_type': location_type,
+            'check_in_requires_face': location_type == 'home',
+            'check_in_requires_office_geo': location_type == 'office',
+            'office_geo_configured': self._is_office_geo_configured(),
+        })
+        return response
 
     def _validate_single_daily_check_in(self):
         self.ensure_one()
