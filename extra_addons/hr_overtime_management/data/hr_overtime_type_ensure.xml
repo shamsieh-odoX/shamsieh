@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <function model="res.company" name="_ensure_overtime_types_for_all_companies"/>
+
+</odoo>

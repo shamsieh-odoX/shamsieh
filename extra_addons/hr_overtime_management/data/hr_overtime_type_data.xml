@@ -25,6 +25,4 @@
         <field name="sequence">3</field>
     </record>
 
-    <function model="res.company" name="_ensure_overtime_types_for_all_companies"/>
-
 </odoo>

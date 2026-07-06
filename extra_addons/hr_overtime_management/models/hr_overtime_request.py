@@ -84,8 +84,10 @@ class HrOvertimeRequest(models.Model):
         'project.project',
         string='Project',
         required=True,
-        domain="['&', ('allow_timesheets', '=', True), '&', ('is_template', '=', False), '|', ('company_id', '=', False), ('company_id', '=', employee_company_id)]",
+        domain="['&', ('allow_timesheets', '=', True), ('is_template', '=', False), "
+               "'|', ('company_id', '=', False), ('company_id', '=', employee_company_id)]",
         tracking=True,
+        help='Timesheet projects for your company (or shared across companies).',
     )
     task_id = fields.Many2one(
         'project.task',
@@ -156,7 +158,8 @@ class HrOvertimeRequest(models.Model):
     @api.depends('employee_id', 'employee_id.company_id')
     def _compute_employee_company_id(self):
         for request in self:
-            request.employee_company_id = request.employee_id.company_id.id if request.employee_id.company_id else False
+            company = request.employee_id.company_id.sudo() if request.employee_id else False
+            request.employee_company_id = company.id if company else False
 
     @api.depends('employee_id', 'employee_id.company_id')
     def _compute_currency_id(self):
@@ -164,32 +167,67 @@ class HrOvertimeRequest(models.Model):
             company = request.employee_id.company_id.sudo() if request.employee_id else False
             request.currency_id = company.currency_id if company else False
 
-    @api.depends('employee_company_id', 'department_id.company_id')
+    @api.depends('employee_company_id')
     def _compute_company_id(self):
         for request in self:
-            request.company_id = (
-                request.employee_company_id
-                or request.department_id.company_id
-            )
+            request.company_id = request.employee_company_id or False
 
     def _sudo_company(self):
-        """Company used for overtime settings; sudo avoids res.company ACL issues."""
+        """Scoped sudo for company settings reads (avoids res.company record-rule errors)."""
         self.ensure_one()
         if self.employee_id and self.employee_id.company_id:
             return self.employee_id.company_id.sudo()
         return self.env.company.sudo()
 
     @api.model
+    def _overtime_crud_env(self):
+        """Skip M2O company consistency checks; project may belong to another branch."""
+        return self.with_context(check_company=False, mail_create_nosubscribe=True)
+
+    def _check_employee_owns_requests(self):
+        user = self.env.user
+        if user.has_group('hr_overtime_management.group_overtime_hr_officer'):
+            return
+        for request in self:
+            if request.employee_id.user_id != user:
+                raise AccessError(_('You can only modify your own overtime requests.'))
+
+    def _validate_employee_company_access(self, employee):
+        """Employee company must be in the user's allowed companies."""
+        if not employee or not employee.company_id:
+            return
+        emp_company = employee.company_id.sudo()
+        if emp_company.id not in self.env.user.company_ids.ids:
+            raise UserError(_(
+                'Your employee record is linked to %(company)s, but that company is not in your '
+                'allowed companies. Ask an administrator to add it under Settings → Users → '
+                '%(user)s → Allowed Companies.',
+                company=emp_company.display_name,
+                user=self.env.user.name,
+            ))
+
+    def _validate_project_company_access(self, project):
+        """Project branch must be in the user's allowed companies (or shared)."""
+        if not project or not project.company_id:
+            return
+        project_company = project.company_id.sudo()
+        if project_company.id not in self.env.user.company_ids.ids:
+            raise UserError(_(
+                'The project "%(project)s" belongs to %(company)s, which is not in your allowed '
+                'companies. Ask an administrator to add that company under Settings → Users → '
+                '%(user)s → Allowed Companies.',
+                project=project.display_name,
+                company=project_company.display_name,
+                user=self.env.user.name,
+            ))
+
+    @api.model
+    def _overtime_request_env(self):
+        return self._overtime_crud_env()
+
+    @api.model
     def _employee_company_env(self):
-        """Restrict multi-company context to the employee company for self-service users."""
-        employee = self.env.user.employee_id
-        if (
-            employee
-            and employee.company_id
-            and not self.env.user.has_group('hr_overtime_management.group_overtime_hr_officer')
-        ):
-            return self.with_context(allowed_company_ids=employee.company_id.ids)
-        return self
+        return self._overtime_request_env()
 
     @api.model
     def _overtime_action_context(self):
@@ -197,8 +235,6 @@ class HrOvertimeRequest(models.Model):
         ctx = {'search_default_my_requests': 1}
         if employee:
             ctx['default_employee_id'] = employee.id
-        if employee and employee.company_id:
-            ctx['allowed_company_ids'] = employee.company_id.ids
         return ctx
 
     @api.model
@@ -229,9 +265,6 @@ class HrOvertimeRequest(models.Model):
             'search_default_my_approvals': 1,
             'search_default_pending': 1,
         }
-        employee = self.env.user.employee_id
-        if employee.company_id:
-            extra['allowed_company_ids'] = employee.company_id.ids
         return self._merge_action_context(action, extra)
 
     @api.model
@@ -381,27 +414,45 @@ class HrOvertimeRequest(models.Model):
 
     def _get_overtime_type_for_category(self, company, category):
         company = company.sudo()
+        category_key = 'day_off' if category == 'holiday' else category
         field_name = {
             'regular': 'overtime_default_type_id',
             'weekend': 'overtime_weekend_type_id',
             'holiday': 'overtime_holiday_type_id',
             'day_off': 'overtime_holiday_type_id',
         }.get(category)
+        if field_name and company[field_name] and company[field_name].active:
+            return company[field_name]
+
+        OvertimeType = self.env['hr.overtime.type'].sudo()
+        code_by_category = {
+            'regular': 'regular',
+            'weekend': 'weekend',
+            'day_off': 'holiday',
+            'holiday': 'holiday',
+        }
+        search_domains = [
+            [('company_id', '=', company.id), ('category', '=', category_key), ('active', '=', True)],
+            [('company_id', '=', company.id), ('category', '=', category_key)],
+            [('company_id', '=', company.id), ('code', '=', code_by_category[category_key])],
+            [('company_id', '=', False), ('category', '=', category_key), ('active', '=', True)],
+            [('company_id', '=', False), ('category', '=', category_key)],
+            [('company_id', '=', False), ('code', '=', code_by_category[category_key])],
+        ]
+        for domain in search_domains:
+            ot_type = OvertimeType.search(domain, order='active desc, id asc', limit=1)
+            if ot_type:
+                if not ot_type.active:
+                    ot_type.write({'active': True})
+                return ot_type
+
+        company._ensure_overtime_types()
         if field_name and company[field_name]:
             return company[field_name]
-        OvertimeType = self.env['hr.overtime.type'].sudo()
-        ot_type = OvertimeType.search([
-            ('company_id', '=', company.id),
-            ('category', '=', 'day_off' if category == 'holiday' else category),
-            ('active', '=', True),
-        ], limit=1)
-        if ot_type:
-            return ot_type
         return OvertimeType.search([
-            ('company_id', '=', False),
-            ('category', '=', 'day_off' if category == 'holiday' else category),
-            ('active', '=', True),
-        ], limit=1)
+            ('company_id', '=', company.id),
+            ('category', '=', category_key),
+        ], order='active desc, id asc', limit=1)
 
     def _get_overtime_type_by_code(self, code, company):
         category_map = {
@@ -416,6 +467,8 @@ class HrOvertimeRequest(models.Model):
     def _get_company_overtime_types(self):
         self.ensure_one()
         company = self._sudo_company()
+        if company:
+            company._ensure_overtime_types()
         types = {
             'regular': self._get_overtime_type_for_category(company, 'regular'),
             'weekend': self._get_overtime_type_for_category(company, 'weekend'),
@@ -425,7 +478,7 @@ class HrOvertimeRequest(models.Model):
             types['regular'] = self.env['hr.overtime.type'].sudo().search([
                 ('active', '=', True),
                 '|', ('company_id', '=', False), ('company_id', '=', company.id),
-            ], limit=1)
+            ], order='id asc', limit=1)
         return types
 
     @api.model
@@ -467,10 +520,14 @@ class HrOvertimeRequest(models.Model):
     def _resolve_overtime_type_for_period(self):
         self.ensure_one()
         company = self._sudo_company()
+        if not company:
+            return self.env['hr.overtime.type']
         types_by_category = self._get_company_overtime_types()
-        fallback = types_by_category['regular']
-        if not self.start_datetime or not self.end_datetime or not fallback:
+        fallback = types_by_category['regular'] or types_by_category['weekend'] or types_by_category['holiday']
+        if not self.start_datetime or not self.end_datetime:
             return fallback
+        if not fallback:
+            return self.env['hr.overtime.type']
         weekend_days = self._get_weekend_weekdays(company)
         employee = self.employee_id
         best_type = fallback
@@ -482,59 +539,31 @@ class HrOvertimeRequest(models.Model):
                 candidate = types_by_category['weekend'] or fallback
             else:
                 candidate = types_by_category['regular'] or fallback
-            multiplier = candidate.rate_multiplier if candidate else 0.0
+            if not candidate:
+                continue
+            multiplier = candidate.rate_multiplier
             if multiplier > best_multiplier:
                 best_multiplier = multiplier
                 best_type = candidate
         return best_type
 
     def _sync_attachment_company(self):
-        for request in self:
-            company = request.employee_id.company_id
-            if not company:
-                continue
-            attachments = request.attachment_ids.sudo()
-            wrong_company = attachments.filtered(
-                lambda att: att.company_id and att.company_id != company
-            )
-            no_company = attachments.filtered(lambda att: not att.company_id)
-            (wrong_company | no_company).write({'company_id': company.id})
-
-    def _raise_if_cross_company_project(self, project, employee):
-        if not project or not employee or not employee.company_id:
-            return
-        project_company = project.sudo().company_id
-        if project_company and project_company.id != employee.company_id.id:
-            raise UserError(_(
-                'Project "%(project)s" belongs to %(other_company)s. '
-                'Please select a project from your company (%(your_company)s).',
-                project=project.sudo().display_name,
-                other_company=project_company.display_name,
-                your_company=employee.company_id.sudo().display_name,
-            ))
+        """Shared attachments avoid multi-company access errors on save."""
+        for request in self.sudo():
+            if request.attachment_ids:
+                request.attachment_ids.sudo().write({'company_id': False})
 
     @api.onchange('employee_id')
     def _onchange_employee_id(self):
         if not self.employee_id:
             return
-        if self.project_id:
-            try:
-                self._raise_if_cross_company_project(self.project_id, self.employee_id)
-            except UserError:
-                self.project_id = False
-                self.task_id = False
 
     @api.onchange('project_id')
     def _onchange_project_id(self):
-        if self.project_id and self.employee_id:
-            try:
-                self._raise_if_cross_company_project(self.project_id, self.employee_id)
-            except UserError as error:
-                self.project_id = False
-                self.task_id = False
-                return {'warning': {'title': _('Invalid project'), 'message': error.args[0]}}
         if self.project_id and self.task_id and self.task_id.project_id != self.project_id:
             self.task_id = False
+        if self.project_id:
+            self._validate_project_company_access(self.project_id)
 
     @api.constrains('employee_id', 'company_id', 'project_id', 'task_id', 'overtime_type_id')
     def _check_employee_company_consistency(self):
@@ -547,26 +576,8 @@ class HrOvertimeRequest(models.Model):
                     'The company must match the employee\'s company (%(company)s).',
                     company=emp_company.sudo().display_name,
                 ))
-            if request.project_id:
-                project_company = request.project_id.sudo().company_id
-                if project_company and project_company.id != emp_company.id:
-                    raise ValidationError(_(
-                        'Project "%(project)s" does not belong to %(company)s.',
-                        project=request.project_id.sudo().display_name,
-                        company=emp_company.sudo().display_name,
-                    ))
             if request.task_id and request.task_id.project_id != request.project_id:
                 raise ValidationError(_('The task must belong to the selected project.'))
-            if (
-                request.overtime_type_id
-                and request.overtime_type_id.company_id
-                and request.overtime_type_id.company_id.id != emp_company.id
-            ):
-                raise ValidationError(_(
-                    'Overtime type "%(otype)s" is not available for %(company)s.',
-                    otype=request.overtime_type_id.display_name,
-                    company=emp_company.sudo().display_name,
-                ))
 
     # -------------------------------------------------------------------------
     # Approval mixin hooks
@@ -648,14 +659,14 @@ class HrOvertimeRequest(models.Model):
             if employee and not is_hr_officer:
                 vals['employee_id'] = employee.id
             emp = self.env['hr.employee'].browse(vals.get('employee_id'))
+            if emp:
+                self._validate_employee_company_access(emp)
             if emp and emp.company_id:
                 vals['employee_company_id'] = emp.company_id.id
                 vals['company_id'] = emp.company_id.id
-            if vals.get('project_id') and emp:
-                self._raise_if_cross_company_project(
-                    self.env['project.project'].browse(vals['project_id']),
-                    emp,
-                )
+            if vals.get('project_id'):
+                project = self.env['project.project'].browse(vals['project_id'])
+                self._validate_project_company_access(project)
             start_dt = vals.get('start_datetime')
             end_dt = vals.get('end_datetime')
             if start_dt and not vals.get('date'):
@@ -667,17 +678,8 @@ class HrOvertimeRequest(models.Model):
                 ot_type = self._resolve_overtime_type_from_vals(vals)
                 if ot_type:
                     vals['overtime_type_id'] = ot_type.id
-        try:
-            records = super(HrOvertimeRequest, self._employee_company_env()).create(vals_list)
-        except AccessError as error:
-            if 'res.company' in str(error):
-                raise UserError(_(
-                    'You cannot save this overtime request because it references another company. '
-                    'Please choose a project from your own company only.'
-                )) from error
-            raise
-        records._check_employee_company_consistency()
-        records._sync_attachment_company()
+        records = super(HrOvertimeRequest, self._overtime_crud_env()).create(vals_list)
+        records.sudo()._sync_attachment_company()
         return records
 
     def write(self, vals):
@@ -686,27 +688,29 @@ class HrOvertimeRequest(models.Model):
         is_hr_officer = self.env.user.has_group('hr_overtime_management.group_overtime_hr_officer')
         if not is_hr_officer:
             vals.pop('overtime_type_id', None)
+            self._check_employee_owns_requests()
         if vals.get('project_id'):
-            for request in self:
-                employee = self.env['hr.employee'].browse(
-                    vals.get('employee_id') or request.employee_id.id
-                )
-                self._raise_if_cross_company_project(
-                    self.env['project.project'].browse(vals['project_id']),
-                    employee,
-                )
-        try:
-            result = super(HrOvertimeRequest, self._employee_company_env()).write(vals)
-        except AccessError as error:
-            if 'res.company' in str(error):
-                raise UserError(_(
-                    'You cannot save this overtime request because it references another company. '
-                    'Please choose a project from your own company only.'
-                )) from error
-            raise
-        self._check_employee_company_consistency()
+            project = self.env['project.project'].browse(vals['project_id'])
+            self._validate_project_company_access(project)
+        if not is_hr_officer and any(key in vals for key in ('start_datetime', 'end_datetime', 'employee_id')):
+            if len(self) == 1:
+                request = self
+                merged = {
+                    'employee_id': vals.get('employee_id', request.employee_id.id),
+                    'start_datetime': vals.get('start_datetime', request.start_datetime),
+                    'end_datetime': vals.get('end_datetime', request.end_datetime),
+                }
+                emp = self.env['hr.employee'].browse(merged['employee_id'])
+                if emp:
+                    self._validate_employee_company_access(emp)
+                if emp.company_id:
+                    merged['employee_company_id'] = emp.company_id.id
+                ot_type = self._resolve_overtime_type_from_vals(merged)
+                if ot_type:
+                    vals['overtime_type_id'] = ot_type.id
+        result = super(HrOvertimeRequest, self._overtime_crud_env()).write(vals)
         if 'attachment_ids' in vals:
-            self._sync_attachment_company()
+            self.sudo()._sync_attachment_company()
         return result
 
     # -------------------------------------------------------------------------
@@ -719,6 +723,8 @@ class HrOvertimeRequest(models.Model):
                 raise UserError(_('Only draft requests can be submitted.'))
             if not request.employee_id:
                 raise UserError(_('An employee must be set before submitting.'))
+            request._validate_employee_company_access(request.employee_id)
+            request._validate_project_company_access(request.project_id)
             chain = request._resolve_approval_chain(
                 request.employee_id,
                 chain_builder=request._build_overtime_approval_chain,

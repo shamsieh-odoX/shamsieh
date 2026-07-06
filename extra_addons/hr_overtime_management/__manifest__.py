@@ -1,6 +1,6 @@
 {
     'name': 'HR Overtime Management',
-    'version': '19.0.1.4.0',
+    'version': '19.0.1.4.8',
     'category': 'Human Resources/Overtime',
     'summary': 'Overtime requests with multi-level approval and timesheet integration',
     'author': 'Custom',
@@ -15,6 +15,7 @@
         'security/security.xml',
         'security/ir.model.access.csv',
         'data/hr_overtime_type_data.xml',
+        'data/hr_overtime_type_ensure.xml',
         'data/hr_overtime_sequence.xml',
         'data/mail_activity_data.xml',
         'views/hr_overtime_type_views.xml',

@@ -69,11 +69,13 @@ class ResCompany(models.Model):
                 ot_type = OvertimeType.search([
                     ('company_id', '=', company.id),
                     ('category', '=', category),
-                    ('active', '=', True),
-                ], limit=1)
+                ], order='active desc, id asc', limit=1)
                 if not ot_type:
                     ot_type = OvertimeType._create_for_company(company, category)
-                if not company[field_name]:
+                elif not ot_type.active:
+                    ot_type.write({'active': True})
+                current = company[field_name]
+                if not current or not current.active or current.company_id not in (company, False):
                     updates[field_name] = ot_type.id
             if updates:
                 company.sudo().write(updates)

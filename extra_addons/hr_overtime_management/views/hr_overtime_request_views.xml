@@ -87,7 +87,8 @@
                             <field name="project_id" readonly="state != 'draft'"/>
                             <field name="task_id" readonly="state != 'draft'"/>
                             <field name="description" readonly="state != 'draft'"/>
-                            <field name="attachment_ids" widget="many2many_binary" readonly="state != 'draft'"/>
+                            <field name="attachment_ids" widget="many2many_binary" readonly="state != 'draft'"
+                                context="{'default_res_model': 'hr.overtime.request', 'default_company_id': False}"/>
                         </group>
                         <group string="Cost">
                             <field name="currency_id" invisible="1"/>

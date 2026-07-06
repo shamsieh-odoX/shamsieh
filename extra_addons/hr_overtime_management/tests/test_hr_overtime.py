@@ -222,18 +222,39 @@ class TestHrOvertime(TransactionCase):
         self.assertFalse(request.with_user(self.employee_user).can_approve_request)
         self.assertFalse(request.with_user(self.employee_user).can_refuse_request)
 
-    def test_employee_cannot_use_project_from_other_company(self):
+    def test_cross_company_project_requires_allowed_company(self):
         other_company = self.env['res.company'].create({'name': 'Other Overtime Co'})
         other_project = self.env['project.project'].create({
             'name': 'Other Company Project',
             'allow_timesheets': True,
             'company_id': other_company.id,
         })
+        other_task = self.env['project.task'].create({
+            'name': 'Other Task',
+            'project_id': other_project.id,
+            'allow_timesheets': True,
+        })
+        OvertimeAsEmployee = self.OvertimeRequest.with_user(self.employee_user)
         with self.assertRaises(UserError):
-            self._create_request(
-                employee=self.employee,
-                project_id=other_project.id,
-            )
+            OvertimeAsEmployee.create({
+                'employee_id': self.employee.id,
+                'start_datetime': self._dt(18, 0),
+                'end_datetime': self._dt(21, 0),
+                'project_id': other_project.id,
+                'task_id': other_task.id,
+                'description': 'Cross-company overtime',
+            })
+        self.employee_user.write({'company_ids': [(4, other_company.id)]})
+        request = OvertimeAsEmployee.create({
+            'employee_id': self.employee.id,
+            'start_datetime': self._dt(18, 0),
+            'end_datetime': self._dt(21, 0),
+            'project_id': other_project.id,
+            'task_id': other_task.id,
+            'description': 'Cross-company overtime',
+        })
+        self.assertEqual(request.project_id, other_project)
+        self.assertEqual(request.company_id, self.employee.company_id)
 
     def test_employee_sees_overtime_menu(self):
         menu = self.env['ir.ui.menu'].with_user(self.employee_user).search([
