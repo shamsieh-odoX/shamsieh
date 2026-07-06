@@ -25,6 +25,10 @@ class TestAttendanceCalendarCompute(TransactionCase):
         })
 
     def test_late_minutes_from_calendar(self):
+        policy = self.env['fingerprint.attendance.policy'].get_company_default(
+            self.employee.company_id,
+        )
+        policy.late_grace_minutes = 0
         monday = datetime(2026, 6, 1, 8, 30, 0)
         attendance = self.env['hr.attendance'].create({
             'employee_id': self.employee.id,

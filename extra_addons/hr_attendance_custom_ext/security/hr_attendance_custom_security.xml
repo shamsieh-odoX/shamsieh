@@ -56,5 +56,12 @@
             <field name="domain_force">[('company_id', 'in', company_ids)]</field>
             <field name="global" eval="True"/>
         </record>
+
+        <record id="hr_employee_face_template_company_rule" model="ir.rule">
+            <field name="name">Employee Face Template: multi-company</field>
+            <field name="model_id" ref="model_hr_employee_face_template"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+            <field name="global" eval="True"/>
+        </record>
     </data>
 </odoo>

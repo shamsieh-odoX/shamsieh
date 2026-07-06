@@ -9,6 +9,7 @@ from odoo.addons.hr_attendance_custom_ext.services.hikvision import (
     HikvisionClient,
     _acs_pagination_has_more,
     _iso_for_device,
+    _iter_time_chunks,
 )
 
 
@@ -54,3 +55,19 @@ class TestHikvisionTime(TransactionCase):
     def test_acs_pagination_stops_when_partial_page(self):
         block = {'responseStatusStrg': 'OK', 'numOfMatches': 12}
         self.assertFalse(_acs_pagination_has_more(block, 30, 12, 30))
+
+    def test_iter_time_chunks_splits_long_windows(self):
+        start = datetime(2026, 7, 5, 8, 0, 0, tzinfo=timezone.utc)
+        end = datetime(2026, 7, 5, 11, 30, 0, tzinfo=timezone.utc)
+        chunks = list(_iter_time_chunks(start, end, 1))
+        self.assertEqual(len(chunks), 4)
+        self.assertEqual(chunks[0][0], start)
+        self.assertEqual(chunks[-1][1], end)
+
+    def test_get_access_events_uses_time_chunks_for_long_window(self):
+        client = HikvisionClient('127.0.0.1', 80, 'user', 'pass')
+        start = datetime(2026, 7, 5, 8, 0, 0, tzinfo=timezone.utc)
+        end = datetime(2026, 7, 5, 11, 0, 0, tzinfo=timezone.utc)
+        with patch.object(client, '_fetch_access_events_window', return_value=([], True, None)) as mocked:
+            client.get_access_events(start, end, device_tz='Asia/Riyadh')
+        self.assertEqual(mocked.call_count, 3)

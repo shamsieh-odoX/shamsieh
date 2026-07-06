@@ -345,6 +345,117 @@ class HikvisionConnector:
             vals['error_message'] = False
         existing.write(vals)
 
+    @staticmethod
+    def _newest_event_time(events):
+        times = []
+        for event in events:
+            event_time = event.get('event_time')
+            if not event_time:
+                continue
+            if isinstance(event_time, str):
+                event_time = fields.Datetime.to_datetime(event_time)
+            if hasattr(event_time, 'tzinfo') and event_time.tzinfo:
+                event_time = event_time.astimezone(timezone.utc).replace(tzinfo=None)
+            times.append(event_time)
+        return max(times) if times else None
+
+    def _update_checkpoint_from_event(self, event):
+        raw = event.get('raw_payload') or {}
+        serial = raw.get('serialNo')
+        event_time = event.get('event_time')
+        if not event_time:
+            return
+        if isinstance(event_time, str):
+            event_time = fields.Datetime.to_datetime(event_time)
+        if hasattr(event_time, 'tzinfo') and event_time.tzinfo:
+            event_time = event_time.astimezone(timezone.utc).replace(tzinfo=None)
+        checkpoint_vals = {'last_sync_checkpoint': event_time}
+        if serial is not None:
+            checkpoint_vals['last_successful_event_serial'] = str(serial)
+        if (
+            not self.device.last_sync_checkpoint
+            or event_time >= self.device.last_sync_checkpoint
+        ):
+            self.device.write(checkpoint_vals)
+
+    def _ingest_normalized_event(self, event, *, process_immediately=False):
+        """Store one normalized event; return (log, action, reason)."""
+        Log = self.device.env['fingerprint.device.log']
+        external_id = event.get('external_id')
+        debug = event_debug_fields(event)
+        store_ignored = self.device.store_ignored_events
+
+        if not external_id:
+            _logger.info(
+                'Hikvision ingest %s skipped: %s | reason=%s',
+                self.device.name, debug, 'missing external_id',
+            )
+            return Log.browse(), 'skipped', 'missing external_id'
+
+        external_id = str(external_id)
+        existing = Log.search([
+            ('device_id', '=', self.device.id),
+            ('external_id', '=', external_id),
+        ], limit=1)
+        if existing:
+            device_user_id = _device_user_id(event)
+            if device_user_id:
+                employee = self._resolve_employee(device_user_id)
+                self._relink_existing_log(existing, employee)
+            _logger.info(
+                'Hikvision ingest %s duplicate: %s | reason=%s',
+                self.device.name, debug, 'duplicate external_id',
+            )
+            return existing, 'duplicate', 'duplicate external_id'
+
+        if self.device.api_type == 'file_import':
+            action, reason = (
+                ('stored', 'file import')
+                if _device_user_id(event) else ('skipped', 'no device_user_id')
+            )
+        else:
+            action, reason = classify_sync_event(
+                event, store_ignored_events=store_ignored,
+            )
+
+        _logger.info(
+            'Hikvision ingest %s event %s: %s | reason=%s',
+            self.device.name, action, debug, reason,
+        )
+
+        log = Log.browse()
+        if action == 'stored':
+            device_user_id = _device_user_id(event)
+            employee = self._resolve_employee(device_user_id)
+            log = Log.create({
+                **self._event_to_log_vals(event, employee=employee),
+                'state': 'draft',
+            })
+            if process_immediately and log:
+                log._process_pending_logs()
+        elif action == 'ignored':
+            log = Log.create({
+                **self._event_to_log_vals(event),
+                'state': 'ignored',
+            })
+
+        self._update_checkpoint_from_event(event)
+        return log, action, reason
+
+    def ingest_push_event(self, raw_payload, *, process_immediately=True):
+        """Ingest a single HTTP push event from Hikvision HTTP Listening."""
+        event = HikvisionClient.normalize_access_event(raw_payload)
+        log, action, reason = self._ingest_normalized_event(
+            event, process_immediately=process_immediately,
+        )
+        self.device.write({'http_listening_last_at': fields.Datetime.now()})
+        return {
+            'log': log,
+            'action': action,
+            'reason': reason,
+            'external_id': str(event.get('external_id') or ''),
+        }
+
     def sync_device_logs(self, date_from=None, date_to=None):
         Log = self.device.env['fingerprint.device.log']
         date_to = date_to or fields.Datetime.now()
@@ -388,74 +499,41 @@ class HikvisionConnector:
             raise
 
         stats['fetched'] = len(events)
+        newest_event_time = self._newest_event_time(events)
+        if (
+            events
+            and newest_event_time
+            and (date_to - newest_event_time) > timedelta(minutes=10)
+            and date_from > lookback_from
+        ):
+            _logger.warning(
+                'Hikvision sync %s: newest fetched event %s is more than 10 min before '
+                'sync end %s; refetching full lookback (%s h)',
+                self.device.name, newest_event_time, date_to, lookback,
+            )
+            events = self._fetch_with_retry(
+                lambda: self.fetch_attendance_logs(lookback_from, date_to),
+            )
+            date_from = lookback_from
+            stats['fetched'] = len(events)
+
         _logger.info(
             'Hikvision sync %s: fetched %s event(s) from %s to %s',
             self.device.name, stats['fetched'], date_from, date_to,
         )
 
         for event in events:
-            external_id = event.get('external_id')
-            debug = event_debug_fields(event)
-            store_ignored = self.device.store_ignored_events
-
-            if not external_id:
-                stats['skipped'] += 1
-                _logger.info(
-                    'Hikvision sync %s event skipped: %s | reason=%s',
-                    self.device.name, debug, 'missing external_id',
-                )
-                continue
-
-            external_id = str(external_id)
-            existing = Log.search([
-                ('device_id', '=', self.device.id),
-                ('external_id', '=', external_id),
-            ], limit=1)
-            if existing:
-                device_user_id = _device_user_id(event)
-                if device_user_id:
-                    employee = self._resolve_employee(device_user_id)
-                    self._relink_existing_log(existing, employee)
-                stats['duplicates'] += 1
-                _logger.info(
-                    'Hikvision sync %s event duplicate: %s | reason=%s',
-                    self.device.name, debug, 'duplicate external_id',
-                )
-                continue
-
-            if self.device.api_type == 'file_import':
-                action, reason = (
-                    ('stored', 'file import')
-                    if _device_user_id(event) else ('skipped', 'no device_user_id')
-                )
-            else:
-                action, reason = classify_sync_event(
-                    event, store_ignored_events=store_ignored,
-                )
-
-            _logger.info(
-                'Hikvision sync %s event %s: %s | reason=%s',
-                self.device.name, action, debug, reason,
-            )
-
+            log, action, _ = self._ingest_normalized_event(event)
             if action == 'stored':
-                device_user_id = _device_user_id(event)
-                employee = self._resolve_employee(device_user_id)
-                log = Log.create({
-                    **self._event_to_log_vals(event, employee=employee),
-                    'state': 'draft',
-                })
-                created |= log
                 stats['stored'] += 1
-                if not employee:
+                created |= log
+                if log and not log.employee_id:
                     stats['unmapped'] += 1
             elif action == 'ignored':
-                log = Log.create({
-                    **self._event_to_log_vals(event),
-                    'state': 'ignored',
-                })
-                created |= log
                 stats['ignored'] += 1
+                created |= log
+            elif action == 'duplicate':
+                stats['duplicates'] += 1
             else:
                 stats['skipped'] += 1
 
@@ -470,18 +548,4 @@ class HikvisionConnector:
             stats['unmapped'],
             stats['skipped'],
         )
-        if events:
-            latest = max(
-                events,
-                key=lambda ev: ev.get('event_time') or date_from,
-            )
-            raw = latest.get('raw_payload') or {}
-            serial = raw.get('serialNo')
-            event_time = latest.get('event_time') or date_to
-            if hasattr(event_time, 'tzinfo') and event_time.tzinfo:
-                event_time = event_time.astimezone(timezone.utc).replace(tzinfo=None)
-            checkpoint_vals = {'last_sync_checkpoint': event_time}
-            if serial is not None:
-                checkpoint_vals['last_successful_event_serial'] = str(serial)
-            self.device.write(checkpoint_vals)
         return created, stats

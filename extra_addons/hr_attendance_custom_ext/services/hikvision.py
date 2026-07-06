@@ -42,10 +42,29 @@ CAPABILITY_ENDPOINTS = (
 USER_SEARCH_PATH = '/ISAPI/AccessControl/UserInfo/Search?format=json'
 ACS_EVENT_PATH = '/ISAPI/AccessControl/AcsEvent?format=json'
 DEVICE_INFO_PATH = '/ISAPI/System/deviceInfo'
+ACS_FETCH_CHUNK_HOURS = 1
+ACS_MAX_RESULTS = 50
+ACS_MAX_PAGES = 200
 
 
 def _local_tag(tag: str) -> str:
     return tag.rsplit('}', 1)[-1] if '}' in tag else tag
+
+
+def _iter_time_chunks(
+    start_time: datetime,
+    end_time: datetime,
+    chunk_hours: int = ACS_FETCH_CHUNK_HOURS,
+):
+    """Split a UTC window into smaller chunks so device pagination can reach all events."""
+    if start_time >= end_time:
+        return
+    chunk = timedelta(hours=chunk_hours)
+    cursor = start_time
+    while cursor < end_time:
+        chunk_end = min(cursor + chunk, end_time)
+        yield cursor, chunk_end
+        cursor = chunk_end
 
 
 def _acs_pagination_has_more(
@@ -464,7 +483,8 @@ class HikvisionClient:
             'raw': raw,
         }
 
-    def _normalize_access_event(self, raw: dict[str, Any]) -> dict[str, Any]:
+    @classmethod
+    def normalize_access_event(cls, raw: dict[str, Any]) -> dict[str, Any]:
         verify_mode = (
             raw.get('currentVerifyMode')
             or raw.get('verifyMode')
@@ -475,15 +495,18 @@ class HikvisionClient:
         if door is not None:
             door = str(door)
         return {
-            'external_id': self._event_external_id(raw),
+            'external_id': cls._event_external_id(raw),
             'employee_id': str(raw.get('employeeNoString') or raw.get('employeeNo') or ''),
             'employee_name': raw.get('name') or '',
             'event_time': _to_utc_datetime(raw.get('time') or raw.get('dateTime')),
-            'event_type': self._event_type_label(raw),
+            'event_type': cls._event_type_label(raw),
             'authentication_method': verify_mode or 'unknown',
             'door': door,
             'raw_payload': raw,
         }
+
+    def _normalize_access_event(self, raw: dict[str, Any]) -> dict[str, Any]:
+        return self.normalize_access_event(raw)
 
     def _acs_event_cond_variants(
         self,
@@ -515,9 +538,11 @@ class HikvisionClient:
     def _fetch_acs_events_once(self, cond_extra: dict[str, Any]) -> list[dict[str, Any]]:
         search_id = str(uuid.uuid4())
         position = 0
-        max_results = 30
+        max_results = ACS_MAX_RESULTS
+        pages = 0
         collected: list[dict[str, Any]] = []
-        while True:
+        while pages < ACS_MAX_PAGES:
+            pages += 1
             cond: dict[str, Any] = {
                 'searchID': search_id,
                 'searchResultPosition': position,
@@ -543,7 +568,48 @@ class HikvisionClient:
             if not _acs_pagination_has_more(block, position, num_matches, max_results):
                 break
             position += num_matches
+        if pages >= ACS_MAX_PAGES:
+            _logger.warning(
+                'AcsEvent pagination stopped at max pages (%s); some events may be missing',
+                ACS_MAX_PAGES,
+            )
         return collected
+
+    def _fetch_access_events_window(
+        self,
+        start_time: datetime,
+        end_time: datetime,
+        device_tz: str | None,
+        seen_keys: set[str],
+    ) -> tuple[list[dict[str, Any]], bool, Exception | None]:
+        """Fetch one time window; returns (events, any_variant_ok, last_error)."""
+        last_error: Exception | None = None
+        any_variant_ok = False
+        merged: list[dict[str, Any]] = []
+
+        for cond_extra in self._acs_event_cond_variants(start_time, end_time, device_tz):
+            try:
+                _logger.info('Trying AcsEventCond variant: %s', cond_extra)
+                raw_events = self._fetch_acs_events_once(cond_extra)
+                any_variant_ok = True
+                added = 0
+                for raw in raw_events:
+                    key = self._event_dedupe_key(raw)
+                    if key in seen_keys:
+                        continue
+                    seen_keys.add(key)
+                    merged.append(self.normalize_access_event(raw))
+                    added += 1
+                _logger.info(
+                    'Variant %s returned %s event(s), %s new after dedupe (total %s)',
+                    cond_extra, len(raw_events), added, len(merged),
+                )
+            except HikvisionConnectionError as exc:
+                last_error = exc
+                _logger.warning('AcsEvent variant failed: %s', exc)
+                continue
+
+        return merged, any_variant_ok, last_error
 
     def get_access_events(
         self,
@@ -567,32 +633,37 @@ class HikvisionClient:
             _iso_for_device(end_time, device_tz),
         )
 
-        last_error: Exception | None = None
-        any_variant_ok = False
+        span = end_time - start_time
+        if span > timedelta(hours=ACS_FETCH_CHUNK_HOURS):
+            chunks = list(_iter_time_chunks(start_time, end_time, ACS_FETCH_CHUNK_HOURS))
+            _logger.info(
+                'Splitting %s h window into %s chunk(s) of up to %s h',
+                span.total_seconds() / 3600, len(chunks), ACS_FETCH_CHUNK_HOURS,
+            )
+        else:
+            chunks = [(start_time, end_time)]
+
         seen_keys: set[str] = set()
         merged: list[dict[str, Any]] = []
+        any_variant_ok = False
+        last_error: Exception | None = None
 
-        for cond_extra in self._acs_event_cond_variants(start_time, end_time, device_tz):
-            try:
-                _logger.info('Trying AcsEventCond variant: %s', cond_extra)
-                raw_events = self._fetch_acs_events_once(cond_extra)
-                any_variant_ok = True
-                added = 0
-                for raw in raw_events:
-                    key = self._event_dedupe_key(raw)
-                    if key in seen_keys:
-                        continue
-                    seen_keys.add(key)
-                    merged.append(self._normalize_access_event(raw))
-                    added += 1
+        for index, (chunk_start, chunk_end) in enumerate(chunks, start=1):
+            if len(chunks) > 1:
                 _logger.info(
-                    'Variant %s returned %s event(s), %s new after dedupe (total %s)',
-                    cond_extra, len(raw_events), added, len(merged),
+                    'Fetching Hikvision chunk %s/%s: %s — %s (device local: %s — %s)',
+                    index, len(chunks),
+                    chunk_start.isoformat(), chunk_end.isoformat(),
+                    _iso_for_device(chunk_start, device_tz),
+                    _iso_for_device(chunk_end, device_tz),
                 )
-            except HikvisionConnectionError as exc:
-                last_error = exc
-                _logger.warning('AcsEvent variant failed: %s', exc)
-                continue
+            chunk_events, chunk_ok, chunk_error = self._fetch_access_events_window(
+                chunk_start, chunk_end, device_tz, seen_keys,
+            )
+            merged.extend(chunk_events)
+            any_variant_ok = any_variant_ok or chunk_ok
+            if chunk_error:
+                last_error = chunk_error
 
         if merged:
             _logger.info('Downloaded %s Hikvision access event(s) across variants', len(merged))

@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+    <!-- Shamsieh uses fingerprint/face attendance; standard kiosk mode is not used. -->
+    <record id="hr_attendance.menu_action_open_form" model="ir.ui.menu">
+        <field name="active" eval="False"/>
+    </record>
+    <record id="hr_attendance.menu_hr_attendance_onboarding" model="ir.ui.menu">
+        <field name="active" eval="False"/>
+    </record>
+
     <menuitem id="menu_fingerprint_devices"
               name="Fingerprint Devices"
               parent="hr_attendance.menu_hr_attendance_configuration"
@@ -19,6 +27,13 @@
               parent="hr_attendance.menu_hr_attendance_reporting"
               action="action_face_attendance_log"
               sequence="26"
+              groups="hr_attendance.group_hr_attendance_officer"/>
+
+    <menuitem id="menu_face_templates"
+              name="Face Templates"
+              parent="hr_attendance.menu_hr_attendance_configuration"
+              action="action_hr_employee_face_template"
+              sequence="21"
               groups="hr_attendance.group_hr_attendance_officer"/>
 
     <menuitem id="menu_daily_attendance_status"

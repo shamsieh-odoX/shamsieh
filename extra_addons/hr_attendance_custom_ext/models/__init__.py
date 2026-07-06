@@ -6,5 +6,6 @@ from . import fingerprint_attendance_policy
 from . import fingerprint_device
 from . import fingerprint_device_log
 from . import face_attendance_log
+from . import hr_employee_face_template
 from . import res_company
 from . import res_config_settings

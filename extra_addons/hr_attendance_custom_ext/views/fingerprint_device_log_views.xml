@@ -6,13 +6,10 @@
         <field name="arch" type="xml">
             <list decoration-danger="state == 'error'"
                   decoration-muted="state in ('duplicate', 'ignored')"
-                  decoration-success="state == 'draft'">
-                <header>
-                    <button name="action_process_selected" type="object" string="Process Selected"
-                            groups="hr_attendance_custom_ext.group_fingerprint_device_manager"/>
-                    <button name="action_reset_to_draft" type="object" string="Reset to Draft"
-                            groups="hr_attendance_custom_ext.group_fingerprint_device_manager"/>
-                </header>
+                  decoration-success="state == 'processed'"
+                  create="false"
+                  edit="false"
+                  limit="200">
                 <field name="event_time"/>
                 <field name="device_id"/>
                 <field name="serial_no" optional="show"/>
@@ -34,14 +31,7 @@
         <field name="name">fingerprint.device.log.form</field>
         <field name="model">fingerprint.device.log</field>
         <field name="arch" type="xml">
-            <form>
-                <header>
-                    <button name="action_process_selected" type="object" string="Process Selected"
-                            groups="hr_attendance_custom_ext.group_fingerprint_device_manager"/>
-                    <button name="action_reset_to_draft" type="object" string="Reset to Draft"
-                            groups="hr_attendance_custom_ext.group_fingerprint_device_manager"
-                            invisible="state not in ('error', 'ignored')"/>
-                </header>
+            <form create="false" edit="false" delete="false">
                 <sheet>
                     <group>
                         <group>
@@ -85,6 +75,7 @@
                 <field name="employee_id"/>
                 <field name="device_id"/>
                 <field name="serial_no"/>
+                <field name="event_type"/>
                 <filter string="Draft" name="filter_draft" domain="[('state', '=', 'draft')]"/>
                 <filter string="Ignored" name="filter_ignored" domain="[('state', '=', 'ignored')]"/>
                 <filter string="Error" name="filter_error" domain="[('state', '=', 'error')]"/>
@@ -100,6 +91,7 @@
                     <filter string="Device" name="group_device" context="{'group_by': 'device_id'}"/>
                     <filter string="State" name="group_state" context="{'group_by': 'state'}"/>
                     <filter string="Authentication" name="group_auth" context="{'group_by': 'authentication_method'}"/>
+                    <filter string="Event Date" name="group_event_date" context="{'group_by': 'event_time:day'}"/>
                 </group>
             </search>
         </field>
@@ -109,5 +101,6 @@
         <field name="name">Fingerprint Sync Logs</field>
         <field name="res_model">fingerprint.device.log</field>
         <field name="view_mode">list,form</field>
+        <field name="limit">200</field>
     </record>
 </odoo>

@@ -10,7 +10,7 @@
                 <field name="api_type"/>
                 <field name="sync_status"/>
                 <field name="last_sync_at"/>
-                <field name="auto_sync"/>
+                <field name="log_count" string="Logs"/>
                 <field name="active"/>
             </list>
         </field>
@@ -22,37 +22,13 @@
         <field name="arch" type="xml">
             <form>
                 <header>
-                    <button name="action_sync_now" type="object" string="Sync Now" class="btn-primary"
-                            groups="hr_attendance_custom_ext.group_fingerprint_device_manager"/>
-                    <button name="action_process_logs" type="object" string="Process Logs"
-                            groups="hr_attendance_custom_ext.group_fingerprint_device_manager"/>
-                    <button name="action_sync_and_process" type="object" string="Sync and Process"
-                            groups="hr_attendance_custom_ext.group_fingerprint_device_manager"/>
-                    <button name="action_reprocess_errors" type="object" string="Reprocess Errors"
-                            groups="hr_attendance_custom_ext.group_fingerprint_device_manager"/>
-                    <button name="action_test_connection" type="object" string="Test Connection"
-                            groups="hr_attendance_custom_ext.group_fingerprint_device_manager"/>
-                    <button name="action_view_logs" type="object" string="View Logs"
-                            groups="hr_attendance.group_hr_attendance_officer"/>
                     <field name="sync_status" widget="statusbar" statusbar_visible="idle,running,success,error"/>
                 </header>
                 <sheet>
                     <div class="oe_button_box" name="button_box">
                         <button class="oe_stat_button" type="object" name="action_view_logs"
                                 icon="fa-list" groups="hr_attendance.group_hr_attendance_officer">
-                            <field name="log_count" widget="statinfo" string="Logs"/>
-                        </button>
-                        <button class="oe_stat_button" type="object" name="action_view_draft_logs"
-                                icon="fa-pencil" groups="hr_attendance.group_hr_attendance_officer">
-                            <field name="draft_log_count" widget="statinfo" string="Draft"/>
-                        </button>
-                        <button class="oe_stat_button" type="object" name="action_view_error_logs"
-                                icon="fa-exclamation-triangle" groups="hr_attendance.group_hr_attendance_officer">
-                            <field name="error_log_count" widget="statinfo" string="Errors"/>
-                        </button>
-                        <button class="oe_stat_button" type="object" name="action_view_processed_logs"
-                                icon="fa-check" groups="hr_attendance.group_hr_attendance_officer">
-                            <field name="processed_log_count" widget="statinfo" string="Processed"/>
+                            <field name="log_count" widget="statinfo" string="Sync Logs"/>
                         </button>
                     </div>
                     <group>
@@ -62,7 +38,8 @@
                             <field name="policy_id"/>
                             <field name="api_type"/>
                             <field name="active"/>
-                            <field name="auto_sync"/>
+                            <field name="auto_sync" readonly="1"/>
+                            <field name="sync_interval_minutes" readonly="1"/>
                             <field name="sync_lookback_hours" invisible="api_type != 'hikvision'"/>
                             <field name="device_timezone" invisible="api_type != 'hikvision'"
                                    placeholder="e.g. Asia/Amman"/>
@@ -82,11 +59,34 @@
                         <field name="import_file_name" invisible="1"/>
                         <field name="import_file_data" filename="import_file_name"/>
                     </group>
-                    <group string="Last Sync">
+                    <group string="Automatic Sync">
+                        <div class="text-muted" colspan="2">
+                            When HTTP Listening is enabled below, scans appear in Odoo within seconds.
+                            Otherwise events are fetched every minute (near-live polling).
+                            The scheduled sync remains as a backup when HTTP listening is active.
+                            Open Sync Logs to browse all imported events.
+                        </div>
                         <field name="last_sync_at" readonly="1"/>
                         <field name="last_sync_checkpoint" readonly="1"/>
                         <field name="last_successful_event_serial" readonly="1"/>
                         <field name="last_sync_message" readonly="1"/>
+                    </group>
+                    <group string="Live HTTP Listening" invisible="api_type != 'hikvision'">
+                        <div class="text-muted" colspan="2">
+                            Enable push-based live sync: copy the Callback URL into the device
+                            configuration (Network / HTTP Listening). The device must be able to
+                            reach your Odoo server on the LAN or production network.
+                        </div>
+                        <field name="http_listening_enabled"/>
+                        <field name="http_listening_url" readonly="1" widget="CopyClipboardChar"/>
+                        <button name="action_regenerate_http_listening_token"
+                                type="object"
+                                string="Regenerate Token"
+                                class="btn-secondary"
+                                groups="hr_attendance_custom_ext.group_fingerprint_device_manager"
+                                invisible="not http_listening_enabled"/>
+                        <field name="http_listening_allowed_ips"/>
+                        <field name="http_listening_last_at" readonly="1"/>
                     </group>
                 </sheet>
             </form>

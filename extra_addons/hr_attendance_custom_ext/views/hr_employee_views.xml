@@ -8,10 +8,29 @@
             <xpath expr="//group[@name='identification_group']" position="inside">
                 <group string="Attendance Integration" groups="hr_attendance.group_hr_attendance_officer">
                     <field name="biometric_device_user_id"/>
-                    <field name="face_reference_id"/>
-                    <field name="face_template_id"/>
                     <field name="attendance_required"/>
                     <field name="remote_attendance_allowed"/>
+                </group>
+                <group string="Face Enrollment" groups="hr_attendance.group_hr_attendance_officer">
+                    <field name="face_enrollment_status" readonly="1"/>
+                    <field name="face_enrolled_at" readonly="1"/>
+                    <field name="face_enrolled_by" readonly="1"/>
+                    <field name="active_face_template_id" readonly="1"/>
+                    <field name="face_reference_id"/>
+                    <field name="face_template_id" readonly="1"/>
+                    <button name="action_open_face_enroll_wizard"
+                            type="object"
+                            string="Enroll Face Template"
+                            class="btn-primary"/>
+                    <button name="action_reset_face_enrollment"
+                            type="object"
+                            string="Reset Face Enrollment"
+                            class="btn-secondary"
+                            confirm="Deactivate all face templates for this employee?"/>
+                    <button name="action_view_face_templates"
+                            type="object"
+                            string="View Face Templates"
+                            class="btn-link"/>
                 </group>
             </xpath>
         </field>

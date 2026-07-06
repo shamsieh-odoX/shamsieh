@@ -14,12 +14,43 @@ class ResCompany(models.Model):
     face_match_threshold = fields.Float(
         string='Face Match Threshold',
         default=0.85,
-        help='Minimum confidence score for face verification. Needs confirmation with provider.',
+        help='Minimum cosine similarity score required for face verification.',
     )
     face_geo_radius_meters = fields.Integer(
         string='Face Geo Radius (meters)',
         default=500,
-        help='Allowed geolocation variance for remote face attendance. Needs confirmation.',
+        help='Allowed geolocation distance from the configured reference point.',
+    )
+    face_provider = fields.Selection(
+        selection=[('insightface', 'InsightFace (self-hosted)')],
+        string='Face Provider',
+        default='insightface',
+        required=True,
+    )
+    face_allowed_latitude = fields.Float(
+        string='Allowed Latitude',
+        digits=(10, 7),
+        help='Reference latitude for remote face attendance geofencing.',
+    )
+    face_allowed_longitude = fields.Float(
+        string='Allowed Longitude',
+        digits=(10, 7),
+        help='Reference longitude for remote face attendance geofencing.',
+    )
+    face_store_raw_images = fields.Boolean(
+        string='Store Raw Face Images',
+        default=False,
+        help='When enabled, enrollment images may be stored as attachments.',
+    )
+    face_quality_check_enabled = fields.Boolean(
+        string='Face Quality Checks',
+        default=True,
+        help='Reject blurry, low-resolution, or small-face images.',
+    )
+    face_liveness_required = fields.Boolean(
+        string='Liveness Required',
+        default=False,
+        help='Reserved for future advanced liveness detection.',
     )
     face_attendance_stub_enabled = fields.Boolean(
         string='Enable Face Attendance Stub',

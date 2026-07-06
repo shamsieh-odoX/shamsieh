@@ -5,18 +5,9 @@
         <field name="model_id" ref="model_fingerprint_device"/>
         <field name="state">code</field>
         <field name="code">model._cron_sync_all()</field>
-        <field name="interval_number">15</field>
+        <field name="interval_number">1</field>
         <field name="interval_type">minutes</field>
-        <field name="active" eval="True"/>
-    </record>
-
-    <record id="ir_cron_fingerprint_process_pending" model="ir.cron">
-        <field name="name">Fingerprint: Process Pending Logs</field>
-        <field name="model_id" ref="model_fingerprint_device_log"/>
-        <field name="state">code</field>
-        <field name="code">model._cron_process_pending()</field>
-        <field name="interval_number">15</field>
-        <field name="interval_type">minutes</field>
+        <field name="priority">1</field>
         <field name="active" eval="True"/>
     </record>
 
