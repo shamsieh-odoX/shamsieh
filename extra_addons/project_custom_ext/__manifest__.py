@@ -2,7 +2,7 @@
 
     'name': 'Project Custom Extensions',
 
-    'version': '19.0.2.1.2',
+    'version': '19.0.2.1.3',
 
     'category': 'Services/Project',
 
@@ -34,11 +34,7 @@
 
         'views/project_menus.xml',
 
-        'data/project_closing_stage_data.xml',
-
         'data/project_task_template_data.xml',
-
-        'data/spreadsheet_dashboard_override.xml',
 
     ],
 
