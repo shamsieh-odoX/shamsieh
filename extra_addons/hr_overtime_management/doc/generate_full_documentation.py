@@ -16,6 +16,7 @@ from docx.shared import Cm, Pt, RGBColor
 TEMPLATE = Path(r"c:\Users\ASUS\Downloads\ملف قالب الشركة (2).docx")
 OUTPUT_DOCX = Path(__file__).resolve().parent / "HR_Overtime_Management_Full_Documentation.docx"
 OUTPUT_PDF = Path(__file__).resolve().parent / "HR_Overtime_Management_Full_Documentation.pdf"
+MODULE_VERSION = "19.0.1.4.0"
 
 # Company template theme colors
 COLOR_PRIMARY = RGBColor(0x0E, 0x28, 0x41)   # dark navy
@@ -53,7 +54,7 @@ def add_cover(doc: Document):
     meta.alignment = WD_ALIGN_PARAGRAPH.CENTER
     r = meta.add_run(
         f"Modules: hr_overtime_management + hr_overtime_payroll (optional)\n"
-        f"Version: 19.0.1.0.3\n"
+        f"Version: {MODULE_VERSION}\n"
         f"Document date: {date.today().strftime('%B %d, %Y')}\n"
         f"Database: odoo19"
     )
@@ -130,14 +131,15 @@ def add_table(doc: Document, headers: list[str], rows: list[list[str]]):
 
 
 def build_document() -> Document:
-    shutil.copy2(TEMPLATE, OUTPUT_DOCX)
-    doc = Document(str(OUTPUT_DOCX))
-
-    # Clear placeholder paragraphs from template
-    body = doc.element.body
-    for child in list(body):
-        if child.tag.endswith("p"):
-            body.remove(child)
+    if TEMPLATE.exists():
+        shutil.copy2(TEMPLATE, OUTPUT_DOCX)
+        doc = Document(str(OUTPUT_DOCX))
+        body = doc.element.body
+        for child in list(body):
+            if child.tag.endswith("p"):
+                body.remove(child)
+    else:
+        doc = Document()
 
     add_cover(doc)
 
@@ -158,13 +160,69 @@ def build_document() -> Document:
         "and optional payroll integration in a separate glue module."
     )
 
-    # --- 2. Business Need ---
-    add_heading(doc, "2. Business Need & Objectives", 1)
+    # --- 2. Custom vs Standard Odoo ---
+    add_heading(doc, "2. What Was Customized vs What Already Existed in Odoo", 1)
+    add_body(
+        doc,
+        "This section separates deliverables built for your organization from standard Odoo "
+        "features that were reused without re-implementing them."
+    )
+    add_heading(doc, "2.1 Already Existed in Odoo (Reused)", 2)
+    add_table(
+        doc,
+        ["Odoo Standard", "How We Use It"],
+        [
+            ["hr.employee + parent_id chain", "Manager / upper-manager resolution (same idea as Time Off)"],
+            ["hr.version (contract wage)", "Hourly cost from employee wage and work schedule"],
+            ["project.project / project.task", "Project & task on each overtime request"],
+            ["account.analytic.line (hr_timesheet)", "Optional timesheet line on final approval"],
+            ["resource.calendar.leaves", "Public holidays / calendar days off for auto type detection"],
+            ["mail.thread / mail.activity", "Chatter, notifications, approval activities"],
+            ["res.company multi-company", "Company branches, record rules, allowed companies"],
+            ["hr_payroll (optional)", "Payslip input via hr_overtime_payroll glue module only"],
+            ["Security groups (res.groups)", "Standard privilege / group pattern"],
+        ],
+    )
+    add_heading(doc, "2.2 Custom-Built for This Project", 2)
+    add_table(
+        doc,
+        ["Custom Component", "Purpose"],
+        [
+            ["hr.overtime.request", "Main overtime request with workflow states"],
+            ["hr.overtime.type", "Per-branch rate categories: Regular, Weekend, Day Off"],
+            ["hr.overtime.approval.line", "Audit trail for each approval step"],
+            ["hr.approval.chain.service", "Reusable approval-chain resolver (manager → HR)"],
+            ["hr.approval.chain.mixin", "Reusable submit / approve / refuse workflow"],
+            ["Auto overtime type by date", "Picks Regular / Weekend / Day Off from datetime + calendar"],
+            ["Per-company type provisioning", "Each company branch gets its own 3 types + multipliers"],
+            ["Middle-East weekend (Fri/Sat)", "Configurable weekend weekdays per company"],
+            ["Multi-company employee access", "Employees only see projects / companies they belong to"],
+            ["overtime_error_handler.js", "Friendly snackbar for company / access errors"],
+            ["QWeb PDF report", "Printable overtime approval document"],
+            ["Refuse wizard", "Mandatory reason when refusing a request"],
+        ],
+    )
+    add_heading(doc, "2.3 Customizations Applied During Delivery", 2)
+    customizations = [
+        "Datetime pickers (start_datetime / end_datetime) instead of separate date + float times.",
+        "Overtime Type is auto-computed — employees do not manually select the category.",
+        "Three category enums on hr.overtime.type: regular, weekend, day_off.",
+        "Each company branch has its own overtime types with independent rate multipliers.",
+        "New companies auto-receive Regular / Weekend / Day Off types on creation.",
+        "Total cost = hours × hourly wage × rate_multiplier (multiplier editable per branch).",
+        "Top-level Overtime app menu (My Requests, My Approvals, All Requests, Configuration).",
+        "Server actions for My Requests / My Approvals with correct multi-company context.",
+    ]
+    for item in customizations:
+        add_bullet(doc, item)
+
+    # --- 3. Business Need ---
+    add_heading(doc, "3. Business Need & Objectives", 1)
     add_body(doc, "The following business requirements drove this development:")
     objectives = [
         "Employees submit overtime with project/task allocation and supporting documents.",
         "Approval follows the existing organizational hierarchy (manager chain + mandatory HR).",
-        "Overtime pay rates (Regular 1.5×, Weekend 2.0×, Holiday 2.5×) are configurable without code changes.",
+        "Overtime pay rates per branch (Regular / Weekend / Day Off) are configurable without code.",
         "Approved overtime can generate account.analytic.line (timesheet) entries automatically.",
         "Overtime cost is derived from contract wage, not a parallel payroll engine.",
         "A reusable approval-chain component supports future request types (expenses, permissions, etc.).",
@@ -173,8 +231,8 @@ def build_document() -> Document:
     for o in objectives:
         add_bullet(doc, o)
 
-    # --- 3. Modules ---
-    add_heading(doc, "3. Delivered Modules", 1)
+    # --- 4. Modules ---
+    add_heading(doc, "4. Delivered Modules", 1)
     add_table(
         doc,
         ["Module", "Type", "Purpose", "Dependencies"],
@@ -184,9 +242,9 @@ def build_document() -> Document:
         ],
     )
 
-    # --- 4. Architecture ---
-    add_heading(doc, "4. System Architecture", 1)
-    add_heading(doc, "4.1 Reusable Approval Engine", 2)
+    # --- 5. Architecture ---
+    add_heading(doc, "5. System Architecture", 1)
+    add_heading(doc, "5.1 Reusable Approval Engine", 2)
     add_table(
         doc,
         ["Component", "Model", "Role"],
@@ -196,7 +254,7 @@ def build_document() -> Document:
             ["Overtime Request", "hr.overtime.request", "Concrete implementation using the mixin"],
         ],
     )
-    add_heading(doc, "4.2 Approval Chain Logic", 2)
+    add_heading(doc, "5.2 Approval Chain Logic", 2)
     add_body(doc, "Mirrors Odoo hr_holidays manager resolution pattern:")
     add_bullet(doc, "Step 1: employee.parent_id (or department manager if no parent) → dept_manager")
     add_bullet(doc, "Step 2: parent of dept manager (if different person) → upper_manager")
@@ -205,7 +263,7 @@ def build_document() -> Document:
     add_bullet(doc, "2 stages: Solo manager → dept_manager → HR")
     add_bullet(doc, "3 stages: dept_manager → upper_manager → HR")
 
-    add_heading(doc, "4.3 Workflow States", 2)
+    add_heading(doc, "5.3 Workflow States", 2)
     add_table(
         doc,
         ["State", "Meaning"],
@@ -220,53 +278,81 @@ def build_document() -> Document:
         ],
     )
 
-    # --- 5. Data Models ---
-    add_heading(doc, "5. Database Models & Columns", 1)
+    add_heading(doc, "5.4 Automatic Overtime Type Selection", 2)
+    add_body(doc, "Overtime type is computed from the request period and the employee company branch:")
+    add_table(
+        doc,
+        ["Category (enum)", "When Applied", "Default Multiplier"],
+        [
+            ["regular", "Normal working days (Sun–Thu by default)", "1.5×"],
+            ["weekend", "Configured weekend weekdays (default Fri=4, Sat=5)", "2.0×"],
+            ["day_off", "Public holiday on employee working calendar", "2.5×"],
+        ],
+    )
+    add_body(
+        doc,
+        "If the period spans multiple categories, the highest multiplier wins. "
+        "Each company branch maintains its own hr.overtime.type records — San Francisco and Chicago "
+        "can use different multipliers."
+    )
 
-    add_heading(doc, "5.1 hr.overtime.type (Configuration)", 2)
+    # --- 6. Data Models ---
+    add_heading(doc, "6. Database Models & Tables", 1)
+    add_body(
+        doc,
+        "PostgreSQL tables created or extended by hr_overtime_management. "
+        "Standard Odoo tables (hr_employee, project_project, etc.) are not duplicated."
+    )
+
+    add_heading(doc, "6.1 hr.overtime.type → table hr_overtime_type", 2)
     add_table(
         doc,
         ["Column", "Type", "Description"],
         [
-            ["name", "Char", "Display name: Regular Overtime, Weekend, Public Holiday"],
-            ["code", "Char", "Unique code per company: regular, weekend, holiday"],
-            ["rate_multiplier", "Float", "Pay multiplier — seeded 1.5 / 2.0 / 2.5, editable in Settings"],
-            ["sequence", "Integer", "Display order"],
-            ["company_id", "Many2one", "Company scope"],
+            ["id", "Integer", "Primary key"],
+            ["name", "Varchar", "Display name (translatable)"],
+            ["code", "Varchar", "Technical code: regular, weekend, holiday"],
+            ["category", "Varchar", "Enum: regular | weekend | day_off"],
+            ["rate_multiplier", "Float", "Pay multiplier — editable per branch (e.g. 1.5, 2.0, 2.5)"],
+            ["sequence", "Integer", "Display order in lists"],
+            ["company_id", "Integer FK → res_company", "Company branch (NULL = shared template)"],
             ["active", "Boolean", "Archive inactive types"],
+            ["create_uid / write_uid", "Integer", "Audit — Odoo standard"],
+            ["create_date / write_date", "Timestamp", "Audit — Odoo standard"],
         ],
     )
 
-    add_heading(doc, "5.2 hr.overtime.request (Main Record)", 2)
+    add_heading(doc, "6.2 hr.overtime.request → table hr_overtime_request", 2)
     add_table(
         doc,
         ["Column", "Type", "Description"],
         [
-            ["name", "Char", "Auto sequence OT/YYYY/MM/00001"],
-            ["employee_id", "Many2one", "Employee who worked overtime"],
-            ["department_id", "Many2one", "Related from employee, stored"],
-            ["manager_id", "Many2one", "Direct manager (parent_id), stored"],
-            ["start_datetime", "Datetime", "Overtime start (date & time picker)"],
-            ["end_datetime", "Datetime", "Overtime end (date & time picker)"],
-            ["date", "Date", "Computed from start_datetime for filters/reports"],
-            ["overtime_hours", "Float", "Computed: (end − start) in hours"],
-            ["overtime_type_id", "Many2one", "Rate category with multiplier"],
-            ["project_id", "Many2one", "Project (timesheet-enabled)"],
-            ["task_id", "Many2one", "Task within project"],
+            ["id", "Integer", "Primary key"],
+            ["name", "Varchar", "Sequence OT/YYYY/MM/00001"],
+            ["employee_id", "Integer FK → hr_employee", "Employee who worked overtime"],
+            ["department_id", "Integer FK", "Stored related from employee"],
+            ["manager_id", "Integer FK", "Direct manager (parent_id)"],
+            ["employee_company_id", "Integer", "Employee company id (computed, stored)"],
+            ["start_datetime", "Timestamp", "Overtime start"],
+            ["end_datetime", "Timestamp", "Overtime end"],
+            ["date", "Date", "Computed from start_datetime"],
+            ["overtime_hours", "Float", "Computed duration in hours"],
+            ["overtime_type_id", "Integer FK → hr_overtime_type", "Auto-computed from date/category"],
+            ["project_id", "Integer FK → project_project", "Timesheet-enabled project"],
+            ["task_id", "Integer FK → project_task", "Task within project"],
             ["description", "Text", "Reason / details"],
-            ["attachment_ids", "Many2many", "Supporting documents"],
-            ["state", "Selection", "Workflow status (see section 4.3)"],
-            ["approval_line_ids", "One2many", "Full approval audit trail"],
-            ["current_approver_id", "Many2one", "User who must act now (record rules)"],
-            ["hourly_cost", "Monetary", "From contract wage via hr.version"],
-            ["total_cost", "Monetary", "hours × hourly_cost × rate_multiplier"],
-            ["analytic_line_id", "Many2one", "Timesheet line created on HR approval"],
-            ["company_id", "Many2one", "Company"],
-            ["currency_id", "Many2one", "Company currency"],
+            ["state", "Varchar", "draft | submitted | manager_approved | upper_manager_approved | hr_approved | refused | cancel"],
+            ["current_approver_id", "Integer FK → res_users", "User who must act now"],
+            ["hourly_cost", "Numeric", "Computed from hr.version wage"],
+            ["total_cost", "Numeric", "hours × hourly_cost × rate_multiplier"],
+            ["analytic_line_id", "Integer FK", "Timesheet line after HR approval"],
+            ["company_id", "Integer FK → res_company", "Employee company branch"],
+            ["currency_id", "Integer FK", "Company currency"],
         ],
     )
+    add_body(doc, "Many2many hr_overtime_request_ir_attachment_rel links supporting documents (ir_attachment).")
 
-    add_heading(doc, "5.3 hr.overtime.approval.line (Audit Trail)", 2)
+    add_heading(doc, "6.3 hr.overtime.approval.line → table hr_overtime_approval_line", 2)
     add_table(
         doc,
         ["Column", "Type", "Description"],
@@ -281,22 +367,37 @@ def build_document() -> Document:
         ],
     )
 
-    add_heading(doc, "5.4 res.company Extensions", 2)
+    add_heading(doc, "6.4 hr.approval.chain.service (Abstract — no table)", 2)
+    add_body(doc, "AbstractModel — logic only. Resolves (role, approver_user) tuples for any employee.")
+
+    add_heading(doc, "6.5 hr.approval.chain.mixin (Abstract — no table)", 2)
+    add_body(doc, "AbstractModel — generic submit, approve, refuse, activity scheduling.")
+
+    add_heading(doc, "6.6 res.company extensions (columns added to res_company)", 2)
     add_table(
         doc,
         ["Column", "Type", "Default", "Description"],
         [
             ["overtime_generate_analytic_line", "Boolean", "True", "Auto-create timesheet on HR approval"],
-            ["overtime_default_type_id", "Many2one", "Regular", "Default overtime type for new requests"],
-            ["overtime_daily_hours_cap", "Float", "4.0", "Warning if single request exceeds hours"],
-            ["overtime_hours_per_month", "Float", "173.33", "Fallback divisor: wage ÷ hours for hourly cost"],
+            ["overtime_default_type_id", "Integer FK", "Regular type", "Regular working day multiplier"],
+            ["overtime_weekend_type_id", "Integer FK", "Weekend type", "Weekend day multiplier"],
+            ["overtime_holiday_type_id", "Integer FK", "Day Off type", "Public holiday multiplier"],
+            ["overtime_weekend_weekdays", "Varchar", "4,5", "Weekend weekday numbers (Mon=0)"],
+            ["overtime_daily_hours_cap", "Float", "4.0", "Warning threshold for long requests"],
+            ["overtime_hours_per_month", "Float", "173.33", "Wage ÷ hours fallback for hourly cost"],
         ],
     )
 
-    # --- 6. Cost Calculation ---
-    add_heading(doc, "6. Cost Calculation", 1)
+    add_heading(doc, "6.7 Entity Relationship Summary", 2)
+    add_body(doc, "hr_employee → hr_overtime_request → hr_overtime_approval_line")
+    add_body(doc, "hr_overtime_request → hr_overtime_type (by category + company branch)")
+    add_body(doc, "hr_overtime_request → project_project / project_task → account_analytic_line (optional)")
+    add_body(doc, "res_company → 3× hr_overtime_type (regular, weekend, day_off) per branch")
+
+    # --- 7. Cost Calculation ---
+    add_heading(doc, "7. Cost Calculation", 1)
     add_body(doc, "Formula: total_cost = overtime_hours × hourly_cost × overtime_type.rate_multiplier")
-    add_heading(doc, "6.1 Hourly Cost (Odoo 19)", 2)
+    add_heading(doc, "7.1 Hourly Cost (Odoo 19)", 2)
     add_body(
         doc,
         "In Odoo 19, contract data lives on hr.version (linked via employee.current_version_id). "
@@ -310,8 +411,8 @@ def build_document() -> Document:
         "Hourly ≈ $45.81 → Total ≈ $137.43"
     )
 
-    # --- 7. Security ---
-    add_heading(doc, "7. Security Groups & Access", 1)
+    # --- 8. Security ---
+    add_heading(doc, "8. Security Groups & Access", 1)
     add_table(
         doc,
         ["Group", "Users", "Access"],
@@ -323,8 +424,8 @@ def build_document() -> Document:
         ],
     )
 
-    # --- 8. UI & Menus ---
-    add_heading(doc, "8. User Interface", 1)
+    # --- 9. UI & Menus ---
+    add_heading(doc, "9. User Interface", 1)
     add_table(
         doc,
         ["Menu", "Purpose"],
@@ -332,29 +433,29 @@ def build_document() -> Document:
             ["Overtime → My Requests", "Employee self-service list/form"],
             ["Overtime → My Approvals", "Kanban for pending approvers"],
             ["Overtime → All Requests", "HR officers — full list"],
-            ["Overtime → Configuration → Overtime Types", "Admin — rate multipliers"],
-            ["Settings → Employees → Overtime", "Company configuration"],
+            ["Overtime → Configuration → Overtime Types", "Per-branch Regular / Weekend / Day Off multipliers"],
+            ["Settings → Employees → Overtime", "Company branch settings + type links"],
         ],
     )
     add_body(doc, "Views delivered: List, Form (statusbar + approval tab + chatter), Kanban, Search filters, Pivot, Graph, QWeb PDF report.")
 
-    # --- 9. Integrations ---
-    add_heading(doc, "9. Integrations", 1)
-    add_heading(doc, "9.1 Timesheets (account.analytic.line)", 2)
+    # --- 10. Integrations ---
+    add_heading(doc, "10. Integrations", 1)
+    add_heading(doc, "10.1 Timesheets (account.analytic.line)", 2)
     add_body(
         doc,
         "When overtime_generate_analytic_line is enabled (default), final HR approval creates a "
         "timesheet line with project, task, employee, date, and overtime_hours as unit_amount."
     )
-    add_heading(doc, "9.2 Payroll (optional — hr_overtime_payroll)", 2)
+    add_heading(doc, "10.2 Payroll (optional — hr_overtime_payroll)", 2)
     add_body(
         doc,
         "If hr_payroll is installed and overtime_link_to_payroll is enabled, HR approval creates/updates "
         "an hr.payslip.input line (type Overtime) on the employee's open payslip."
     )
 
-    # --- 10. Issues Fixed ---
-    add_heading(doc, "10. Issues Encountered & Resolutions", 1)
+    # --- 11. Issues Fixed ---
+    add_heading(doc, "11. Issues Encountered & Resolutions", 1)
     add_table(
         doc,
         ["Issue", "Cause", "Resolution"],
@@ -365,37 +466,40 @@ def build_document() -> Document:
             ["Approval chain incomplete: no HR stage", "Sanitizer removed HR when same user as manager", "HR stage always preserved in chain"],
             ["Hourly/Total cost $0.00", "Core returned 0; Odoo 19 uses hr.version not hr.contract", "Read wage from employee.version_id"],
             ["column overtime_hours_per_month missing", "New field without DB upgrade", "Added column + reset module state"],
-            ["PDF: wkhtmltopdf not found", "Binary not installed on Windows", "Installed wkhtmltopdf 0.12.6 via winget"],
+            ["Missing overtime_type_id on save", "Computed field not set before INSERT", "Pre-resolve type in create(); category enums"],
+            ["overtime_weekend_weekdays column missing", "Module not upgraded", "SQL migration + module upgrade"],
+            ["Menu server action TypeError", "action context is a string not dict", "literal_eval before merge"],
+            ["Multi-company project access", "Session company ≠ employee company", "allowed_company_ids + record rules"],
         ],
     )
 
-    # --- 11. Configuration ---
-    add_heading(doc, "11. Configuration Checklist", 1)
+    # --- 12. Configuration ---
+    add_heading(doc, "12. Configuration Checklist (Multi-Company)", 1)
     checklist = [
         "Install hr_overtime_management on database odoo19.",
-        "Assign users to security groups (especially Officer: Overtime HR Approval).",
-        "Verify overtime types and multipliers under Overtime → Configuration.",
-        "Set company settings: default type, daily cap, hours/month divisor, timesheet toggle.",
-        "Ensure employees have contract wage and work schedule on hr.version.",
+        "For each company branch: verify 3 overtime types exist (auto-created on company create).",
+        "Set rate multipliers per branch under Overtime → Configuration → Overtime Types.",
+        "Configure weekend weekdays per branch in Settings → HR → Overtime (default 4,5 = Fri/Sat).",
+        "Assign users to Officer: Overtime HR Approval for each branch that needs HR approval.",
+        "Ensure employees have wage on hr.version and projects allow timesheets.",
         "Optional: install hr_overtime_payroll for payslip integration.",
-        "Optional: add C:\\Program Files\\wkhtmltopdf\\bin to PATH for PDF reports.",
     ]
     for i, item in enumerate(checklist, 1):
         add_bullet(doc, f"{i}. {item}")
 
-    # --- 12. User Guide ---
-    add_heading(doc, "12. End-User Guide", 1)
-    add_heading(doc, "12.1 Employee — Submit Overtime", 2)
+    # --- 13. User Guide ---
+    add_heading(doc, "13. End-User Guide", 1)
+    add_heading(doc, "13.1 Employee — Submit Overtime", 2)
     steps_emp = [
         "Go to Overtime → My Requests → New.",
-        "Select employee, start/end date & time, overtime type, project, task, description.",
+        "Set start/end date & time, project, task, description (type is auto-set from date).",
         "Attach documents if needed → Save → Submit.",
-        "Track status in form statusbar and Approval History tab.",
+        "Overtime Type and Total Cost update automatically (Regular / Weekend / Day Off).",
     ]
     for s in steps_emp:
         add_bullet(doc, s)
 
-    add_heading(doc, "12.2 Manager — Approve", 2)
+    add_heading(doc, "13.2 Manager — Approve", 2)
     for s in [
         "Go to Overtime → My Approvals.",
         "Open pending request → Approve or Refuse (reason required).",
@@ -403,15 +507,24 @@ def build_document() -> Document:
     ]:
         add_bullet(doc, s)
 
-    add_heading(doc, "12.3 HR — Final Approval", 2)
+    add_heading(doc, "13.3 HR — Configure Branch Rates", 2)
+    for s in [
+        "Switch to the company branch (company selector in top bar).",
+        "Open Overtime → Configuration → Overtime Types — grouped by company.",
+        "Edit Regular / Weekend / Day Off records and change Rate Multiplier per branch.",
+        "Or use Settings → HR → Overtime to link types and set weekend weekdays.",
+    ]:
+        add_bullet(doc, s)
+
+    add_heading(doc, "13.4 HR — Final Approval", 2)
     for s in [
         "Any user in Officer: Overtime HR Approval can perform final approval.",
         "On approval: state → Approved; timesheet line created if enabled; payroll input if enabled.",
     ]:
         add_bullet(doc, s)
 
-    # --- 13. Technical ---
-    add_heading(doc, "13. Technical File Structure", 1)
+    # --- 14. Technical ---
+    add_heading(doc, "14. Technical File Structure", 1)
     add_body(doc, "extra_addons/hr_overtime_management/")
     files = [
         "models/hr_approval_chain_service.py — reusable chain resolver",
@@ -423,13 +536,14 @@ def build_document() -> Document:
         "views/ — list, form, kanban, search, pivot, graph",
         "report/hr_overtime_report.xml — QWeb PDF",
         "wizard/hr_overtime_refuse_wizard.py — refusal reason dialog",
+        "hooks.py — post_init: provision overtime types for all company branches",
         "tests/test_hr_overtime.py — automated tests",
-        "migrations/ — database upgrade scripts",
+        "doc/generate_full_documentation.py — this PDF/DOCX generator",
     ]
     for f in files:
         add_bullet(doc, f)
 
-    add_heading(doc, "14. Upgrade & Maintenance", 1)
+    add_heading(doc, "15. Upgrade & Maintenance", 1)
     add_body(doc, "After any code change, upgrade the module:")
     add_body(doc, "python odoo-bin -c debian/odoo.conf -d odoo19 -u hr_overtime_management --stop-after-init")
     add_body(doc, "Or: Apps → HR Overtime Management → Upgrade")
@@ -487,7 +601,7 @@ def build_pdf_fallback():
     body = ParagraphStyle("Body", parent=styles["BodyText"], fontSize=10, leading=14, spaceAfter=6)
     story = [
         Paragraph("HR Overtime Management System", ParagraphStyle("T", fontSize=22, textColor=primary, alignment=1, spaceAfter=20)),
-        Paragraph("Full Technical Documentation — Odoo 19 v19.0.1.0.3", ParagraphStyle("S", fontSize=14, textColor=accent, alignment=1)),
+        Paragraph(f"Full Technical Documentation — Odoo 19 v{MODULE_VERSION}", ParagraphStyle("S", fontSize=14, textColor=accent, alignment=1)),
         Spacer(1, 30),
         Paragraph(f"Generated: {date.today()}", body),
         PageBreak(),

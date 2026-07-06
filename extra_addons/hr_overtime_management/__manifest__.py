@@ -1,6 +1,6 @@
 {
     'name': 'HR Overtime Management',
-    'version': '19.0.1.3.0',
+    'version': '19.0.1.4.0',
     'category': 'Human Resources/Overtime',
     'summary': 'Overtime requests with multi-level approval and timesheet integration',
     'author': 'Custom',
@@ -36,4 +36,5 @@
     'installable': True,
     'application': True,
     'license': 'LGPL-3',
+    'post_init_hook': 'post_init_hook',
 }

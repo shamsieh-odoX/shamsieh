@@ -379,6 +379,30 @@ class HrOvertimeRequest(models.Model):
         except ValueError:
             return {4, 5}
 
+    def _get_overtime_type_for_category(self, company, category):
+        company = company.sudo()
+        field_name = {
+            'regular': 'overtime_default_type_id',
+            'weekend': 'overtime_weekend_type_id',
+            'holiday': 'overtime_holiday_type_id',
+            'day_off': 'overtime_holiday_type_id',
+        }.get(category)
+        if field_name and company[field_name]:
+            return company[field_name]
+        OvertimeType = self.env['hr.overtime.type'].sudo()
+        ot_type = OvertimeType.search([
+            ('company_id', '=', company.id),
+            ('category', '=', 'day_off' if category == 'holiday' else category),
+            ('active', '=', True),
+        ], limit=1)
+        if ot_type:
+            return ot_type
+        return OvertimeType.search([
+            ('company_id', '=', False),
+            ('category', '=', 'day_off' if category == 'holiday' else category),
+            ('active', '=', True),
+        ], limit=1)
+
     def _get_overtime_type_by_code(self, code, company):
         category_map = {
             'regular': 'regular',
@@ -386,28 +410,16 @@ class HrOvertimeRequest(models.Model):
             'holiday': 'day_off',
             'day_off': 'day_off',
         }
-        OvertimeType = self.env['hr.overtime.type'].sudo()
-        domain = [
-            '|', ('company_id', '=', False), ('company_id', '=', company.id),
-        ]
-        ot_type = OvertimeType.search(domain + [('code', '=', code)], limit=1)
-        if ot_type:
-            return ot_type
-        category = category_map.get(code)
-        if category:
-            return OvertimeType.search(domain + [('category', '=', category)], limit=1)
-        return OvertimeType.browse()
+        category = category_map.get(code, code)
+        return self._get_overtime_type_for_category(company, category)
 
     def _get_company_overtime_types(self):
         self.ensure_one()
         company = self._sudo_company()
         types = {
-            'regular': company.overtime_default_type_id
-                or self._get_overtime_type_by_code('regular', company),
-            'weekend': company.overtime_weekend_type_id
-                or self._get_overtime_type_by_code('weekend', company),
-            'holiday': company.overtime_holiday_type_id
-                or self._get_overtime_type_by_code('holiday', company),
+            'regular': self._get_overtime_type_for_category(company, 'regular'),
+            'weekend': self._get_overtime_type_for_category(company, 'weekend'),
+            'holiday': self._get_overtime_type_for_category(company, 'day_off'),
         }
         if not types['regular']:
             types['regular'] = self.env['hr.overtime.type'].sudo().search([

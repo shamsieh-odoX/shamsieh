@@ -13,17 +13,17 @@ class ResConfigSettings(models.TransientModel):
     overtime_default_type_id = fields.Many2one(
         related='company_id.overtime_default_type_id',
         readonly=False,
-        domain="['|', ('company_id', '=', False), ('company_id', '=', company_id), ('category', '=', 'regular')]",
+        domain="['&', '|', ('company_id', '=', False), ('company_id', '=', company_id), ('category', '=', 'regular')]",
     )
     overtime_weekend_type_id = fields.Many2one(
         related='company_id.overtime_weekend_type_id',
         readonly=False,
-        domain="['|', ('company_id', '=', False), ('company_id', '=', company_id), ('category', '=', 'weekend')]",
+        domain="['&', '|', ('company_id', '=', False), ('company_id', '=', company_id), ('category', '=', 'weekend')]",
     )
     overtime_holiday_type_id = fields.Many2one(
         related='company_id.overtime_holiday_type_id',
         readonly=False,
-        domain="['|', ('company_id', '=', False), ('company_id', '=', company_id), ('category', '=', 'day_off')]",
+        domain="['&', '|', ('company_id', '=', False), ('company_id', '=', company_id), ('category', '=', 'day_off')]",
     )
     overtime_weekend_weekdays = fields.Char(
         related='company_id.overtime_weekend_weekdays',
