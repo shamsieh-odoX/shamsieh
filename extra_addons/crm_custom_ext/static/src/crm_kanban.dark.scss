@@ -1,0 +1,17 @@
+.o_crm_custom_kanban {
+    --crm-kanban-label-color: #{$gray-400};
+    --crm-kanban-meta-color: #{$gray-300};
+    --crm-kanban-revenue-color: #{lighten($success, 12%)};
+    --crm-kanban-ref-bg: #{rgba($white, 0.08)};
+    --crm-kanban-ref-color: #{$gray-200};
+    --crm-kanban-badge-bg: #{rgba($white, 0.06)};
+    --crm-kanban-badge-color: #{$gray-300};
+    --crm-kanban-badge-border: #{rgba($white, 0.14)};
+    --crm-kanban-divider: #{rgba($white, 0.08)};
+
+    .o_kanban_record {
+        .o_crm_custom_kanban_title {
+            color: $gray-100;
+        }
+    }
+}

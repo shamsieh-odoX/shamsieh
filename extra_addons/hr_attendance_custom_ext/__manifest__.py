@@ -1,6 +1,6 @@
 {
     'name': 'HR Attendance Custom Extensions',
-    'version': '19.0.1.2.0',
+    'version': '19.0.1.3.0',
     'category': 'Human Resources/Attendances',
     'summary': 'Shamsieh attendance, fingerprint sync, and face attendance (§2, §8, §9)',
     'author': 'Custom',
@@ -28,4 +28,10 @@
     'installable': True,
     'application': False,
     'license': 'LGPL-3',
+    'assets': {
+        'web.assets_backend': [
+            'hr_attendance_custom_ext/static/src/**/*.js',
+            'hr_attendance_custom_ext/static/src/**/*.xml',
+        ],
+    },
 }

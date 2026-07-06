@@ -32,6 +32,10 @@
     'assets': {
         'web.assets_backend': [
             'crm_custom_ext/static/src/crm_kanban.scss',
+            ('remove', 'crm_custom_ext/static/src/crm_kanban.dark.scss'),
+        ],
+        'web.assets_web_dark': [
+            'crm_custom_ext/static/src/crm_kanban.dark.scss',
         ],
     },
 }

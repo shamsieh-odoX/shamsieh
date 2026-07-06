@@ -21,6 +21,21 @@ class ResCompany(models.Model):
         default=500,
         help='Allowed geolocation distance from the configured reference point.',
     )
+    office_geo_latitude = fields.Float(
+        string='Office Latitude',
+        digits=(10, 7),
+        help='Reference latitude for office check-in geofencing.',
+    )
+    office_geo_longitude = fields.Float(
+        string='Office Longitude',
+        digits=(10, 7),
+        help='Reference longitude for office check-in geofencing.',
+    )
+    office_geo_radius_meters = fields.Integer(
+        string='Office Geo Radius (meters)',
+        default=500,
+        help='Allowed geolocation distance in meters from the office reference point.',
+    )
     face_provider = fields.Selection(
         selection=[('insightface', 'InsightFace (self-hosted)')],
         string='Face Provider',

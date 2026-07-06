@@ -50,6 +50,18 @@
                         <field name="face_geo_radius_meters" class="text-center" style="width: 6ch;"/>
                         <span class="ms-2">meters</span>
                     </setting>
+                    <setting string="Office Geo Reference Point" company_dependent="1"
+                             help="Office check-ins are rejected when outside this radius. Falls back to the employee office work address coordinates when unset.">
+                        <div class="d-flex gap-2 align-items-center">
+                            <field name="office_geo_latitude" placeholder="Latitude"/>
+                            <field name="office_geo_longitude" placeholder="Longitude"/>
+                        </div>
+                    </setting>
+                    <setting string="Office Geo Radius" company_dependent="1"
+                             help="Allowed geolocation distance in meters from the office reference point.">
+                        <field name="office_geo_radius_meters" class="text-center" style="width: 6ch;"/>
+                        <span class="ms-2">meters</span>
+                    </setting>
                     <setting string="Liveness Required" company_dependent="1"
                              invisible="face_attendance_stub_enabled"
                              help="Reserved for future advanced liveness detection.">

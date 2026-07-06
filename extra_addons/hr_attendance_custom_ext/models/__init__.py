@@ -9,3 +9,4 @@ from . import face_attendance_log
 from . import hr_employee_face_template
 from . import res_company
 from . import res_config_settings
+from . import ir_http

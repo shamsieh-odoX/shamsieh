@@ -1,6 +1,11 @@
 # -*- coding: utf-8 -*-
 
-from odoo import api, fields, models
+from odoo import _, api, fields, models
+from odoo.exceptions import UserError
+
+from odoo.addons.hr_attendance_custom_ext.services.face_provider_insightface import (
+    haversine_distance_meters,
+)
 
 
 class HrEmployee(models.Model):
@@ -133,7 +138,93 @@ class HrEmployee(models.Model):
             'context': {'default_employee_id': self.id},
         }
 
+    def _get_effective_work_location_type(self):
+        self.ensure_one()
+        return self.work_location_type or 'other'
+
+    def _is_office_geo_configured(self):
+        self.ensure_one()
+        lat, lng, _radius = self._get_office_geo_reference()
+        return bool(lat and lng)
+
+    def _get_office_geo_reference(self):
+        self.ensure_one()
+        company = self.company_id
+        if company.office_geo_latitude and company.office_geo_longitude:
+            return (
+                company.office_geo_latitude,
+                company.office_geo_longitude,
+                company.office_geo_radius_meters or 500,
+            )
+        work_location = self.work_location_id
+        if work_location and work_location.location_type == 'office' and work_location.address_id:
+            partner = work_location.address_id
+            if partner.partner_latitude and partner.partner_longitude:
+                return (
+                    partner.partner_latitude,
+                    partner.partner_longitude,
+                    company.office_geo_radius_meters or 500,
+                )
+        return False, False, 0
+
+    def _validate_single_daily_check_in(self):
+        self.ensure_one()
+        policy = self.env['fingerprint.attendance.policy'].get_company_default(self.company_id)
+        if policy.allow_multiple_attendances_per_day:
+            return
+        today = fields.Date.context_today(self)
+        if self.env['hr.attendance'].search_count([
+            ('employee_id', '=', self.id),
+            ('date', '=', today),
+        ]):
+            raise UserError(_('You have already checked in today. Only one check-in per day is allowed.'))
+
+    def _validate_office_geolocation(self, latitude, longitude, device_location=False):
+        self.ensure_one()
+        if not device_location:
+            raise UserError(_('Your device location is required to check in from the office.'))
+        if not latitude or not longitude:
+            raise UserError(_('Your device location is required to check in from the office.'))
+
+        lat_ref, lng_ref, radius = self._get_office_geo_reference()
+        if not lat_ref or not lng_ref:
+            raise UserError(_('Office geolocation is not configured. Please contact HR.'))
+
+        distance = haversine_distance_meters(lat_ref, lng_ref, latitude, longitude)
+        if radius and distance > radius:
+            raise UserError(_(
+                'You must be at the office to check in. You are %(distance).0f m away (allowed radius: %(radius)s m).',
+                distance=distance,
+                radius=radius,
+            ))
+        return distance
+
+    def _validate_attendance_check_in(self, geo_information=None, via_face=False, device_location=False):
+        self.ensure_one()
+        if self.attendance_state == 'checked_in':
+            return
+
+        self._validate_single_daily_check_in()
+        location_type = self._get_effective_work_location_type()
+
+        if location_type == 'home':
+            if not via_face:
+                raise UserError(_('Face verification is required when working from home.'))
+            return
+
+        if location_type == 'office':
+            if via_face:
+                raise UserError(_('Office check-in requires geolocation. Use the attendance menu instead.'))
+            latitude = geo_information.get('latitude') if geo_information else False
+            longitude = geo_information.get('longitude') if geo_information else False
+            self._validate_office_geolocation(latitude, longitude, device_location=device_location)
+
     def _attendance_action_change(self, geo_information=None):
+        self._validate_attendance_check_in(
+            geo_information,
+            via_face=self.env.context.get('attendance_via_face'),
+            device_location=self.env.context.get('attendance_device_location'),
+        )
         attendance = super()._attendance_action_change(geo_information=geo_information)
         if attendance and not attendance.attendance_source:
             mode_map = {

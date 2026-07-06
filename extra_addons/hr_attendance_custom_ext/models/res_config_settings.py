@@ -22,6 +22,18 @@ class ResConfigSettings(models.TransientModel):
         related='company_id.face_geo_radius_meters',
         readonly=False,
     )
+    office_geo_latitude = fields.Float(
+        related='company_id.office_geo_latitude',
+        readonly=False,
+    )
+    office_geo_longitude = fields.Float(
+        related='company_id.office_geo_longitude',
+        readonly=False,
+    )
+    office_geo_radius_meters = fields.Integer(
+        related='company_id.office_geo_radius_meters',
+        readonly=False,
+    )
     face_provider = fields.Selection(
         related='company_id.face_provider',
         readonly=False,

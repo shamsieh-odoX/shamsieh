@@ -14,6 +14,7 @@ class TestFaceAttendanceStub(TransactionCase):
             'name': 'Remote Face Employee',
             'remote_attendance_allowed': True,
             'company_id': cls.company.id,
+            'work_location_id': cls.env.ref('hr.home_work_location').id,
         })
 
     def test_face_check_creates_attendance(self):
@@ -29,6 +30,7 @@ class TestFaceAttendanceStub(TransactionCase):
 
     def test_face_check_blocked_without_permission(self):
         self.employee.remote_attendance_allowed = False
+        self.employee.work_location_id = self.env.ref('hr.home_work_office')
         Log = self.env['face.attendance.log']
         with self.assertRaises(Exception):
             Log.create_face_check(

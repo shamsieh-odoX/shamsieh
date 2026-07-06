@@ -8,4 +8,5 @@ from . import test_hikvision_time
 from . import test_hikvision_http_listening
 from . import test_sync_hardening
 from . import test_face_attendance_stub
+from . import test_work_location_check_in
 from . import test_face_attendance_insightface

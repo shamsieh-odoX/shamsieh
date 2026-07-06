@@ -42,6 +42,7 @@ class TestFaceAttendanceInsightFace(TransactionCase):
             'name': 'InsightFace Employee',
             'remote_attendance_allowed': True,
             'company_id': cls.company.id,
+            'work_location_id': cls.env.ref('hr.home_work_location').id,
         })
         cls.template = cls.env['hr.employee.face.template'].create({
             'employee_id': cls.employee.id,
@@ -119,6 +120,7 @@ class TestFaceAttendanceInsightFace(TransactionCase):
 
     def test_remote_attendance_not_allowed_raises(self):
         self.employee.remote_attendance_allowed = False
+        self.employee.work_location_id = self.env.ref('hr.home_work_office')
         with self.assertRaises(Exception):
             self.Log.create_face_check(
                 employee=self.employee,
@@ -161,7 +163,8 @@ class TestFaceAttendanceInsightFace(TransactionCase):
         self.assertEqual(first.id, second.id)
         self.assertEqual(self.Log.search_count([('external_token', '=', token)]), 1)
 
-    def test_geo_outside_radius_fails(self):
+    def test_geo_outside_radius_fails_for_remote_non_home(self):
+        self.employee.work_location_id = self.env.ref('hr.home_work_other')
         self.company.write({
             'face_allowed_latitude': 31.9500,
             'face_allowed_longitude': 35.9100,
@@ -175,8 +178,7 @@ class TestFaceAttendanceInsightFace(TransactionCase):
             selfie_image_base64='aGVsbG8=',
         )
         self.assertEqual(log.verification_status, 'failed')
-        self.assertTrue(log.distance_meters > 100)
-        self.assertIn('outside the allowed radius', log.error_message)
+        self.assertIn('Face verification is only required when working from home', log.error_message)
 
     @patch('odoo.addons.hr_attendance_custom_ext.models.face_attendance_log.get_face_provider')
     def test_low_confidence_fails(self, mock_get_provider):
@@ -243,6 +245,7 @@ class TestFaceAttendanceController(HttpCase):
             'remote_attendance_allowed': True,
             'company_id': cls.company.id,
             'user_id': cls.env.user.id,
+            'work_location_id': cls.env.ref('hr.home_work_location').id,
         })
 
     def test_face_check_jsonrpc_stub(self):

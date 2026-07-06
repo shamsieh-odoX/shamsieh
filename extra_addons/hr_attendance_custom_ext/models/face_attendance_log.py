@@ -61,8 +61,37 @@ class FaceAttendanceLog(models.Model):
 
     def _validate_remote_allowed(self):
         self.ensure_one()
+        if self.employee_id._get_effective_work_location_type() == 'home':
+            return
         if not self.employee_id.remote_attendance_allowed:
             raise UserError(_('Remote face attendance is not allowed for this employee.'))
+
+    def _validate_work_location_rules(self):
+        self.ensure_one()
+        if self.action_type != 'check_in':
+            return True
+        location_type = self.employee_id._get_effective_work_location_type()
+        if location_type == 'office':
+            self.verification_status = 'failed'
+            self.error_message = _('Office check-in requires geolocation. Use the attendance menu instead.')
+            return False
+        if location_type != 'home':
+            self.verification_status = 'failed'
+            self.error_message = _('Face verification is only required when working from home.')
+            return False
+        return True
+
+    def _validate_single_daily_check_in(self):
+        self.ensure_one()
+        if self.action_type != 'check_in':
+            return True
+        try:
+            self.employee_id._validate_single_daily_check_in()
+        except UserError as exc:
+            self.verification_status = 'failed'
+            self.error_message = str(exc)
+            return False
+        return True
 
     def _get_active_template(self):
         self.ensure_one()
@@ -79,6 +108,8 @@ class FaceAttendanceLog(models.Model):
 
     def _validate_geolocation(self):
         self.ensure_one()
+        if self.employee_id._get_effective_work_location_type() == 'home':
+            return True
         company = self.employee_id.company_id
         if not (company.face_allowed_latitude and company.face_allowed_longitude):
             return True
@@ -187,9 +218,13 @@ class FaceAttendanceLog(models.Model):
 
         employee = self.employee_id
         if self.action_type == 'check_in' and employee.attendance_state == 'checked_out':
-            attendance = employee._attendance_action_change(geo_information=geo or None)
+            attendance = employee.with_context(
+                attendance_via_face=True,
+            )._attendance_action_change(geo_information=geo or None)
         elif self.action_type == 'check_out' and employee.attendance_state == 'checked_in':
-            attendance = employee._attendance_action_change(geo_information=geo or None)
+            attendance = employee.with_context(
+                attendance_via_face=True,
+            )._attendance_action_change(geo_information=geo or None)
         else:
             action = self.action_type
             state = employee.attendance_state
@@ -246,6 +281,10 @@ class FaceAttendanceLog(models.Model):
             'external_token': external_token or str(uuid.uuid4()),
         })
         log._validate_remote_allowed()
+        if not log._validate_work_location_rules():
+            return log
+        if not log._validate_single_daily_check_in():
+            return log
         if not log._validate_geolocation():
             return log
         company = employee.company_id
