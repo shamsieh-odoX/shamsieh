@@ -19,7 +19,15 @@ class FingerprintDeviceLog(models.Model):
     external_id = fields.Char(required=True, index=True)
     serial_no = fields.Char(index=True)
     device_user_id = fields.Char(index=True)
-    employee_name = fields.Char()
+    employee_name = fields.Char(
+        string='Stored Employee Name',
+        help='Odoo employee name at sync time (not the device scanner label).',
+    )
+    display_employee_name = fields.Char(
+        string='Employee Name',
+        compute='_compute_display_employee_name',
+        store=True,
+    )
     employee_id = fields.Many2one('hr.employee', index=True)
     event_time = fields.Datetime(required=True, index=True)
     event_type = fields.Char(index=True)
@@ -61,6 +69,24 @@ class FingerprintDeviceLog(models.Model):
         'Device log external ID must be unique per device.',
     )
 
+    @api.depends('employee_id', 'employee_id.name', 'employee_name')
+    def _compute_display_employee_name(self):
+        for log in self:
+            if log.employee_id:
+                log.display_employee_name = log.employee_id.name
+            else:
+                log.display_employee_name = log.employee_name or ''
+
+    @api.model
+    def _attendance_log_domain(self):
+        """Logs shown in sync UI: attendance scans only (check-in/out or pending draft)."""
+        return [
+            ('state', 'not in', ('ignored', 'duplicate')),
+            '|',
+            ('punch_type', 'in', ('check_in', 'check_out')),
+            ('state', '=', 'draft'),
+        ]
+
     def _employee_timezone(self, employee):
         return (
             employee.tz
@@ -89,7 +115,10 @@ class FingerprintDeviceLog(models.Model):
             ('company_id', '=', self.device_id.company_id.id),
         ], limit=1)
         if employee:
-            self.employee_id = employee.id
+            self.write({
+                'employee_id': employee.id,
+                'employee_name': employee.name,
+            })
         return employee
 
     def _mark_error(self, message):

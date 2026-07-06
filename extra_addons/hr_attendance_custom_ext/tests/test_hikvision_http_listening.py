@@ -1,7 +1,10 @@
 # -*- coding: utf-8 -*-
 
 import json
+from datetime import timedelta
+from unittest.mock import patch
 
+from odoo import fields
 from odoo.tests import HttpCase, TransactionCase
 
 from odoo.addons.hr_attendance_custom_ext.services.hikvision_connector import HikvisionConnector
@@ -79,6 +82,18 @@ class TestHikvisionPushIngest(TransactionCase):
         self.assertIn(self.token, self.device.http_listening_url)
         self.assertIn('/hikvision/event/', self.device.http_listening_url)
 
+    def test_ingest_push_event_stores_odoo_employee_name(self):
+        connector = HikvisionConnector(self.device)
+        payload = dict(SAMPLE_EVENT)
+        payload['employeeNoString'] = 'HL001'
+        payload['name'] = 'Scanner Label'
+        payload['serialNo'] = 9104
+        result = connector.ingest_push_event(payload)
+        self.assertEqual(result['action'], 'stored')
+        log = result['log']
+        self.assertEqual(log.employee_name, self.employee.name)
+        self.assertEqual(log.display_employee_name, self.employee.name)
+
     def test_ingest_push_event_stores_and_processes(self):
         connector = HikvisionConnector(self.device)
         payload = dict(SAMPLE_EVENT)
@@ -90,6 +105,25 @@ class TestHikvisionPushIngest(TransactionCase):
         self.assertEqual(log.state, 'processed')
         self.assertTrue(log.attendance_id)
 
+    def test_cron_skips_poll_when_http_listening_is_live(self):
+        self.device.write({
+            'http_listening_last_at': fields.Datetime.now(),
+            'sync_interval_minutes': 15.0,
+        })
+        with patch.object(type(self.device), '_sync_device') as mock_sync:
+            self.env['fingerprint.device']._cron_sync_all()
+            mock_sync.assert_not_called()
+
+    def test_cron_polls_when_http_listening_is_stale(self):
+        self.device.write({
+            'http_listening_last_at': fields.Datetime.now() - timedelta(minutes=20),
+            'sync_interval_minutes': 15.0,
+            'last_sync_at': False,
+        })
+        with patch.object(type(self.device), '_sync_device') as mock_sync:
+            self.env['fingerprint.device']._cron_sync_all()
+            mock_sync.assert_called_once()
+
     def test_ingest_duplicate(self):
         connector = HikvisionConnector(self.device)
         payload = dict(SAMPLE_EVENT)
@@ -99,10 +133,23 @@ class TestHikvisionPushIngest(TransactionCase):
         result = connector.ingest_push_event(payload)
         self.assertEqual(result['action'], 'duplicate')
 
-    def test_door_event_ignored(self):
+    def test_door_event_skipped_by_default(self):
         connector = HikvisionConnector(self.device)
         payload = {
             'serialNo': 9102,
+            'employeeNoString': '',
+            'time': '2026-07-05T13:11:17',
+            'major': 5,
+            'minor': 21,
+        }
+        result = connector.ingest_push_event(payload)
+        self.assertEqual(result['action'], 'skipped')
+
+    def test_door_event_ignored_when_storing_ignored(self):
+        self.device.write({'store_ignored_events': True})
+        connector = HikvisionConnector(self.device)
+        payload = {
+            'serialNo': 9103,
             'employeeNoString': '',
             'time': '2026-07-05T13:11:17',
             'major': 5,

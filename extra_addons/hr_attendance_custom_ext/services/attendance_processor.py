@@ -266,6 +266,7 @@ class AttendanceProcessor:
             'state': 'processed',
             'attendance_id': attendance.id,
             'employee_id': log.employee_id.id or attendance.employee_id.id,
+            'employee_name': (log.employee_id or attendance.employee_id).name,
             'error_message': False,
             'punch_type': punch_type,
             'processed_at': now,

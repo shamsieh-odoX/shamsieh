@@ -12,6 +12,7 @@
         <field name="name">Fingerprint Device Logs Report</field>
         <field name="res_model">fingerprint.device.log</field>
         <field name="view_mode">list,pivot,graph</field>
+        <field name="domain">[('state', 'not in', ('ignored', 'duplicate')), '|', ('punch_type', 'in', ('check_in', 'check_out')), ('state', '=', 'draft')]</field>
         <field name="limit">200</field>
         <field name="context">{'search_default_group_device': 1}</field>
         <field name="search_view_id" ref="view_fingerprint_device_log_search"/>

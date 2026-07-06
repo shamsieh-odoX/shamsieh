@@ -89,7 +89,10 @@ class HrEmployee(models.Model):
             ])
             if not logs:
                 continue
-            logs.write({'employee_id': employee.id})
+            logs.write({
+                'employee_id': employee.id,
+                'employee_name': employee.name,
+            })
             logs.filtered(lambda log: log.state == 'error').write({
                 'state': 'draft',
                 'error_message': False,

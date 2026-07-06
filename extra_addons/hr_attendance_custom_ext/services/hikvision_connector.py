@@ -313,7 +313,6 @@ class HikvisionConnector:
             'external_id': str(event.get('external_id')),
             'serial_no': str(raw.get('serialNo')) if raw.get('serialNo') is not None else False,
             'device_user_id': device_user_id or False,
-            'employee_name': event.get('employee_name') or False,
             'event_time': event_time or fields.Datetime.now(),
             'event_type': event_type,
             'major': int(raw['major']) if raw.get('major') is not None else False,
@@ -324,6 +323,7 @@ class HikvisionConnector:
         }
         if employee:
             vals['employee_id'] = employee.id
+            vals['employee_name'] = employee.name
         return vals
 
     def _resolve_employee(self, device_user_id):
@@ -339,7 +339,10 @@ class HikvisionConnector:
     def _relink_existing_log(existing, employee):
         if not employee or existing.employee_id:
             return
-        vals = {'employee_id': employee.id}
+        vals = {
+            'employee_id': employee.id,
+            'employee_name': employee.name,
+        }
         if existing.state == 'error':
             vals['state'] = 'draft'
             vals['error_message'] = False

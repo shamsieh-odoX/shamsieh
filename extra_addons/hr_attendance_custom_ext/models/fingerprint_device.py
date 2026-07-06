@@ -54,7 +54,7 @@ class FingerprintDevice(models.Model):
     )
     store_ignored_events = fields.Boolean(
         string='Store All Device Events',
-        default=True,
+        default=False,
         help='When enabled, door/system events are saved with state Ignored. '
              'When disabled, only attendance-relevant authentication events are stored.',
     )
@@ -81,10 +81,11 @@ class FingerprintDevice(models.Model):
     active = fields.Boolean(default=True)
     auto_sync = fields.Boolean(string='Auto Sync', default=True)
     sync_interval_minutes = fields.Float(
-        string='Sync Interval (minutes)',
-        default=1.0,
-        help='Minimum minutes between automatic syncs for this device. '
-             'Odoo runs the scheduler every minute; use 1 for near-live polling.',
+        string='Polling Fallback Interval (minutes)',
+        default=15.0,
+        help='When HTTP listening is active and receiving events, polling is skipped. '
+             'If no push is received within this window, the scheduler fetches events '
+             'from the device as a backup.',
     )
     import_file_data = fields.Binary(
         string='Import File',
@@ -99,8 +100,9 @@ class FingerprintDevice(models.Model):
     processed_log_count = fields.Integer(compute='_compute_log_counts')
     http_listening_enabled = fields.Boolean(
         string='HTTP Listening',
-        default=False,
-        help='When enabled, the device pushes access events to Odoo in real time.',
+        default=True,
+        help='When enabled, the device pushes access events to Odoo in real time. '
+             'Scheduled polling is used only as a fallback when pushes stop.',
     )
     http_listening_token = fields.Char(
         string='HTTP Listening Token',
@@ -221,6 +223,11 @@ class FingerprintDevice(models.Model):
         """Fetch device events, remap employees, and process attendance (used by cron)."""
         self.ensure_one()
         self._sync_device()
+        self._process_pending_drafts()
+
+    def _process_pending_drafts(self):
+        """Remap employees and process draft attendance logs without fetching from device."""
+        self.ensure_one()
         self._refresh_log_employee_mappings()
         errors = self.log_ids.filtered(lambda log: log.state == 'error' and log.device_user_id)
         for log in errors:
@@ -228,9 +235,19 @@ class FingerprintDevice(models.Model):
                 log.write({'state': 'draft', 'error_message': False})
         self.log_ids.filtered(lambda log: log.state == 'draft')._process_pending_logs()
 
+    def _http_listening_is_live(self, now=None):
+        """Return True when recent HTTP pushes indicate live sync is healthy."""
+        self.ensure_one()
+        if not self.http_listening_enabled or not self.http_listening_last_at:
+            return False
+        now = now or fields.Datetime.now()
+        fallback = timedelta(minutes=self.sync_interval_minutes or 15.0)
+        return (now - self.http_listening_last_at) < fallback
+
     def _action_view_logs_domain(self, extra_domain=None):
         self.ensure_one()
         domain = [('device_id', '=', self.id)]
+        domain += self.env['fingerprint.device.log']._attendance_log_domain()
         if extra_domain:
             domain += extra_domain
         return {
@@ -328,8 +345,17 @@ class FingerprintDevice(models.Model):
         now = fields.Datetime.now()
         devices = self.search([('active', '=', True), ('auto_sync', '=', True)])
         for device in devices:
-            interval = device.sync_interval_minutes or 1.0
-            if interval > 1 and device.last_sync_at and (now - device.last_sync_at) < timedelta(minutes=interval):
+            if device._http_listening_is_live(now):
+                try:
+                    device._process_pending_drafts()
+                except UserError as exc:
+                    _logger.warning(
+                        'Fingerprint draft processing failed for %s: %s',
+                        device.name, exc,
+                    )
+                continue
+            interval = device.sync_interval_minutes or 15.0
+            if device.last_sync_at and (now - device.last_sync_at) < timedelta(minutes=interval):
                 continue
             try:
                 device._auto_sync_device()
