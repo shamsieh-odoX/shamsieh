@@ -154,6 +154,49 @@ class HrOvertimeRequest(models.Model):
         readonly=True,
         index=True,
     )
+    company_label = fields.Char(
+        string='Company',
+        compute='_compute_company_label',
+        readonly=True,
+    )
+
+    @api.depends('employee_company_id')
+    def _compute_company_label(self):
+        for request in self:
+            if request.employee_company_id:
+                company = request.env['res.company'].browse(request.employee_company_id).sudo()
+                request.company_label = company.display_name
+            else:
+                request.company_label = ''
+
+    def _user_can_access_overtime_records(self):
+        """True when the user may open this overtime request (owner or active approver)."""
+        user = self.env.user
+        if user.has_group('hr_overtime_management.group_overtime_hr_officer'):
+            return True
+        for request in self:
+            if request.employee_id.user_id == user:
+                continue
+            if request.current_approver_id == user:
+                continue
+            active_lines = request.sudo().approval_line_ids.filtered(
+                lambda l: l.approver_id == user and l.state == 'to_approve'
+            )
+            if active_lines:
+                continue
+            return False
+        return True
+
+    @api.readonly
+    def web_read(self, specification):
+        if self.env.user.has_group('hr_overtime_management.group_overtime_hr_officer'):
+            return super().web_read(specification)
+        if not self._user_can_access_overtime_records():
+            return super().web_read(specification)
+        return super(
+            HrOvertimeRequest,
+            self.sudo().with_context(check_company=False),
+        ).web_read(specification)
 
     @api.depends('employee_id', 'employee_id.company_id')
     def _compute_employee_company_id(self):
@@ -189,8 +232,11 @@ class HrOvertimeRequest(models.Model):
         if user.has_group('hr_overtime_management.group_overtime_hr_officer'):
             return
         for request in self:
-            if request.employee_id.user_id != user:
-                raise AccessError(_('You can only modify your own overtime requests.'))
+            if request.employee_id.user_id == user:
+                continue
+            if request.current_approver_id == user:
+                continue
+            raise AccessError(_('You can only modify your own overtime requests.'))
 
     def _validate_employee_company_access(self, employee):
         """Employee company must be in the user's allowed companies."""
@@ -232,7 +278,12 @@ class HrOvertimeRequest(models.Model):
     @api.model
     def _overtime_action_context(self):
         employee = self.env.user.employee_id
-        ctx = {'search_default_my_requests': 1}
+        ctx = {
+            'search_default_my_requests': 1,
+            'allowed_company_ids': self.env.user.company_ids.ids,
+        }
+        if employee and employee.company_id:
+            ctx['default_company_id'] = employee.company_id.id
         if employee:
             ctx['default_employee_id'] = employee.id
         return ctx
@@ -261,11 +312,17 @@ class HrOvertimeRequest(models.Model):
         action = self.env['ir.actions.act_window']._for_xml_id(
             'hr_overtime_management.action_hr_overtime_my_approvals_window',
         )
-        extra = {
-            'search_default_my_approvals': 1,
+        uid = self.env.user.id
+        action['domain'] = [
+            ('state', 'in', ('submitted', 'manager_approved', 'upper_manager_approved')),
+            '|',
+            ('current_approver_id', '=', uid),
+            '&', ('approval_line_ids.approver_id', '=', uid), ('approval_line_ids.state', '=', 'to_approve'),
+        ]
+        return self._merge_action_context(action, {
             'search_default_pending': 1,
-        }
-        return self._merge_action_context(action, extra)
+            'allowed_company_ids': self.env.user.company_ids.ids,
+        })
 
     @api.model
     def default_get(self, fields_list):
@@ -324,8 +381,61 @@ class HrOvertimeRequest(models.Model):
     @api.depends('approval_line_ids.state', 'approval_line_ids.approver_id')
     def _compute_current_approver_id(self):
         for request in self:
-            active_line = request.approval_line_ids.filtered(lambda l: l.state == 'to_approve')[:1]
+            active_line = request.sudo().approval_line_ids.filtered(
+                lambda l: l.state == 'to_approve'
+            )[:1]
             request.current_approver_id = active_line.approver_id
+
+    @api.model
+    def _recompute_current_approvers(self):
+        """Refresh stored approver after rule/compute fixes (module upgrade)."""
+        self._apply_approver_record_rule()
+        requests = self.search([('state', 'not in', ('draft', 'cancel', 'refused', 'hr_approved'))])
+        if requests:
+            requests._compute_current_approver_id()
+        self._refresh_stale_approval_assignments()
+
+    @api.model
+    def _apply_approver_record_rule(self):
+        """Force-update manager rule (original XML is noupdate)."""
+        rule = self.env.ref(
+            'hr_overtime_management.hr_overtime_request_rule_manager',
+            raise_if_not_found=False,
+        )
+        domain = (
+            "['|', ('current_approver_id', '=', user.id), "
+            "'&', ('approval_line_ids.approver_id', '=', user.id), "
+            "('approval_line_ids.state', '=', 'to_approve')]"
+        )
+        if rule and rule.domain_force != domain:
+            rule.sudo().write({'domain_force': domain})
+
+    @api.model
+    def _refresh_stale_approval_assignments(self):
+        """Re-point active manager lines when the employee's manager changed."""
+        ApprovalLine = self.env['hr.overtime.approval.line'].sudo()
+        for request in self.search([
+            ('state', 'in', ('submitted', 'manager_approved', 'upper_manager_approved')),
+        ]):
+            employee = request.employee_id
+            if not employee:
+                continue
+            active_line = ApprovalLine.search([
+                ('request_id', '=', request.id),
+                ('state', '=', 'to_approve'),
+            ], limit=1)
+            if not active_line:
+                continue
+            expected_user = False
+            if active_line.role == 'dept_manager':
+                manager = employee.parent_id or employee.department_id.manager_id
+                expected_user = manager.user_id if manager else False
+            elif active_line.role == 'upper_manager' and employee.parent_id:
+                upper = employee.parent_id.parent_id
+                expected_user = upper.user_id if upper else False
+            if expected_user and active_line.approver_id != expected_user:
+                active_line.write({'approver_id': expected_user.id})
+                request._compute_current_approver_id()
 
     @api.depends('start_datetime', 'end_datetime', 'employee_id', 'employee_company_id')
     def _compute_overtime_type_id(self):
@@ -613,8 +723,9 @@ class HrOvertimeRequest(models.Model):
         )
         if not activity_type:
             return
-        note = _('Overtime request %(ref)s requires your approval.', ref=self.name)
-        self.activity_schedule(
+        request = self.sudo()
+        note = _('Overtime request %(ref)s requires your approval.', ref=request.name)
+        request.activity_schedule(
             activity_type_id=activity_type.id,
             user_id=line.approver_id.id,
             note=note,
@@ -626,7 +737,7 @@ class HrOvertimeRequest(models.Model):
             raise_if_not_found=False,
         )
         if activity_type:
-            self.activity_ids.filtered(
+            self.sudo().activity_ids.filtered(
                 lambda a: a.activity_type_id == activity_type
             ).unlink()
 
@@ -636,7 +747,7 @@ class HrOvertimeRequest(models.Model):
                 request._create_analytic_line()
 
     def _on_approval_refused(self, line, reason):
-        self.message_post(
+        self.sudo().message_post(
             body=_('Request refused by %(user)s: %(reason)s', user=self.env.user.name, reason=reason),
             subtype_xmlid='mail.mt_comment',
         )
@@ -686,9 +797,11 @@ class HrOvertimeRequest(models.Model):
         vals.pop('company_id', None)
         vals.pop('employee_company_id', None)
         is_hr_officer = self.env.user.has_group('hr_overtime_management.group_overtime_hr_officer')
-        if not is_hr_officer:
+        if not is_hr_officer and not self.env.su:
             vals.pop('overtime_type_id', None)
             self._check_employee_owns_requests()
+        elif not is_hr_officer:
+            vals.pop('overtime_type_id', None)
         if vals.get('project_id'):
             project = self.env['project.project'].browse(vals['project_id'])
             self._validate_project_company_access(project)
@@ -737,9 +850,9 @@ class HrOvertimeRequest(models.Model):
                     'Ask an administrator to assign at least one user to the '
                     '"Officer: Overtime HR Approval" group (Settings → Users).'
                 ))
-            request.approval_line_ids.unlink()
+            request._unlink_approval_lines()
             request._create_approval_lines_from_chain(chain)
-            request.state = 'submitted'
+            request.sudo().write({'state': 'submitted'})
             first_line = request._get_active_approval_line()
             if first_line:
                 request._schedule_approval_activity(first_line)
@@ -751,7 +864,7 @@ class HrOvertimeRequest(models.Model):
             if request.state in ('hr_approved', 'refused'):
                 raise UserError(_('Approved or refused requests cannot be cancelled.'))
             request._clear_approval_activities()
-            request.approval_line_ids.unlink()
+            request._unlink_approval_lines()
             request.state = 'cancel'
         return True
 
@@ -759,7 +872,7 @@ class HrOvertimeRequest(models.Model):
         for request in self:
             if request.state not in ('cancel', 'refused'):
                 raise UserError(_('Only cancelled or refused requests can be reset to draft.'))
-            request.approval_line_ids.unlink()
+            request._unlink_approval_lines()
             request.state = 'draft'
         return True
 
@@ -781,7 +894,7 @@ class HrOvertimeRequest(models.Model):
             'company_id': self.company_id.id,
         }
         analytic_line = self.env['account.analytic.line'].sudo().create(line_vals)
-        self.analytic_line_id = analytic_line
+        self.sudo().analytic_line_id = analytic_line
 
     def action_view_approval_lines(self):
         self.ensure_one()

@@ -67,9 +67,13 @@ class HrApprovalChainMixin(models.AbstractModel):
             return user.has_group(self._approval_hr_group_xmlid())
         return line.approver_id == user
 
+    def _approval_line_env(self):
+        """Sudo env for workflow-managed lines; ACL stays on the request actions."""
+        return self.env[self._approval_line_model()].sudo()
+
     def _create_approval_lines_from_chain(self, chain):
         self.ensure_one()
-        ApprovalLine = self.env[self._approval_line_model()]
+        ApprovalLine = self._approval_line_env()
         inverse_field = self._approval_line_inverse_field()
         lines_vals = []
         for seq, (role, approver) in enumerate(chain, start=1):
@@ -83,17 +87,23 @@ class HrApprovalChainMixin(models.AbstractModel):
             })
         return ApprovalLine.create(lines_vals)
 
+    def _unlink_approval_lines(self):
+        self.ensure_one()
+        self._approval_line_env().search([
+            (self._approval_line_inverse_field(), '=', self.id),
+        ]).unlink()
+
     def _get_active_approval_line(self):
         self.ensure_one()
-        return self.approval_line_ids.filtered(lambda l: l.state == 'to_approve')[:1]
+        return self.sudo().approval_line_ids.filtered(lambda l: l.state == 'to_approve')[:1]
 
     def _activate_next_approval_line(self, current_line):
         self.ensure_one()
-        next_line = self.approval_line_ids.filtered(
+        next_line = self.sudo().approval_line_ids.filtered(
             lambda l: l.sequence > current_line.sequence and l.state == 'pending'
         ).sorted('sequence')[:1]
         if next_line:
-            next_line.state = 'to_approve'
+            next_line.sudo().write({'state': 'to_approve'})
             self._schedule_approval_activity(next_line)
         return next_line
 
@@ -125,21 +135,26 @@ class HrApprovalChainMixin(models.AbstractModel):
 
     def _process_approval(self, line):
         self.ensure_one()
-        line.write({
+        line.sudo().write({
             'state': 'approved',
             'decision_date': fields.Datetime.now(),
         })
         new_state = self._approval_state_after_role(line.role)
+        request_vals = {}
         if new_state:
-            self.state = new_state
+            request_vals['state'] = new_state
         self._clear_approval_activities()
         if line.role == 'hr':
-            self.state = self._approval_final_state()
+            request_vals['state'] = self._approval_final_state()
+            if request_vals:
+                self.sudo().write(request_vals)
             self._on_approval_complete()
         else:
+            if request_vals:
+                self.sudo().write(request_vals)
             next_line = self._activate_next_approval_line(line)
             if not next_line:
-                has_hr_line = any(l.role == 'hr' for l in self.approval_line_ids)
+                has_hr_line = any(l.role == 'hr' for l in self.sudo().approval_line_ids)
                 if not has_hr_line:
                     raise UserError(_(
                         'Approval chain is incomplete: no HR stage found. '
@@ -149,6 +164,11 @@ class HrApprovalChainMixin(models.AbstractModel):
 
     def action_open_refuse_wizard(self):
         self.ensure_one()
+        line = self.sudo()._get_active_approval_line()
+        if not line:
+            raise UserError(_('No pending approval step found.'))
+        if not self._can_user_approve_line(line):
+            raise AccessError(_('You are not allowed to refuse this request.'))
         return {
             'name': _('Refuse Request'),
             'type': 'ir.actions.act_window',
@@ -157,7 +177,7 @@ class HrApprovalChainMixin(models.AbstractModel):
             'target': 'new',
             'context': {
                 'default_overtime_request_id': self.id,
-                'default_approval_line_id': self._get_active_approval_line().id,
+                'default_approval_line_id': line.id,
             },
         }
 
@@ -165,11 +185,11 @@ class HrApprovalChainMixin(models.AbstractModel):
         self.ensure_one()
         if not self._can_user_approve_line(line):
             raise AccessError(_('You are not allowed to refuse this request.'))
-        line.write({
+        line.sudo().write({
             'state': 'refused',
             'decision_date': fields.Datetime.now(),
             'comment': reason,
         })
-        self.state = self._approval_refused_state()
+        self.sudo().write({'state': self._approval_refused_state()})
         self._clear_approval_activities()
         self._on_approval_refused(line, reason)

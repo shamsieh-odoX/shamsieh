@@ -7,8 +7,8 @@
         <field name="arch" type="xml">
             <form string="Refuse Overtime Request">
                 <group>
-                    <field name="overtime_request_id" readonly="1"/>
-                    <field name="approval_line_id" readonly="1"/>
+                    <field name="overtime_request_id" invisible="1"/>
+                    <field name="approval_line_id" invisible="1"/>
                     <field name="reason" placeholder="Please provide a reason for refusal..."/>
                 </group>
                 <footer>

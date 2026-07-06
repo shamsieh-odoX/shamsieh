@@ -87,7 +87,10 @@
         <record id="hr_overtime_request_rule_manager" model="ir.rule">
             <field name="name">Overtime Request: current approver</field>
             <field name="model_id" ref="model_hr_overtime_request"/>
-            <field name="domain_force">[('current_approver_id', '=', user.id)]</field>
+            <field name="domain_force">['|',
+                ('current_approver_id', '=', user.id),
+                '&amp;', ('approval_line_ids.approver_id', '=', user.id), ('approval_line_ids.state', '=', 'to_approve')
+            ]</field>
             <field name="groups" eval="[(4, ref('base.group_user'))]"/>
             <field name="perm_read" eval="True"/>
             <field name="perm_write" eval="True"/>

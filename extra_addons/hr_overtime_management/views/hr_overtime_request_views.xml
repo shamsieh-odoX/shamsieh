@@ -21,7 +21,7 @@
                     decoration-warning="state in ('manager_approved', 'upper_manager_approved')"
                     decoration-success="state == 'hr_approved'"
                     decoration-danger="state == 'refused'"/>
-                <field name="company_id" groups="base.group_multi_company" optional="hide"/>
+                <field name="company_label" groups="base.group_multi_company" optional="hide"/>
             </list>
         </field>
     </record>
@@ -72,7 +72,7 @@
                             <field name="employee_id" readonly="not can_edit_employee_id"/>
                             <field name="department_id"/>
                             <field name="manager_id"/>
-                            <field name="company_id" groups="base.group_multi_company" readonly="1"/>
+                            <field name="company_label" groups="base.group_multi_company" readonly="1"/>
                         </group>
                         <group string="Date &amp; Time">
                             <field name="start_datetime" readonly="state != 'draft'"/>
@@ -172,7 +172,7 @@
                 <field name="current_approver_id"/>
                 <separator/>
                 <filter string="My Requests" name="my_requests" domain="[('employee_id.user_id', '=', uid)]"/>
-                <filter string="My Approvals" name="my_approvals" domain="[('current_approver_id', '=', uid)]"/>
+                <filter string="My Approvals" name="my_approvals" domain="['|', ('current_approver_id', '=', uid), '&amp;', ('approval_line_ids.approver_id', '=', uid), ('approval_line_ids.state', '=', 'to_approve')]"/>
                 <filter string="Draft" name="draft" domain="[('state', '=', 'draft')]"/>
                 <filter string="Submitted" name="submitted" domain="[('state', '=', 'submitted')]"/>
                 <filter string="Pending Approval" name="pending" domain="[('state', 'in', ('submitted', 'manager_approved', 'upper_manager_approved'))]"/>
@@ -242,14 +242,19 @@
     </record>
 
     <record id="action_hr_overtime_my_approvals_window" model="ir.actions.act_window">
-        <field name="name">My Approvals</field>
+        <field name="name">To Approve</field>
         <field name="res_model">hr.overtime.request</field>
         <field name="view_mode">kanban,list,form</field>
         <field name="domain">[('state', 'in', ('submitted', 'manager_approved', 'upper_manager_approved'))]</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">No overtime waiting for your approval</p>
+            <p>Requests appear here when you are the active approver (manager or HR).
+               Your own submitted requests are under <b>My Requests</b>.</p>
+        </field>
     </record>
 
     <record id="action_hr_overtime_open_my_approvals" model="ir.actions.server">
-        <field name="name">My Approvals</field>
+        <field name="name">To Approve</field>
         <field name="model_id" ref="model_hr_overtime_request"/>
         <field name="state">code</field>
         <field name="code">action = model.action_open_my_approvals()</field>

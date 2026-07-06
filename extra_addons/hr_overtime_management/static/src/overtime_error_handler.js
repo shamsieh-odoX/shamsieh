@@ -8,18 +8,51 @@ import { UncaughtPromiseError } from "@web/core/errors/error_service";
 import { FormController } from "@web/views/form/form_controller";
 
 const OVERTIME_EXCEPTIONS = new Set([
+    "odoo.exceptions.AccessError",
     "odoo.exceptions.UserError",
     "odoo.exceptions.ValidationError",
 ]);
 
 const OVERTIME_MODEL_RE = /^hr\.overtime(\.|$)/;
 
-function isOvertimeContextError(error) {
-    return Boolean(error.model && OVERTIME_MODEL_RE.test(error.model));
+function errorMessage(error) {
+    return error.data?.message || error.message || "";
+}
+
+function isCompanyAccessError(error) {
+    const msg = errorMessage(error);
+    return (
+        error.model === "res.company" ||
+        /res\.company/i.test(msg) ||
+        /company rule employee/i.test(msg)
+    );
+}
+
+function isOvertimeFormActive(env) {
+    const controller = env.services.action?.currentController;
+    const resModel = controller?.props?.resModel;
+    return Boolean(resModel?.startsWith("hr.overtime"));
+}
+
+function isOvertimeContextError(error, env) {
+    if (error.model && OVERTIME_MODEL_RE.test(error.model)) {
+        return true;
+    }
+    if (isCompanyAccessError(error) && isOvertimeFormActive(env)) {
+        return true;
+    }
+    return false;
 }
 
 export function friendlyOvertimeErrorMessage(error) {
-    const raw = error.data?.message || error.message || "";
+    if (isCompanyAccessError(error)) {
+        return _t(
+            "This overtime record uses a company that is not in your Allowed Companies. " +
+            "Ask your administrator to add that branch under Settings → Users → your profile → " +
+            "Allowed Companies, or choose a project from your own company."
+        );
+    }
+    const raw = errorMessage(error);
     const lines = raw.split("\n").map((l) => l.trim()).filter(Boolean);
     const withoutBoilerplate = lines.filter((l) => !/top-secret|Uh-oh|stumbled upon/i.test(l));
     return withoutBoilerplate[0] || _t("This overtime action is not allowed.");
@@ -42,7 +75,7 @@ function overtimeRpcErrorHandler(env, error, originalError) {
     if (!(error instanceof UncaughtPromiseError) || !(originalError instanceof RPCError)) {
         return false;
     }
-    if (!isHandledOvertimeError(originalError) || !isOvertimeContextError(originalError)) {
+    if (!isHandledOvertimeError(originalError) || !isOvertimeContextError(originalError, env)) {
         return false;
     }
     error.unhandledRejectionEvent.preventDefault();

@@ -7,19 +7,14 @@
         web_icon="hr,static/description/icon.png"
         groups="base.group_user"/>
 
-    <menuitem id="menu_hr_overtime_my_requests"
-        name="My Overtime"
-        parent="menu_hr_overtime_root"
-        sequence="1"/>
-
     <menuitem id="menu_hr_overtime_requests"
         name="My Requests"
-        parent="menu_hr_overtime_my_requests"
+        parent="menu_hr_overtime_root"
         action="action_hr_overtime_open_my_requests"
         sequence="10"/>
 
     <menuitem id="menu_hr_overtime_my_approvals"
-        name="My Approvals"
+        name="To Approve"
         parent="menu_hr_overtime_root"
         action="action_hr_overtime_open_my_approvals"
         sequence="20"/>
