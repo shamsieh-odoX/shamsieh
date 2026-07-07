@@ -2,7 +2,9 @@
 
 import json
 import logging
+from base64 import b64encode
 from datetime import timedelta
+from uuid import uuid4
 
 from odoo import fields, http
 from odoo.http import request
@@ -78,6 +80,61 @@ class HikvisionEventController(http.Controller):
             return None
         return parsed
 
+    @staticmethod
+    def _safe_json(value):
+        try:
+            json.dumps(value)
+            return value
+        except TypeError:
+            return str(value)
+
+    @classmethod
+    def _to_text(cls, data):
+        if not data:
+            return ''
+        try:
+            return data.decode('utf-8')
+        except UnicodeDecodeError:
+            return f'base64:{b64encode(data).decode("ascii")}'
+
+    def _collect_request_snapshot(self):
+        http_request = request.httprequest
+        raw_body = http_request.get_data(cache=True, as_text=False) or b''
+        body_size = len(raw_body)
+        body_preview = raw_body[:20 * 1024]
+        form_data = {
+            key: [self._safe_json(v) for v in http_request.form.getlist(key)]
+            for key in http_request.form.keys()
+        }
+        files_data = {}
+        for key in http_request.files.keys():
+            files_data[key] = []
+            for uploaded in http_request.files.getlist(key):
+                content = uploaded.read() or b''
+                uploaded.stream.seek(0)
+                files_data[key].append({
+                    'filename': uploaded.filename,
+                    'content_type': uploaded.content_type,
+                    'size': len(content),
+                    'content': self._to_text(content),
+                })
+        snapshot = {
+            'method': http_request.method,
+            'url': http_request.url,
+            'content_type': http_request.content_type or '',
+            'headers': {k: self._safe_json(v) for k, v in http_request.headers.items()},
+            'query_params': {
+                key: [self._safe_json(v) for v in http_request.args.getlist(key)]
+                for key in http_request.args.keys()
+            },
+            'form': form_data,
+            'files': files_data,
+            'raw_body_preview': self._to_text(body_preview),
+            'raw_body_size': body_size,
+        }
+        _logger.info('Hikvision HTTP push raw request snapshot: %s', json.dumps(snapshot, default=str))
+        return snapshot
+
     def _log_unknown_keys(self, device, payload):
         unknown = sorted(set(payload.keys()) - KNOWN_PAYLOAD_KEYS)
         if unknown:
@@ -100,17 +157,15 @@ class HikvisionEventController(http.Controller):
 
     @classmethod
     def _external_id_from_payload(cls, payload):
-        parts = []
-        for key in ('serialNo', 'verifyNo', 'dateTime'):
-            value = payload.get(key)
-            if value is not None and str(value) != '':
-                parts.append(str(value))
-        if parts:
-            return '-'.join(parts)
-        return f'push-{fields.Datetime.now()}'
+        serial = payload.get('serialNo')
+        verify = payload.get('verifyNo')
+        date_time = payload.get('dateTime')
+        parts = [str(v) for v in (serial, verify, date_time) if v not in (None, '')]
+        prefix = '-'.join(parts) if parts else 'push'
+        return f'{prefix}-{uuid4().hex}'
 
     @classmethod
-    def _build_log_vals(cls, device, payload):
+    def _build_log_vals(cls, device, payload, snapshot):
         event_time = _to_utc_datetime(payload.get('dateTime')) or fields.Datetime.now()
         return {
             'device_id': device.id,
@@ -131,22 +186,41 @@ class HikvisionEventController(http.Controller):
             'minor': cls._coerce_int(payload.get('subEventType')),
             'event_time': event_time,
             'raw_payload': payload,
-            'state': 'draft',
+            'request_headers': snapshot.get('headers'),
+            'request_content_type': snapshot.get('content_type'),
+            'request_query_params': snapshot.get('query_params'),
+            'request_form': snapshot.get('form'),
+            'request_files': snapshot.get('files'),
+            'raw_request_body': snapshot.get('raw_body_preview'),
+            'raw_request_body_size': snapshot.get('raw_body_size'),
+            'state': 'ignored',
         }
 
-    def _record_payload(self, device, payload):
+    @classmethod
+    def _build_fallback_log_vals(cls, device, snapshot):
+        return {
+            'device_id': device.id,
+            'external_id': f'unknown-{uuid4().hex}',
+            'event_time': fields.Datetime.now(),
+            'event_type': 'unknown',
+            'raw_payload': {},
+            'request_headers': snapshot.get('headers'),
+            'request_content_type': snapshot.get('content_type'),
+            'request_query_params': snapshot.get('query_params'),
+            'request_form': snapshot.get('form'),
+            'request_files': snapshot.get('files'),
+            'raw_request_body': snapshot.get('raw_body_preview'),
+            'raw_request_body_size': snapshot.get('raw_body_size'),
+            'state': 'ignored',
+        }
+
+    def _record_payload(self, device, payload, snapshot):
         Log = request.env['fingerprint.device.log'].sudo()
-        vals = self._build_log_vals(device, payload)
-        existing = Log.search([
-            ('device_id', '=', device.id),
-            ('external_id', '=', vals['external_id']),
-        ], limit=1)
-        if existing:
-            _logger.info(
-                'Hikvision HTTP push duplicate for %s external_id=%s',
-                device.name, vals['external_id'],
-            )
-            return existing
+        vals = (
+            self._build_log_vals(device, payload, snapshot)
+            if payload is not None
+            else self._build_fallback_log_vals(device, snapshot)
+        )
         return Log.create(vals)
 
     @http.route(
@@ -157,6 +231,7 @@ class HikvisionEventController(http.Controller):
         csrf=False,
     )
     def hikvision_event(self, token, **kwargs):
+        snapshot = self._collect_request_snapshot()
         token = self._resolve_token(token)
         device = self._find_device(token)
         if not device:
@@ -174,13 +249,13 @@ class HikvisionEventController(http.Controller):
             return self._json_response({'status': 'error', 'message': 'Rate limit exceeded'}, status=429)
 
         payload = self._parse_event_log()
-        if payload is not None:
-            try:
-                device = device.with_company(device.company_id)
+        try:
+            device = device.with_company(device.company_id)
+            if payload is not None:
                 self._log_unknown_keys(device, payload)
-                self._record_payload(device, payload)
-                device.write({'http_listening_last_at': fields.Datetime.now()})
-            except Exception:
-                _logger.exception('Hikvision HTTP push record failed for %s', device.name)
+            self._record_payload(device, payload, snapshot)
+            device.write({'http_listening_last_at': fields.Datetime.now()})
+        except Exception:
+            _logger.exception('Hikvision HTTP push record failed for %s', device.name)
 
         return self._json_response({'status': 'ok'})

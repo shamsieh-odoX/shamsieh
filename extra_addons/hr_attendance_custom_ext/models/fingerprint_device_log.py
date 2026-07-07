@@ -36,6 +36,13 @@ class FingerprintDeviceLog(models.Model):
     minor = fields.Integer()
     authentication_method = fields.Char()
     raw_payload = fields.Json()
+    request_headers = fields.Json()
+    request_content_type = fields.Char()
+    request_query_params = fields.Json()
+    request_form = fields.Json()
+    request_files = fields.Json()
+    raw_request_body = fields.Text()
+    raw_request_body_size = fields.Integer()
     state = fields.Selection(
         selection=[
             ('draft', 'Draft'),

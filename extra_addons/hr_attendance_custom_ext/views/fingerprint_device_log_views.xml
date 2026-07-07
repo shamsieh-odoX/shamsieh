@@ -60,6 +60,13 @@
                         <field name="minor"/>
                         <field name="verify_no"/>
                         <field name="employee_name"/>
+                        <field name="request_content_type"/>
+                        <field name="raw_request_body_size"/>
+                        <field name="request_headers" widget="json"/>
+                        <field name="request_query_params" widget="json"/>
+                        <field name="request_form" widget="json"/>
+                        <field name="request_files" widget="json"/>
+                        <field name="raw_request_body"/>
                         <field name="raw_payload" widget="json"/>
                     </group>
                 </sheet>
