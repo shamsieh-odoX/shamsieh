@@ -1,5 +1,10 @@
 # -*- coding: utf-8 -*-
 
+import binascii
+import hashlib
+import hmac
+import os
+
 from odoo import _, api, fields, models
 from odoo.exceptions import UserError
 
@@ -59,6 +64,11 @@ class HrEmployee(models.Model):
         compute='_compute_active_face_template_id',
         groups='hr_attendance.group_hr_attendance_officer',
     )
+    attendance_face_image_preview = fields.Binary(
+        string='Enrolled Face Image',
+        compute='_compute_attendance_face_image_preview',
+        groups='hr_attendance.group_hr_attendance_officer',
+    )
     attendance_required = fields.Boolean(
         string='Attendance Required',
         default=True,
@@ -69,6 +79,27 @@ class HrEmployee(models.Model):
         default=False,
         groups='hr_attendance.group_hr_attendance_officer',
         help='Allows remote check-in/out via face verification (§9).',
+    )
+    attendance_home_pin_hash = fields.Char(
+        string='Home Attendance PIN Hash',
+        groups='hr_attendance.group_hr_attendance_officer',
+        copy=False,
+    )
+    attendance_home_pin_value = fields.Char(
+        string='Home Attendance PIN',
+        groups='hr_attendance.group_hr_attendance_officer',
+        copy=False,
+        help='Displayed PIN value configured for home attendance.',
+    )
+    attendance_home_pin_set = fields.Boolean(
+        string='Home Attendance PIN Set',
+        compute='_compute_attendance_home_pin_set',
+        groups='hr_attendance.group_hr_attendance_officer',
+    )
+    attendance_home_pin_input = fields.Char(
+        string='Set Home PIN',
+        groups='hr_attendance.group_hr_attendance_officer',
+        copy=False,
     )
     face_provider = fields.Selection(
         related='company_id.face_provider',
@@ -102,11 +133,75 @@ class HrEmployee(models.Model):
         for employee in self:
             employee.active_face_template_id = Template.get_active_for_employee(employee)
 
+    @api.depends('face_template_ids', 'face_template_ids.active', 'face_template_ids.image_attachment_id')
+    def _compute_attendance_face_image_preview(self):
+        Template = self.env['hr.employee.face.template']
+        for employee in self:
+            template = Template.get_active_for_employee(employee)
+            employee.attendance_face_image_preview = (
+                template.image_attachment_id.datas if template and template.image_attachment_id else False
+            )
+
+    @api.depends('attendance_home_pin_hash')
+    def _compute_attendance_home_pin_set(self):
+        for employee in self:
+            employee.attendance_home_pin_set = bool(employee.attendance_home_pin_hash)
+
     def write(self, vals):
+        pin_value = vals.pop('attendance_home_pin_input', None) if 'attendance_home_pin_input' in vals else None
         res = super().write(vals)
+        if pin_value is not None:
+            for employee in self:
+                employee._set_home_attendance_pin(pin_value)
         if 'biometric_device_user_id' in vals:
             self._relink_fingerprint_logs()
         return res
+
+    def _normalize_attendance_pin(self, pin_code):
+        self.ensure_one()
+        return (pin_code or '').strip()
+
+    def _build_attendance_pin_hash(self, pin_code):
+        normalized = self._normalize_attendance_pin(pin_code)
+        if not normalized:
+            raise UserError(_('PIN cannot be empty.'))
+        if not normalized.isdigit():
+            raise UserError(_('PIN must contain digits only.'))
+        if len(normalized) < 4:
+            raise UserError(_('PIN must be at least 4 digits.'))
+        salt = os.urandom(16)
+        digest = hashlib.pbkdf2_hmac('sha256', normalized.encode(), salt, 120000)
+        return '%s$%s' % (
+            binascii.hexlify(salt).decode(),
+            binascii.hexlify(digest).decode(),
+        )
+
+    def _set_home_attendance_pin(self, pin_code):
+        for employee in self:
+            normalized = employee._normalize_attendance_pin(pin_code)
+            if not normalized:
+                employee.attendance_home_pin_hash = False
+                employee.attendance_home_pin_value = False
+                continue
+            employee.attendance_home_pin_hash = employee._build_attendance_pin_hash(normalized)
+            employee.attendance_home_pin_value = normalized
+
+    def _verify_home_attendance_pin(self, pin_code):
+        self.ensure_one()
+        normalized = self._normalize_attendance_pin(pin_code)
+        stored = self.attendance_home_pin_hash or ''
+        if not normalized or '$' not in stored:
+            return False
+        salt_hex, digest_hex = stored.split('$', 1)
+        if not salt_hex or not digest_hex:
+            return False
+        try:
+            salt = binascii.unhexlify(salt_hex.encode())
+            expected = binascii.unhexlify(digest_hex.encode())
+        except (binascii.Error, ValueError):
+            return False
+        calculated = hashlib.pbkdf2_hmac('sha256', normalized.encode(), salt, 120000)
+        return hmac.compare_digest(expected, calculated)
 
     def _relink_fingerprint_logs(self):
         Log = self.env['fingerprint.device.log']
@@ -163,8 +258,18 @@ class HrEmployee(models.Model):
             'context': {'default_employee_id': self.id},
         }
 
+    def action_clear_home_attendance_pin(self):
+        self.write({
+            'attendance_home_pin_hash': False,
+            'attendance_home_pin_value': False,
+        })
+        return True
+
     def _get_effective_work_location_type(self):
         self.ensure_one()
+        schedule_location = self._get_schedule_location_type()
+        if schedule_location:
+            return schedule_location
         work_location = self.work_location_id
         if work_location and work_location.location_type:
             return work_location.location_type
@@ -210,7 +315,8 @@ class HrEmployee(models.Model):
         policy = self.env['fingerprint.attendance.policy'].get_company_default(self.company_id)
         response.update({
             'work_location_type': location_type,
-            'check_in_requires_face': location_type == 'home',
+            'check_in_requires_face': location_type == 'home' and bool(self.remote_attendance_allowed),
+            'check_in_requires_home_pin': location_type == 'home',
             'check_in_requires_office_geo': location_type == 'office',
             'office_geo_configured': self._is_office_geo_configured(),
             'single_check_in_per_day': not policy.allow_multiple_attendances_per_day,
@@ -258,7 +364,13 @@ class HrEmployee(models.Model):
             ))
         return distance
 
-    def _validate_attendance_check_in(self, geo_information=None, via_face=False, device_location=False):
+    def _validate_attendance_check_in(
+        self,
+        geo_information=None,
+        via_face=False,
+        via_home_pin=False,
+        device_location=False,
+    ):
         self.ensure_one()
         if self.attendance_state == 'checked_in':
             return
@@ -267,12 +379,12 @@ class HrEmployee(models.Model):
         location_type = self._get_effective_work_location_type()
 
         if location_type == 'home':
-            if not via_face:
-                raise UserError(_('Face verification is required when working from home.'))
+            if not via_face and not via_home_pin:
+                raise UserError(_('Face verification or PIN is required when working from home.'))
             return
 
         if location_type == 'office':
-            if via_face:
+            if via_face or via_home_pin:
                 raise UserError(_('Office check-in requires geolocation. Use the attendance menu instead.'))
             latitude = geo_information.get('latitude') if geo_information else False
             longitude = geo_information.get('longitude') if geo_information else False
@@ -283,6 +395,7 @@ class HrEmployee(models.Model):
             self._validate_attendance_check_in(
                 geo_information,
                 via_face=self.env.context.get('attendance_via_face'),
+                via_home_pin=self.env.context.get('attendance_via_home_pin'),
                 device_location=self.env.context.get('attendance_device_location'),
             )
         attendance = super()._attendance_action_change(geo_information=geo_information)

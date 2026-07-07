@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from odoo import http
+from odoo.exceptions import UserError
 from odoo.http import request
 
 from odoo.addons.hr_attendance.controllers.main import HrAttendance
@@ -27,3 +28,26 @@ class HrAttendanceCustom(HrAttendance):
             attendance_device_location=bool(latitude and longitude),
         )._attendance_action_change(geo_ip_response)
         return self._get_employee_info_response(employee)
+
+    @http.route('/hr_attendance_custom/home_pin_check_in', type='jsonrpc', auth='user')
+    def home_pin_check_in(self, pin_code=False):
+        employee = request.env.user.employee_id
+        if not employee:
+            return {'status': 'error', 'message': 'No employee linked to user.'}
+        try:
+            employee._validate_single_daily_check_in()
+            if employee._get_effective_work_location_type() != 'home':
+                raise UserError('Home PIN check-in is only allowed on home schedule days.')
+            if not employee._verify_home_attendance_pin(pin_code):
+                raise UserError('Invalid PIN code.')
+            attendance = employee.with_context(
+                attendance_via_home_pin=True,
+            )._attendance_action_change()
+            attendance.write({'attendance_source': 'pin'})
+        except UserError as exc:
+            return {'status': 'error', 'message': str(exc)}
+        return {
+            'status': 'passed',
+            'attendance_id': attendance.id,
+            'message': 'OK',
+        }

@@ -4,7 +4,7 @@
         <field name="name">face.attendance.log.list</field>
         <field name="model">face.attendance.log</field>
         <field name="arch" type="xml">
-            <list>
+            <list create="false" edit="false" delete="false">
                 <field name="create_date"/>
                 <field name="employee_id"/>
                 <field name="action_type"/>
@@ -21,7 +21,7 @@
         <field name="name">face.attendance.log.form</field>
         <field name="model">face.attendance.log</field>
         <field name="arch" type="xml">
-            <form>
+            <form create="false" edit="false" delete="false">
                 <sheet>
                     <group>
                         <group>

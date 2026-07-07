@@ -5,6 +5,9 @@
         <field name="model">hr.employee</field>
         <field name="inherit_id" ref="hr_attendance.view_employee_form_inherit_hr_attendance"/>
         <field name="arch" type="xml">
+            <xpath expr="//field[@name='work_location_id']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
             <xpath expr="//group[@name='identification_group']" position="after">
                 <group string="Attendance &amp; Face Recognition"
                        name="attendance_face_group"
@@ -15,6 +18,18 @@
                                placeholder="e.g. 10042"/>
                         <field name="attendance_required"/>
                         <field name="remote_attendance_allowed"/>
+                        <field name="attendance_home_pin_set" readonly="1"/>
+                        <field name="attendance_home_pin_value" readonly="1"/>
+                        <field name="attendance_home_pin_input"
+                               password="True"
+                               placeholder="Enter digits to set PIN (blank keeps current)"/>
+                        <button name="action_clear_home_attendance_pin"
+                                type="object"
+                                string="Clear Home PIN"
+                                class="btn-secondary"
+                                icon="fa-eraser"
+                                invisible="not attendance_home_pin_set"
+                                confirm="Clear the employee home attendance PIN?"/>
                     </group>
                     <group string="InsightFace Provider">
                         <field name="face_provider" readonly="1"/>
@@ -49,6 +64,12 @@
                             <field name="face_reference_id"
                                    placeholder="Optional external reference"
                                    invisible="face_enrollment_status == 'none'"/>
+                            <field name="attendance_face_image_preview"
+                                   widget="image"
+                                   class="oe_avatar"
+                                   options="{'size': [160, 160]}"
+                                   readonly="1"
+                                   invisible="not attendance_face_image_preview"/>
                         </group>
                         <div class="d-flex flex-wrap gap-2 mt-2" colspan="2">
                             <button name="action_open_face_enroll_wizard"

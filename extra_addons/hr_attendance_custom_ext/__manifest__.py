@@ -1,6 +1,6 @@
 {
     'name': 'HR Attendance Custom Extensions',
-    'version': '19.0.1.3.12',
+    'version': '19.0.1.3.13',
     'category': 'Human Resources/Attendances',
     'summary': 'Shamsieh attendance, fingerprint sync, and face attendance (§2, §8, §9)',
     'author': 'Custom',
@@ -12,6 +12,7 @@
         'data/fingerprint_attendance_policy_data.xml',
         'data/ir_cron_data.xml',
         'views/res_config_settings_views.xml',
+        'views/resource_calendar_views.xml',
         'views/hr_employee_views.xml',
         'views/hr_attendance_views.xml',
         'views/fingerprint_attendance_policy_views.xml',

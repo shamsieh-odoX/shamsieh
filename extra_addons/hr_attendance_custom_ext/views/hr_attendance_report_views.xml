@@ -18,6 +18,14 @@
         <field name="search_view_id" ref="view_fingerprint_device_log_search"/>
     </record>
 
+    <record id="action_pin_attendance_logs_report" model="ir.actions.act_window">
+        <field name="name">PIN Attendance Logs</field>
+        <field name="res_model">hr.attendance</field>
+        <field name="view_mode">list,form,pivot,graph</field>
+        <field name="domain">[('attendance_source', '=', 'pin')]</field>
+        <field name="search_view_id" ref="hr_attendance.hr_attendance_view_filter"/>
+    </record>
+
     <record id="action_attendance_lateness_report" model="ir.actions.act_window">
         <field name="name">Lateness Report (Attendance)</field>
         <field name="res_model">hr.attendance</field>
