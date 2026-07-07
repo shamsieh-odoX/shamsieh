@@ -22,6 +22,18 @@ SAMPLE_EVENT = {
     'currentVerifyMode': 'fp',
 }
 
+SAMPLE_EVENT_LOG = {
+    'eventType': 'AccessControllerEvent',
+    'majorEventType': 5,
+    'subEventType': 38,
+    'serialNo': 9001,
+    'verifyNo': 42,
+    'dateTime': '2026-07-05T13:11:17',
+    'employeeNoString': '2',
+    'name': 'Anton',
+    'currentVerifyMode': 'fp',
+}
+
 
 class TestHikvisionPushParser(TransactionCase):
 
@@ -181,74 +193,138 @@ class TestHikvisionHttpListeningController(HttpCase):
         })
         cls.token = cls.device.http_listening_token
 
-    def _post_event(self, token, payload, status=200):
+    def _post_event_log(self, token, payload, status=200):
+        event_log = json.dumps(payload)
+        body = (
+            b'--boundary\r\n'
+            b'Content-Disposition: form-data; name="event_log"\r\n\r\n'
+            + event_log.encode()
+            + b'\r\n--boundary--\r\n'
+        )
         response = self.url_open(
             f'/hikvision/event/{token}',
-            json={'AccessControllerEvent': payload},
-            headers={'Content-Type': 'application/json'},
+            data=body,
+            headers={'Content-Type': 'multipart/form-data; boundary=boundary'},
         )
         self.assertEqual(response.status_code, status)
         return response.json()
 
-    def test_valid_push(self):
-        payload = dict(SAMPLE_EVENT)
-        payload['employeeNoString'] = 'HC001'
+    def test_valid_push_records_payload(self):
+        payload = dict(SAMPLE_EVENT_LOG)
         payload['serialNo'] = 9200
-        body = self._post_event(self.token, payload)
-        self.assertEqual(body['status'], 'ok')
-        self.assertEqual(body['action'], 'stored')
+        body = self._post_event_log(self.token, payload)
+        self.assertEqual(body, {'status': 'ok'})
         log = self.env['fingerprint.device.log'].search([
             ('device_id', '=', self.device.id),
-            ('external_id', '=', '9200'),
+            ('serial_no', '=', '9200'),
         ], limit=1)
         self.assertTrue(log)
-        self.assertEqual(log.state, 'processed')
+        self.assertEqual(log.state, 'draft')
+        self.assertFalse(log.attendance_id)
+        self.assertEqual(log.raw_payload, payload)
+        self.assertEqual(log.event_type, 'AccessControllerEvent')
+        self.assertEqual(log.major, 5)
+        self.assertEqual(log.minor, 38)
+        self.assertEqual(log.verify_no, '42')
+
+    def test_unknown_payload_keys_still_recorded(self):
+        payload = dict(SAMPLE_EVENT_LOG)
+        payload['serialNo'] = 9203
+        payload['customField'] = 'probe'
+        body = self._post_event_log(self.token, payload)
+        self.assertEqual(body, {'status': 'ok'})
+        log = self.env['fingerprint.device.log'].search([
+            ('device_id', '=', self.device.id),
+            ('serial_no', '=', '9203'),
+        ], limit=1)
+        self.assertTrue(log)
+        self.assertEqual(log.raw_payload['customField'], 'probe')
 
     def test_wrong_token(self):
+        event_log = json.dumps(SAMPLE_EVENT_LOG)
+        body = (
+            b'--boundary\r\n'
+            b'Content-Disposition: form-data; name="event_log"\r\n\r\n'
+            + event_log.encode()
+            + b'\r\n--boundary--\r\n'
+        )
         response = self.url_open(
             '/hikvision/event/invalid-token-xyz',
-            json=SAMPLE_EVENT,
-            headers={'Content-Type': 'application/json'},
+            data=body,
+            headers={'Content-Type': 'multipart/form-data; boundary=boundary'},
         )
         self.assertEqual(response.status_code, 404)
 
     def test_disabled_device(self):
         self.device.write({'http_listening_enabled': False})
+        event_log = json.dumps(SAMPLE_EVENT_LOG)
+        body = (
+            b'--boundary\r\n'
+            b'Content-Disposition: form-data; name="event_log"\r\n\r\n'
+            + event_log.encode()
+            + b'\r\n--boundary--\r\n'
+        )
         response = self.url_open(
             f'/hikvision/event/{self.token}',
-            json=SAMPLE_EVENT,
-            headers={'Content-Type': 'application/json'},
+            data=body,
+            headers={'Content-Type': 'multipart/form-data; boundary=boundary'},
         )
         self.assertEqual(response.status_code, 404)
 
     def test_wrong_ip(self):
         self.device.write({'http_listening_allowed_ips': '192.168.100.85'})
+        payload = dict(SAMPLE_EVENT_LOG)
         response = self.url_open(
             f'/hikvision/event/{self.token}',
-            json={'AccessControllerEvent': SAMPLE_EVENT},
-            headers={'Content-Type': 'application/json'},
+            data=(
+                b'--boundary\r\n'
+                b'Content-Disposition: form-data; name="event_log"\r\n\r\n'
+                + json.dumps(payload).encode()
+                + b'\r\n--boundary--\r\n'
+            ),
+            headers={'Content-Type': 'multipart/form-data; boundary=boundary'},
         )
         self.assertEqual(response.status_code, 403)
 
-    def test_duplicate_push(self):
-        payload = dict(SAMPLE_EVENT)
-        payload['employeeNoString'] = 'HC001'
+    def test_duplicate_push_returns_ok(self):
+        payload = dict(SAMPLE_EVENT_LOG)
         payload['serialNo'] = 9201
-        self._post_event(self.token, payload)
-        body = self._post_event(self.token, payload)
-        self.assertEqual(body['action'], 'duplicate')
+        self._post_event_log(self.token, payload)
+        body = self._post_event_log(self.token, payload)
+        self.assertEqual(body, {'status': 'ok'})
+        logs = self.env['fingerprint.device.log'].search([
+            ('device_id', '=', self.device.id),
+            ('serial_no', '=', '9201'),
+        ])
+        self.assertEqual(len(logs), 1)
 
     def test_bearer_token_auth(self):
-        payload = dict(SAMPLE_EVENT)
-        payload['employeeNoString'] = 'HC001'
+        payload = dict(SAMPLE_EVENT_LOG)
         payload['serialNo'] = 9202
+        event_log = json.dumps(payload)
+        body = (
+            b'--boundary\r\n'
+            b'Content-Disposition: form-data; name="event_log"\r\n\r\n'
+            + event_log.encode()
+            + b'\r\n--boundary--\r\n'
+        )
         response = self.url_open(
             '/hikvision/event/unused-path-token',
-            json={'AccessControllerEvent': payload},
+            data=body,
             headers={
-                'Content-Type': 'application/json',
+                'Content-Type': 'multipart/form-data; boundary=boundary',
                 'Authorization': f'Bearer {self.token}',
             },
         )
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json()['action'], 'stored')
+        self.assertEqual(response.json(), {'status': 'ok'})
+
+    def test_missing_event_log_still_returns_ok(self):
+        body = b'--boundary\r\n--boundary--\r\n'
+        response = self.url_open(
+            f'/hikvision/event/{self.token}',
+            data=body,
+            headers={'Content-Type': 'multipart/form-data; boundary=boundary'},
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json(), {'status': 'ok'})

@@ -18,6 +18,7 @@ class FingerprintDeviceLog(models.Model):
     company_id = fields.Many2one(related='device_id.company_id', store=True)
     external_id = fields.Char(required=True, index=True)
     serial_no = fields.Char(index=True)
+    verify_no = fields.Char(index=True)
     device_user_id = fields.Char(index=True)
     employee_name = fields.Char(
         string='Stored Employee Name',

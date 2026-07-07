@@ -58,6 +58,7 @@
                     <group string="Debug" groups="base.group_no_one">
                         <field name="major"/>
                         <field name="minor"/>
+                        <field name="verify_no"/>
                         <field name="employee_name"/>
                         <field name="raw_payload" widget="json"/>
                     </group>
