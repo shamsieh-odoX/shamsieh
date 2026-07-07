@@ -1,0 +1,52 @@
+// Project custom UI — dark mode (web.assets_web_dark)
+
+.o_project_create_custom {
+    --project-create-bg: #{rgba($white, 0.04)};
+    --project-create-border: #{rgba($white, 0.12)};
+    --project-create-shadow: none;
+
+    .o_horizontal_separator {
+        color: $gray-300;
+        opacity: 1;
+    }
+
+    .alert-info {
+        background-color: rgba($info, 0.14);
+        border-color: rgba($info, 0.35);
+        color: #{lighten($info, 28%)};
+    }
+
+    .alert-secondary {
+        background-color: rgba($white, 0.06);
+        border-color: rgba($white, 0.1);
+        color: $gray-300;
+    }
+}
+
+.o_project_progress_card {
+    --project-progress-bg: #{linear-gradient(135deg, rgba($white, 0.06) 0%, rgba($primary, 0.12) 100%)};
+    --project-progress-border: #{rgba($white, 0.12)};
+    --project-progress-title: #{$gray-200};
+    --project-progress-badge: #{lighten($primary, 18%)};
+}
+
+.o_project_kanban_progress {
+    --project-kanban-track-bg: #{rgba($white, 0.08)};
+    --project-kanban-track-border: #{rgba($white, 0.12)};
+    --project-kanban-fill: #{lighten($primary, 8%)};
+    --project-kanban-fill-done: #{lighten($success, 6%)};
+    --project-kanban-pct: #{$gray-300};
+}
+
+.o_project_task_template_form {
+    .alert-secondary {
+        background-color: rgba($white, 0.06);
+        border-color: rgba($white, 0.1);
+        color: $gray-300;
+    }
+}
+
+// New project dialog — match Odoo dark form surface
+.modal .o_project_create_custom {
+    background: var(--o-view-background-color, #{rgba($white, 0.03)});
+}

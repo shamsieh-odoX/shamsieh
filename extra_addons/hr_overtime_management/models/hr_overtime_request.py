@@ -77,7 +77,7 @@ class HrOvertimeRequest(models.Model):
         store=True,
         readonly=True,
         domain="['|', ('company_id', '=', False), ('company_id', '=', employee_company_id)]",
-        help='Automatically set from the date: regular working day, weekend, or day off.',
+        help='Automatically set from the date: regular working day, weekend, or company public holiday (e.g. Eid).',
     )
 
     project_id = fields.Many2one(
@@ -614,18 +614,65 @@ class HrOvertimeRequest(models.Model):
             current += timedelta(days=1)
         return dates
 
+    def _public_holiday_day_bounds(self, day, employee, company):
+        """Local start/end of `day` in the company/employee calendar timezone."""
+        calendar = employee.resource_calendar_id or company.resource_calendar_id
+        tz_name = (calendar.tz if calendar else None) or self.env.user.tz or 'UTC'
+        try:
+            from pytz import timezone as pytz_timezone, utc
+            tz = pytz_timezone(tz_name)
+            day_start = tz.localize(datetime.combine(day, time.min))
+            day_end = tz.localize(datetime.combine(day, time.max))
+            return day_start, day_end, tz, utc
+        except ImportError:
+            day_start = datetime.combine(day, time.min)
+            day_end = datetime.combine(day, time.max)
+            return day_start, day_end, None, None
+
     def _is_public_holiday_date(self, day, employee, company):
+        """True when `day` is a company-wide public holiday (e.g. Eid) for the employee's company."""
+        company = company or employee.company_id
+        if not company:
+            return False
+
+        day_start, day_end, tz, utc = self._public_holiday_day_bounds(day, employee, company)
+        if utc:
+            day_start_naive = day_start.astimezone(utc).replace(tzinfo=None)
+            day_end_naive = day_end.astimezone(utc).replace(tzinfo=None)
+        else:
+            day_start_naive = day_start
+            day_end_naive = day_end
+
+        calendar_ids = {False}
+        if employee.resource_calendar_id:
+            calendar_ids.add(employee.resource_calendar_id.id)
+        if company.resource_calendar_id:
+            calendar_ids.add(company.resource_calendar_id.id)
+
+        Leave = self.env['resource.calendar.leaves'].sudo()
+        company_holiday = Leave.search([
+            ('resource_id', '=', False),
+            ('time_type', '=', 'leave'),
+            ('date_from', '<=', day_end_naive),
+            ('date_to', '>=', day_start_naive),
+            '|', ('company_id', '=', False), ('company_id', '=', company.id),
+            ('calendar_id', 'in', list(calendar_ids)),
+        ], limit=1)
+        if company_holiday:
+            return True
+
         calendar = employee.resource_calendar_id or company.resource_calendar_id
         if not calendar:
             return False
-        day_start = datetime.combine(day, time.min)
-        day_end = datetime.combine(day, time.max)
-        return bool(self.env['resource.calendar.leaves'].sudo().search([
-            ('calendar_id', '=', calendar.id),
-            ('resource_id', '=', False),
-            ('date_from', '<=', day_end),
-            ('date_to', '>=', day_start),
-        ], limit=1))
+        resource = employee.resource_id or self.env['resource.resource']
+        intervals = calendar._leave_intervals(
+            day_start,
+            day_end,
+            resource=resource,
+            domain=[('time_type', '=', 'leave')],
+            tz=tz,
+        )
+        return bool(intervals)
 
     def _resolve_overtime_type_for_period(self):
         self.ensure_one()

@@ -290,6 +290,34 @@ class TestHrOvertime(TransactionCase):
         request = self._create_request(start_datetime=start, end_datetime=end)
         self.assertEqual(request.overtime_type_id, self.holiday_type)
 
+    def test_auto_overtime_type_company_public_holiday_without_calendar(self):
+        """Company-wide public holidays (Time Off → Public Holidays, e.g. Eid) apply to all staff."""
+        start, end = self._dt_on(2026, 8, 10, 9, 0, 12, 0)
+        leave = self.env['resource.calendar.leaves'].sudo().create({
+            'name': 'Eid Al-Fitr',
+            'date_from': datetime(2026, 8, 10, 0, 0, 0),
+            'date_to': datetime(2026, 8, 10, 23, 59, 59),
+        })
+        leave.company_id = self.env.company
+        request = self._create_request(start_datetime=start, end_datetime=end)
+        self.assertEqual(
+            request.overtime_type_id,
+            self.holiday_type,
+            'Overtime on a company public holiday should default to Day Off / Public Holiday type.',
+        )
+
+    def test_auto_overtime_type_multi_day_company_holiday(self):
+        """Multi-day company holiday (e.g. 3-day Eid) picks Day Off type for any day in range."""
+        self.env['resource.calendar.leaves'].sudo().create({
+            'name': 'Eid Holiday',
+            'company_id': self.env.company.id,
+            'date_from': datetime(2026, 9, 1, 0, 0, 0),
+            'date_to': datetime(2026, 9, 3, 23, 59, 59),
+        })
+        start, end = self._dt_on(2026, 9, 2, 18, 0, 21, 0)
+        request = self._create_request(start_datetime=start, end_datetime=end)
+        self.assertEqual(request.overtime_type_id, self.holiday_type)
+
     def test_cost_computation_all_types(self):
         hourly_cost = 100.0
         scenarios = [

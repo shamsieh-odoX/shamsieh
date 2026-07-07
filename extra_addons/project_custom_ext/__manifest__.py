@@ -2,7 +2,7 @@
 
     'name': 'Project Custom Extensions',
 
-    'version': '19.0.2.1.3',
+    'version': '19.0.2.1.4',
 
     'category': 'Services/Project',
 
@@ -53,6 +53,12 @@
             'project_custom_ext/static/src/action_restore_fix.js',
 
             'project_custom_ext/static/src/project_notifications.js',
+
+        ],
+
+        'web.assets_web_dark': [
+
+            'project_custom_ext/static/src/project_custom.dark.scss',
 
         ],
 
