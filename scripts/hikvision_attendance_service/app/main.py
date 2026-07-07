@@ -15,7 +15,15 @@ from starlette.responses import Response
 
 from .config import get_settings
 from .db import EventStore
-from .hikvision_parser import AttendanceEvent, parse_event
+from .hikvision_parser import (
+    AttendanceEvent,
+    debug_multipart,
+    parse_event,
+    parse_fields,
+    _employee_no,
+    _sub_event_type,
+    _verify_mode,
+)
 from .odoo_client import OdooClient, OdooConfig, OdooError
 
 logging.basicConfig(
@@ -33,9 +41,14 @@ class _SuppressDoorHeartbeatAccessLog(logging.Filter):
         return 'POST /hikvision/attendance HTTP/1.1" 204' not in message
 
 
-logging.getLogger("uvicorn.access").addFilter(_SuppressDoorHeartbeatAccessLog())
-
 settings = get_settings()
+if settings.verbose_logging:
+    logging.getLogger().setLevel(logging.DEBUG)
+    logging.getLogger("app.hikvision_parser").setLevel(logging.DEBUG)
+    logger.info("VERBOSE_LOGGING enabled — all requests and payloads will be logged")
+else:
+    logging.getLogger("uvicorn.access").addFilter(_SuppressDoorHeartbeatAccessLog())
+
 store = EventStore(settings.sqlite_path)
 odoo: OdooClient | None = None
 _system_event_counts: dict[str, int] = {}
@@ -87,9 +100,13 @@ def _api_response(content: dict[str, Any], status_code: int = 200) -> JSONRespon
 def _result_status_code(result: str) -> int:
     if result == "created":
         return 201
-    if result == "employee-not-found":
-        return 404
     return 200
+
+
+def _device_response(content: dict[str, Any], status_code: int | None = None) -> JSONResponse:
+    """Hikvision redelivers events unless the webhook returns HTTP 200/201."""
+    code = status_code if status_code in (200, 201) else 200
+    return JSONResponse(status_code=code, content=content)
 
 
 def _connect_odoo() -> OdooClient | None:
@@ -195,21 +212,69 @@ async def hikvision_attendance_get():
     }
 
 
+def _log_verbose_request(
+    remote: str,
+    body: bytes,
+    content_type: str,
+    fields: dict[str, Any],
+    parsed_reason: str,
+    status_code: int,
+) -> None:
+    logger.info(
+        "VERBOSE POST remote=%s bytes=%s content_type=%r subEventType=%s employee_no=%r verify=%r -> %s HTTP %s",
+        remote,
+        len(body),
+        content_type,
+        _sub_event_type(fields),
+        _employee_no(fields) or None,
+        _verify_mode(fields) or None,
+        parsed_reason,
+        status_code,
+    )
+    logger.debug("VERBOSE parsed_fields=%s", fields)
+    if "multipart/" in (content_type or "").lower():
+        for part in debug_multipart(body, content_type):
+            logger.info(
+                "VERBOSE multipart part name=%r content_type=%r preview=%s",
+                part.get("name"),
+                part.get("content_type"),
+                part.get("preview", "")[:800],
+            )
+
+
 @app.post("/hikvision/attendance")
 async def hikvision_attendance(request: Request):
     body = await request.body()
     content_type = request.headers.get("content-type", "")
     remote = request.client.host if request.client else "unknown"
+    fields: dict[str, Any] = {}
     try:
+        fields = parse_fields(body, content_type)
         parsed = parse_event(body, content_type, received_at=datetime.now(timezone.utc))
     except Exception as exc:  # noqa: BLE001
         logger.warning("Invalid Hikvision payload from %s: %s", remote, exc)
-        return _api_response({"status": "error", "reason": "invalid-payload"}, 400)
+        if settings.verbose_logging:
+            logger.debug("VERBOSE invalid body preview=%r", body[:800])
+        return _device_response({"status": "error", "reason": "invalid-payload"}, 200)
+
+    if settings.verbose_logging:
+        status_code = parsed.status_code if not parsed.event else _result_status_code("created")
+        if not parsed.event:
+            status_code = parsed.status_code
+        _log_verbose_request(remote, body, content_type, fields, parsed.reason, status_code)
 
     if not parsed.event and parsed.reason == "system-event":
-        _note_system_event(remote)
-        return _api_response(
-            {"status": "error", "reason": parsed.reason},
+        if settings.verbose_logging:
+            logger.info(
+                "VERBOSE ignored door/system event subEventType=%s serialNo=%s from %s",
+                _sub_event_type(fields),
+                fields.get("serialNo"),
+                remote,
+            )
+        else:
+            _note_system_event(remote)
+        return _device_response(
+            {"status": "ignored", "reason": parsed.reason},
             parsed.status_code,
         )
 
@@ -222,21 +287,21 @@ async def hikvision_attendance(request: Request):
     )
 
     if not parsed.event:
-        return _api_response(
+        return _device_response(
             {"status": "error", "reason": parsed.reason},
             parsed.status_code,
         )
 
     try:
         result = process_event(parsed.event)
-        return _api_response(
+        return _device_response(
             {"status": "ok", "result": result},
             _result_status_code(result),
         )
     except Exception as exc:  # noqa: BLE001
         logger.exception("Processing failed, queueing for retry event_id=%s", parsed.event.event_id)
         store.enqueue_retry(_event_to_payload(parsed.event), str(exc), settings.retry_interval_seconds)
-        return _api_response({"status": "queued", "reason": "odoo-unavailable"}, 503)
+        return _device_response({"status": "queued", "reason": "odoo-unavailable"}, 200)
 
 
 @app.get("/health")

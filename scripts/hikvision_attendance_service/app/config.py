@@ -28,10 +28,12 @@ class Settings:
     default_event_timezone: str = "UTC"
     listen_host: str = "0.0.0.0"
     listen_port: int = 8080
+    verbose_logging: bool = False
 
 
 def get_settings() -> Settings:
     _load_dotenv()
+    verbose = os.getenv("VERBOSE_LOGGING", "false").strip().lower() in {"1", "true", "yes", "on"}
     return Settings(
         odoo_url=os.getenv("ODOO_URL", "").rstrip("/"),
         odoo_db=os.getenv("ODOO_DB", ""),
@@ -42,4 +44,5 @@ def get_settings() -> Settings:
         default_event_timezone=os.getenv("DEFAULT_EVENT_TIMEZONE", "UTC"),
         listen_host=os.getenv("LISTEN_HOST", "0.0.0.0"),
         listen_port=int(os.getenv("LISTEN_PORT", "8080")),
+        verbose_logging=verbose,
     )

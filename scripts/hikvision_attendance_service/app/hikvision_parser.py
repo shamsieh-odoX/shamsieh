@@ -25,8 +25,9 @@ ACS_FIELD_MARKERS = frozenset({
 })
 
 FINGERPRINT_VERIFY_MODES = frozenset({"fp", "finger", "fingerprint"})
-FINGERPRINT_SUCCESS_SUB_EVENT_TYPES = frozenset({38, "38"})
-FINGERPRINT_FAILED_SUB_EVENT_TYPES = frozenset({39, "39"})
+FINGERPRINT_SUCCESS_SUB_EVENT_TYPES = frozenset({1, 38, 75, 150, "1", "38", "75", "150"})
+FINGERPRINT_FAILED_SUB_EVENT_TYPES = frozenset({39, 151, "39", "151"})
+AUTH_VERIFY_MODES = frozenset({"fp", "finger", "fingerprint", "faceorfporcardorpw", "face", "card", "pw"})
 DOOR_SYSTEM_SUB_EVENT_TYPES = frozenset({21, 22, 23, 24, "21", "22", "23", "24"})
 
 
@@ -262,15 +263,37 @@ def _is_door_system_event(fields: dict[str, Any]) -> bool:
     return verify == "invalid"
 
 
+def _status_value(fields: dict[str, Any]) -> str:
+    return str(fields.get("statusValue", fields.get("status", fields.get("result", "")))).strip().lower()
+
+
+def _is_auth_related(fields: dict[str, Any]) -> bool:
+    sub_event = _sub_event_value(fields)
+    if sub_event in FINGERPRINT_SUCCESS_SUB_EVENT_TYPES | FINGERPRINT_FAILED_SUB_EVENT_TYPES:
+        return True
+    verify = _verify_mode(fields)
+    if verify in AUTH_VERIFY_MODES or any(token in verify for token in ("finger", "fp", "face", "card", "pw")):
+        return True
+    return bool(_employee_no(fields))
+
+
 def _is_fingerprint_failed(fields: dict[str, Any]) -> bool:
     sub_event = _sub_event_value(fields)
     if sub_event in FINGERPRINT_FAILED_SUB_EVENT_TYPES:
         return True
+    if not _is_auth_related(fields):
+        return False
     verify = _verify_mode(fields)
     if verify == "invalid" and _employee_no(fields):
         return True
-    status = str(fields.get("statusValue", fields.get("status", fields.get("result", "")))).lower()
-    return status in ("failed", "fail", "false", "0", "denied", "rejected")
+    status = _status_value(fields)
+    if status in ("failed", "fail", "false", "denied", "rejected"):
+        return True
+    if status in ("0",) and sub_event in FINGERPRINT_FAILED_SUB_EVENT_TYPES:
+        return True
+    if status in ("0",) and verify not in ("", "invalid") and not _employee_no(fields):
+        return True
+    return False
 
 
 def _is_successful_fingerprint(fields: dict[str, Any]) -> bool:
@@ -278,12 +301,17 @@ def _is_successful_fingerprint(fields: dict[str, Any]) -> bool:
         return False
 
     sub_event = _sub_event_value(fields)
-    if sub_event in FINGERPRINT_SUCCESS_SUB_EVENT_TYPES:
+    if sub_event in FINGERPRINT_SUCCESS_SUB_EVENT_TYPES and _employee_no(fields):
         return True
+
+    if _employee_no(fields) and _status_value(fields) in ("1", "success", "ok", "true"):
+        verify = _verify_mode(fields)
+        if verify in AUTH_VERIFY_MODES or any(token in verify for token in ("finger", "fp", "face", "card")):
+            return True
 
     verify = _verify_mode(fields)
     if verify in FINGERPRINT_VERIFY_MODES or any(token in verify for token in ("finger", "fp")):
-        status = str(fields.get("status", fields.get("result", "success"))).lower()
+        status = _status_value(fields)
         return status in ("success", "ok", "1", "true", "")
 
     event_tokens = " ".join(
@@ -339,21 +367,22 @@ def parse_event(
 
     if _is_door_system_event(fields):
         logger.debug("Ignored system/door event subEventType=%s", _sub_event_type(fields))
-        return ParseResult(None, "system-event", 204)
+        return ParseResult(None, "system-event", 200)
 
     if _is_fingerprint_failed(fields):
         logger.info(
-            "Fingerprint failed subEventType=%s verify=%s employee_no=%r",
+            "Fingerprint failed subEventType=%s verify=%s employee_no=%r statusValue=%s",
             _sub_event_type(fields),
             _verify_mode(fields),
             _employee_no(fields),
+            fields.get("statusValue"),
         )
-        return ParseResult(None, "fingerprint-failed", 422)
+        return ParseResult(None, "fingerprint-failed", 200)
 
     employee_no = _employee_no(fields)
     if not employee_no:
         logger.info("Incomplete event: missing employee_no keys=%s", sorted(fields.keys()))
-        return ParseResult(None, "missing-employee", 422)
+        return ParseResult(None, "missing-employee", 200)
 
     if not _is_successful_fingerprint(fields):
         logger.info(
@@ -362,7 +391,7 @@ def parse_event(
             _verify_mode(fields),
             _sub_event_type(fields),
         )
-        return ParseResult(None, "not-fingerprint-event", 422)
+        return ParseResult(None, "not-fingerprint-event", 200)
 
     event_time, time_source = _extract_event_time(fields, received_at)
     if time_source == "received_at":
