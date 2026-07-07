@@ -1,10 +1,14 @@
 # -*- coding: utf-8 -*-
 
+import json
+import logging
 from datetime import timedelta
 
 from odoo import _, api, fields, models
 
 from ..services.attendance_processor import AttendanceProcessor
+
+_logger = logging.getLogger(__name__)
 
 
 class FingerprintDeviceLog(models.Model):
@@ -118,15 +122,60 @@ class FingerprintDeviceLog(models.Model):
             return self.employee_id
         if not self.device_user_id:
             return self.env['hr.employee']
-        employee = self.env['hr.employee'].search([
-            ('biometric_device_user_id', '=', self.device_user_id),
+        payload = self.raw_payload or {}
+        device_user_id = str(self.device_user_id).strip()
+        domain = [
+            ('biometric_device_user_id', '=', device_user_id),
             ('company_id', '=', self.device_id.company_id.id),
-        ], limit=1)
+        ]
+        _logger.info(
+            'Attendance processor mapping log_id=%s external_id=%s parsed_payload=%s '
+            'extracted_identifier=%r lookup_field=%s domain=%s compared_value=%r',
+            self.id,
+            self.external_id,
+            json.dumps(payload, default=str),
+            device_user_id,
+            'biometric_device_user_id',
+            domain,
+            device_user_id,
+        )
+        count = self.env['hr.employee'].search_count(domain)
+        _logger.info(
+            'Attendance processor mapping log_id=%s result_count=%s',
+            self.id,
+            count,
+        )
+        employee = self.env['hr.employee'].search(domain, limit=1)
         if employee:
+            _logger.info(
+                'Attendance processor mapping log_id=%s succeeded employee_id=%s employee_name=%r',
+                self.id,
+                employee.id,
+                employee.name,
+            )
             self.write({
                 'employee_id': employee.id,
                 'employee_name': employee.name,
             })
+        else:
+            employees = self.env['hr.employee'].search([
+                ('company_id', '=', self.device_id.company_id.id),
+            ])
+            compared = [
+                {
+                    'id': emp.id,
+                    'name': emp.name,
+                    'biometric_device_user_id': emp.biometric_device_user_id or '',
+                }
+                for emp in employees
+            ]
+            _logger.info(
+                'Attendance processor mapping log_id=%s no match for identifier=%r. '
+                'Company employee biometric values=%s',
+                self.id,
+                device_user_id,
+                compared,
+            )
         return employee
 
     def _mark_error(self, message):

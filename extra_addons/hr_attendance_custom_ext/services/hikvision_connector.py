@@ -3,6 +3,7 @@
 import base64
 import csv
 import io
+import json
 import logging
 from datetime import timedelta, timezone
 
@@ -326,14 +327,173 @@ class HikvisionConnector:
             vals['employee_name'] = employee.name
         return vals
 
+    def _log_employee_lookup_inputs(self, event):
+        raw = event.get('raw_payload') or {}
+        _logger.info(
+            'Hikvision mapping input %s: employeeNoString=%r name=%r serialNo=%r '
+            'verifyNo=%r currentVerifyMode=%r',
+            self.device.name,
+            raw.get('employeeNoString') or raw.get('employeeNo'),
+            raw.get('name'),
+            raw.get('serialNo'),
+            raw.get('verifyNo'),
+            raw.get('currentVerifyMode') or raw.get('verifyMode') or raw.get('currentVerify'),
+        )
+
+    def _log_candidate_values(self, device_user_id):
+        employees = self.device.env['hr.employee'].search([
+            ('company_id', '=', self.device.company_id.id),
+        ])
+        candidates = [
+            {
+                'id': employee.id,
+                'name': employee.name,
+                'biometric_device_user_id': employee.biometric_device_user_id or '',
+                'barcode': employee.barcode or '',
+                'shams_employee_code': getattr(employee, 'shams_employee_code', '') or '',
+                'identification_id': employee.identification_id or '',
+            }
+            for employee in employees
+        ]
+        _logger.info(
+            'Hikvision mapping no match %s for device_user_id=%r. '
+            'Compared candidate values: %s',
+            self.device.name,
+            device_user_id,
+            candidates,
+        )
+
     def _resolve_employee(self, device_user_id):
         if not device_user_id:
             return self.device.env['hr.employee']
         device_user_id = str(device_user_id).strip()
-        return self.device.env['hr.employee'].search([
+        Employee = self.device.env['hr.employee']
+        biometric_domain = [
             ('biometric_device_user_id', '=', device_user_id),
             ('company_id', '=', self.device.company_id.id),
-        ], limit=1)
+        ]
+
+        _logger.info(
+            'Hikvision mapping lookup %s: extracted identifier=%r lookup_field=%s '
+            'domain=%s compared_value=%r',
+            self.device.name,
+            device_user_id,
+            'biometric_device_user_id',
+            biometric_domain,
+            device_user_id,
+        )
+        count = Employee.search_count(biometric_domain)
+        _logger.info(
+            'Hikvision mapping lookup %s: biometric_device_user_id result_count=%s',
+            self.device.name,
+            count,
+        )
+        employee = Employee.search(biometric_domain, limit=1)
+        if employee:
+            _logger.info(
+                'Hikvision mapping lookup %s succeeded via biometric_device_user_id: '
+                'employee_id=%s employee_name=%r',
+                self.device.name,
+                employee.id,
+                employee.name,
+            )
+            return employee
+
+        _logger.info(
+            'Hikvision mapping lookup %s: extracted identifier=%r lookup_field=%s '
+            'domain=%s compared_value=%r',
+            self.device.name,
+            device_user_id,
+            'barcode',
+            [('barcode', '=', device_user_id), ('company_id', '=', self.device.company_id.id)],
+            device_user_id,
+        )
+        barcode_domain = [
+            ('barcode', '=', device_user_id),
+            ('company_id', '=', self.device.company_id.id),
+        ]
+        barcode_count = Employee.search_count(barcode_domain)
+        _logger.info(
+            'Hikvision mapping lookup %s: barcode result_count=%s',
+            self.device.name,
+            barcode_count,
+        )
+        barcode_match = Employee.search(barcode_domain, limit=1)
+        if barcode_match:
+            _logger.info(
+                'Hikvision mapping diagnostic %s: barcode would match employee_id=%s employee_name=%r '
+                '(mapping logic unchanged)',
+                self.device.name,
+                barcode_match.id,
+                barcode_match.name,
+            )
+
+        if 'shams_employee_code' in Employee._fields:
+            _logger.info(
+                'Hikvision mapping lookup %s: extracted identifier=%r lookup_field=%s '
+                'domain=%s compared_value=%r',
+                self.device.name,
+                device_user_id,
+                'shams_employee_code',
+                [('shams_employee_code', '=', device_user_id), ('company_id', '=', self.device.company_id.id)],
+                device_user_id,
+            )
+            shams_domain = [
+                ('shams_employee_code', '=', device_user_id),
+                ('company_id', '=', self.device.company_id.id),
+            ]
+            shams_count = Employee.search_count(shams_domain)
+            _logger.info(
+                'Hikvision mapping lookup %s: shams_employee_code result_count=%s',
+                self.device.name,
+                shams_count,
+            )
+            shams_match = Employee.search(shams_domain, limit=1)
+            if shams_match:
+                _logger.info(
+                    'Hikvision mapping diagnostic %s: shams_employee_code would match employee_id=%s '
+                    'employee_name=%r (mapping logic unchanged)',
+                    self.device.name,
+                    shams_match.id,
+                    shams_match.name,
+                )
+        else:
+            _logger.info(
+                'Hikvision mapping lookup %s: field shams_employee_code not found on hr.employee',
+                self.device.name,
+            )
+
+        _logger.info(
+            'Hikvision mapping lookup %s: extracted identifier=%r lookup_field=%s '
+            'domain=%s compared_value=%r',
+            self.device.name,
+            device_user_id,
+            'identification_id',
+            [('identification_id', '=', device_user_id), ('company_id', '=', self.device.company_id.id)],
+            device_user_id,
+        )
+        identification_domain = [
+            ('identification_id', '=', device_user_id),
+            ('company_id', '=', self.device.company_id.id),
+        ]
+        identification_count = Employee.search_count(identification_domain)
+        _logger.info(
+            'Hikvision mapping lookup %s: identification_id result_count=%s',
+            self.device.name,
+            identification_count,
+        )
+        identification_match = Employee.search(identification_domain, limit=1)
+        if identification_match:
+            _logger.info(
+                'Hikvision mapping diagnostic %s: identification_id would match employee_id=%s '
+                'employee_name=%r (mapping logic unchanged)',
+                self.device.name,
+                identification_match.id,
+                identification_match.name,
+            )
+
+        self._log_candidate_values(device_user_id)
+        return employee
 
     @staticmethod
     def _relink_existing_log(existing, employee):
@@ -403,6 +563,7 @@ class HikvisionConnector:
         if existing:
             device_user_id = _device_user_id(event)
             if device_user_id:
+                self._log_employee_lookup_inputs(event)
                 employee = self._resolve_employee(device_user_id)
                 self._relink_existing_log(existing, employee)
             _logger.info(
@@ -429,6 +590,12 @@ class HikvisionConnector:
         log = Log.browse()
         if action == 'stored':
             device_user_id = _device_user_id(event)
+            _logger.info(
+                'Hikvision mapping parsed payload %s: %s',
+                self.device.name,
+                json.dumps(event.get('raw_payload') or {}, default=str),
+            )
+            self._log_employee_lookup_inputs(event)
             employee = self._resolve_employee(device_user_id)
             log = Log.create({
                 **self._event_to_log_vals(event, employee=employee),
