@@ -247,7 +247,6 @@ class FingerprintDevice(models.Model):
     def _action_view_logs_domain(self, extra_domain=None):
         self.ensure_one()
         domain = [('device_id', '=', self.id)]
-        domain += self.env['fingerprint.device.log']._attendance_log_domain()
         if extra_domain:
             domain += extra_domain
         return {
