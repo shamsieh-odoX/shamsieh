@@ -1,0 +1,25 @@
+{
+    'name': 'HR Holidays Custom Extensions',
+    'version': '19.0.1.0.0',
+    'category': 'Human Resources/Time Off',
+    'summary': 'Exceptional holiday approval workflow and employee leave balance summary',
+    'author': 'Custom',
+    'depends': [
+        'hr_holidays',
+        'mail',
+        'hr',
+        'hr_overtime_management',
+    ],
+    'data': [
+        'security/security.xml',
+        'security/ir.model.access.csv',
+        'data/ir_sequence_data.xml',
+        'views/hr_exceptional_holiday_views.xml',
+        'views/hr_leave_balance_summary_views.xml',
+        'views/hr_holidays_menus.xml',
+        'wizard/hr_exceptional_holiday_refuse_wizard_views.xml',
+    ],
+    'installable': True,
+    'application': False,
+    'license': 'LGPL-3',
+}
