@@ -1,6 +1,6 @@
 {
     'name': 'CRM Custom Extensions',
-    'version': '19.0.1.0.3',
+    'version': '19.0.1.0.4',
     'category': 'Sales/CRM',
     'summary': 'Shamsieh CRM fields, security, teams, targets, and dashboards',
     'author': 'Custom',
