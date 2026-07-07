@@ -1,0 +1,8 @@
+{
+  "eventType": "AccessControllerEvent",
+  "majorEventType": 5,
+  "subEventType": 39,
+  "serialNo": 9998,
+  "currentVerifyMode": "faceOrFpOrCardOrPw",
+  "status": "failed"
+}
