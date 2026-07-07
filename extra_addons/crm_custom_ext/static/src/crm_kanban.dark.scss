@@ -1,26 +1,44 @@
-// Dark-mode overrides for the CRM custom kanban (web.assets_web_dark).
+// Dark-mode grey palette for CRM custom kanban (web.assets_web_dark).
 
 .o_crm_custom_kanban {
+    --crm-kanban-title-color: #{$o-gray-100};
     --crm-kanban-label-color: #{$o-gray-400};
     --crm-kanban-meta-color: #{$o-gray-300};
-    --crm-kanban-revenue-color: #{lighten($o-success, 12%)};
+    --crm-kanban-revenue-color: #{$o-gray-300};
     --crm-kanban-ref-bg: #{rgba($o-white, 0.06)};
-    --crm-kanban-ref-color: #{$o-gray-200};
+    --crm-kanban-ref-color: #{$o-gray-300};
     --crm-kanban-badge-bg: #{rgba($o-white, 0.06)};
     --crm-kanban-badge-color: #{$o-gray-300};
     --crm-kanban-badge-border: #{rgba($o-white, 0.14)};
 
     .o_kanban_record {
-        color: $o-gray-100;
+        color: var(--crm-kanban-meta-color);
 
-        .o_crm_custom_kanban_title {
-            color: $o-gray-100 !important;
+        .o_crm_custom_kanban_body .o_field_widget {
+            color: var(--crm-kanban-meta-color) !important;
+        }
+
+        .o_crm_custom_kanban_title,
+        .o_crm_custom_kanban_title.o_field_widget {
+            color: var(--crm-kanban-title-color) !important;
         }
 
         .o_crm_custom_kanban_contact,
+        .o_crm_custom_kanban_contact .o_field_widget,
         .o_crm_custom_kanban_followup,
-        .text-muted {
+        .text-muted,
+        .text-muted .o_field_widget {
             color: var(--crm-kanban-meta-color) !important;
+        }
+
+        .o_crm_custom_kanban_revenue,
+        .o_crm_custom_kanban_revenue .o_field_widget {
+            color: var(--crm-kanban-revenue-color) !important;
+        }
+
+        .o_crm_lead_ref,
+        .o_crm_lead_ref .o_field_widget {
+            color: var(--crm-kanban-ref-color) !important;
         }
 
         footer {

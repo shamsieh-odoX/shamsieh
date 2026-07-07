@@ -4,23 +4,28 @@
     --KanbanRecord-gap-v: 0.65rem;
     --Card-Footer-gap: 0.5rem;
 
-    --crm-kanban-label-color: #{rgba($o-main-text-color, 0.5)};
-    --crm-kanban-meta-color: #{rgba($o-main-text-color, 0.72)};
+    --crm-kanban-title-color: #{$o-gray-900};
+    --crm-kanban-label-color: #{$o-gray-500};
+    --crm-kanban-meta-color: #{$o-gray-600};
     --crm-kanban-revenue-color: #{darken($o-success, 6%)};
-    --crm-kanban-ref-bg: #{rgba($o-main-text-color, 0.05)};
-    --crm-kanban-ref-color: #{rgba($o-main-text-color, 0.82)};
-    --crm-kanban-badge-bg: #{rgba($o-main-text-color, 0.06)};
-    --crm-kanban-badge-color: #{rgba($o-main-text-color, 0.78)};
-    --crm-kanban-badge-border: #{rgba($o-main-text-color, 0.16)};
+    --crm-kanban-ref-bg: #{rgba($o-gray-900, 0.05)};
+    --crm-kanban-ref-color: #{$o-gray-700};
+    --crm-kanban-badge-bg: #{rgba($o-gray-900, 0.06)};
+    --crm-kanban-badge-color: #{$o-gray-700};
+    --crm-kanban-badge-border: #{rgba($o-gray-900, 0.14)};
 
     .o_kanban_record {
-        color: $o-main-text-color;
+        color: var(--crm-kanban-meta-color);
 
         .o_crm_custom_kanban_body {
             display: flex;
             flex-direction: column;
             gap: 0.6rem;
             padding-bottom: 0.15rem;
+
+            .o_field_widget {
+                color: var(--crm-kanban-meta-color) !important;
+            }
         }
 
         .o_crm_custom_kanban_row {
@@ -53,30 +58,29 @@
 
             .o_field_widget {
                 margin: 0;
-                color: inherit;
+                color: inherit !important;
             }
         }
 
-        .o_crm_custom_kanban_title {
+        .o_crm_custom_kanban_title,
+        .o_crm_custom_kanban_title.o_field_widget {
             line-height: 1.35;
-            color: $o-main-text-color !important;
+            color: var(--crm-kanban-title-color) !important;
             margin-top: 0.1rem;
         }
 
-        .o_crm_custom_kanban_contact {
+        .o_crm_custom_kanban_contact,
+        .o_crm_custom_kanban_contact .o_field_widget {
             font-size: 0.85rem;
             line-height: 1.4;
             color: var(--crm-kanban-meta-color) !important;
         }
 
-        .o_crm_custom_kanban_revenue {
+        .o_crm_custom_kanban_revenue,
+        .o_crm_custom_kanban_revenue .o_field_widget {
             font-weight: 700;
             font-size: 0.95rem;
             color: var(--crm-kanban-revenue-color) !important;
-
-            .o_field_widget {
-                color: inherit;
-            }
         }
 
         .o_crm_custom_kanban_cell .badge {
@@ -104,7 +108,7 @@
 
             .o_field_widget {
                 margin: 0;
-                color: inherit;
+                color: inherit !important;
             }
         }
 
@@ -135,7 +139,8 @@
             justify-content: flex-end;
         }
 
-        .text-muted {
+        .text-muted,
+        .text-muted .o_field_widget {
             color: var(--crm-kanban-meta-color) !important;
         }
 
