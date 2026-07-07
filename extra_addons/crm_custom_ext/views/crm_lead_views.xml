@@ -364,7 +364,6 @@
             </xpath>
             <xpath expr="//t[@t-name='card']/field[@name='contact_name']" position="replace"/>
             <xpath expr="//t[@t-name='card']/field[@name='tag_ids']" position="replace"/>
-            <xpath expr="//t[@t-name='card']/field[@name='lead_properties']" position="replace"/>
         </field>
     </record>
 
