@@ -24,6 +24,17 @@ logging.basicConfig(
 )
 logger = logging.getLogger("hikvision_bridge")
 
+
+class _SuppressDoorHeartbeatAccessLog(logging.Filter):
+    """Hide uvicorn access lines for ignored door/system webhooks (HTTP 204)."""
+
+    def filter(self, record: logging.LogRecord) -> bool:
+        message = record.getMessage()
+        return 'POST /hikvision/attendance HTTP/1.1" 204' not in message
+
+
+logging.getLogger("uvicorn.access").addFilter(_SuppressDoorHeartbeatAccessLog())
+
 settings = get_settings()
 store = EventStore(settings.sqlite_path)
 odoo: OdooClient | None = None
