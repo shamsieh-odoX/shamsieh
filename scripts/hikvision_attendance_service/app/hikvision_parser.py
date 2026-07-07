@@ -99,6 +99,39 @@ def _try_parse_part(payload: bytes) -> dict[str, Any] | None:
     return None
 
 
+def _part_priority(fields: dict[str, Any]) -> int:
+    score = 0
+    if _employee_no(fields):
+        score += 100
+    sub_event = _sub_event_value(fields)
+    if sub_event in FINGERPRINT_SUCCESS_SUB_EVENT_TYPES:
+        score += 50
+    elif sub_event in FINGERPRINT_FAILED_SUB_EVENT_TYPES:
+        score += 40
+    elif sub_event in DOOR_SYSTEM_SUB_EVENT_TYPES:
+        score += 1
+    verify = _verify_mode(fields)
+    if verify in FINGERPRINT_VERIFY_MODES or any(token in verify for token in ("finger", "fp")):
+        score += 20
+    return score
+
+
+def _merge_event_parts(parts: list[dict[str, Any]]) -> dict[str, Any]:
+    if not parts:
+        return {}
+    if len(parts) == 1:
+        return parts[0]
+    ranked = sorted(parts, key=_part_priority, reverse=True)
+    merged = dict(ranked[0])
+    for part in ranked[1:]:
+        for key, value in part.items():
+            if value in (None, ""):
+                continue
+            if key not in merged or merged[key] in (None, ""):
+                merged[key] = value
+    return merged
+
+
 def _parse_multipart_fields(body: bytes, content_type: str) -> dict[str, Any]:
     headers = f"Content-Type: {content_type}\r\n\r\n".encode()
     msg = BytesParser(policy=policy.default).parsebytes(headers + body)
@@ -109,24 +142,19 @@ def _parse_multipart_fields(body: bytes, content_type: str) -> dict[str, Any]:
             return parsed
         raise ValueError("Multipart wrapper without parseable payload")
 
-    merged: dict[str, Any] = {}
     part_names: list[str] = []
+    candidates: list[dict[str, Any]] = []
     for part in msg.iter_parts():
         payload = part.get_payload(decode=True) or b""
         name = (part.get_param("name", header="content-disposition") or "").strip()
         if name:
             part_names.append(name)
         parsed = _try_parse_part(payload)
-        if not parsed:
-            continue
-        for key, value in _unwrap_event_dict(parsed).items():
-            if value in (None, ""):
-                merged.setdefault(key, value)
-            else:
-                merged[key] = value
+        if parsed:
+            candidates.append(_unwrap_event_dict(parsed))
 
-    if merged:
-        return merged
+    if candidates:
+        return _merge_event_parts(candidates)
     raise ValueError(f"No parseable event part in multipart body (parts={part_names})")
 
 
@@ -225,11 +253,13 @@ def _sub_event_value(fields: dict[str, Any]) -> Any:
 
 
 def _is_door_system_event(fields: dict[str, Any]) -> bool:
+    if _employee_no(fields):
+        return False
     sub_event = _sub_event_value(fields)
     if sub_event in DOOR_SYSTEM_SUB_EVENT_TYPES:
         return True
     verify = _verify_mode(fields)
-    return verify == "invalid" and not _employee_no(fields)
+    return verify == "invalid"
 
 
 def _is_fingerprint_failed(fields: dict[str, Any]) -> bool:
@@ -297,6 +327,15 @@ def parse_event(
     received_at: datetime | None = None,
 ) -> ParseResult:
     fields = parse_fields(body, content_type)
+    sub_event = _sub_event_type(fields)
+    employee_no = _employee_no(fields)
+    if employee_no or sub_event not in {"", *map(str, DOOR_SYSTEM_SUB_EVENT_TYPES)}:
+        logger.info(
+            "Hikvision event subEventType=%s employee_no=%r verify=%r",
+            sub_event,
+            employee_no or None,
+            _verify_mode(fields) or None,
+        )
 
     if _is_door_system_event(fields):
         logger.debug("Ignored system/door event subEventType=%s", _sub_event_type(fields))
