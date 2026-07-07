@@ -32,9 +32,6 @@
                             <field name="duplicate_scan_window_minutes"/>
                             <field name="minimum_checkout_gap_minutes"/>
                             <field name="max_shift_hours"/>
-                            <field name="allow_multiple_attendances_per_day"/>
-                            <field name="allow_overnight_shift"/>
-                            <field name="ignore_middle_scans"/>
                         </group>
                     </group>
                     <group string="Grace and Tolerance">
@@ -42,9 +39,6 @@
                             <field name="late_grace_minutes"/>
                             <field name="early_checkout_grace_minutes"/>
                             <field name="missing_checkout_tolerance_minutes"/>
-                        </group>
-                        <group>
-                            <field name="raw_payload_retention_days"/>
                         </group>
                     </group>
                 </sheet>

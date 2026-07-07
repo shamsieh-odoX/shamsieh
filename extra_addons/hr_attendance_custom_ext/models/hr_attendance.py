@@ -12,6 +12,7 @@ class HrAttendance(models.Model):
         selection=[
             ('fingerprint', 'Fingerprint'),
             ('face', 'Face'),
+            ('pin', 'PIN'),
             ('manual', 'Manual'),
             ('kiosk', 'Kiosk'),
             ('systray', 'Systray'),

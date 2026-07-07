@@ -49,6 +49,10 @@ class FaceAttendanceLog(models.Model):
     face_reference_id = fields.Char()
     provider = fields.Char()
     provider_response = fields.Json()
+    selfie_image = fields.Binary(
+        string='Selfie Image',
+        attachment=True,
+    )
     attendance_id = fields.Many2one('hr.attendance', ondelete='set null')
     external_token = fields.Char(index=True, copy=False, default=lambda self: str(uuid.uuid4()))
     error_message = fields.Text()
@@ -60,8 +64,6 @@ class FaceAttendanceLog(models.Model):
 
     def _validate_remote_allowed(self):
         self.ensure_one()
-        if self.employee_id._get_effective_work_location_type() == 'home':
-            return
         if not self.employee_id.remote_attendance_allowed:
             raise UserError(_('Remote face attendance is not allowed for this employee.'))
 
@@ -247,6 +249,7 @@ class FaceAttendanceLog(models.Model):
             'user_agent': user_agent,
             'device_info': device_info,
             'face_reference_id': face_reference_id or employee.face_reference_id,
+            'selfie_image': selfie_image_base64 or False,
             'external_token': external_token or str(uuid.uuid4()),
         })
         log._validate_remote_allowed()

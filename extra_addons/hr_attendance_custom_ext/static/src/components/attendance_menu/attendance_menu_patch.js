@@ -6,6 +6,7 @@ import { rpc, ConnectionLostError } from "@web/core/network/rpc";
 import { ConfirmationDialog } from "@web/core/confirmation_dialog/confirmation_dialog";
 import { ActivityMenu } from "@hr_attendance/components/attendance_menu/attendance_menu";
 import { FaceCheckDialog } from "@hr_attendance_custom_ext/components/face_check_dialog/face_check_dialog";
+import { HomePinDialog } from "@hr_attendance_custom_ext/components/home_pin_dialog/home_pin_dialog";
 import { isIosApp } from "@web/core/browser/feature_detection";
 
 patch(ActivityMenu.prototype, {
@@ -22,14 +23,30 @@ patch(ActivityMenu.prototype, {
             return this._confirmCheckOut();
         }
 
-        if (this.employee?.check_in_requires_face) {
+        if (this.employee?.check_in_requires_face && this.employee?.check_in_requires_home_pin) {
             this._attendanceInProgress = false;
-            this.dialogService.add(FaceCheckDialog, {
-                actionType: "check_in",
-                onSuccess: async () => {
-                    await this.searchReadEmployee();
+            this.dialogService.add(ConfirmationDialog, {
+                title: _t("Choose Check-In Method"),
+                body: _t("Use Face Verification or Home PIN to check in."),
+                confirmLabel: _t("Face Verification"),
+                cancelLabel: _t("Home PIN"),
+                confirm: async () => {
+                    this._openFaceCheckDialog();
+                },
+                cancel: () => {
+                    this._openHomePinDialog();
                 },
             });
+            return;
+        }
+
+        if (this.employee?.check_in_requires_face) {
+            this._openFaceCheckDialog();
+            return;
+        }
+
+        if (this.employee?.check_in_requires_home_pin) {
+            this._openHomePinDialog();
             return;
         }
 
@@ -46,6 +63,25 @@ patch(ActivityMenu.prototype, {
         }
 
         return super.signInOut(...arguments);
+    },
+
+    _openFaceCheckDialog() {
+        this._attendanceInProgress = false;
+        this.dialogService.add(FaceCheckDialog, {
+            actionType: "check_in",
+            onSuccess: async () => {
+                await this.searchReadEmployee();
+            },
+        });
+    },
+
+    _openHomePinDialog() {
+        this._attendanceInProgress = false;
+        this.dialogService.add(HomePinDialog, {
+            onSuccess: async () => {
+                await this.searchReadEmployee();
+            },
+        });
     },
 
     _confirmCheckOut() {

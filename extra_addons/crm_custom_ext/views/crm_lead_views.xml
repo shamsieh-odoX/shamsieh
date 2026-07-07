@@ -233,27 +233,24 @@
             </xpath>
             <xpath expr="//t[@t-name='card']/field[@name='name']" position="replace">
                 <div class="o_crm_custom_kanban_body">
-                    <div class="row g-2 o_crm_custom_kanban_row">
+                    <div class="row g-3 o_crm_custom_kanban_row">
                         <div class="col-6 o_crm_custom_kanban_cell">
-                            <span class="o_crm_custom_kanban_label" invisible="not lead_ref">Lead ID</span>
                             <field name="lead_ref" class="o_crm_lead_ref" invisible="not lead_ref"/>
                         </div>
                         <div class="col-6 o_crm_custom_kanban_cell text-end">
-                            <span class="o_crm_custom_kanban_label" invisible="not interest_level">Interest</span>
                             <field name="interest_level"
                                 widget="label_selection"
                                 invisible="not interest_level"
                                 options="{'classes': {'hot': 'danger', 'warm': 'warning', 'cold': 'info', 'not_interested': 'secondary'}}"/>
                         </div>
                     </div>
-                    <div class="row g-2 o_crm_custom_kanban_row">
+                    <div class="row g-3 o_crm_custom_kanban_row">
                         <div class="col-12 o_crm_custom_kanban_cell">
                             <field class="fw-bold fs-5 o_crm_custom_kanban_title mb-0" name="name"/>
                         </div>
                     </div>
-                    <div class="row g-2 o_crm_custom_kanban_row">
+                    <div class="row g-3 o_crm_custom_kanban_row">
                         <div class="col-6 o_crm_custom_kanban_cell">
-                            <span class="o_crm_custom_kanban_label">Contact</span>
                             <div class="o_crm_custom_kanban_contact text-truncate">
                                 <div class="d-flex align-items-center" invisible="not partner_id">
                                     <field name="partner_id" widget="many2one_avatar" class="text-truncate" readonly="1" options="{'no_create': 1, 'no_open': 1}"/>
@@ -264,7 +261,6 @@
                             </div>
                         </div>
                         <div class="col-6 o_crm_custom_kanban_cell text-end">
-                            <span class="o_crm_custom_kanban_label">Value</span>
                             <div class="o_kanban_card_crm_lead_revenue o_crm_custom_kanban_revenue">
                                 <t t-if="record.expected_revenue.raw_value">
                                     <field name="expected_revenue" widget="monetary" options="{'currency_field': 'company_currency'}"/>
@@ -277,26 +273,22 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row g-2 o_crm_custom_kanban_row" invisible="not sector_id and not channel_id">
+                    <div class="row g-3 o_crm_custom_kanban_row" invisible="not sector_id and not channel_id">
                         <div class="col-6 o_crm_custom_kanban_cell">
-                            <span class="o_crm_custom_kanban_label" invisible="not sector_id">Sector</span>
                             <field name="sector_id" widget="badge" invisible="not sector_id"/>
                         </div>
                         <div class="col-6 o_crm_custom_kanban_cell text-end">
-                            <span class="o_crm_custom_kanban_label" invisible="not channel_id">Channel</span>
                             <field name="channel_id" widget="badge" invisible="not channel_id"/>
                         </div>
                     </div>
-                    <div class="row g-2 o_crm_custom_kanban_row" invisible="not next_followup_date and not tag_ids">
+                    <div class="row g-3 o_crm_custom_kanban_row" invisible="not next_followup_date and not tag_ids">
                         <div class="col-6 o_crm_custom_kanban_cell">
-                            <span class="o_crm_custom_kanban_label" invisible="not next_followup_date">Follow-up</span>
                             <div class="o_crm_custom_kanban_followup d-flex align-items-center gap-1 text-muted small" invisible="not next_followup_date">
                                 <i class="fa fa-calendar-o"/>
                                 <field name="next_followup_date"/>
                             </div>
                         </div>
                         <div class="col-6 o_crm_custom_kanban_cell text-end">
-                            <span class="o_crm_custom_kanban_label" invisible="not tag_ids">Tags</span>
                             <field name="tag_ids" class="o_crm_custom_kanban_tags justify-content-end" widget="many2many_tags"/>
                         </div>
                     </div>
@@ -307,6 +299,7 @@
             <xpath expr="//t[@t-name='card']/field[@name='contact_name']" position="replace"/>
             <xpath expr="//t[@t-name='card']/field[@name='partner_name']" position="replace"/>
             <xpath expr="//t[@t-name='card']/field[@name='tag_ids']" position="replace"/>
+            <xpath expr="//t[@t-name='card']/field[@name='lead_properties']" position="replace"/>
         </field>
     </record>
 
@@ -327,50 +320,43 @@
             </xpath>
             <xpath expr="//t[@t-name='card']/field[@name='name']" position="replace">
                 <div class="o_crm_custom_kanban_body">
-                    <div class="row g-2 o_crm_custom_kanban_row">
+                    <div class="row g-3 o_crm_custom_kanban_row">
                         <div class="col-6 o_crm_custom_kanban_cell">
-                            <span class="o_crm_custom_kanban_label" invisible="not lead_ref">Lead ID</span>
                             <field name="lead_ref" class="o_crm_lead_ref" invisible="not lead_ref"/>
                         </div>
                         <div class="col-6 o_crm_custom_kanban_cell text-end">
-                            <span class="o_crm_custom_kanban_label" invisible="not interest_level">Interest</span>
                             <field name="interest_level"
                                 widget="label_selection"
                                 invisible="not interest_level"
                                 options="{'classes': {'hot': 'danger', 'warm': 'warning', 'cold': 'info', 'not_interested': 'secondary'}}"/>
                         </div>
                     </div>
-                    <div class="row g-2 o_crm_custom_kanban_row">
+                    <div class="row g-3 o_crm_custom_kanban_row">
                         <div class="col-12 o_crm_custom_kanban_cell">
                             <field class="fw-bold fs-5 o_crm_custom_kanban_title mb-0" name="name"/>
                         </div>
                     </div>
-                    <div class="row g-2 o_crm_custom_kanban_row">
+                    <div class="row g-3 o_crm_custom_kanban_row">
                         <div class="col-6 o_crm_custom_kanban_cell">
-                            <span class="o_crm_custom_kanban_label">Contact</span>
                             <field name="contact_name" class="text-muted text-truncate o_crm_custom_kanban_contact"/>
                         </div>
                         <div class="col-6 o_crm_custom_kanban_cell text-end" invisible="not sector_id and not channel_id">
-                            <span class="o_crm_custom_kanban_label" invisible="not sector_id">Sector</span>
                             <field name="sector_id" widget="badge" invisible="not sector_id"/>
                         </div>
                     </div>
-                    <div class="row g-2 o_crm_custom_kanban_row" invisible="not channel_id and not next_followup_date">
+                    <div class="row g-3 o_crm_custom_kanban_row" invisible="not channel_id and not next_followup_date">
                         <div class="col-6 o_crm_custom_kanban_cell">
-                            <span class="o_crm_custom_kanban_label" invisible="not channel_id">Channel</span>
                             <field name="channel_id" widget="badge" invisible="not channel_id"/>
                         </div>
                         <div class="col-6 o_crm_custom_kanban_cell text-end">
-                            <span class="o_crm_custom_kanban_label" invisible="not next_followup_date">Follow-up</span>
                             <div class="o_crm_custom_kanban_followup d-flex align-items-center justify-content-end gap-1 text-muted small" invisible="not next_followup_date">
                                 <i class="fa fa-calendar-o"/>
                                 <field name="next_followup_date"/>
                             </div>
                         </div>
                     </div>
-                    <div class="row g-2 o_crm_custom_kanban_row" invisible="not tag_ids">
+                    <div class="row g-3 o_crm_custom_kanban_row" invisible="not tag_ids">
                         <div class="col-12 o_crm_custom_kanban_cell">
-                            <span class="o_crm_custom_kanban_label">Tags</span>
                             <field name="tag_ids" class="o_crm_custom_kanban_tags" widget="many2many_tags"/>
                         </div>
                     </div>
@@ -378,6 +364,7 @@
             </xpath>
             <xpath expr="//t[@t-name='card']/field[@name='contact_name']" position="replace"/>
             <xpath expr="//t[@t-name='card']/field[@name='tag_ids']" position="replace"/>
+            <xpath expr="//t[@t-name='card']/field[@name='lead_properties']" position="replace"/>
         </field>
     </record>
 

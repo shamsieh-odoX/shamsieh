@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <menuitem
+        id="menu_hr_exceptional_holiday"
+        name="Exceptional Holidays"
+        parent="hr_holidays.menu_hr_holidays_management"
+        action="action_hr_exceptional_holiday"
+        groups="hr_holidays.group_hr_holidays_user"
+        sequence="20"/>
+
+    <menuitem
+        id="menu_hr_leave_balance_summary"
+        name="Employee Balance Summary"
+        parent="hr_holidays.menu_hr_holidays_report"
+        action="action_hr_leave_balance_summary"
+        groups="hr_holidays.group_hr_holidays_user"
+        sequence="5"/>
+
+</odoo>
