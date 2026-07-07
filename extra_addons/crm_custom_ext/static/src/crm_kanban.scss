@@ -1,55 +1,53 @@
 .o_crm_custom_kanban {
-    --crm-kanban-label-color: #{$o-gray-600};
-    --crm-kanban-meta-color: #{$o-gray-700};
+    --KanbanRecord-padding-v: 0.85rem;
+    --KanbanRecord-padding-h: 0.9rem;
+    --KanbanRecord-gap-v: 0.65rem;
+    --Card-Footer-gap: 0.5rem;
+
+    --crm-kanban-label-color: #{rgba($o-main-text-color, 0.5)};
+    --crm-kanban-meta-color: #{rgba($o-main-text-color, 0.72)};
     --crm-kanban-revenue-color: #{darken($o-success, 6%)};
-    --crm-kanban-ref-bg: #{mix($o-brand-primary, $o-view-background-color, 8%)};
-    --crm-kanban-ref-color: #{darken($o-brand-primary, 8%)};
-    --crm-kanban-badge-bg: #{rgba($o-gray-700, 0.06)};
-    --crm-kanban-badge-color: #{$o-gray-700};
-    --crm-kanban-badge-border: #{rgba($o-gray-700, 0.18)};
-    --crm-kanban-divider: #{rgba($o-gray-700, 0.1)};
+    --crm-kanban-ref-bg: #{rgba($o-main-text-color, 0.05)};
+    --crm-kanban-ref-color: #{rgba($o-main-text-color, 0.82)};
+    --crm-kanban-badge-bg: #{rgba($o-main-text-color, 0.06)};
+    --crm-kanban-badge-color: #{rgba($o-main-text-color, 0.78)};
+    --crm-kanban-badge-border: #{rgba($o-main-text-color, 0.16)};
 
     .o_kanban_record {
+        color: $o-main-text-color;
+
         .o_crm_custom_kanban_body {
             display: flex;
             flex-direction: column;
-            gap: 0.35rem;
+            gap: 0.6rem;
+            padding-bottom: 0.15rem;
         }
 
         .o_crm_custom_kanban_row {
-            --bs-gutter-x: 0.5rem;
+            --bs-gutter-x: 0.75rem;
             margin-bottom: 0 !important;
-
-            &:not(:first-child) {
-                padding-top: 0.35rem;
-                border-top: 1px solid var(--crm-kanban-divider);
-            }
         }
 
         .o_crm_custom_kanban_cell {
             min-width: 0;
+        }
 
-            .o_crm_custom_kanban_label {
-                display: block;
-                font-size: 0.62rem;
-                font-weight: 600;
-                text-transform: uppercase;
-                letter-spacing: 0.06em;
-                color: var(--crm-kanban-label-color);
-                margin-bottom: 0.15rem;
-                line-height: 1;
-            }
+        .o_crm_custom_kanban_label,
+        .o_crm_custom_kanban_cell .o_form_label,
+        .o_crm_custom_kanban_cell .o_field_label {
+            display: none !important;
         }
 
         .o_crm_lead_ref {
             display: inline-block;
-            font-size: 0.72rem;
+            font-size: 0.78rem;
             font-weight: 600;
             font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
             color: var(--crm-kanban-ref-color) !important;
             background: var(--crm-kanban-ref-bg);
-            border-radius: 0.25rem;
-            padding: 0.1rem 0.4rem;
+            border: none;
+            border-radius: 0.3rem;
+            padding: 0.25rem 0.55rem;
             letter-spacing: 0.02em;
             margin: 0;
 
@@ -60,19 +58,20 @@
         }
 
         .o_crm_custom_kanban_title {
-            line-height: 1.25;
-            color: $o-main-text-color;
+            line-height: 1.35;
+            color: $o-main-text-color !important;
+            margin-top: 0.1rem;
         }
 
         .o_crm_custom_kanban_contact {
-            font-size: 0.82rem;
-            line-height: 1.3;
+            font-size: 0.85rem;
+            line-height: 1.4;
             color: var(--crm-kanban-meta-color) !important;
         }
 
         .o_crm_custom_kanban_revenue {
             font-weight: 700;
-            font-size: 0.92rem;
+            font-size: 0.95rem;
             color: var(--crm-kanban-revenue-color) !important;
 
             .o_field_widget {
@@ -81,24 +80,24 @@
         }
 
         .o_crm_custom_kanban_cell .badge {
-            font-size: 0.68rem;
+            font-size: 0.72rem;
             font-weight: 500;
             background-color: var(--crm-kanban-badge-bg) !important;
             color: var(--crm-kanban-badge-color) !important;
             border: 1px solid var(--crm-kanban-badge-border);
-            padding: 0.15rem 0.45rem;
+            padding: 0.2rem 0.5rem;
             max-width: 100%;
             overflow: hidden;
             text-overflow: ellipsis;
         }
 
         .o_crm_custom_kanban_followup {
-            font-size: 0.78rem;
-            line-height: 1.2;
+            font-size: 0.82rem;
+            line-height: 1.3;
             color: var(--crm-kanban-meta-color) !important;
 
             .fa {
-                font-size: 0.7rem;
+                font-size: 0.75rem;
                 opacity: 0.85;
                 color: var(--crm-kanban-label-color);
             }
@@ -111,6 +110,7 @@
 
         .o_crm_custom_kanban_tags {
             margin: 0;
+            gap: 0.35rem;
 
             &.justify-content-end {
                 display: flex;
@@ -124,19 +124,40 @@
                 color: var(--crm-kanban-badge-color) !important;
                 border: 1px solid var(--crm-kanban-badge-border) !important;
                 font-weight: 500;
-                font-size: 0.68rem;
+                font-size: 0.72rem;
             }
         }
 
         .o_crm_custom_kanban_cell .o_field_widget[name="interest_level"] {
             margin: 0;
-            font-size: 0.72rem;
+            font-size: 0.75rem;
             display: inline-flex;
             justify-content: flex-end;
         }
 
         .text-muted {
             color: var(--crm-kanban-meta-color) !important;
+        }
+
+        footer {
+            color: var(--crm-kanban-meta-color);
+            padding-top: 0.5rem !important;
+            margin-top: 0;
+
+            .o_field_widget:not(.o_priority),
+            .fa:not(.o_priority_star) {
+                color: inherit;
+            }
+
+            .o_priority > .o_priority_star {
+                &.fa-star {
+                    color: $o-main-favorite-color !important;
+                }
+
+                &.fa-star-o {
+                    color: #{rgba($o-main-favorite-color, 0.35)} !important;
+                }
+            }
         }
     }
 }

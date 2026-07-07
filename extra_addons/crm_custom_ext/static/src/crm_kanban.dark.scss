@@ -1,17 +1,45 @@
+// Dark-mode overrides for the CRM custom kanban (web.assets_web_dark).
+
 .o_crm_custom_kanban {
-    --crm-kanban-label-color: #{$gray-400};
-    --crm-kanban-meta-color: #{$gray-300};
-    --crm-kanban-revenue-color: #{lighten($success, 12%)};
-    --crm-kanban-ref-bg: #{rgba($white, 0.08)};
-    --crm-kanban-ref-color: #{$gray-200};
-    --crm-kanban-badge-bg: #{rgba($white, 0.06)};
-    --crm-kanban-badge-color: #{$gray-300};
-    --crm-kanban-badge-border: #{rgba($white, 0.14)};
-    --crm-kanban-divider: #{rgba($white, 0.08)};
+    --crm-kanban-label-color: #{$o-gray-400};
+    --crm-kanban-meta-color: #{$o-gray-300};
+    --crm-kanban-revenue-color: #{lighten($o-success, 12%)};
+    --crm-kanban-ref-bg: #{rgba($o-white, 0.06)};
+    --crm-kanban-ref-color: #{$o-gray-200};
+    --crm-kanban-badge-bg: #{rgba($o-white, 0.06)};
+    --crm-kanban-badge-color: #{$o-gray-300};
+    --crm-kanban-badge-border: #{rgba($o-white, 0.14)};
 
     .o_kanban_record {
+        color: $o-gray-100;
+
         .o_crm_custom_kanban_title {
-            color: $gray-100;
+            color: $o-gray-100 !important;
+        }
+
+        .o_crm_custom_kanban_contact,
+        .o_crm_custom_kanban_followup,
+        .text-muted {
+            color: var(--crm-kanban-meta-color) !important;
+        }
+
+        footer {
+            color: var(--crm-kanban-meta-color);
+
+            .o_field_widget:not(.o_priority),
+            .fa:not(.o_priority_star) {
+                color: inherit;
+            }
+
+            .o_priority > .o_priority_star {
+                &.fa-star {
+                    color: #{lighten($o-main-favorite-color, 6%)} !important;
+                }
+
+                &.fa-star-o {
+                    color: #{rgba($o-main-favorite-color, 0.4)} !important;
+                }
+            }
         }
     }
 }
