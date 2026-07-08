@@ -9,10 +9,6 @@ import { FaceCheckDialog } from "@hr_attendance_custom_ext/components/face_check
 import { HomePinDialog } from "@hr_attendance_custom_ext/components/home_pin_dialog/home_pin_dialog";
 import { isIosApp } from "@web/core/browser/feature_detection";
 
-patch(ActivityMenu, {
-    static template: "hr_attendance_custom_ext.attendance_menu",
-});
-
 patch(ActivityMenu.prototype, {
     setup() {
         super.setup(...arguments);
