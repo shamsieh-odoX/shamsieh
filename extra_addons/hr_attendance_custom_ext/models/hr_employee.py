@@ -332,6 +332,150 @@ class HrEmployee(models.Model):
             return False, False, 0
         return False, False, 0
 
+    def _hikvision_any_attendance_today(self):
+        self.ensure_one()
+        today = fields.Date.context_today(self)
+        return bool(self.env['hr.attendance'].sudo().search_count([
+            ('employee_id', '=', self.id),
+            ('date', '=', today),
+        ]))
+
+    def hikvision_process_punch(
+        self,
+        punch_type,
+        punch_time,
+        external_log_id=False,
+        device_user_id=False,
+        attendance_source='fingerprint',
+    ):
+        """Process a Hikvision punch without treating breaks as checkout."""
+        self.ensure_one()
+        Attendance = self.env['hr.attendance'].sudo()
+        PunchLog = self.env['hr.attendance.punch.log'].sudo()
+        open_attendance = Attendance.search([
+            ('employee_id', '=', self.id),
+            ('check_out', '=', False),
+        ], order='check_in desc', limit=1)
+
+        if external_log_id:
+            duplicate = PunchLog.search([
+                ('external_log_id', '=', external_log_id),
+                ('employee_id', '=', self.id),
+            ], limit=1)
+            if duplicate:
+                return {
+                    'status': 'duplicate',
+                    'attendance_id': duplicate.attendance_id.id,
+                }
+
+        source_vals = {
+            'attendance_source': attendance_source,
+            'device_user_id': device_user_id,
+            'external_log_id': external_log_id,
+        }
+        source_vals = {key: value for key, value in source_vals.items() if value}
+
+        if punch_type == 'check_in':
+            if open_attendance:
+                return {'status': 'duplicate', 'attendance_id': open_attendance.id}
+            policy = self.env['fingerprint.attendance.policy'].get_company_default(self.company_id)
+            if not policy.allow_multiple_attendances_per_day and self._hikvision_any_attendance_today():
+                today_attendance = Attendance.search([
+                    ('employee_id', '=', self.id),
+                    ('date', '=', fields.Date.context_today(self)),
+                ], order='check_in desc', limit=1)
+                return {
+                    'status': 'duplicate',
+                    'attendance_id': today_attendance.id if today_attendance else False,
+                    'reason': 'already_checked_in_today',
+                }
+            attendance = Attendance.create({
+                'employee_id': self.id,
+                'check_in': punch_time,
+                'hikvision_punch_type': punch_type,
+                'in_mode': 'technical',
+                **source_vals,
+            })
+            self.sudo().hikvision_presence_status = 'working'
+            PunchLog.create({
+                'attendance_id': attendance.id,
+                'punch_type': punch_type,
+                'punch_time': punch_time,
+                'attendance_source': attendance_source,
+                'device_user_id': device_user_id,
+                'external_log_id': external_log_id,
+            })
+            return {'status': 'created', 'attendance_id': attendance.id}
+
+        if punch_type == 'check_out':
+            if not open_attendance:
+                return {'status': 'no_open_attendance'}
+            open_attendance.write({
+                'check_out': punch_time,
+                'hikvision_punch_type': punch_type,
+                'out_mode': 'technical',
+                **source_vals,
+            })
+            PunchLog.create({
+                'attendance_id': open_attendance.id,
+                'punch_type': punch_type,
+                'punch_time': punch_time,
+                'attendance_source': attendance_source,
+                'device_user_id': device_user_id,
+                'external_log_id': external_log_id,
+            })
+            self.sudo().hikvision_presence_status = 'checked_out'
+            return {'status': 'closed', 'attendance_id': open_attendance.id}
+
+        if punch_type == 'break_in':
+            if not open_attendance:
+                return {'status': 'no_open_attendance'}
+            if self.hikvision_presence_status == 'on_break':
+                return {'status': 'duplicate', 'attendance_id': open_attendance.id}
+            self.sudo().hikvision_presence_status = 'on_break'
+            open_attendance.write({'hikvision_punch_type': punch_type})
+            PunchLog.create({
+                'attendance_id': open_attendance.id,
+                'punch_type': punch_type,
+                'punch_time': punch_time,
+                'attendance_source': attendance_source,
+                'device_user_id': device_user_id,
+                'external_log_id': external_log_id,
+            })
+            return {'status': 'break_started', 'attendance_id': open_attendance.id}
+
+        if punch_type == 'break_out':
+            if not open_attendance:
+                return {'status': 'no_open_attendance'}
+            on_break = self.hikvision_presence_status == 'on_break'
+            if not on_break:
+                last_punch = PunchLog.search([
+                    ('attendance_id', '=', open_attendance.id),
+                ], order='punch_time desc, id desc', limit=1)
+                if not last_punch or last_punch.punch_type != 'break_in':
+                    return {'status': 'not_on_break', 'attendance_id': open_attendance.id}
+            self.sudo().hikvision_presence_status = 'working'
+            open_attendance.write({'hikvision_punch_type': punch_type})
+            PunchLog.create({
+                'attendance_id': open_attendance.id,
+                'punch_type': punch_type,
+                'punch_time': punch_time,
+                'attendance_source': attendance_source,
+                'device_user_id': device_user_id,
+                'external_log_id': external_log_id,
+            })
+            return {'status': 'break_ended', 'attendance_id': open_attendance.id}
+
+        return {'status': 'ignored', 'punch_type': punch_type}
+
+    def action_systray_punch(self, punch_type):
+        self.ensure_one()
+        return self.hikvision_process_punch(
+            punch_type=punch_type,
+            punch_time=fields.Datetime.now(),
+            attendance_source='systray',
+        )
+
     def _get_attendance_systray_user_data(self):
         """Extend standard systray payload with work-location check-in rules."""
         from odoo.addons.hr_attendance.controllers.main import HrAttendance
@@ -347,6 +491,7 @@ class HrEmployee(models.Model):
             'check_in_requires_office_geo': location_type == 'office',
             'office_geo_configured': self._is_office_geo_configured(),
             'single_check_in_per_day': not policy.allow_multiple_attendances_per_day,
+            'hikvision_presence_status': self.hikvision_presence_status or 'checked_out',
         })
         return response
 

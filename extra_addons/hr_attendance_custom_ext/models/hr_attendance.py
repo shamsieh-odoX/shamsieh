@@ -76,7 +76,17 @@ class HrAttendance(models.Model):
         string='Punch Type',
         tracking=True,
         index=True,
-        help='Last Hikvision punch that opened or closed this attendance segment.',
+        help='Last punch recorded for this attendance day.',
+    )
+    hikvision_presence_status = fields.Selection(
+        related='employee_id.hikvision_presence_status',
+        string='Work State',
+        readonly=True,
+    )
+    punch_log_ids = fields.One2many(
+        'hr.attendance.punch.log',
+        'attendance_id',
+        string='Punch History',
     )
 
     _attendance_external_log_device_uniq = models.Constraint(
@@ -128,7 +138,26 @@ class HrAttendance(models.Model):
             self._refresh_daily_status()
         return res
 
-    @api.depends('check_in', 'check_out', 'employee_id', 'employee_id.resource_calendar_id', 'policy_id')
+    def _defer_penalties_until_checkout(self):
+        """Keep one open day record; compute late/early only after final checkout."""
+        self.ensure_one()
+        if self.check_out:
+            return False
+        if self.employee_id.hikvision_presence_status in ('working', 'on_break'):
+            return True
+        if self.punch_log_ids:
+            return True
+        return False
+
+    @api.depends(
+        'check_in',
+        'check_out',
+        'employee_id',
+        'employee_id.resource_calendar_id',
+        'employee_id.hikvision_presence_status',
+        'policy_id',
+        'punch_log_ids',
+    )
     def _compute_attendance_status_fields(self):
         now = fields.Datetime.now()
         for attendance in self:
@@ -138,6 +167,9 @@ class HrAttendance(models.Model):
             attendance.attendance_status = 'present'
 
             if not attendance.employee_id or not attendance.check_in:
+                continue
+
+            if attendance._defer_penalties_until_checkout():
                 continue
 
             employee = attendance.employee_id

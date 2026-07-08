@@ -98,7 +98,7 @@ def _api_response(content: dict[str, Any], status_code: int = 200) -> JSONRespon
 
 
 def _result_status_code(result: str) -> int:
-    if result in {"created", "checkin", "check_in", "breakout", "break_out"}:
+    if result in {"created", "checkin", "check_in", "breakout", "break_out", "break_started", "break_ended"}:
         return 201
     return 200
 
@@ -157,74 +157,34 @@ def process_event(event: AttendanceEvent, *, from_retry: bool = False) -> str:
         logger.warning("No employee found for barcode=%s", event.employee_no)
         store.mark_processed(event.device_serial, event.event_id, event.employee_no, event.event_time.isoformat())
         return "employee-not-found"
+
     attendance_status = str(event.raw_fields.get("attendanceStatus") or "").strip().lower()
     punch_type = _normalize_punch_type(attendance_status)
-    open_attendance = odoo.get_open_attendance(employee["id"])
-    # Hikvision uses breakIn = leave for break (close), breakOut = return from break (open).
-    checkout_statuses = {"checkout", "check_out", "breakin", "break_in"}
-    checkin_statuses = {"checkin", "check_in", "breakout", "break_out", "undefined", ""}
-
-    if attendance_status in checkout_statuses:
-        if not open_attendance:
-            store.mark_processed(event.device_serial, event.event_id, event.employee_no, event.event_time.isoformat())
-            logger.info(
-                "No open attendance to close employee=%s status=%s event_id=%s",
-                employee["id"],
-                attendance_status or "unknown",
-                event.event_id,
-            )
-            return "no-open-attendance"
-        odoo.checkout_from_hikvision(
-            int(open_attendance["id"]),
-            event.event_time.astimezone(timezone.utc),
-            event_id=event.event_id,
-            employee_no=event.employee_no,
-            punch_type=punch_type or "check_out",
-            employee_id=employee["id"],
-        )
+    if not punch_type:
         store.mark_processed(event.device_serial, event.event_id, event.employee_no, event.event_time.isoformat())
-        logger.info(
-            "Closed attendance id=%s employee=%s status=%s event_id=%s",
-            open_attendance["id"],
-            employee["id"],
-            attendance_status,
-            event.event_id,
-        )
-        return attendance_status
+        logger.info("Ignored attendance status=%s employee=%s", attendance_status, employee["id"])
+        return "ignored-status"
 
-    if attendance_status in checkin_statuses and open_attendance:
-        # Regular check-in while already checked in is a duplicate.
-        # breakOut while open means already back from break.
-        logger.info(
-            "Duplicate open attendance for employee=%s open_id=%s status=%s",
-            employee["id"],
-            open_attendance["id"],
-            attendance_status or "checkin",
-        )
-        store.mark_processed(event.device_serial, event.event_id, event.employee_no, event.event_time.isoformat())
-        return "duplicate-attendance"
-
-    if attendance_status in checkin_statuses:
-        attendance_id = odoo.create_checkin_from_hikvision(
-            employee["id"],
-            event.event_time.astimezone(timezone.utc),
-            event_id=event.event_id,
-            employee_no=event.employee_no,
-            punch_type=punch_type or "check_in",
-        )
-        store.mark_processed(event.device_serial, event.event_id, event.employee_no, event.event_time.isoformat())
-        logger.info(
-            "Created attendance id=%s employee=%s status=%s event_id=%s",
-            attendance_id,
-            employee["id"],
-            attendance_status or "checkin",
-            event.event_id,
-        )
-        return attendance_status or "created"
-
+    result = odoo.process_hikvision_punch(
+        employee["id"],
+        punch_type,
+        event.event_time.astimezone(timezone.utc),
+        event_id=event.event_id,
+        employee_no=event.employee_no,
+    )
     store.mark_processed(event.device_serial, event.event_id, event.employee_no, event.event_time.isoformat())
-    logger.info("Ignored attendance status=%s employee=%s", attendance_status, employee["id"])
-    return "ignored-status"
+    status = result.get("status", "unknown")
+    logger.info(
+        "Processed punch type=%s employee=%s status=%s attendance_id=%s event_id=%s",
+        punch_type,
+        employee["id"],
+        status,
+        result.get("attendance_id"),
+        event.event_id,
+    )
+    if status in {"duplicate", "no_open_attendance", "not_on_break"}:
+        return status
+    return punch_type
 
 
 async def retry_worker() -> None:

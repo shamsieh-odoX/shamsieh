@@ -116,7 +116,13 @@ class HrAttendanceDailyStatus(models.Model):
                 vals['status'] = 'on_leave'
             else:
                 statuses = attendances.mapped('attendance_status')
-                if 'incomplete' in statuses or any(not att.check_out for att in attendances):
+                open_active = any(
+                    not att.check_out and att._defer_penalties_until_checkout()
+                    for att in attendances
+                )
+                if open_active and len(attendances) == 1:
+                    vals['status'] = 'present'
+                elif 'incomplete' in statuses or any(not att.check_out for att in attendances):
                     vals['status'] = 'incomplete'
                 elif 'late' in statuses:
                     vals['status'] = 'late'

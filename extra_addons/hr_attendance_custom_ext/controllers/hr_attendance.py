@@ -29,6 +29,28 @@ class HrAttendanceCustom(HrAttendance):
         )._attendance_action_change(geo_ip_response)
         return self._get_employee_info_response(employee)
 
+    @http.route('/hr_attendance_custom/systray_punch', type='jsonrpc', auth='user')
+    def systray_punch(self, punch_type=False):
+        employee = request.env.user.employee_id
+        if not employee:
+            return {'status': 'error', 'message': 'No employee linked to user.'}
+        if punch_type not in {'check_in', 'break_in', 'break_out', 'check_out'}:
+            return {'status': 'error', 'message': 'Invalid punch type.'}
+        try:
+            if punch_type == 'check_in':
+                employee._validate_attendance_check_in()
+            result = employee.action_systray_punch(punch_type)
+            if result.get('status') in {'duplicate', 'no_open_attendance', 'not_on_break'}:
+                messages = {
+                    'duplicate': 'This punch was already recorded.',
+                    'no_open_attendance': 'You must check in before using this punch.',
+                    'not_on_break': 'You are not currently on break.',
+                }
+                return {'status': 'error', 'message': messages[result['status']]}
+        except UserError as exc:
+            return {'status': 'error', 'message': str(exc)}
+        return self._get_employee_info_response(employee)
+
     @http.route('/hr_attendance_custom/home_pin_check_in', type='jsonrpc', auth='user')
     def home_pin_check_in(self, pin_code=False):
         employee = request.env.user.employee_id
