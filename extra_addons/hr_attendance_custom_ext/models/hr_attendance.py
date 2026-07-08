@@ -94,13 +94,15 @@ class HrAttendance(models.Model):
         return self.env['fingerprint.attendance.policy']
 
     def _refresh_daily_status(self):
-        Status = self.env['hr.attendance.daily.status']
+        # Daily status rows are technical artifacts generated from attendance writes.
+        # They should not fail for regular users (kiosk, fingerprint bridge, employees).
+        Status = self.env['hr.attendance.daily.status'].sudo()
         seen = set()
         for attendance in self:
             key = (attendance.employee_id.id, attendance.date)
             if attendance.employee_id and attendance.date and key not in seen:
                 seen.add(key)
-                Status._generate_for_employee_date(attendance.employee_id, attendance.date)
+                Status._generate_for_employee_date(attendance.employee_id.sudo(), attendance.date)
 
     @api.model_create_multi
     def create(self, vals_list):
