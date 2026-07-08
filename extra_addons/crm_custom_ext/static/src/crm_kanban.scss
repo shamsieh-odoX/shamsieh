@@ -4,28 +4,17 @@
     --KanbanRecord-gap-v: 0.65rem;
     --Card-Footer-gap: 0.5rem;
 
-    --crm-kanban-title-color: #{$o-gray-900};
-    --crm-kanban-label-color: #{$o-gray-500};
-    --crm-kanban-meta-color: #{$o-gray-600};
-    --crm-kanban-revenue-color: #{darken($o-success, 6%)};
     --crm-kanban-ref-bg: #{rgba($o-gray-900, 0.05)};
-    --crm-kanban-ref-color: #{$o-gray-700};
     --crm-kanban-badge-bg: #{rgba($o-gray-900, 0.06)};
-    --crm-kanban-badge-color: #{$o-gray-700};
+    --crm-kanban-badge-color: var(--o-main-text-color, #{$o-main-text-color});
     --crm-kanban-badge-border: #{rgba($o-gray-900, 0.14)};
 
     .o_kanban_record {
-        color: var(--crm-kanban-meta-color);
-
         .o_crm_custom_kanban_body {
             display: flex;
             flex-direction: column;
             gap: 0.6rem;
             padding-bottom: 0.15rem;
-
-            .o_field_widget {
-                color: var(--crm-kanban-meta-color) !important;
-            }
         }
 
         .o_crm_custom_kanban_row {
@@ -48,7 +37,7 @@
             font-size: 0.78rem;
             font-weight: 600;
             font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-            color: var(--crm-kanban-ref-color) !important;
+            color: var(--o-main-text-color, #{$o-main-text-color});
             background: var(--crm-kanban-ref-bg);
             border: none;
             border-radius: 0.3rem;
@@ -62,25 +51,23 @@
             }
         }
 
-        .o_crm_custom_kanban_title,
-        .o_crm_custom_kanban_title.o_field_widget {
+        .o_crm_custom_kanban_title {
             line-height: 1.35;
-            color: var(--crm-kanban-title-color) !important;
             margin-top: 0.1rem;
         }
 
-        .o_crm_custom_kanban_contact,
-        .o_crm_custom_kanban_contact .o_field_widget {
+        .o_crm_custom_kanban_contact {
             font-size: 0.85rem;
             line-height: 1.4;
-            color: var(--crm-kanban-meta-color) !important;
         }
 
-        .o_crm_custom_kanban_revenue,
-        .o_crm_custom_kanban_revenue .o_field_widget {
+        .o_crm_custom_kanban_revenue {
             font-weight: 700;
             font-size: 0.95rem;
-            color: var(--crm-kanban-revenue-color) !important;
+
+            .o_field_widget {
+                color: inherit !important;
+            }
         }
 
         .o_crm_custom_kanban_cell .badge {
@@ -98,12 +85,10 @@
         .o_crm_custom_kanban_followup {
             font-size: 0.82rem;
             line-height: 1.3;
-            color: var(--crm-kanban-meta-color) !important;
 
             .fa {
                 font-size: 0.75rem;
                 opacity: 0.85;
-                color: var(--crm-kanban-label-color);
             }
 
             .o_field_widget {
@@ -139,20 +124,9 @@
             justify-content: flex-end;
         }
 
-        .text-muted,
-        .text-muted .o_field_widget {
-            color: var(--crm-kanban-meta-color) !important;
-        }
-
         footer {
-            color: var(--crm-kanban-meta-color);
             padding-top: 0.5rem !important;
             margin-top: 0;
-
-            .o_field_widget:not(.o_priority),
-            .fa:not(.o_priority_star) {
-                color: inherit;
-            }
 
             .o_priority > .o_priority_star {
                 &.fa-star {

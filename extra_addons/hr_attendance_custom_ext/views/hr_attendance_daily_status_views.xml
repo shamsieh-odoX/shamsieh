@@ -58,6 +58,7 @@
                 <field name="department_id"/>
                 <field name="company_id" groups="base.group_multi_company"/>
                 <filter string="Late" name="filter_late" domain="[('status', '=', 'late')]"/>
+                <filter string="On Leave" name="filter_on_leave" domain="[('status', '=', 'on_leave')]"/>
                 <filter string="Absent" name="filter_absent" domain="[('status', '=', 'absent')]"/>
                 <filter string="Incomplete" name="filter_incomplete" domain="[('status', '=', 'incomplete')]"/>
                 <filter string="This Month" name="filter_month"

@@ -33,6 +33,51 @@ class HrLeaveBalanceSummary(models.Model):
         return fields.Date.context_today(self)
 
     @api.model
+    def _get_balance_row(self, employee, leave_type, as_of_date):
+        if isinstance(as_of_date, str):
+            as_of_date = fields.Date.from_string(as_of_date)
+
+        allocation_data = leave_type.get_allocation_data(employee, as_of_date).get(employee, [])
+        info = next(
+            (item[1] for item in allocation_data if len(item) > 3 and item[3] == leave_type.id),
+            None,
+        )
+        if not info:
+            return None
+
+        allocations = self.env['hr.leave.allocation'].sudo().search([
+            ('employee_id', '=', employee.id),
+            ('holiday_status_id', '=', leave_type.id),
+            ('state', '=', 'validate'),
+            ('date_from', '<=', as_of_date),
+            '|', ('date_to', '=', False), ('date_to', '>=', as_of_date),
+        ])
+        carried_over = sum(allocations.mapped('expiring_carryover_days'))
+        year_start = date(as_of_date.year, 1, 1)
+        year_leaves = self.env['hr.leave'].sudo().search([
+            ('employee_id', '=', employee.id),
+            ('holiday_status_id', '=', leave_type.id),
+            ('state', 'in', ('validate', 'validate1')),
+            ('date_from', '>=', fields.Datetime.to_datetime(year_start)),
+            ('date_from', '<=', fields.Datetime.to_datetime(as_of_date)),
+        ])
+        taken_this_year = sum(year_leaves.mapped('number_of_days'))
+        accrued_this_year = max(0.0, info['max_leaves'] - carried_over)
+        current_year_balance = max(0.0, accrued_this_year - taken_this_year)
+        return {
+            'employee_id': employee.id,
+            'leave_type_id': leave_type.id,
+            'company_id': employee.company_id.id,
+            'as_of_date': as_of_date,
+            'total_accrued': info.get('max_leaves', 0.0),
+            'days_used': info.get('leaves_taken', 0.0),
+            'days_remaining': info.get('remaining_leaves', 0.0),
+            'carried_over': carried_over,
+            'current_year_balance': current_year_balance,
+            'total_available': info.get('virtual_remaining_leaves', 0.0),
+        }
+
+    @api.model
     def _collect_balance_rows(self, as_of_date=None, company_id=None, department_id=None, leave_type_id=None):
         as_of_date = as_of_date or self._default_as_of_date()
         if isinstance(as_of_date, str):
@@ -55,46 +100,11 @@ class HrLeaveBalanceSummary(models.Model):
         leave_types = self.env['hr.leave.type'].search(leave_type_domain)
 
         rows = []
-        year_start = date(as_of_date.year, 1, 1)
-        Leave = self.env['hr.leave'].sudo()
-
         for employee in employees:
-            allocation_data = leave_types.get_allocation_data(employee, as_of_date).get(employee, [])
-            type_data_by_id = {
-                item[3]: item[1] for item in allocation_data if len(item) > 3
-            }
             for leave_type in leave_types:
-                info = type_data_by_id.get(leave_type.id)
-                if not info:
-                    continue
-                allocations = self.env['hr.leave.allocation'].sudo().search([
-                    ('employee_id', '=', employee.id),
-                    ('holiday_status_id', '=', leave_type.id),
-                    ('state', '=', 'validate'),
-                ])
-                carried_over = sum(allocations.mapped('expiring_carryover_days'))
-                year_leaves = Leave.search([
-                    ('employee_id', '=', employee.id),
-                    ('holiday_status_id', '=', leave_type.id),
-                    ('state', 'in', ('validate', 'validate1')),
-                    ('date_from', '>=', fields.Datetime.to_datetime(year_start)),
-                    ('date_from', '<=', fields.Datetime.to_datetime(as_of_date)),
-                ])
-                taken_this_year = sum(year_leaves.mapped('number_of_days'))
-                accrued_this_year = max(0.0, info['max_leaves'] - carried_over)
-                current_year_balance = max(0.0, accrued_this_year - taken_this_year)
-                rows.append({
-                    'employee_id': employee.id,
-                    'leave_type_id': leave_type.id,
-                    'company_id': employee.company_id.id,
-                    'as_of_date': as_of_date,
-                    'total_accrued': info.get('max_leaves', 0.0),
-                    'days_used': info.get('leaves_taken', 0.0),
-                    'days_remaining': info.get('remaining_leaves', 0.0),
-                    'carried_over': carried_over,
-                    'current_year_balance': current_year_balance,
-                    'total_available': info.get('virtual_remaining_leaves', 0.0),
-                })
+                row = self._get_balance_row(employee, leave_type, as_of_date)
+                if row:
+                    rows.append(row)
         return rows
 
     @api.model

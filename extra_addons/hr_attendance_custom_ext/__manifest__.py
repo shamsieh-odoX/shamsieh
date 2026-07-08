@@ -1,10 +1,10 @@
 {
     'name': 'HR Attendance Custom Extensions',
-    'version': '19.0.1.3.13',
+    'version': '19.0.1.3.14',
     'category': 'Human Resources/Attendances',
     'summary': 'Shamsieh attendance, fingerprint sync, and face attendance (§2, §8, §9)',
     'author': 'Custom',
-    'depends': ['hr', 'hr_attendance', 'base_geolocalize', 'resource', 'mail'],
+    'depends': ['hr', 'hr_attendance', 'hr_holidays', 'base_geolocalize', 'resource', 'mail'],
     'data': [
         'security/hr_attendance_custom_security.xml',
         'security/ir.model.access.csv',

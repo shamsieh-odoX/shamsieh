@@ -97,28 +97,39 @@ class HrAttendanceDailyStatus(models.Model):
             'notes': False,
         }
 
+        skip, _reason = employee._should_skip_attendance_penalties(target_date)
+
         if attendances:
             first = attendances[0]
             last = attendances[-1]
             vals.update({
                 'check_in': first.check_in,
                 'check_out': last.check_out,
-                'late_minutes': sum(attendances.mapped('late_minutes')),
-                'early_checkout_minutes': max(attendances.mapped('early_checkout_minutes') or [0]),
+                'late_minutes': 0 if skip else sum(attendances.mapped('late_minutes')),
+                'early_checkout_minutes': 0 if skip else max(attendances.mapped('early_checkout_minutes') or [0]),
                 'worked_hours': sum(attendances.mapped('worked_hours')),
                 'source_summary': ', '.join(sorted({
                     src for src in attendances.mapped('attendance_source') if src
                 })),
             })
-            statuses = attendances.mapped('attendance_status')
-            if 'incomplete' in statuses or any(not att.check_out for att in attendances):
-                vals['status'] = 'incomplete'
-            elif 'late' in statuses:
-                vals['status'] = 'late'
-            elif 'early_leave' in statuses:
-                vals['status'] = 'early_leave'
+            if skip:
+                vals['status'] = 'on_leave'
             else:
-                vals['status'] = 'present'
+                statuses = attendances.mapped('attendance_status')
+                if 'incomplete' in statuses or any(not att.check_out for att in attendances):
+                    vals['status'] = 'incomplete'
+                elif 'late' in statuses:
+                    vals['status'] = 'late'
+                elif 'early_leave' in statuses:
+                    vals['status'] = 'early_leave'
+                else:
+                    vals['status'] = 'present'
+        elif skip:
+            vals.update({
+                'status': 'on_leave',
+                'check_in': False,
+                'check_out': False,
+            })
         else:
             vals.update({
                 'status': 'absent',

@@ -8,3 +8,7 @@ access_hr_exceptional_holiday_approval_line_manager,hr.exceptional.holiday.appro
 access_hr_exceptional_holiday_refuse_wizard_user,hr.exceptional.holiday.refuse.wizard.user,model_hr_exceptional_holiday_refuse_wizard,base.group_user,1,1,1,0
 access_hr_leave_balance_summary_user,hr.leave.balance.summary.user,model_hr_leave_balance_summary,hr_holidays.group_hr_holidays_user,1,1,1,1
 access_hr_leave_balance_summary_manager,hr.leave.balance.summary.manager,model_hr_leave_balance_summary,hr_holidays.group_hr_holidays_manager,1,1,1,1
+access_hr_sick_leave_renewal_log_user,hr.sick.leave.renewal.log.user,model_hr_sick_leave_renewal_log,hr_holidays.group_hr_holidays_user,1,0,0,0
+access_hr_sick_leave_renewal_log_manager,hr.sick.leave.renewal.log.manager,model_hr_sick_leave_renewal_log,hr_holidays.group_hr_holidays_manager,1,0,0,0
+access_hr_annual_leave_carryover_log_user,hr.annual.leave.carryover.log.user,model_hr_annual_leave_carryover_log,hr_holidays.group_hr_holidays_user,1,0,0,0
+access_hr_annual_leave_carryover_log_manager,hr.annual.leave.carryover.log.manager,model_hr_annual_leave_carryover_log,hr_holidays.group_hr_holidays_manager,1,0,0,0

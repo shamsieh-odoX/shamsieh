@@ -14,15 +14,11 @@
                        colspan="2"
                        groups="hr_attendance.group_hr_attendance_officer">
                     <group string="Device &amp; Policy">
-                        <field name="biometric_device_user_id"
-                               placeholder="e.g. 10042"/>
                         <field name="attendance_required"/>
                         <field name="remote_attendance_allowed"/>
-                        <field name="attendance_home_pin_set" readonly="1"/>
-                        <field name="attendance_home_pin_value" readonly="1"/>
+                        <field name="attendance_home_pin_set" invisible="1"/>
                         <field name="attendance_home_pin_input"
-                               password="True"
-                               placeholder="Enter digits to set PIN (blank keeps current)"/>
+                               placeholder="Enter digits to set PIN"/>
                         <button name="action_clear_home_attendance_pin"
                                 type="object"
                                 string="Clear Home PIN"

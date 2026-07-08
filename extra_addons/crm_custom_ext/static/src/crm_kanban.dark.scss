@@ -1,54 +1,14 @@
-// Dark-mode grey palette for CRM custom kanban (web.assets_web_dark).
+// Dark-mode surface tweaks for CRM custom kanban (web.assets_web_dark).
+// Text colors inherit from the theme like Project kanban cards.
 
 .o_crm_custom_kanban {
-    --crm-kanban-title-color: #{$o-gray-100};
-    --crm-kanban-label-color: #{$o-gray-400};
-    --crm-kanban-meta-color: #{$o-gray-300};
-    --crm-kanban-revenue-color: #{$o-gray-300};
-    --crm-kanban-ref-bg: #{rgba($o-white, 0.06)};
-    --crm-kanban-ref-color: #{$o-gray-300};
-    --crm-kanban-badge-bg: #{rgba($o-white, 0.06)};
-    --crm-kanban-badge-color: #{$o-gray-300};
-    --crm-kanban-badge-border: #{rgba($o-white, 0.14)};
+    --crm-kanban-ref-bg: #{rgba($white, 0.06)};
+    --crm-kanban-badge-bg: #{rgba($white, 0.06)};
+    --crm-kanban-badge-color: #{$gray-300};
+    --crm-kanban-badge-border: #{rgba($white, 0.14)};
 
     .o_kanban_record {
-        color: var(--crm-kanban-meta-color);
-
-        .o_crm_custom_kanban_body .o_field_widget {
-            color: var(--crm-kanban-meta-color) !important;
-        }
-
-        .o_crm_custom_kanban_title,
-        .o_crm_custom_kanban_title.o_field_widget {
-            color: var(--crm-kanban-title-color) !important;
-        }
-
-        .o_crm_custom_kanban_contact,
-        .o_crm_custom_kanban_contact .o_field_widget,
-        .o_crm_custom_kanban_followup,
-        .text-muted,
-        .text-muted .o_field_widget {
-            color: var(--crm-kanban-meta-color) !important;
-        }
-
-        .o_crm_custom_kanban_revenue,
-        .o_crm_custom_kanban_revenue .o_field_widget {
-            color: var(--crm-kanban-revenue-color) !important;
-        }
-
-        .o_crm_lead_ref,
-        .o_crm_lead_ref .o_field_widget {
-            color: var(--crm-kanban-ref-color) !important;
-        }
-
         footer {
-            color: var(--crm-kanban-meta-color);
-
-            .o_field_widget:not(.o_priority),
-            .fa:not(.o_priority_star) {
-                color: inherit;
-            }
-
             .o_priority > .o_priority_star {
                 &.fa-star {
                     color: #{lighten($o-main-favorite-color, 6%)} !important;

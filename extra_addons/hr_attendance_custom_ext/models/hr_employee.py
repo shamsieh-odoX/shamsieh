@@ -97,9 +97,12 @@ class HrEmployee(models.Model):
         groups='hr_attendance.group_hr_attendance_officer',
     )
     attendance_home_pin_input = fields.Char(
-        string='Set Home PIN',
+        string='Home PIN',
+        compute='_compute_attendance_home_pin_input',
+        inverse='_inverse_attendance_home_pin_input',
         groups='hr_attendance.group_hr_attendance_officer',
         copy=False,
+        help='Home attendance PIN. Leave unchanged on save to keep the current value.',
     )
     face_provider = fields.Selection(
         related='company_id.face_provider',
@@ -147,12 +150,24 @@ class HrEmployee(models.Model):
         for employee in self:
             employee.attendance_home_pin_set = bool(employee.attendance_home_pin_hash)
 
+    @api.depends('attendance_home_pin_value')
+    def _compute_attendance_home_pin_input(self):
+        for employee in self:
+            employee.attendance_home_pin_input = employee.attendance_home_pin_value or False
+
+    def _inverse_attendance_home_pin_input(self):
+        for employee in self:
+            new_value = employee.attendance_home_pin_input
+            current_value = employee.attendance_home_pin_value or ''
+            if new_value == current_value:
+                continue
+            if not employee._normalize_attendance_pin(new_value):
+                employee.attendance_home_pin_input = current_value or False
+                continue
+            employee._set_home_attendance_pin(new_value)
+
     def write(self, vals):
-        pin_value = vals.pop('attendance_home_pin_input', None) if 'attendance_home_pin_input' in vals else None
         res = super().write(vals)
-        if pin_value is not None:
-            for employee in self:
-                employee._set_home_attendance_pin(pin_value)
         if 'biometric_device_user_id' in vals:
             self._relink_fingerprint_logs()
         return res

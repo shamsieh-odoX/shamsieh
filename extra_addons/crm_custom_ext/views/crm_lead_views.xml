@@ -261,7 +261,7 @@
                             </div>
                         </div>
                         <div class="col-6 o_crm_custom_kanban_cell text-end">
-                            <div class="o_kanban_card_crm_lead_revenue o_crm_custom_kanban_revenue">
+                            <div class="o_kanban_card_crm_lead_revenue o_crm_custom_kanban_revenue text-success">
                                 <t t-if="record.expected_revenue.raw_value">
                                     <field name="expected_revenue" widget="monetary" options="{'currency_field': 'company_currency'}"/>
                                     <span t-if="record.recurring_revenue and record.recurring_revenue.raw_value" groups="crm.group_use_recurring_revenues"> + </span>

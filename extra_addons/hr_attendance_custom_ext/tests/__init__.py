@@ -1,4 +1,5 @@
 from . import test_attendance_calendar_compute
+from . import test_attendance_leave_holiday
 from . import test_attendance_policy_process
 from . import test_daily_attendance_status
 from . import test_fingerprint_sync

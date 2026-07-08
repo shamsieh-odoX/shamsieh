@@ -71,13 +71,6 @@
               sequence="34"
               groups="hr_attendance.group_hr_attendance_officer"/>
 
-    <menuitem id="menu_fingerprint_logs_report"
-              name="Fingerprint Logs Report"
-              parent="hr_attendance.menu_hr_attendance_reporting"
-              action="action_fingerprint_logs_report"
-              sequence="26"
-              groups="hr_attendance.group_hr_attendance_officer"/>
-
     <menuitem id="menu_pin_attendance_logs_report"
               name="PIN Attendance Logs"
               parent="hr_attendance.menu_hr_attendance_reporting"

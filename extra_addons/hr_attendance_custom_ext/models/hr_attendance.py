@@ -93,6 +93,27 @@ class HrAttendance(models.Model):
             )
         return self.env['fingerprint.attendance.policy']
 
+    def _refresh_daily_status(self):
+        Status = self.env['hr.attendance.daily.status']
+        seen = set()
+        for attendance in self:
+            key = (attendance.employee_id.id, attendance.date)
+            if attendance.employee_id and attendance.date and key not in seen:
+                seen.add(key)
+                Status._generate_for_employee_date(attendance.employee_id, attendance.date)
+
+    @api.model_create_multi
+    def create(self, vals_list):
+        records = super().create(vals_list)
+        records._refresh_daily_status()
+        return records
+
+    def write(self, vals):
+        res = super().write(vals)
+        if {'check_in', 'check_out', 'employee_id'} & set(vals):
+            self._refresh_daily_status()
+        return res
+
     @api.depends('check_in', 'check_out', 'employee_id', 'employee_id.resource_calendar_id', 'policy_id')
     def _compute_attendance_status_fields(self):
         now = fields.Datetime.now()
@@ -106,8 +127,13 @@ class HrAttendance(models.Model):
                 continue
 
             employee = attendance.employee_id
-            policy = attendance._get_attendance_policy()
             work_date = attendance.date
+            skip, _reason = employee._should_skip_attendance_penalties(work_date)
+            if skip:
+                attendance.attendance_status = 'on_leave'
+                continue
+
+            policy = attendance._get_attendance_policy()
             scheduled_start, scheduled_end = employee._get_work_day_bounds(work_date)
 
             if not scheduled_start:

@@ -13,4 +13,16 @@
         <field name="domain_force">[('company_id', 'in', company_ids)]</field>
     </record>
 
+    <record id="hr_sick_leave_renewal_log_rule_company" model="ir.rule">
+        <field name="name">Sick Leave Renewal Log: multi-company</field>
+        <field name="model_id" ref="model_hr_sick_leave_renewal_log"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+
+    <record id="hr_annual_leave_carryover_log_rule_company" model="ir.rule">
+        <field name="name">Annual Leave Carryover Log: multi-company</field>
+        <field name="model_id" ref="model_hr_annual_leave_carryover_log"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+
 </odoo>
