@@ -205,11 +205,9 @@ class OdooClient:
             "hr.employee",
             "hikvision_process_punch",
             [[employee_id]],
-            {
-                "punch_type": punch_type,
-                "punch_time": punch_time_str,
-                "external_log_id": event_id,
-                "device_user_id": employee_no,
-                "attendance_source": "fingerprint",
-            },
+            punch_type=punch_type,
+            punch_time=punch_time_str,
+            external_log_id=event_id,
+            device_user_id=employee_no,
+            attendance_source="fingerprint",
         )
