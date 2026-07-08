@@ -66,6 +66,18 @@ class HrAttendance(models.Model):
     device_user_id = fields.Char(string='Device User ID', index=True)
     external_log_id = fields.Char(string='External Log ID', index=True)
     face_verified = fields.Boolean(string='Face Verified')
+    hikvision_punch_type = fields.Selection(
+        selection=[
+            ('check_in', 'Check In'),
+            ('break_in', 'Break In'),
+            ('break_out', 'Break Out'),
+            ('check_out', 'Check Out'),
+        ],
+        string='Punch Type',
+        tracking=True,
+        index=True,
+        help='Last Hikvision punch that opened or closed this attendance segment.',
+    )
 
     _attendance_external_log_device_uniq = models.Constraint(
         'unique(device_id, external_log_id)',

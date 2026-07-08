@@ -62,6 +62,12 @@ class OdooClient:
             self._attendance_fields_cache = set(fields_map.keys())
         return self._attendance_fields_cache
 
+    def _employee_field_names(self) -> set[str]:
+        if not hasattr(self, "_employee_fields_cache"):
+            fields_map = self._execute("hr.employee", "fields_get", [], attributes=["type"])
+            self._employee_fields_cache = set(fields_map.keys())
+        return self._employee_fields_cache
+
     def _resolve_timezone(self, employee: dict) -> str:
         user_id = employee.get("user_id")
         if user_id:
@@ -136,6 +142,7 @@ class OdooClient:
         event_id: str,
         employee_no: str,
         for_check_in: bool,
+        punch_type: str | None = None,
     ) -> dict:
         field_names = self._attendance_field_names()
         vals: dict[str, str] = {}
@@ -145,11 +152,24 @@ class OdooClient:
             vals["external_log_id"] = event_id
         if "device_user_id" in field_names:
             vals["device_user_id"] = employee_no
+        if punch_type and "hikvision_punch_type" in field_names:
+            vals["hikvision_punch_type"] = punch_type
         if for_check_in and "in_mode" in field_names:
             vals["in_mode"] = "technical"
         if not for_check_in and "out_mode" in field_names:
             vals["out_mode"] = "technical"
         return vals
+
+    def set_hikvision_presence_status(self, employee_id: int, presence_status: str) -> None:
+        field_names = self._employee_field_names()
+        if "hikvision_presence_status" not in field_names:
+            return
+        self._execute(
+            "hr.employee",
+            "write",
+            [employee_id],
+            {"hikvision_presence_status": presence_status},
+        )
 
     def create_checkin(self, employee_id: int, event_time: datetime) -> int:
         if event_time.tzinfo:
@@ -165,7 +185,15 @@ class OdooClient:
             }],
         )
 
-    def create_checkin_from_hikvision(self, employee_id: int, event_time: datetime, *, event_id: str, employee_no: str) -> int:
+    def create_checkin_from_hikvision(
+        self,
+        employee_id: int,
+        event_time: datetime,
+        *,
+        event_id: str,
+        employee_no: str,
+        punch_type: str = "check_in",
+    ) -> int:
         if event_time.tzinfo:
             check_in = event_time.astimezone(timezone.utc).replace(tzinfo=None)
         else:
@@ -174,10 +202,28 @@ class OdooClient:
             "employee_id": employee_id,
             "check_in": check_in.strftime("%Y-%m-%d %H:%M:%S"),
         }
-        vals.update(self._build_source_vals(event_id=event_id, employee_no=employee_no, for_check_in=True))
-        return self._execute("hr.attendance", "create", [vals])
+        vals.update(
+            self._build_source_vals(
+                event_id=event_id,
+                employee_no=employee_no,
+                for_check_in=True,
+                punch_type=punch_type,
+            )
+        )
+        attendance_id = self._execute("hr.attendance", "create", [vals])
+        self.set_hikvision_presence_status(employee_id, "working")
+        return attendance_id
 
-    def checkout_from_hikvision(self, attendance_id: int, event_time: datetime, *, event_id: str, employee_no: str) -> bool:
+    def checkout_from_hikvision(
+        self,
+        attendance_id: int,
+        event_time: datetime,
+        *,
+        event_id: str,
+        employee_no: str,
+        punch_type: str = "check_out",
+        employee_id: int | None = None,
+    ) -> bool:
         if event_time.tzinfo:
             check_out = event_time.astimezone(timezone.utc).replace(tzinfo=None)
         else:
@@ -185,5 +231,16 @@ class OdooClient:
         vals = {
             "check_out": check_out.strftime("%Y-%m-%d %H:%M:%S"),
         }
-        vals.update(self._build_source_vals(event_id=event_id, employee_no=employee_no, for_check_in=False))
-        return bool(self._execute("hr.attendance", "write", [attendance_id], vals))
+        vals.update(
+            self._build_source_vals(
+                event_id=event_id,
+                employee_no=employee_no,
+                for_check_in=False,
+                punch_type=punch_type,
+            )
+        )
+        result = bool(self._execute("hr.attendance", "write", [attendance_id], vals))
+        if employee_id is not None:
+            presence = "on_break" if punch_type == "break_in" else "checked_out"
+            self.set_hikvision_presence_status(employee_id, presence)
+        return result

@@ -23,6 +23,18 @@ class HrEmployee(models.Model):
         groups='hr_attendance.group_hr_attendance_officer',
         help='User ID on the fingerprint device; used to map device logs to this employee.',
     )
+    hikvision_presence_status = fields.Selection(
+        selection=[
+            ('checked_out', 'Checked Out'),
+            ('working', 'Working'),
+            ('on_break', 'On Break'),
+        ],
+        string='Hikvision Presence',
+        default='checked_out',
+        index=True,
+        groups='hr_attendance.group_hr_attendance_officer',
+        help='Live work state from the Hikvision fingerprint bridge.',
+    )
     face_reference_id = fields.Char(
         string='Face Reference ID',
         groups='hr_attendance.group_hr_attendance_officer',

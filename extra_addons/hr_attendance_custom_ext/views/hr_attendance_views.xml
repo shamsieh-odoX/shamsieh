@@ -14,6 +14,10 @@
             <xpath expr="//field[@name='out_longitude']" position="replace"/>
             <xpath expr="//field[@name='out_location']" position="replace"/>
             <xpath expr="//field[@name='worked_hours']" position="after">
+                <field name="hikvision_punch_type" optional="show" widget="badge"
+                       decoration-success="hikvision_punch_type in ('check_in', 'break_out')"
+                       decoration-warning="hikvision_punch_type == 'break_in'"
+                       decoration-danger="hikvision_punch_type == 'check_out'"/>
                 <field name="attendance_source" optional="show"/>
                 <field name="attendance_status" optional="show" widget="badge"/>
                 <field name="late_minutes" optional="show"/>
@@ -30,6 +34,10 @@
         <field name="inherit_id" ref="hr_attendance.hr_attendance_view_form"/>
         <field name="arch" type="xml">
             <xpath expr="//field[@name='worked_hours']" position="before">
+                <field name="hikvision_punch_type" readonly="1" widget="badge"
+                       decoration-success="hikvision_punch_type in ('check_in', 'break_out')"
+                       decoration-warning="hikvision_punch_type == 'break_in'"
+                       decoration-danger="hikvision_punch_type == 'check_out'"/>
                 <field name="attendance_source" readonly="1"/>
                 <field name="attendance_status" readonly="1"/>
                 <field name="late_minutes" readonly="1"/>
@@ -52,6 +60,11 @@
                 <filter string="Late" name="filter_late" domain="[('attendance_status', '=', 'late')]"/>
                 <filter string="Early Checkout" name="filter_early" domain="[('attendance_status', '=', 'early_leave')]"/>
                 <filter string="Missing Checkout" name="filter_missing_checkout" domain="[('missing_checkout', '=', True)]"/>
+                <separator/>
+                <filter string="Check In" name="filter_punch_check_in" domain="[('hikvision_punch_type', '=', 'check_in')]"/>
+                <filter string="Break In" name="filter_punch_break_in" domain="[('hikvision_punch_type', '=', 'break_in')]"/>
+                <filter string="Break Out" name="filter_punch_break_out" domain="[('hikvision_punch_type', '=', 'break_out')]"/>
+                <filter string="Check Out" name="filter_punch_check_out" domain="[('hikvision_punch_type', '=', 'check_out')]"/>
                 <filter string="Fingerprint" name="filter_source_fingerprint" domain="[('attendance_source', '=', 'fingerprint')]"/>
                 <filter string="Face" name="filter_source_face" domain="[('attendance_source', '=', 'face')]"/>
                 <filter string="Manual" name="filter_source_manual" domain="[('attendance_source', '=', 'manual')]"/>
@@ -59,6 +72,7 @@
             <xpath expr="//filter[@name='groupby_mode_in']" position="after">
                 <filter string="Attendance Source" name="groupby_attendance_source" context="{'group_by': 'attendance_source'}"/>
                 <filter string="Attendance Status" name="groupby_attendance_status" context="{'group_by': 'attendance_status'}"/>
+                <filter string="Punch Type" name="groupby_hikvision_punch_type" context="{'group_by': 'hikvision_punch_type'}"/>
             </xpath>
         </field>
     </record>

@@ -124,6 +124,21 @@ def _connect_odoo() -> OdooClient | None:
         return None
 
 
+def _normalize_punch_type(attendance_status: str) -> str | None:
+    status = attendance_status.strip().lower()
+    mapping = {
+        "checkin": "check_in",
+        "check_in": "check_in",
+        "checkout": "check_out",
+        "check_out": "check_out",
+        "breakin": "break_in",
+        "break_in": "break_in",
+        "breakout": "break_out",
+        "break_out": "break_out",
+    }
+    return mapping.get(status)
+
+
 def process_event(event: AttendanceEvent, *, from_retry: bool = False) -> str:
     if not odoo:
         raise OdooError("Odoo client not initialized")
@@ -143,6 +158,7 @@ def process_event(event: AttendanceEvent, *, from_retry: bool = False) -> str:
         store.mark_processed(event.device_serial, event.event_id, event.employee_no, event.event_time.isoformat())
         return "employee-not-found"
     attendance_status = str(event.raw_fields.get("attendanceStatus") or "").strip().lower()
+    punch_type = _normalize_punch_type(attendance_status)
     open_attendance = odoo.get_open_attendance(employee["id"])
     # Hikvision uses breakIn = leave for break (close), breakOut = return from break (open).
     checkout_statuses = {"checkout", "check_out", "breakin", "break_in"}
@@ -163,6 +179,8 @@ def process_event(event: AttendanceEvent, *, from_retry: bool = False) -> str:
             event.event_time.astimezone(timezone.utc),
             event_id=event.event_id,
             employee_no=event.employee_no,
+            punch_type=punch_type or "check_out",
+            employee_id=employee["id"],
         )
         store.mark_processed(event.device_serial, event.event_id, event.employee_no, event.event_time.isoformat())
         logger.info(
@@ -192,6 +210,7 @@ def process_event(event: AttendanceEvent, *, from_retry: bool = False) -> str:
             event.event_time.astimezone(timezone.utc),
             event_id=event.event_id,
             employee_no=event.employee_no,
+            punch_type=punch_type or "check_in",
         )
         store.mark_processed(event.device_serial, event.event_id, event.employee_no, event.event_time.isoformat())
         logger.info(
