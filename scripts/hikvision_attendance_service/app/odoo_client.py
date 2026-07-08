@@ -56,6 +56,12 @@ class OdooClient:
         )
         return records[0] if records else None
 
+    def _attendance_field_names(self) -> set[str]:
+        if not hasattr(self, "_attendance_fields_cache"):
+            fields_map = self._execute("hr.attendance", "fields_get", [], attributes=["type"])
+            self._attendance_fields_cache = set(fields_map.keys())
+        return self._attendance_fields_cache
+
     def _resolve_timezone(self, employee: dict) -> str:
         user_id = employee.get("user_id")
         if user_id:
@@ -110,6 +116,41 @@ class OdooClient:
         )
         return bool(count)
 
+    def get_open_attendance(self, employee_id: int) -> dict | None:
+        records = self._execute(
+            "hr.attendance",
+            "search_read",
+            [
+                ("employee_id", "=", employee_id),
+                ("check_out", "=", False),
+            ],
+            fields=["id", "check_in", "check_out"],
+            order="check_in desc",
+            limit=1,
+        )
+        return records[0] if records else None
+
+    def _build_source_vals(
+        self,
+        *,
+        event_id: str,
+        employee_no: str,
+        for_check_in: bool,
+    ) -> dict:
+        field_names = self._attendance_field_names()
+        vals: dict[str, str] = {}
+        if "attendance_source" in field_names:
+            vals["attendance_source"] = "fingerprint"
+        if "external_log_id" in field_names:
+            vals["external_log_id"] = event_id
+        if "device_user_id" in field_names:
+            vals["device_user_id"] = employee_no
+        if for_check_in and "in_mode" in field_names:
+            vals["in_mode"] = "technical"
+        if not for_check_in and "out_mode" in field_names:
+            vals["out_mode"] = "technical"
+        return vals
+
     def create_checkin(self, employee_id: int, event_time: datetime) -> int:
         if event_time.tzinfo:
             check_in = event_time.astimezone(timezone.utc).replace(tzinfo=None)
@@ -123,3 +164,26 @@ class OdooClient:
                 "check_in": check_in.strftime("%Y-%m-%d %H:%M:%S"),
             }],
         )
+
+    def create_checkin_from_hikvision(self, employee_id: int, event_time: datetime, *, event_id: str, employee_no: str) -> int:
+        if event_time.tzinfo:
+            check_in = event_time.astimezone(timezone.utc).replace(tzinfo=None)
+        else:
+            check_in = event_time
+        vals = {
+            "employee_id": employee_id,
+            "check_in": check_in.strftime("%Y-%m-%d %H:%M:%S"),
+        }
+        vals.update(self._build_source_vals(event_id=event_id, employee_no=employee_no, for_check_in=True))
+        return self._execute("hr.attendance", "create", [vals])
+
+    def checkout_from_hikvision(self, attendance_id: int, event_time: datetime, *, event_id: str, employee_no: str) -> bool:
+        if event_time.tzinfo:
+            check_out = event_time.astimezone(timezone.utc).replace(tzinfo=None)
+        else:
+            check_out = event_time
+        vals = {
+            "check_out": check_out.strftime("%Y-%m-%d %H:%M:%S"),
+        }
+        vals.update(self._build_source_vals(event_id=event_id, employee_no=employee_no, for_check_in=False))
+        return bool(self._execute("hr.attendance", "write", [attendance_id], vals))

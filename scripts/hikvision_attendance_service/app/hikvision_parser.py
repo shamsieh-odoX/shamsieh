@@ -41,7 +41,21 @@ def _unwrap_event_dict(data: dict[str, Any]) -> dict[str, Any]:
     for key in ("AccessControllerEvent", "AcsEvent", "EventNotificationAlert"):
         nested = data.get(key)
         if isinstance(nested, dict):
-            return _unwrap_event_dict(nested)
+            merged = _unwrap_event_dict(nested)
+            # Keep useful wrapper fields (for example top-level dateTime) when Hikvision
+            # puts event details inside AccessControllerEvent.
+            for wrapper_key in (
+                "dateTime",
+                "time",
+                "eventType",
+                "eventState",
+                "eventDescription",
+                "ipAddress",
+                "channelID",
+            ):
+                if wrapper_key in data and wrapper_key not in merged:
+                    merged[wrapper_key] = data[wrapper_key]
+            return merged
     if ACS_FIELD_MARKERS.intersection(data):
         return data
     event_list = data.get("EventNotificationAlertList")

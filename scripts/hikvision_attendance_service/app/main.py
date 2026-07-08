@@ -142,24 +142,59 @@ def process_event(event: AttendanceEvent, *, from_retry: bool = False) -> str:
         logger.warning("No employee found for barcode=%s", event.employee_no)
         store.mark_processed(event.device_serial, event.event_id, event.employee_no, event.event_time.isoformat())
         return "employee-not-found"
+    attendance_status = str(event.raw_fields.get("attendanceStatus") or "").strip().lower()
+    open_attendance = odoo.get_open_attendance(employee["id"])
+    checkout_statuses = {"checkout", "check_out", "breakout", "break_out"}
+    checkin_statuses = {"checkin", "check_in", "breakin", "break_in", "undefined", ""}
 
-    day_start, day_end = odoo.get_today_range_utc(employee, event.event_time)
-    if odoo.has_attendance_for_day(employee["id"], day_start, day_end):
+    if attendance_status in checkout_statuses:
+        if not open_attendance:
+            store.mark_processed(event.device_serial, event.event_id, event.employee_no, event.event_time.isoformat())
+            logger.info(
+                "No open attendance to close employee=%s status=%s event_id=%s",
+                employee["id"],
+                attendance_status or "unknown",
+                event.event_id,
+            )
+            return "no-open-attendance"
+        odoo.checkout_from_hikvision(
+            int(open_attendance["id"]),
+            event.event_time.astimezone(timezone.utc),
+            event_id=event.event_id,
+            employee_no=event.employee_no,
+        )
+        store.mark_processed(event.device_serial, event.event_id, event.employee_no, event.event_time.isoformat())
         logger.info(
-            "Duplicate attendance for employee=%s day_range=(%s,%s)",
+            "Closed attendance id=%s employee=%s status=%s event_id=%s",
+            open_attendance["id"],
             employee["id"],
-            day_start,
-            day_end,
+            attendance_status,
+            event.event_id,
+        )
+        return attendance_status
+
+    if attendance_status in checkin_statuses and open_attendance:
+        logger.info(
+            "Duplicate open attendance for employee=%s open_id=%s status=%s",
+            employee["id"],
+            open_attendance["id"],
+            attendance_status or "checkin",
         )
         store.mark_processed(event.device_serial, event.event_id, event.employee_no, event.event_time.isoformat())
         return "duplicate-attendance"
 
-    attendance_id = odoo.create_checkin(employee["id"], event.event_time.astimezone(timezone.utc))
+    attendance_id = odoo.create_checkin_from_hikvision(
+        employee["id"],
+        event.event_time.astimezone(timezone.utc),
+        event_id=event.event_id,
+        employee_no=event.employee_no,
+    )
     store.mark_processed(event.device_serial, event.event_id, event.employee_no, event.event_time.isoformat())
     logger.info(
-        "Created attendance id=%s employee=%s event_id=%s",
+        "Created attendance id=%s employee=%s status=%s event_id=%s",
         attendance_id,
         employee["id"],
+        attendance_status or "checkin",
         event.event_id,
     )
     return "created"
