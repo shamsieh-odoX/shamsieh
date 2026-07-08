@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Generate Hikvision-Odoo bridge documentation using company Word template."""
+"""Generate simple Hikvision-Odoo bridge guide (company Word template)."""
 
 from __future__ import annotations
 
@@ -38,14 +38,14 @@ def add_cover(doc: Document) -> None:
         doc.add_paragraph()
     title = doc.add_paragraph()
     title.alignment = WD_ALIGN_PARAGRAPH.CENTER
-    run = title.add_run("Hikvision Fingerprint to Odoo Attendance")
+    run = title.add_run("Hikvision → Odoo Attendance")
     run.bold = True
     run.font.size = Pt(28)
     run.font.color.rgb = COLOR_PRIMARY
 
     sub = doc.add_paragraph()
     sub.alignment = WD_ALIGN_PARAGRAPH.CENTER
-    r = sub.add_run("Integration Guide — Option B (FastAPI Bridge)")
+    r = sub.add_run("Quick Setup Guide (read this when you come back)")
     r.font.size = Pt(16)
     r.font.color.rgb = COLOR_ACCENT
 
@@ -53,9 +53,8 @@ def add_cover(doc: Document) -> None:
     meta = doc.add_paragraph()
     meta.alignment = WD_ALIGN_PARAGRAPH.CENTER
     r = meta.add_run(
-        f"Odoo: https://shamsieh-testing-33874628.dev.odoo.com\n"
-        f"Webhook: http://192.168.100.4:8080/hikvision/attendance\n"
-        f"Document date: {date.today().strftime('%B %d, %Y')}"
+        f"Updated: {date.today().strftime('%B %d, %Y')}\n"
+        "Folder: scripts\\hikvision_attendance_service"
     )
     r.font.size = Pt(11)
     r.font.color.rgb = COLOR_TEXT
@@ -137,138 +136,158 @@ def build_document() -> Document:
 
     add_cover(doc)
 
-    add_heading(doc, "1. Overview", 1)
+    add_heading(doc, "What is this?", 1)
     add_body(
         doc,
-        "This integration connects a Hikvision fingerprint terminal on the local network to "
-        "Odoo Attendances on Odoo.sh. A FastAPI bridge runs on a Windows PC, receives device "
-        "events, and creates hr.attendance check-ins through XML-RPC. No Fingerprint Device "
-        "configuration is required inside Odoo."
+        "A small Python program on your Windows PC receives fingerprint events from the Hikvision "
+        "device and creates check-ins in Odoo Attendances on Odoo.sh. "
+        "You do NOT configure anything inside Odoo for the fingerprint device itself."
     )
+    add_body(doc, "Flow: Fingerprint on device → PC bridge → Odoo.sh attendance record.")
 
-    add_heading(doc, "2. Architecture", 1)
+    add_heading(doc, "Your machines (write these down)", 1)
     add_table(
         doc,
-        ["Component", "Role"],
+        ["What", "Address"],
         [
-            ["Hikvision device (192.168.100.85)", "Captures fingerprint; pushes HTTP events"],
-            ["FastAPI bridge (192.168.100.4:8080)", "Parses events, idempotency, retries"],
-            ["Odoo.sh", "Stores employees and attendance records"],
-            ["SQLite (local)", "Processed events + retry queue"],
+            ["Hikvision device", "192.168.100.85"],
+            ["Bridge PC (this PC)", "192.168.100.4"],
+            ["Bridge URL", "http://192.168.100.4:8080/hikvision/attendance"],
+            ["Odoo.sh", "https://shamsieh-testing-33874628.dev.odoo.com"],
+            ["Odoo database name", "shamsieh-testing-33874628"],
         ],
     )
-    add_body(doc, "Flow: Device POST → /hikvision/attendance → find employee by barcode → create check-in.")
 
-    add_heading(doc, "3. Configuration", 1)
-    add_heading(doc, "3.1 Hikvision HTTP Listening", 2)
+    add_heading(doc, "Start the bridge (every time)", 1)
+    add_body(doc, "Open PowerShell:")
+    add_body(
+        doc,
+        "cd C:\\Users\\ASUS\\Desktop\\odoo\\scripts\\hikvision_attendance_service\n"
+        ".\\.venv\\Scripts\\Activate.ps1\n"
+        "uvicorn app.main:app --host 0.0.0.0 --port 8080"
+    )
+    add_body(doc, "Leave the window open. Test in browser:")
+    add_bullet(doc, "http://127.0.0.1:8080/health  →  {\"status\":\"ok\"}")
+    add_bullet(doc, "http://127.0.0.1:8080/odoo/ping  →  {\"status\":\"ok\"}")
+
+    add_heading(doc, "Auto-start on Windows login", 1)
+    add_body(doc, "Already installed to:")
+    add_bullet(doc, "C:\\Users\\ASUS\\AppData\\Local\\HikvisionAttendanceBridge")
+    add_bullet(doc, "Scheduled task name: HikvisionAttendanceBridge")
+    add_body(doc, "Restart task: Start-ScheduledTask -TaskName HikvisionAttendanceBridge")
+
+    add_heading(doc, "Hikvision device settings", 1)
+    add_body(doc, "Configuration → Network → Advanced → HTTP Listening:")
     add_table(
         doc,
         ["Field", "Value"],
         [
-            ["Event Alarm IP/Domain Name", "192.168.100.4"],
+            ["Event Alarm IP", "192.168.100.4"],
             ["Port", "8080"],
             ["URL", "/hikvision/attendance"],
             ["Protocol", "HTTP"],
         ],
     )
-    add_heading(doc, "3.2 Odoo Employee Mapping", 2)
-    add_bullet(doc, "RFID/Badge Number = Hikvision employeeNoString (example: 5)")
-    add_bullet(doc, "Biometric Device User ID = same value (recommended)")
+    add_body(
+        doc,
+        "Important: The device must send authentication events, not only door status. "
+        "If you only see subEventType 21–24 in logs, enable access/authentication events in the device event settings."
+    )
 
-    add_heading(doc, "3.3 Bridge Environment (.env)", 2)
+    add_heading(doc, "Odoo employee setup (required)", 1)
+    add_body(doc, "For each person on the fingerprint device:")
+    add_bullet(doc, "Open Employees → select person")
+    add_bullet(doc, "RFID/Badge Number = same number as on Hikvision (example: 5 for MohammadNoor)")
+    add_bullet(doc, "Biometric Device User ID = same number (recommended)")
+    add_body(
+        doc,
+        "Example verified: MohammadNoor (employee id 3) with barcode 5 matches device employeeNoString 5."
+    )
+
+    add_heading(doc, "Odoo login for the bridge (.env file)", 1)
+    add_body(doc, "The bridge uses XML-RPC + API key. It does NOT use PostgreSQL.")
+    add_body(doc, "File: scripts\\hikvision_attendance_service\\.env")
     add_table(
         doc,
-        ["Variable", "Example"],
+        ["Variable", "Value"],
         [
             ["ODOO_URL", "https://shamsieh-testing-33874628.dev.odoo.com"],
             ["ODOO_DB", "shamsieh-testing-33874628"],
-            ["ODOO_BOT_USER", "admin"],
-            ["ODOO_API_KEY", "API key from Odoo Preferences"],
+            ["ODOO_BOT_USER", "Your Odoo login email (e.g. m.saqer@shamsieh.com)"],
+            ["ODOO_API_KEY", "From Odoo → Preferences → Account Security → New API Key"],
             ["LISTEN_PORT", "8080"],
+            ["VERBOSE_LOGGING", "true = see every device event in console"],
         ],
     )
-
-    add_heading(doc, "4. HTTP API & Status Codes", 1)
     add_body(
         doc,
-        "The bridge returns meaningful HTTP status codes so operators and integrators can "
-        "distinguish success, wrong fingerprint, missing employee, and system events."
+        "If /odoo/ping fails: wrong email or API key. Generate a new API key while logged in as that user."
     )
 
-    add_heading(doc, "4.1 Endpoints", 2)
+    add_heading(doc, "What the device sends (event types)", 1)
     add_table(
         doc,
-        ["Method", "URL", "Purpose"],
+        ["subEventType", "Meaning", "What happens"],
         [
-            ["GET", "/health", "Service health check"],
-            ["GET", "/odoo/ping", "Test Odoo.sh XML-RPC connection"],
-            ["GET", "/hikvision/attendance", "Webhook reachability check"],
-            ["POST", "/hikvision/attendance", "Receive Hikvision fingerprint events"],
+            ["38 or 150", "Fingerprint / auth SUCCESS", "Creates attendance in Odoo (if barcode matches)"],
+            ["39 or 151", "Fingerprint / auth FAILED", "Logged as fingerprint-failed; no Odoo record"],
+            ["21–24", "Door / system noise", "Ignored (door locked, unlocked, etc.)"],
         ],
     )
+    add_body(doc, "Success log looks like:")
+    add_body(doc, "employee_no='5'  subEventType=38  statusValue=1  →  Created attendance id=...")
+    add_body(doc, "Failed log looks like:")
+    add_body(doc, "employee_no=None  subEventType=151  statusValue=0  →  wrong finger or not enrolled on device")
 
-    add_heading(doc, "4.2 POST /hikvision/attendance — Status Codes", 2)
-    add_table(
-        doc,
-        ["HTTP", "reason / result", "When it happens"],
-        [
-            ["201", "created", "Fingerprint success; new hr.attendance check-in created"],
-            ["200", "duplicate-attendance", "Employee already checked in today"],
-            ["200", "duplicate-event", "Same device event already processed (idempotency)"],
-            ["404", "employee-not-found", "employeeNoString not found in Odoo barcode"],
-            ["422", "fingerprint-failed", "Wrong finger / failed scan (subEventType 39)"],
-            ["422", "missing-employee", "Event has no employee number"],
-            ["422", "not-fingerprint-event", "Not a fingerprint authentication event"],
-            ["204", "system-event", "Door/system event (subEventType 21–24); ignored"],
-            ["400", "invalid-payload", "Malformed or unparseable request body"],
-            ["503", "odoo-unavailable", "Odoo.sh unreachable; event queued for retry"],
-        ],
-    )
-
-    add_heading(doc, "4.3 Hikvision Event Codes", 2)
-    add_table(
-        doc,
-        ["subEventType", "Meaning", "Bridge action"],
-        [
-            ["38", "Fingerprint verification success", "Process attendance if employee mapped"],
-            ["39", "Fingerprint verification failed", "HTTP 422 fingerprint-failed"],
-            ["21", "Door locked", "HTTP 204 system-event (ignored)"],
-            ["22", "Door unlocked", "HTTP 204 system-event (ignored)"],
-        ],
-    )
-
-    add_heading(doc, "5. Postman Test Bodies", 1)
-    add_heading(doc, "5.1 Success (expect 201)", 2)
+    add_heading(doc, "Webhook responses (JSON body)", 1)
     add_body(
         doc,
-        'POST http://192.168.100.4:8080/hikvision/attendance\n'
-        'Content-Type: application/json\n\n'
-        '{"subEventType":38,"employeeNoString":"5","currentVerifyMode":"fp",'
-        '"dateTime":"2026-07-07T13:40:51+03:00","serialNo":9999,"status":"success"}'
+        "The device always gets HTTP 200 or 201 (so it stops retrying). "
+        "Read the JSON reason field to know what happened:"
     )
-    add_heading(doc, "5.2 Wrong fingerprint (expect 422)", 2)
+    add_table(
+        doc,
+        ["reason / result", "Meaning"],
+        [
+            ["created (HTTP 201)", "Check-in created in Odoo"],
+            ["duplicate-attendance", "Already checked in today"],
+            ["duplicate-event", "Same event already processed"],
+            ["employee-not-found", "Barcode not set in Odoo for that employee number"],
+            ["fingerprint-failed", "Device rejected the scan"],
+            ["system-event", "Door event — ignored"],
+            ["odoo-unavailable", "Odoo down — queued for retry"],
+        ],
+    )
+
+    add_heading(doc, "Troubleshooting cheat sheet", 1)
+    add_table(
+        doc,
+        ["Problem", "Fix"],
+        [
+            ["Only subEventType 21–24 in logs", "Device not sending auth events — check Hikvision event settings"],
+            ["subEventType 151, no employee_no", "Fingerprint failed on device — re-enroll finger"],
+            ["employee-not-found", "Set RFID/Badge Number in Odoo = device employee ID"],
+            ["Odoo connection failed", "Fix ODOO_BOT_USER (email) and ODOO_API_KEY in .env"],
+            ["Same event repeats forever", "Restart bridge (latest code returns 200 to ACK events)"],
+            ["Nothing in Odoo server logs", "Normal — bridge talks via XML-RPC from your PC, not Odoo web"],
+        ],
+    )
+
+    add_heading(doc, "Test without the device", 1)
+    add_body(doc, "PowerShell (tests MohammadNoor barcode 5):")
     add_body(
         doc,
-        'POST http://192.168.100.4:8080/hikvision/attendance\n'
-        'Content-Type: application/json\n\n'
-        '{"subEventType":39,"currentVerifyMode":"faceOrFpOrCardOrPw","status":"failed","serialNo":9998}'
+        'Invoke-RestMethod -Method POST -Uri http://127.0.0.1:8080/hikvision/attendance '
+        '-ContentType application/json '
+        '-Body \'{"subEventType":38,"employeeNoString":"5","currentVerifyMode":"fp",'
+        '"status":"success","statusValue":1,"dateTime":"2026-07-07T15:00:00+03:00","serialNo":99999}\''
     )
 
-    add_heading(doc, "6. Service Features", 1)
-    for item in [
-        "Parses Hikvision multipart/form-data JSON (event_log field).",
-        "Uses webhook receive time when device omits dateTime.",
-        "SQLite idempotency on (device_serial, event_id).",
-        "Retries failed Odoo calls every 30 seconds.",
-        "Auto-start via Windows scheduled task HikvisionAttendanceBridge.",
-    ]:
-        add_bullet(doc, item)
-
-    add_heading(doc, "7. Start & Verify", 1)
-    add_bullet(doc, "Manual: .\\run.ps1 in scripts/hikvision_attendance_service")
-    add_bullet(doc, "Health: GET http://192.168.100.4:8080/health")
-    add_bullet(doc, "Odoo: GET http://192.168.100.4:8080/odoo/ping")
-    add_bullet(doc, "Fingerprint on device → check Attendances in Odoo.sh")
+    add_heading(doc, "Regenerate this PDF", 1)
+    add_body(doc, "cd scripts\\hikvision_attendance_service")
+    add_body(doc, ".\\.venv\\Scripts\\pip install python-docx docx2pdf")
+    add_body(doc, ".\\.venv\\Scripts\\python doc\\generate_documentation.py")
+    add_body(doc, f"Output: {DOWNLOADS_PDF}")
 
     doc.add_paragraph()
     footer = doc.add_paragraph()
@@ -301,7 +320,7 @@ def convert_to_pdf(docx_path: Path, pdf_path: Path) -> bool:
 
 
 def main() -> None:
-    print("Building documentation from company template...")
+    print("Building simple documentation...")
     doc = build_document()
     doc.save(str(OUTPUT_DOCX))
     print(f"DOCX: {OUTPUT_DOCX}")
