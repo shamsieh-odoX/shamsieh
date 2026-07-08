@@ -98,7 +98,7 @@ def _api_response(content: dict[str, Any], status_code: int = 200) -> JSONRespon
 
 
 def _result_status_code(result: str) -> int:
-    if result == "created":
+    if result in {"created", "checkin", "check_in", "breakout", "break_out"}:
         return 201
     return 200
 
@@ -144,8 +144,9 @@ def process_event(event: AttendanceEvent, *, from_retry: bool = False) -> str:
         return "employee-not-found"
     attendance_status = str(event.raw_fields.get("attendanceStatus") or "").strip().lower()
     open_attendance = odoo.get_open_attendance(employee["id"])
-    checkout_statuses = {"checkout", "check_out", "breakout", "break_out"}
-    checkin_statuses = {"checkin", "check_in", "breakin", "break_in", "undefined", ""}
+    # Hikvision uses breakIn = leave for break (close), breakOut = return from break (open).
+    checkout_statuses = {"checkout", "check_out", "breakin", "break_in"}
+    checkin_statuses = {"checkin", "check_in", "breakout", "break_out", "undefined", ""}
 
     if attendance_status in checkout_statuses:
         if not open_attendance:
@@ -174,6 +175,8 @@ def process_event(event: AttendanceEvent, *, from_retry: bool = False) -> str:
         return attendance_status
 
     if attendance_status in checkin_statuses and open_attendance:
+        # Regular check-in while already checked in is a duplicate.
+        # breakOut while open means already back from break.
         logger.info(
             "Duplicate open attendance for employee=%s open_id=%s status=%s",
             employee["id"],
@@ -183,21 +186,26 @@ def process_event(event: AttendanceEvent, *, from_retry: bool = False) -> str:
         store.mark_processed(event.device_serial, event.event_id, event.employee_no, event.event_time.isoformat())
         return "duplicate-attendance"
 
-    attendance_id = odoo.create_checkin_from_hikvision(
-        employee["id"],
-        event.event_time.astimezone(timezone.utc),
-        event_id=event.event_id,
-        employee_no=event.employee_no,
-    )
+    if attendance_status in checkin_statuses:
+        attendance_id = odoo.create_checkin_from_hikvision(
+            employee["id"],
+            event.event_time.astimezone(timezone.utc),
+            event_id=event.event_id,
+            employee_no=event.employee_no,
+        )
+        store.mark_processed(event.device_serial, event.event_id, event.employee_no, event.event_time.isoformat())
+        logger.info(
+            "Created attendance id=%s employee=%s status=%s event_id=%s",
+            attendance_id,
+            employee["id"],
+            attendance_status or "checkin",
+            event.event_id,
+        )
+        return attendance_status or "created"
+
     store.mark_processed(event.device_serial, event.event_id, event.employee_no, event.event_time.isoformat())
-    logger.info(
-        "Created attendance id=%s employee=%s status=%s event_id=%s",
-        attendance_id,
-        employee["id"],
-        attendance_status or "checkin",
-        event.event_id,
-    )
-    return "created"
+    logger.info("Ignored attendance status=%s employee=%s", attendance_status, employee["id"])
+    return "ignored-status"
 
 
 async def retry_worker() -> None:
