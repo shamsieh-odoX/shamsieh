@@ -1,3 +1,20 @@
+# ============================
+# WHITELIST: only extra-addons/ and scripts/ get pushed
+# ============================
+/*
+!/extra-addons/
+!/extra-addons/**
+!/scripts/
+!/scripts/**
+!/.gitignore
+!/.gitkeep
+
+# ----------------------------
+# (everything below this line becomes irrelevant once the
+# whitelist above excludes all other paths, but kept for
+# reference / in case the whitelist section is ever removed)
+# ----------------------------
+
 # sphinx build directories
 _build/
 
