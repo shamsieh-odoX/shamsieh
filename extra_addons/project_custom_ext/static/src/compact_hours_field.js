@@ -30,7 +30,10 @@ export function formatCompactHours(hours) {
 
 export class CompactHoursField extends Component {
     static template = "project_custom_ext.CompactHoursField";
-    static props = { ...standardFieldProps };
+    static props = {
+        ...standardFieldProps,
+        digits: { optional: true },
+    };
 
     get formattedValue() {
         return formatCompactHours(this.props.record.data[this.props.name]);
@@ -41,7 +44,4 @@ registry.category("fields").add("compact_hours", {
     component: CompactHoursField,
     supportedTypes: ["float"],
     isEmpty: () => false,
-    extractProps: ({ attrs }) => ({
-        digits: attrs.digits ? JSON.parse(attrs.digits) : undefined,
-    }),
 });
