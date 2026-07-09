@@ -52,3 +52,18 @@ package.json
 /share/
 /src/
 virtual/
+=======
+# ============================
+# WHITELIST: only extra_addons/ and scripts/ get pushed to Testing
+# ============================
+/*
+!/extra_addons/
+!/extra_addons/**
+!/scripts/
+!/scripts/**
+!/.gitignore
+!/.gitkeep
+
+# Python runtime cache files
+**/__pycache__/
+**/*.py[cod]

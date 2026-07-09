@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="rule_shams_todo_employee_own" model="ir.rule">
+        <field name="name">Shams To-Do: Employee own tasks</field>
+        <field name="model_id" ref="project.model_project_task"/>
+        <field name="groups" eval="[(4, ref('shams_todo_management.group_shams_todo_employee'))]"/>
+        <field name="domain_force">[('owner_employee_id.user_id', '=', user.id)]</field>
+        <field name="perm_read" eval="1"/>
+        <field name="perm_write" eval="1"/>
+        <field name="perm_create" eval="1"/>
+        <field name="perm_unlink" eval="0"/>
+    </record>
+
+    <record id="rule_shams_todo_manager_team" model="ir.rule">
+        <field name="name">Shams To-Do: Manager hierarchy access</field>
+        <field name="model_id" ref="project.model_project_task"/>
+        <field name="groups" eval="[(4, ref('shams_todo_management.group_shams_todo_manager'))]"/>
+        <field name="domain_force">['|', ('owner_employee_id.user_id', '=', user.id), ('owner_employee_id', 'child_of', user.employee_id.id)]</field>
+        <field name="perm_read" eval="1"/>
+        <field name="perm_write" eval="1"/>
+        <field name="perm_create" eval="1"/>
+        <field name="perm_unlink" eval="0"/>
+    </record>
+
+    <record id="rule_shams_todo_admin_all" model="ir.rule">
+        <field name="name">Shams To-Do: Admin full access</field>
+        <field name="model_id" ref="project.model_project_task"/>
+        <field name="groups" eval="[(4, ref('shams_todo_management.group_shams_todo_admin'))]"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="perm_read" eval="1"/>
+        <field name="perm_write" eval="1"/>
+        <field name="perm_create" eval="1"/>
+        <field name="perm_unlink" eval="1"/>
+    </record>
+</odoo>
