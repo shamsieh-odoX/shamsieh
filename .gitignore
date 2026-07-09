@@ -8,3 +8,7 @@
 !/scripts/**
 !/.gitignore
 !/.gitkeep
+
+# Python runtime cache files
+**/__pycache__/
+**/*.py[cod]
