@@ -468,6 +468,28 @@ class HrEmployee(models.Model):
 
         return {'status': 'ignored', 'punch_type': punch_type}
 
+    @api.model
+    def hikvision_bridge_punch(
+        self,
+        employee_id,
+        punch_type,
+        punch_time,
+        external_log_id=False,
+        device_user_id=False,
+        attendance_source='fingerprint',
+    ):
+        """XML-RPC entry point for the local Hikvision bridge."""
+        employee = self.browse(int(employee_id)).exists()
+        if not employee:
+            return {'status': 'employee_not_found', 'employee_id': employee_id}
+        return employee.hikvision_process_punch(
+            punch_type=punch_type,
+            punch_time=punch_time,
+            external_log_id=external_log_id,
+            device_user_id=device_user_id,
+            attendance_source=attendance_source,
+        )
+
     def action_systray_punch(self, punch_type):
         self.ensure_one()
         return self.hikvision_process_punch(

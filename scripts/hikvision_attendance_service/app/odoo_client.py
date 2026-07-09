@@ -201,12 +201,11 @@ class OdooClient:
         punch_time_str = punch_time.strftime("%Y-%m-%d %H:%M:%S")
         if "hikvision_presence_status" not in self._employee_field_names():
             raise OdooError("Upgrade hr_attendance_custom_ext on Odoo before using break punches.")
+        # @api.model method — positional args only, no [[ids]] wrapper.
         return self._execute(
             "hr.employee",
-            "hikvision_process_punch",
-            [[employee_id]],
-            punch_type=punch_type,
-            punch_time=punch_time_str,
+            "hikvision_bridge_punch",
+            [employee_id, punch_type, punch_time_str],
             external_log_id=event_id,
             device_user_id=employee_no,
             attendance_source="fingerprint",
