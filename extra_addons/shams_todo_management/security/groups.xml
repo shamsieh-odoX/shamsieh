@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record model="res.groups.privilege" id="res_groups_privilege_shams_todo">
+        <field name="name">Shams To-Do</field>
+        <field name="sequence">16</field>
+        <field name="category_id" ref="base.module_category_productivity"/>
+    </record>
+
+    <record id="group_shams_todo_employee" model="res.groups">
+        <field name="name">User: Own To-Dos</field>
+        <field name="sequence">10</field>
+        <field name="privilege_id" ref="res_groups_privilege_shams_todo"/>
+        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        <field name="comment">Employees can create and manage their own to-dos.</field>
+    </record>
+
+    <record id="group_shams_todo_manager" model="res.groups">
+        <field name="name">Manager: Team To-Dos</field>
+        <field name="sequence">20</field>
+        <field name="privilege_id" ref="res_groups_privilege_shams_todo"/>
+        <field name="implied_ids" eval="[(4, ref('group_shams_todo_employee'))]"/>
+        <field name="comment">Managers can see and review to-dos for employees in their reporting hierarchy.</field>
+    </record>
+
+    <record id="group_shams_todo_admin" model="res.groups">
+        <field name="name">Administrator: All To-Dos</field>
+        <field name="sequence">30</field>
+        <field name="privilege_id" ref="res_groups_privilege_shams_todo"/>
+        <field name="implied_ids" eval="[(4, ref('group_shams_todo_manager'))]"/>
+        <field name="user_ids" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
+        <field name="comment">Full access to all to-dos and configuration.</field>
+    </record>
+
+    <record id="base.group_user" model="res.groups">
+        <field name="implied_ids" eval="[(4, ref('group_shams_todo_employee'))]"/>
+    </record>
+
+</odoo>

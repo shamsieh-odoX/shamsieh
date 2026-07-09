@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <function model="project.task" name="action_shams_deduplicate_personal_stages"/>
+</odoo>

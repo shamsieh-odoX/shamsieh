@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Pivot view for team reports -->
+    <record id="project_task_view_todo_pivot_shams" model="ir.ui.view">
+        <field name="name">project.task.todo.pivot.shams</field>
+        <field name="model">project.task</field>
+        <field name="arch" type="xml">
+            <pivot string="Team To-Do Reports">
+                <field name="owner_employee_id" type="row"/>
+                <field name="review_state" type="col"/>
+                <field name="allocated_hours" type="measure"/>
+                <field name="actual_hours" type="measure"/>
+                <field name="progress" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <!-- Graph view for team reports -->
+    <record id="project_task_view_todo_graph_shams" model="ir.ui.view">
+        <field name="name">project.task.todo.graph.shams</field>
+        <field name="model">project.task</field>
+        <field name="arch" type="xml">
+            <graph string="Team To-Do Reports" type="bar" stacked="True">
+                <field name="owner_employee_id"/>
+                <field name="review_state" type="col"/>
+            </graph>
+        </field>
+    </record>
+
+    <!-- All Team Reports action -->
+    <record id="project_task_action_team_reports" model="ir.actions.act_window">
+        <field name="name">All Team Reports</field>
+        <field name="res_model">project.task</field>
+        <field name="path">team-to-do-reports</field>
+        <field name="domain">[('is_shams_todo', '=', True)]</field>
+        <field name="view_mode">pivot,graph,list,kanban</field>
+        <field name="search_view_id" ref="project_todo.project_task_view_todo_search"/>
+        <field name="context">{
+            'search_default_my_team': 1,
+        }</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No to-do data to report on yet.
+            </p>
+            <p>
+                Organization-level to-do reporting by employee, status, and deadline.
+            </p>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window.view" id="action_team_reports_pivot">
+        <field name="view_mode">pivot</field>
+        <field name="view_id" ref="project_task_view_todo_pivot_shams"/>
+        <field name="act_window_id" ref="project_task_action_team_reports"/>
+    </record>
+    <record model="ir.actions.act_window.view" id="action_team_reports_graph">
+        <field name="view_mode">graph</field>
+        <field name="view_id" ref="project_task_view_todo_graph_shams"/>
+        <field name="act_window_id" ref="project_task_action_team_reports"/>
+    </record>
+
+</odoo>

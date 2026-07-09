@@ -1,0 +1,27 @@
+{
+    'name': 'Shams To-Do Management',
+    'version': '19.0.1.0.0',
+    'category': 'Productivity/To-Do',
+    'summary': 'HR hierarchy visibility and manager review workflow for Odoo To-Do',
+    'author': 'Shamsieh',
+    'depends': [
+        'base',
+        'mail',
+        'hr',
+        'project_todo',
+    ],
+    'data': [
+        'security/groups.xml',
+        'security/ir.model.access.csv',
+        'security/record_rules.xml',
+        'data/deduplicate_stages.xml',
+        'data/todo_tags.xml',
+        'views/todo_views.xml',
+        'views/dashboard_views.xml',
+        'views/menu_views.xml',
+    ],
+    'installable': True,
+    'application': False,
+    'license': 'LGPL-3',
+    'post_init_hook': 'post_init_hook',
+}
