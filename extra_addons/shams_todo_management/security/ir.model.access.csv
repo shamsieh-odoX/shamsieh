@@ -1,4 +1,0 @@
-"id","name","model_id:id","group_id:id","perm_read","perm_write","perm_create","perm_unlink"
-"access_shams_todo_employee_project_task","access.shams.todo.employee.project.task","project.model_project_task","shams_todo_management.group_shams_todo_employee",1,1,1,0
-"access_shams_todo_manager_project_task","access.shams.todo.manager.project.task","project.model_project_task","shams_todo_management.group_shams_todo_manager",1,1,1,0
-"access_shams_todo_admin_project_task","access.shams.todo.admin.project.task","project.model_project_task","shams_todo_management.group_shams_todo_admin",1,1,1,1
