@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <menuitem id="menu_shams_todo_personal_tasks"
+        name="My Tasks"
+        parent="project_todo.menu_todo_todos"
+        action="project_todo.project_task_action_todo"
+        sequence="10"/>
+
+    <menuitem id="menu_shams_todo_dashboard"
+        name="Group Dashboard"
+        parent="project_todo.menu_todo_todos"
+        action="shams_todo_dashboard_action"
+        sequence="15"
+        groups="shams_todo_groups.group_todo_user"/>
+
+    <menuitem id="menu_shams_todo_my_groups"
+        name="My Groups"
+        parent="project_todo.menu_todo_todos"
+        action="shams_todo_group_action_my_groups"
+        sequence="25"
+        groups="shams_todo_groups.group_todo_user"/>
+
+    <menuitem id="menu_shams_todo_group_tasks"
+        name="Group Tasks"
+        parent="project_todo.menu_todo_todos"
+        action="shams_todo_task_action_group_tasks"
+        sequence="30"
+        groups="shams_todo_groups.group_todo_user"/>
+
+    <menuitem id="menu_shams_todo_all_tasks"
+        name="All Group Tasks"
+        parent="project_todo.menu_todo_todos"
+        action="shams_todo_task_action_all_tasks"
+        sequence="35"
+        groups="shams_todo_groups.group_todo_management"/>
+
+    <menuitem id="menu_shams_todo_configuration"
+        name="Group Configuration"
+        parent="project_todo.menu_todo_todos"
+        sequence="90"
+        groups="shams_todo_groups.group_todo_management"/>
+
+    <menuitem id="menu_shams_todo_groups_configuration"
+        name="To-Do Groups"
+        parent="menu_shams_todo_configuration"
+        action="shams_todo_group_action_configuration"
+        sequence="10"/>
+
+</odoo>
