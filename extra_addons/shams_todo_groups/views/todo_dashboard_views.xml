@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="shams_todo_dashboard_view_form" model="ir.ui.view">
+        <field name="name">shams.todo.dashboard.form</field>
+        <field name="model">shams.todo.dashboard</field>
+        <field name="arch" type="xml">
+            <form string="Group Dashboard" create="false" delete="false" class="o_shams_todo_dashboard_form">
+                <sheet class="o_shams_todo_dashboard_sheet">
+                    <div class="mb-3">
+                        <h1 class="mb-1">Group To-Do Overview</h1>
+                        <p class="text-muted mb-0">
+                            Track shared team tasks across your groups at a glance.
+                        </p>
+                    </div>
+                    <div class="o_shams_todo_dashboard_grid">
+                        <button name="action_view_all_tasks" type="object"
+                            class="o_shams_todo_stat_card o_shams_todo_stat_card--primary">
+                            <span class="o_stat_value">
+                                <field name="total_task_count" nolabel="1"/>
+                            </span>
+                            <span class="o_stat_text">Open Tasks</span>
+                            <span class="o_stat_hint">Active group tasks you can access</span>
+                        </button>
+                        <button name="action_view_my_tasks" type="object"
+                            class="o_shams_todo_stat_card o_shams_todo_stat_card--info">
+                            <span class="o_stat_value">
+                                <field name="my_task_count" nolabel="1"/>
+                            </span>
+                            <span class="o_stat_text">Assigned to Me</span>
+                            <span class="o_stat_hint">Open tasks waiting on you</span>
+                        </button>
+                        <button name="action_view_overdue_tasks" type="object"
+                            class="o_shams_todo_stat_card o_shams_todo_stat_card--warning">
+                            <span class="o_stat_value">
+                                <field name="overdue_task_count" nolabel="1"/>
+                            </span>
+                            <span class="o_stat_text">Overdue</span>
+                            <span class="o_stat_hint">Past due and still open</span>
+                        </button>
+                        <button name="action_view_done_tasks" type="object"
+                            class="o_shams_todo_stat_card o_shams_todo_stat_card--success">
+                            <span class="o_stat_value">
+                                <field name="done_task_count" nolabel="1"/>
+                            </span>
+                            <span class="o_stat_text">Completed</span>
+                            <span class="o_stat_hint">Finished group tasks</span>
+                        </button>
+                        <button name="action_view_tasks_by_group" type="object"
+                            class="o_shams_todo_stat_card o_shams_todo_stat_card--chart">
+                            <span class="o_stat_value"><i class="fa fa-bar-chart"/></span>
+                            <span class="o_stat_text">Tasks by Group</span>
+                            <span class="o_stat_hint">Open pivot analysis</span>
+                        </button>
+                    </div>
+                    <div class="o_shams_todo_dashboard_my_tasks mt-4">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <h2 class="h4 mb-0">My Assigned Tasks</h2>
+                            <button name="action_view_my_tasks" type="object"
+                                string="View all" class="btn btn-link"/>
+                        </div>
+                        <field name="my_task_ids" nolabel="1">
+                            <list create="false" delete="false"
+                                decoration-danger="is_overdue"
+                                default_order="due_date asc, priority desc, id desc">
+                                <field name="is_done" widget="shams_todo_done_checkmark" nolabel="1"
+                                    width="30px" class="o_shams_todo_done_checkmark_cell"/>
+                                <field name="name"/>
+                                <field name="group_id"/>
+                                <field name="due_date"/>
+                                <field name="priority" widget="priority" width="40px"/>
+                                <field name="status" widget="badge"
+                                    decoration-info="status == 'todo'"
+                                    decoration-success="status == 'done'"
+                                    decoration-muted="status == 'cancelled'"/>
+                                <field name="is_overdue" column_invisible="True"/>
+                            </list>
+                        </field>
+                    </div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="shams_todo_dashboard_action" model="ir.actions.server">
+        <field name="name">Group Dashboard</field>
+        <field name="model_id" ref="model_shams_todo_dashboard"/>
+        <field name="group_ids" eval="[(4, ref('group_todo_user'))]"/>
+        <field name="state">code</field>
+        <field name="code">action = model.action_open_dashboard()</field>
+    </record>
+
+</odoo>

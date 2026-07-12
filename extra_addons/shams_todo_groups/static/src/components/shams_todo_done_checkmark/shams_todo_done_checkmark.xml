@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="shams_todo_groups.ShamsTodoDoneCheckmark">
+        <a role="button"
+            t-att-title="props.record.data[props.name] ? 'Mark as to-do' : 'Mark as done'"
+            t-on-click.stop="onDoneToggled"
+            t-attf-class="o_shams_todo_done_button fa fa-lg fa-check-circle{{!props.record.data[props.name] ? '-o' : ' o_shams_todo_done_button_enabled'}}"/>
+    </t>
+
+</templates>
