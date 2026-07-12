@@ -122,6 +122,13 @@ def _connect_odoo() -> OdooClient | None:
     except OdooError as exc:
         logger.error("Odoo connection failed: %s", exc)
         return None
+    except OSError as exc:
+        logger.error(
+            "Odoo connection failed (%s). Check ODOO_URL in .env "
+            "(must be https://your-instance.dev.odoo.com with no /odoo path).",
+            exc,
+        )
+        return None
 
 
 def _normalize_punch_type(attendance_status: str) -> str | None:

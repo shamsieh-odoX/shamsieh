@@ -20,9 +20,19 @@ class OdooConfig:
 
 class OdooClient:
     def __init__(self, cfg: OdooConfig) -> None:
-        self.cfg = cfg
-        self.common = xmlrpc.client.ServerProxy(f"{cfg.url}/xmlrpc/2/common", allow_none=True)
-        self.models = xmlrpc.client.ServerProxy(f"{cfg.url}/xmlrpc/2/object", allow_none=True)
+        url = (cfg.url or "").strip().rstrip("/")
+        if not url.startswith(("http://", "https://")):
+            raise OdooError(
+                "ODOO_URL must start with https:// — create a .env file "
+                "(copy .env.example) and set ODOO_URL, ODOO_DB, ODOO_BOT_USER, ODOO_API_KEY."
+            )
+        if not cfg.db or not cfg.username or not cfg.api_key:
+            raise OdooError(
+                "ODOO_DB, ODOO_BOT_USER, and ODOO_API_KEY are required in .env."
+            )
+        self.cfg = OdooConfig(url=url, db=cfg.db, username=cfg.username, api_key=cfg.api_key)
+        self.common = xmlrpc.client.ServerProxy(f"{url}/xmlrpc/2/common", allow_none=True)
+        self.models = xmlrpc.client.ServerProxy(f"{url}/xmlrpc/2/object", allow_none=True)
         self.uid = self.common.authenticate(cfg.db, cfg.username, cfg.api_key, {})
         if not self.uid:
             raise OdooError("Failed to authenticate to Odoo XML-RPC")

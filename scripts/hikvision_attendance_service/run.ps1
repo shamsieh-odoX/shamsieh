@@ -12,5 +12,7 @@ if (-not (Test-Path ".\.env")) {
 }
 
 & .\.venv\Scripts\Activate.ps1
+Write-Host "Ensuring Python dependencies are installed..."
+python -m pip install -q -r requirements.txt
 Write-Host "Starting Hikvision Attendance Bridge on http://0.0.0.0:8080"
-uvicorn app.main:app --host 0.0.0.0 --port 8080
+python -m uvicorn app.main:app --host 0.0.0.0 --port 8080

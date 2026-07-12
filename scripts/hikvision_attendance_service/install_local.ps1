@@ -19,14 +19,15 @@ if (Test-Path (Join-Path $source "hikvision_bridge.db")) {
 $ErrorActionPreference = "Stop"
 Set-Location $PSScriptRoot
 & .\.venv\Scripts\Activate.ps1
-uvicorn app.main:app --host 0.0.0.0 --port 8080
+python -m pip install -q -r requirements.txt
+python -m uvicorn app.main:app --host 0.0.0.0 --port 8080
 '@ | Set-Content -Path (Join-Path $target "run.ps1") -Encoding UTF8
 
 Set-Location $target
 if (-not (Test-Path ".\.venv\Scripts\python.exe")) {
     python -m venv .venv
-    .\.venv\Scripts\pip.exe install -r requirements.txt
 }
+.\.venv\Scripts\python.exe -m pip install -r requirements.txt
 
 $runScript = Join-Path $target "run.ps1"
 $powershell = (Get-Command powershell.exe).Source
