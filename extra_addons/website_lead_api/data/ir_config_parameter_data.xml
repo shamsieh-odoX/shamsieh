@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <!--
+        Set the API key after install via Settings → Technical → System Parameters.
+        Generate with: openssl rand -hex 32
+        Never commit the actual secret value.
+    -->
+    <record id="website_lead_api_key_param" model="ir.config_parameter">
+        <field name="key">website.lead_api_key</field>
+        <field name="value"></field>
+    </record>
+</odoo>
