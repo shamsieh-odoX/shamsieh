@@ -11,6 +11,7 @@ class HrLeaveAllocation(models.Model):
             ('manual', 'Manual'),
             ('annual_grant', 'Annual Grant'),
             ('year_carryover', 'Year Carryover'),
+            ('sick_renewal', 'Sick Leave Renewal'),
         ],
         string='Allocation Origin',
         default='manual',

@@ -51,6 +51,22 @@ class HrSickLeaveRenewalLog(models.Model):
     def _get_sick_leave_type(self):
         return self.env.ref('hr_holidays_custom_ext.leave_type_sick_leave')
 
+    def _find_existing_sick_allocation(self, employee, sick_type, renewal_year, year_start):
+        Allocation = self.env['hr.leave.allocation'].sudo()
+        existing = Allocation.search([
+            ('employee_id', '=', employee.id),
+            ('holiday_status_id', '=', sick_type.id),
+            ('allocation_origin', '=', 'sick_renewal'),
+            ('origin_year', '=', renewal_year),
+        ], limit=1)
+        if existing:
+            return existing
+        return Allocation.search([
+            ('employee_id', '=', employee.id),
+            ('holiday_status_id', '=', sick_type.id),
+            ('date_from', '=', year_start),
+        ], limit=1)
+
     @api.model
     def _run_renewal(self, company=None, year=None, trigger='manual', force=False):
         sick_type = self._get_sick_leave_type()
@@ -80,11 +96,9 @@ class HrSickLeaveRenewalLog(models.Model):
             created = 0
             skipped = 0
             for employee in employees:
-                existing = Allocation.search([
-                    ('employee_id', '=', employee.id),
-                    ('holiday_status_id', '=', sick_type.id),
-                    ('date_from', '=', year_start),
-                ], limit=1)
+                existing = self._find_existing_sick_allocation(
+                    employee, sick_type, renewal_year, year_start,
+                )
                 if existing:
                     skipped += 1
                     continue
@@ -94,6 +108,8 @@ class HrSickLeaveRenewalLog(models.Model):
                     'employee_id': employee.id,
                     'holiday_status_id': sick_type.id,
                     'allocation_type': 'regular',
+                    'allocation_origin': 'sick_renewal',
+                    'origin_year': renewal_year,
                     'number_of_days': days_per_year,
                     'date_from': year_start,
                     'date_to': year_end,

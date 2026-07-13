@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+
+    <record id="hr_salary_rule_category_jo_custom_ded" model="hr.salary.rule.category">
+        <field name="name">Jordan Custom Deductions</field>
+        <field name="code">JO_DED</field>
+        <field name="parent_id" ref="hr_payroll.DED"/>
+    </record>
+
+</odoo>

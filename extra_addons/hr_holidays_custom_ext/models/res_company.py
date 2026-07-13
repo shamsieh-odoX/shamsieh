@@ -22,6 +22,12 @@ class ResCompany(models.Model):
         domain="[('requires_allocation', '=', True), '|', ('company_id', '=', False), ('company_id', '=', id)]",
         help='Time off type used for annual leave grants and carryover.',
     )
+    annual_leave_carryover_max_days = fields.Integer(
+        string='Max Carryover Days',
+        default=0,
+        help='Maximum unused annual leave days carried into the new year per employee. '
+             'Set to 0 for no limit.',
+    )
 
     def _get_annual_leave_type(self):
         self.ensure_one()

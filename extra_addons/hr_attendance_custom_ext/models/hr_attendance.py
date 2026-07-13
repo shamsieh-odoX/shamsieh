@@ -30,8 +30,21 @@ class HrAttendance(models.Model):
             ('absent', 'Absent'),
             ('incomplete', 'Incomplete'),
             ('on_leave', 'On Leave'),
+            ('on_holiday', 'Public Holiday'),
         ],
         string='Attendance Status',
+        compute='_compute_attendance_status_fields',
+        store=True,
+        index=True,
+    )
+    is_on_approved_leave = fields.Boolean(
+        string='On Approved Leave',
+        compute='_compute_attendance_status_fields',
+        store=True,
+        index=True,
+    )
+    is_public_holiday = fields.Boolean(
+        string='Public Holiday',
         compute='_compute_attendance_status_fields',
         store=True,
         index=True,
@@ -165,18 +178,22 @@ class HrAttendance(models.Model):
             attendance.early_checkout_minutes = 0
             attendance.missing_checkout = False
             attendance.attendance_status = 'present'
+            attendance.is_on_approved_leave = False
+            attendance.is_public_holiday = False
 
             if not attendance.employee_id or not attendance.check_in:
                 continue
 
-            if attendance._defer_penalties_until_checkout():
-                continue
-
             employee = attendance.employee_id
             work_date = attendance.date
-            skip, _reason = employee._should_skip_attendance_penalties(work_date)
+            skip, reason = employee._should_skip_attendance_penalties(work_date)
+            attendance.is_on_approved_leave = reason == 'leave'
+            attendance.is_public_holiday = reason == 'holiday'
             if skip:
-                attendance.attendance_status = 'on_leave'
+                attendance.attendance_status = employee._excused_attendance_status(work_date)
+                continue
+
+            if attendance._defer_penalties_until_checkout():
                 continue
 
             policy = attendance._get_attendance_policy()

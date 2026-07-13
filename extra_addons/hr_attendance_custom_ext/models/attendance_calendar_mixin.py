@@ -174,3 +174,11 @@ class AttendanceCalendarMixin(models.AbstractModel):
         if self._is_public_holiday(target_date):
             return True, 'holiday'
         return False, False
+
+    def _excused_attendance_status(self, target_date):
+        """Return daily/attendance status when penalties are skipped, or False."""
+        self.ensure_one()
+        skip, reason = self._should_skip_attendance_penalties(target_date)
+        if not skip:
+            return False
+        return 'on_holiday' if reason == 'holiday' else 'on_leave'

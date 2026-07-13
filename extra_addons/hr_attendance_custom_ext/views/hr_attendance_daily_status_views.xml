@@ -9,6 +9,8 @@
                 <field name="employee_id"/>
                 <field name="department_id" optional="show"/>
                 <field name="status" widget="badge"/>
+                <field name="is_on_approved_leave" optional="hide"/>
+                <field name="is_public_holiday" optional="hide"/>
                 <field name="check_in"/>
                 <field name="check_out"/>
                 <field name="late_minutes"/>
@@ -33,6 +35,8 @@
                             <field name="company_id" groups="base.group_multi_company"/>
                             <field name="calendar_id"/>
                             <field name="status"/>
+                            <field name="is_on_approved_leave"/>
+                            <field name="is_public_holiday"/>
                         </group>
                         <group>
                             <field name="check_in"/>
@@ -59,6 +63,9 @@
                 <field name="company_id" groups="base.group_multi_company"/>
                 <filter string="Late" name="filter_late" domain="[('status', '=', 'late')]"/>
                 <filter string="On Leave" name="filter_on_leave" domain="[('status', '=', 'on_leave')]"/>
+                <filter string="Public Holiday" name="filter_on_holiday" domain="[('status', '=', 'on_holiday')]"/>
+                <filter string="On Approved Leave" name="filter_is_on_leave" domain="[('is_on_approved_leave', '=', True)]"/>
+                <filter string="Is Public Holiday" name="filter_is_holiday" domain="[('is_public_holiday', '=', True)]"/>
                 <filter string="Absent" name="filter_absent" domain="[('status', '=', 'absent')]"/>
                 <filter string="Incomplete" name="filter_incomplete" domain="[('status', '=', 'incomplete')]"/>
                 <filter string="This Month" name="filter_month"

@@ -24,6 +24,8 @@
                        decoration-danger="hikvision_punch_type == 'check_out'"/>
                 <field name="attendance_source" optional="show"/>
                 <field name="attendance_status" optional="show" widget="badge"/>
+                <field name="is_on_approved_leave" optional="hide"/>
+                <field name="is_public_holiday" optional="hide"/>
                 <field name="late_minutes" optional="show"/>
                 <field name="early_checkout_minutes" optional="show"/>
                 <field name="missing_checkout" optional="show"/>
@@ -48,6 +50,8 @@
                        decoration-danger="hikvision_punch_type == 'check_out'"/>
                 <field name="attendance_source" readonly="1"/>
                 <field name="attendance_status" readonly="1"/>
+                <field name="is_on_approved_leave" readonly="1"/>
+                <field name="is_public_holiday" readonly="1"/>
                 <field name="late_minutes" readonly="1"/>
                 <field name="early_checkout_minutes" readonly="1"/>
                 <field name="missing_checkout" readonly="1"/>
@@ -84,6 +88,10 @@
         <field name="arch" type="xml">
             <xpath expr="//filter[@name='nocheckout']" position="after">
                 <filter string="Late" name="filter_late" domain="[('attendance_status', '=', 'late')]"/>
+                <filter string="On Leave" name="filter_on_leave" domain="[('attendance_status', '=', 'on_leave')]"/>
+                <filter string="Public Holiday" name="filter_on_holiday" domain="[('attendance_status', '=', 'on_holiday')]"/>
+                <filter string="On Approved Leave" name="filter_is_on_leave" domain="[('is_on_approved_leave', '=', True)]"/>
+                <filter string="Is Public Holiday" name="filter_is_holiday" domain="[('is_public_holiday', '=', True)]"/>
                 <filter string="Early Checkout" name="filter_early" domain="[('attendance_status', '=', 'early_leave')]"/>
                 <filter string="Missing Checkout" name="filter_missing_checkout" domain="[('missing_checkout', '=', True)]"/>
                 <separator/>

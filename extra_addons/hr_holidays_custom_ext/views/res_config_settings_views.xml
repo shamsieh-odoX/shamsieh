@@ -19,7 +19,7 @@
                         </div>
                     </setting>
                     <setting string="Manual Renewal" company_dependent="1"
-                             help="Create sick leave allocations for the current year if they are missing.">
+                             help="Create sick leave allocations for a selected year if they are missing.">
                         <button name="action_run_sick_leave_renewal"
                                 type="object"
                                 string="Run Now"
@@ -37,6 +37,11 @@
                              help="Time off type used for annual grants and carryover allocations.">
                         <field name="annual_leave_type_id"/>
                     </setting>
+                    <setting string="Max Carryover Days" company_dependent="1"
+                             help="Maximum unused annual leave days carried into the new year per employee. Set to 0 for no limit.">
+                        <field name="annual_leave_carryover_max_days" class="text-center" style="width: 5ch;"/>
+                        <span class="ms-2">Days (0 = unlimited)</span>
+                    </setting>
                     <setting string="Last Carryover Run" company_dependent="1">
                         <field name="annual_leave_last_carryover_date" readonly="1"/>
                         <div invisible="not annual_leave_last_carryover_summary">
@@ -44,7 +49,7 @@
                         </div>
                     </setting>
                     <setting string="Manual Carryover" company_dependent="1"
-                             help="Forfeit expired carryover and create annual leave allocations for the current year.">
+                             help="Forfeit expired carryover and create annual leave allocations for a selected year.">
                         <button name="action_run_annual_leave_carryover"
                                 type="object"
                                 string="Run Carryover Now"

@@ -36,6 +36,11 @@ class HrAnnualLeaveCarryoverLog(models.Model):
     carryovers_created = fields.Integer()
     carryovers_skipped = fields.Integer()
     carryover_days_forfeited = fields.Float(digits=(16, 2))
+    carryover_days_capped = fields.Float(
+        string='Carryover Days Capped',
+        digits=(16, 2),
+        help='Unused balance above the company carryover limit that was not carried forward.',
+    )
     summary = fields.Text()
 
     def _get_company_timezone(self, company):
@@ -56,6 +61,13 @@ class HrAnnualLeaveCarryoverLog(models.Model):
         if leave_type:
             return leave_type
         return self.env.ref('hr_holidays.leave_type_paid_time_off')
+
+    def _cap_carryover_days(self, company, carryover_days):
+        max_days = company.annual_leave_carryover_max_days or 0
+        if max_days <= 0 or carryover_days <= 0:
+            return carryover_days, 0.0
+        capped = min(carryover_days, float(max_days))
+        return capped, carryover_days - capped
 
     def _find_existing_allocation(self, employee, leave_type, origin, target_year):
         return self.env['hr.leave.allocation'].sudo().search([
@@ -137,11 +149,14 @@ class HrAnnualLeaveCarryoverLog(models.Model):
             grants_skipped = 0
             carryovers_created = 0
             carryovers_skipped = 0
+            carryover_days_capped = 0.0
 
             employee_balances = []
             for employee in employees:
                 balance_row = BalanceSummary._get_balance_row(employee, leave_type, as_of_date)
-                carryover_days = balance_row['current_year_balance'] if balance_row else 0.0
+                raw_carryover = balance_row['current_year_balance'] if balance_row else 0.0
+                carryover_days, capped_amount = self._cap_carryover_days(comp, raw_carryover)
+                carryover_days_capped += capped_amount
                 employee_balances.append((employee, carryover_days))
 
             for employee, carryover_days in employee_balances:
@@ -188,7 +203,7 @@ class HrAnnualLeaveCarryoverLog(models.Model):
                 '%(processed)s employees processed, '
                 '%(grants_created)s grants created, %(grants_skipped)s grants skipped, '
                 '%(carryovers_created)s carryovers created, %(carryovers_skipped)s carryovers skipped, '
-                '%(forfeited)s carryover days forfeited.',
+                '%(forfeited)s carryover days forfeited, %(capped)s carryover days capped by policy.',
                 company=comp.name,
                 year=run_year,
                 processed=len(employees),
@@ -197,6 +212,7 @@ class HrAnnualLeaveCarryoverLog(models.Model):
                 carryovers_created=carryovers_created,
                 carryovers_skipped=carryovers_skipped,
                 forfeited=forfeited_days,
+                capped=carryover_days_capped,
             )
             _logger.info(summary)
             logs += self.sudo().create({
@@ -210,6 +226,7 @@ class HrAnnualLeaveCarryoverLog(models.Model):
                 'carryovers_created': carryovers_created,
                 'carryovers_skipped': carryovers_skipped,
                 'carryover_days_forfeited': forfeited_days,
+                'carryover_days_capped': carryover_days_capped,
                 'summary': summary,
             })
 

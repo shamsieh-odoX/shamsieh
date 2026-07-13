@@ -1,0 +1,26 @@
+{
+    'name': 'Jordan Payroll Custom Extensions',
+    'version': '19.0.1.0.0',
+    'category': 'Human Resources/Payroll',
+    'summary': 'Jordan payslip inputs for absence, unpaid leave, loans, advances, and custom rules',
+    'author': 'Custom',
+    'depends': [
+        'l10n_jo_hr_payroll',
+        'hr_overtime_payroll',
+        'hr_loans_advances',
+        'hr_attendance_custom_ext',
+        'hr_payroll_custom_ext',
+    ],
+    'data': [
+        'security/ir.model.access.csv',
+        'data/hr_payslip_input_type_data.xml',
+        'data/hr_salary_rule_category_data.xml',
+        'data/hr_salary_rule_jo_custom.xml',
+        'views/hr_payslip_views.xml',
+        'views/res_config_settings_views.xml',
+    ],
+    'license': 'LGPL-3',
+    'post_init_hook': 'post_init_hook',
+    'installable': True,
+    'application': False,
+}

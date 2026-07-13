@@ -16,6 +16,7 @@
                 <field name="carryovers_created"/>
                 <field name="carryovers_skipped"/>
                 <field name="carryover_days_forfeited"/>
+                <field name="carryover_days_capped" optional="show"/>
             </list>
         </field>
     </record>
@@ -40,6 +41,7 @@
                             <field name="carryovers_created"/>
                             <field name="carryovers_skipped"/>
                             <field name="carryover_days_forfeited"/>
+                            <field name="carryover_days_capped"/>
                         </group>
                     </group>
                     <group>

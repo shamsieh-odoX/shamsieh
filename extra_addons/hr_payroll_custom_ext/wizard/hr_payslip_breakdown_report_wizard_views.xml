@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="hr_payslip_breakdown_report_wizard_view_form" model="ir.ui.view">
+        <field name="name">hr.payslip.breakdown.report.wizard.form</field>
+        <field name="model">hr.payslip.breakdown.report.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Payslip Breakdown Report">
+                <group>
+                    <group>
+                        <field name="date_from"/>
+                        <field name="date_to"/>
+                        <field name="payslip_state"/>
+                    </group>
+                    <group>
+                        <field name="company_id" groups="base.group_multi_company"/>
+                        <field name="department_id"/>
+                        <field name="employee_ids" widget="many2many_tags"/>
+                    </group>
+                </group>
+                <footer>
+                    <button name="action_print_report" string="Print PDF" type="object" class="btn-primary"/>
+                    <button string="Cancel" special="cancel" class="btn-secondary"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_hr_payslip_breakdown_report_wizard" model="ir.actions.act_window">
+        <field name="name">Payslip Breakdown</field>
+        <field name="res_model">hr.payslip.breakdown.report.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+</odoo>

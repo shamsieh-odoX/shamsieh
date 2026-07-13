@@ -26,6 +26,10 @@ class ResConfigSettings(models.TransientModel):
         related='company_id.annual_leave_type_id',
         readonly=False,
     )
+    annual_leave_carryover_max_days = fields.Integer(
+        related='company_id.annual_leave_carryover_max_days',
+        readonly=False,
+    )
     annual_leave_last_carryover_date = fields.Datetime(
         string='Last Annual Leave Carryover',
         compute='_compute_annual_leave_last_carryover',
@@ -57,74 +61,26 @@ class ResConfigSettings(models.TransientModel):
 
     def action_run_annual_leave_carryover(self):
         self.ensure_one()
-        logs = self.env['hr.annual.leave.carryover.log']._run_carryover(
-            company=self.company_id,
-            trigger='manual',
-            force=True,
-        )
-        if not logs:
-            return {
-                'type': 'ir.actions.client',
-                'tag': 'display_notification',
-                'params': {
-                    'title': _('Annual Leave Carryover'),
-                    'message': _('No allocations were created or updated.'),
-                    'type': 'warning',
-                    'sticky': False,
-                },
-            }
-        log = logs[0]
         return {
-            'type': 'ir.actions.client',
-            'tag': 'display_notification',
-            'params': {
-                'title': _('Annual Leave Carryover Complete'),
-                'message': log.summary,
-                'type': 'success',
-                'sticky': False,
-                'next': {
-                    'type': 'ir.actions.act_window',
-                    'res_model': 'hr.annual.leave.carryover.log',
-                    'view_mode': 'list,form',
-                    'domain': [('id', 'in', logs.ids)],
-                    'target': 'current',
-                },
+            'name': _('Annual Leave Carryover'),
+            'type': 'ir.actions.act_window',
+            'res_model': 'hr.annual.leave.carryover.wizard',
+            'view_mode': 'form',
+            'target': 'new',
+            'context': {
+                'default_company_id': self.company_id.id,
             },
         }
 
     def action_run_sick_leave_renewal(self):
         self.ensure_one()
-        logs = self.env['hr.sick.leave.renewal.log']._run_renewal(
-            company=self.company_id,
-            trigger='manual',
-            force=True,
-        )
-        if not logs:
-            return {
-                'type': 'ir.actions.client',
-                'tag': 'display_notification',
-                'params': {
-                    'title': _('Sick Leave Renewal'),
-                    'message': _('No allocations were created or updated.'),
-                    'type': 'warning',
-                    'sticky': False,
-                },
-            }
-        log = logs[0]
         return {
-            'type': 'ir.actions.client',
-            'tag': 'display_notification',
-            'params': {
-                'title': _('Sick Leave Renewal Complete'),
-                'message': log.summary,
-                'type': 'success',
-                'sticky': False,
-                'next': {
-                    'type': 'ir.actions.act_window',
-                    'res_model': 'hr.sick.leave.renewal.log',
-                    'view_mode': 'list,form',
-                    'domain': [('id', 'in', logs.ids)],
-                    'target': 'current',
-                },
+            'name': _('Sick Leave Renewal'),
+            'type': 'ir.actions.act_window',
+            'res_model': 'hr.sick.leave.renewal.wizard',
+            'view_mode': 'form',
+            'target': 'new',
+            'context': {
+                'default_company_id': self.company_id.id,
             },
         }

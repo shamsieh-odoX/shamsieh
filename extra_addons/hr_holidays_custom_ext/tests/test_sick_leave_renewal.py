@@ -75,6 +75,8 @@ class TestSickLeaveRenewal(TransactionCase):
         ], limit=1)
         self.assertEqual(allocation.state, 'validate')
         self.assertEqual(allocation.number_of_days, 14)
+        self.assertEqual(allocation.allocation_origin, 'sick_renewal')
+        self.assertEqual(allocation.origin_year, 2026)
 
     @freeze_time('2026-01-01 08:00:00')
     def test_rerun_same_year_no_duplicate(self):
@@ -95,6 +97,16 @@ class TestSickLeaveRenewal(TransactionCase):
         )
         self.assertEqual(logs.employees_processed, 1)
         self.assertEqual(self._allocation_count(self.inactive_employee), 0)
+
+    @freeze_time('2026-06-15 08:00:00')
+    def test_manual_wizard_run_for_selected_year(self):
+        wizard = self.env['hr.sick.leave.renewal.wizard'].create({
+            'company_id': self.company.id,
+            'renewal_year': 2026,
+        })
+        action = wizard.action_run_renewal()
+        self.assertEqual(action['params']['type'], 'success')
+        self.assertEqual(self._allocation_count(self.active_employee), 1)
 
     @freeze_time('2026-06-15 08:00:00')
     def test_manual_run_works_off_jan_1(self):

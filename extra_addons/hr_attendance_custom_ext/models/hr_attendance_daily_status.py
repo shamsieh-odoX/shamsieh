@@ -27,9 +27,20 @@ class HrAttendanceDailyStatus(models.Model):
             ('absent', 'Absent'),
             ('incomplete', 'Incomplete'),
             ('on_leave', 'On Leave'),
+            ('on_holiday', 'Public Holiday'),
         ],
         required=True,
         index=True,
+    )
+    is_on_approved_leave = fields.Boolean(
+        string='On Approved Leave',
+        index=True,
+        help='Employee had a validated time off request on this date.',
+    )
+    is_public_holiday = fields.Boolean(
+        string='Public Holiday',
+        index=True,
+        help='Date is a company or calendar public holiday.',
     )
     check_in = fields.Datetime()
     check_out = fields.Datetime()
@@ -86,6 +97,9 @@ class HrAttendanceDailyStatus(models.Model):
         ], order='check_in asc')
 
         calendar = employee.resource_calendar_id or employee.company_id.resource_calendar_id
+        skip, reason = employee._should_skip_attendance_penalties(target_date)
+        excused_status = employee._excused_attendance_status(target_date) if skip else False
+
         vals = {
             'employee_id': employee.id,
             'date': target_date,
@@ -95,9 +109,9 @@ class HrAttendanceDailyStatus(models.Model):
             'worked_hours': 0.0,
             'source_summary': False,
             'notes': False,
+            'is_on_approved_leave': reason == 'leave',
+            'is_public_holiday': reason == 'holiday',
         }
-
-        skip, _reason = employee._should_skip_attendance_penalties(target_date)
 
         if attendances:
             first = attendances[0]
@@ -113,7 +127,7 @@ class HrAttendanceDailyStatus(models.Model):
                 })),
             })
             if skip:
-                vals['status'] = 'on_leave'
+                vals['status'] = excused_status
             else:
                 statuses = attendances.mapped('attendance_status')
                 open_active = any(
@@ -132,7 +146,7 @@ class HrAttendanceDailyStatus(models.Model):
                     vals['status'] = 'present'
         elif skip:
             vals.update({
-                'status': 'on_leave',
+                'status': excused_status,
                 'check_in': False,
                 'check_out': False,
             })

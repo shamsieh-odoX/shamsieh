@@ -233,3 +233,40 @@ class TestAnnualLeaveCarryover(TransactionCase):
         ):
             self.assertEqual(helper_row[key], summary_row[key], msg=key)
         self.assertGreater(helper_row['current_year_balance'], 0)
+
+    @freeze_time('2027-01-01 08:00:00')
+    def test_carryover_respects_company_cap(self):
+        self.company.annual_leave_carryover_max_days = 5
+        self._create_allocation('annual_grant', 2026, 21)
+        self._create_leave(5, date(2026, 6, 1))
+        balance_row = self.BalanceSummary._get_balance_row(
+            self.employee,
+            self.annual_type,
+            date(2026, 12, 31),
+        )
+        raw_carryover = balance_row['current_year_balance']
+        expected_capped = max(0.0, raw_carryover - 5.0)
+
+        logs = self.CarryoverLog._run_carryover(
+            company=self.company,
+            target_year=2027,
+            trigger='manual',
+            force=True,
+        )
+        carryover = self._carryover_allocation(2027, 'year_carryover')
+        self.assertTrue(carryover)
+        self.assertEqual(carryover.number_of_days, 5.0)
+        self.assertEqual(logs.carryover_days_capped, expected_capped)
+
+    @freeze_time('2027-01-01 08:00:00')
+    def test_manual_wizard_run_for_selected_year(self):
+        self._create_allocation('annual_grant', 2026, 21)
+        self._create_leave(5, date(2026, 6, 1))
+        wizard = self.env['hr.annual.leave.carryover.wizard'].create({
+            'company_id': self.company.id,
+            'target_year': 2027,
+        })
+        action = wizard.action_run_carryover()
+        self.assertEqual(action['params']['type'], 'success')
+        self.assertTrue(self._carryover_allocation(2027, 'year_carryover'))
+        self.assertTrue(self._carryover_allocation(2027, 'annual_grant'))

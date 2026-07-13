@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+
+    <record id="hr_salary_rule_jo_overtime" model="hr.salary.rule">
+        <field name="name">Overtime Allowance</field>
+        <field name="code">OVERTIME</field>
+        <field name="sequence">115</field>
+        <field name="category_id" ref="hr_payroll.ALW"/>
+        <field name="condition_select">python</field>
+        <field name="condition_python">result = inputs.get('OVERTIME', 0)</field>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">result = inputs.get('OVERTIME', 0)</field>
+        <field name="active" eval="False"/>
+    </record>
+
+    <record id="hr_salary_rule_jo_absence" model="hr.salary.rule">
+        <field name="name">Absence Deduction</field>
+        <field name="code">ABSENCE</field>
+        <field name="sequence">145</field>
+        <field name="category_id" ref="hr_payroll_jo_custom_ext.hr_salary_rule_category_jo_custom_ded"/>
+        <field name="condition_select">python</field>
+        <field name="condition_python">result = inputs.get('ABSENCE', 0)</field>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">result = -inputs.get('ABSENCE', 0)</field>
+    </record>
+
+    <record id="hr_salary_rule_jo_unpaid" model="hr.salary.rule">
+        <field name="name">Unpaid Leave Deduction</field>
+        <field name="code">UNPAID</field>
+        <field name="sequence">146</field>
+        <field name="category_id" ref="hr_payroll_jo_custom_ext.hr_salary_rule_category_jo_custom_ded"/>
+        <field name="condition_select">python</field>
+        <field name="condition_python">result = inputs.get('UNPAID', 0)</field>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">result = -inputs.get('UNPAID', 0)</field>
+    </record>
+
+    <record id="hr_salary_rule_jo_loan" model="hr.salary.rule">
+        <field name="name">Loan Installment</field>
+        <field name="code">LOAN</field>
+        <field name="sequence">147</field>
+        <field name="category_id" ref="hr_payroll_jo_custom_ext.hr_salary_rule_category_jo_custom_ded"/>
+        <field name="condition_select">python</field>
+        <field name="condition_python">result = inputs.get('LOAN', 0)</field>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">result = -inputs.get('LOAN', 0)</field>
+    </record>
+
+    <record id="hr_salary_rule_jo_advance" model="hr.salary.rule">
+        <field name="name">Salary Advance Recovery</field>
+        <field name="code">ADVANCE</field>
+        <field name="sequence">148</field>
+        <field name="category_id" ref="hr_payroll_jo_custom_ext.hr_salary_rule_category_jo_custom_ded"/>
+        <field name="condition_select">python</field>
+        <field name="condition_python">result = inputs.get('ADVANCE', 0)</field>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">result = -inputs.get('ADVANCE', 0)</field>
+    </record>
+
+</odoo>
