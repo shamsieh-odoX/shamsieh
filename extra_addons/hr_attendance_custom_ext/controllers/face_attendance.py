@@ -2,7 +2,7 @@
 
 import logging
 
-from odoo import http
+from odoo import _, http
 from odoo.exceptions import UserError
 from odoo.http import request
 
@@ -32,13 +32,13 @@ class FaceAttendanceController(http.Controller):
             if not env.user.has_group('hr_attendance.group_hr_attendance_officer'):
                 return {
                     'status': 'error',
-                    'message': 'Not allowed to check attendance for another employee.',
+                    'message': _('Not allowed to check attendance for another employee.'),
                 }
             employee = env['hr.employee'].browse(employee_id)
             if not employee or employee.company_id not in env.user.company_ids:
-                return {'status': 'error', 'message': 'Employee not found.'}
+                return {'status': 'error', 'message': _('Employee not found.')}
         if not employee:
-            return {'status': 'error', 'message': 'No employee linked to user.'}
+            return {'status': 'error', 'message': _('No employee linked to user.')}
 
         try:
             log = env['face.attendance.log'].sudo().create_face_check(
@@ -61,5 +61,5 @@ class FaceAttendanceController(http.Controller):
             'attendance_id': log.attendance_id.id if log.attendance_id else False,
             'confidence_score': log.confidence_score,
             'distance_meters': log.distance_meters,
-            'message': log.error_message or 'OK',
+            'message': log.error_message or _('OK'),
         }

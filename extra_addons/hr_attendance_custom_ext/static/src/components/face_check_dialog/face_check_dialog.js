@@ -23,6 +23,26 @@ export class FaceCheckDialog extends Component {
         onWillUnmount(() => this.stopCamera());
     }
 
+    get dialogTitle() {
+        return _t("Face Verification");
+    }
+
+    get instructions() {
+        return _t("Position your face in the frame to verify your identity before checking in.");
+    }
+
+    get cancelLabel() {
+        return _t("Cancel");
+    }
+
+    get verifyingLabel() {
+        return _t("Verifying...");
+    }
+
+    get captureLabel() {
+        return _t("Capture & Check In");
+    }
+
     async startCamera() {
         if (!navigator.mediaDevices?.getUserMedia) {
             this.state.error = _t("Camera access is not available in this browser.");

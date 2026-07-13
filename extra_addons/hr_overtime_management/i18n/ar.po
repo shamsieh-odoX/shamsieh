@@ -1,0 +1,585 @@
+# Translation of Odoo Server.
+# Professional Arabic (ar) translations.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-07-13 10:40+0000\n"
+"PO-Revision-Date: 2026-07-13 10:40+0000\n"
+"Last-Translator: Shamsieh\n"
+"Language-Team: Arabic\n"
+"Language: ar\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=6; plural=(n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 ? 4 : 5);\n"
+
+
+#. module: hr_overtime_management
+msgid "A refusal reason is required."
+msgstr "سبب الرفض مطلوب."
+
+#. module: hr_overtime_management
+msgid "Administrator: Overtime Configuration"
+msgstr "مدير: إعدادات العمل الإضافي"
+
+#. module: hr_overtime_management
+msgid "An employee must be set before submitting."
+msgstr "يجب تحديد الموظف قبل الإرسال."
+
+#. module: hr_overtime_management
+msgid "Applied on regular working days (Sunday–Thursday by default)."
+msgstr "يُطبّق في أيام العمل العادية (الأحد–الخميس افتراضياً)."
+
+#. module: hr_overtime_management
+msgid "Applied when overtime falls on a configured weekend day."
+msgstr "يُطبّق عندما يقع العمل الإضافي في يوم عطلة نهاية أسبوع مُعدّ."
+
+#. module: hr_overtime_management
+msgid "Applied when overtime falls on a public holiday or calendar day off."
+msgstr "يُطبّق عندما يقع العمل الإضافي في عطلة رسمية أو يوم عطلة في التقويم."
+
+#. module: hr_overtime_management
+msgid "Approval History"
+msgstr "سجل الاعتمادات"
+
+#. module: hr_overtime_management
+msgid "Approval Step"
+msgstr "خطوة الاعتماد"
+
+#. module: hr_overtime_management
+msgid "Approval chain is incomplete: no HR stage found. "
+msgstr "سلسلة الاعتماد غير مكتملة: لم يتم العثور على مرحلة الموارد البشرية."
+
+#. module: hr_overtime_management
+msgid "Approvals"
+msgstr "الاعتمادات"
+
+#. module: hr_overtime_management
+msgid "Approve"
+msgstr "اعتماد"
+
+#. module: hr_overtime_management
+msgid "Approved"
+msgstr "معتمد"
+
+#. module: hr_overtime_management
+msgid "Approved or refused requests cannot be cancelled."
+msgstr "لا يمكن إلغاء الطلبات المعتمدة أو المرفوضة."
+
+#. module: hr_overtime_management
+msgid "Approver"
+msgstr "المعتمد"
+
+#. module: hr_overtime_management
+msgid "Archived"
+msgstr "مؤرشف"
+
+#. module: hr_overtime_management
+msgid "Attachments"
+msgstr "المرفقات"
+
+#. module: hr_overtime_management
+msgid "Automatically set from the date: regular working day, weekend, or company public holiday (e.g. Eid)."
+msgstr "يُحدَّد تلقائياً من التاريخ: يوم عمل عادي، عطلة نهاية أسبوع، أو عطلة رسمية للشركة (مثل العيد)."
+
+#. module: hr_overtime_management
+msgid "Calendar date derived from the start datetime (used for filters and reports)."
+msgstr "تاريخ التقويم مستخرج من تاريخ ووقت البداية (للفلاتر والتقارير)."
+
+#. module: hr_overtime_management
+msgid "Cancel"
+msgstr "إلغاء"
+
+#. module: hr_overtime_management
+msgid "Category"
+msgstr "الفئة"
+
+#. module: hr_overtime_management
+msgid "Category &amp; Rate"
+msgstr "الفئة والمعدل"
+
+#. module: hr_overtime_management
+msgid "Comma-separated weekday numbers (Monday=0 … Sunday=6). "
+msgstr "أرقام أيام الأسبوع مفصولة بفواصل (الاثنين=0 … الأحد=6)."
+
+#. module: hr_overtime_management
+msgid "Comment"
+msgstr "ملاحظة"
+
+#. module: hr_overtime_management
+msgid "Company"
+msgstr "الشركة"
+
+#. module: hr_overtime_management
+msgid "Company Branch"
+msgstr "فرع الشركة"
+
+#. module: hr_overtime_management
+msgid "Company Currency"
+msgstr "عملة الشركة"
+
+#. module: hr_overtime_management
+msgid "Cost"
+msgstr "التكلفة"
+
+#. module: hr_overtime_management
+msgid "Current Approver"
+msgstr "المعتمد الحالي"
+
+#. module: hr_overtime_management
+msgid "Daily Hours Warning Cap"
+msgstr "حد تحذير الساعات اليومية"
+
+#. module: hr_overtime_management
+msgid "Daily Overtime Hours Warning Cap"
+msgstr "حد تحذير ساعات العمل الإضافي اليومية"
+
+#. module: hr_overtime_management
+msgid "Date"
+msgstr "التاريخ"
+
+#. module: hr_overtime_management
+msgid "Date &amp; Time"
+msgstr "التاريخ والوقت"
+
+#. module: hr_overtime_management
+msgid "Day Off"
+msgstr "يوم عطلة"
+
+#. module: hr_overtime_management
+msgid "Day Off Overtime"
+msgstr "عمل إضافي يوم عطلة"
+
+#. module: hr_overtime_management
+msgid "Day Off Overtime Type"
+msgstr "نوع العمل الإضافي (يوم عطلة)"
+
+#. module: hr_overtime_management
+msgid "Decision Date"
+msgstr "تاريخ القرار"
+
+#. module: hr_overtime_management
+msgid "Demo OT Department Manager"
+msgstr "Demo OT Department Manager"
+
+#. module: hr_overtime_management
+msgid "Demo OT Dept Manager"
+msgstr "Demo OT Dept Manager"
+
+#. module: hr_overtime_management
+msgid "Demo OT Employee (2-stage)"
+msgstr "Demo OT Employee (2-stage)"
+
+#. module: hr_overtime_management
+msgid "Demo OT Employee (3-stage)"
+msgstr "Demo OT Employee (3-stage)"
+
+#. module: hr_overtime_management
+msgid "Demo OT Solo Manager"
+msgstr "Demo OT Solo Manager"
+
+#. module: hr_overtime_management
+msgid "Demo OT Upper Manager"
+msgstr "Demo OT Upper Manager"
+
+#. module: hr_overtime_management
+msgid "Department"
+msgstr "القسم"
+
+#. module: hr_overtime_management
+msgid "Display a warning when a single request exceeds this number of hours."
+msgstr "عرض تحذير عندما يتجاوز طلب واحد هذا العدد من الساعات."
+
+#. module: hr_overtime_management
+msgid "Draft"
+msgstr "مسودة"
+
+#. module: hr_overtime_management
+msgid "Each company branch should have exactly one active type per category. "
+msgstr "يجب أن يكون لكل فرع شركة نوع نشط واحد فقط لكل فئة."
+
+#. module: hr_overtime_management
+msgid "Employee"
+msgstr "الموظف"
+
+#. module: hr_overtime_management
+msgid "Employee Company"
+msgstr "شركة الموظف"
+
+#. module: hr_overtime_management
+msgid "End Date & Time"
+msgstr "تاريخ ووقت النهاية"
+
+#. module: hr_overtime_management
+msgid "End date & time must be after start date & time."
+msgstr "يجب أن يكون تاريخ ووقت النهاية بعد تاريخ ووقت البداية."
+
+#. module: hr_overtime_management
+msgid "Fallback divisor to derive hourly cost from monthly contract wage (wage / hours)."
+msgstr "مقسوم احتياطي لاشتقاق التكلفة بالساعة من الراتب الشهري (الراتب / الساعات)."
+
+#. module: hr_overtime_management
+msgid "Generate Timesheet on Overtime Approval"
+msgstr "إنشاء جدول زمني عند اعتماد العمل الإضافي"
+
+#. module: hr_overtime_management
+msgid "Hourly Cost"
+msgstr "التكلفة بالساعة"
+
+#. module: hr_overtime_management
+msgid "Hourly Cost Divisor"
+msgstr "مقسوم التكلفة بالساعة"
+
+#. module: hr_overtime_management
+msgid "Install the payroll glue module to push approved overtime costs to payslips."
+msgstr "ثبّت وحدة ربط الرواتب لإرسال تكاليف العمل الإضافي المعتمد إلى قسائم الرواتب."
+
+#. module: hr_overtime_management
+msgid "Last Month"
+msgstr "الشهر الماضي"
+
+#. module: hr_overtime_management
+msgid "Leave empty only for shared template records. Each branch should have its own set."
+msgstr "اتركه فارغاً فقط للسجلات المشتركة. يجب أن يكون لكل فرع مجموعته الخاصة."
+
+#. module: hr_overtime_management
+msgid "Link Overtime to Payroll"
+msgstr "ربط العمل الإضافي بالرواتب"
+
+#. module: hr_overtime_management
+msgid "My Approvals"
+msgstr "موافقاتي"
+
+#. module: hr_overtime_management
+msgid "My Requests"
+msgstr "طلباتي"
+
+#. module: hr_overtime_management
+msgid "New"
+msgstr "جديد"
+
+#. module: hr_overtime_management
+msgid "No HR officer is configured for overtime approval. "
+msgstr "لم يتم إعداد مسؤول موارد بشرية لاعتماد العمل الإضافي."
+
+#. module: hr_overtime_management
+msgid "No approval chain could be resolved for this employee."
+msgstr "تعذر تحديد سلسلة الاعتماد لهذا الموظف."
+
+#. module: hr_overtime_management
+msgid "No overtime type could be determined for this date. "
+msgstr "تعذر تحديد نوع العمل الإضافي لهذا التاريخ."
+
+#. module: hr_overtime_management
+msgid "No pending approval step found."
+msgstr "لم يتم العثور على خطوة اعتماد قيد الانتظار."
+
+#. module: hr_overtime_management
+msgid "Officer: Overtime HR Approval"
+msgstr "مسؤول: اعتماد العمل الإضافي (الموارد البشرية)"
+
+#. module: hr_overtime_management
+msgid "Only cancelled or refused requests can be reset to draft."
+msgstr "يمكن إعادة الطلبات الملغاة أو المرفوضة فقط إلى مسودة."
+
+#. module: hr_overtime_management
+msgid "Only draft requests can be submitted."
+msgstr "يمكن إرسال الطلبات في حالة المسودة فقط."
+
+#. module: hr_overtime_management
+msgid "Only one active overtime type is allowed per category for %(company)s. "
+msgstr "يُسمح بنوع عمل إضافي نشط واحد فقط لكل فئة في %(company)s."
+
+#. module: hr_overtime_management
+msgid "Overtime"
+msgstr "العمل الإضافي"
+
+#. module: hr_overtime_management
+msgid "Overtime Analysis"
+msgstr "تحليل العمل الإضافي"
+
+#. module: hr_overtime_management
+msgid "Overtime Approval"
+msgstr "اعتماد العمل الإضافي"
+
+#. module: hr_overtime_management
+msgid "Overtime Cost (YTD)"
+msgstr "تكلفة العمل الإضافي (منذ بداية السنة)"
+
+#. module: hr_overtime_management
+msgid "Overtime Hours"
+msgstr "ساعات العمل الإضافي"
+
+#. module: hr_overtime_management
+msgid "Overtime Hours (YTD)"
+msgstr "ساعات العمل الإضافي (منذ بداية السنة)"
+
+#. module: hr_overtime_management
+msgid "Overtime Request"
+msgstr "طلب عمل إضافي"
+
+#. module: hr_overtime_management
+msgid "Overtime Request: HR officer read all"
+msgstr "طلب عمل إضافي: قراءة مسؤول HR للكل"
+
+#. module: hr_overtime_management
+msgid "Overtime Request: HR officer write at HR stage"
+msgstr "طلب عمل إضافي: كتابة مسؤول HR في مرحلة HR"
+
+#. module: hr_overtime_management
+msgid "Overtime Request: administrator full access"
+msgstr "طلب عمل إضافي: وصول كامل للمدير"
+
+#. module: hr_overtime_management
+msgid "Overtime Request: current approver"
+msgstr "طلب عمل إضافي: المعتمد الحالي"
+
+#. module: hr_overtime_management
+msgid "Overtime Request: employee cancel submitted"
+msgstr "طلب عمل إضافي: إلغاء الموظف للطلب المُرسل"
+
+#. module: hr_overtime_management
+msgid "Overtime Request: employee read own"
+msgstr "طلب عمل إضافي: قراءة الموظف لطلباته"
+
+#. module: hr_overtime_management
+msgid "Overtime Request: employee reset refused/cancelled"
+msgstr "طلب عمل إضافي: إعادة الموظف للمرفوض/الملغى"
+
+#. module: hr_overtime_management
+msgid "Overtime Request: employee write draft"
+msgstr "طلب عمل إضافي: كتابة الموظف للمسودة"
+
+#. module: hr_overtime_management
+msgid "Overtime Request: multi-company"
+msgstr "طلب عمل إضافي: متعدد الشركات"
+
+#. module: hr_overtime_management
+msgid "Overtime Requests"
+msgstr "طلبات العمل الإضافي"
+
+#. module: hr_overtime_management
+msgid "Overtime Type"
+msgstr "نوع العمل الإضافي"
+
+#. module: hr_overtime_management
+msgid "Overtime Type: multi-company"
+msgstr "نوع العمل الإضافي: متعدد الشركات"
+
+#. module: hr_overtime_management
+msgid "Overtime Types"
+msgstr "أنواع العمل الإضافي"
+
+#. module: hr_overtime_management
+msgid "Overtime request %(ref)s requires your approval."
+msgstr "طلب العمل الإضافي %(ref)s يتطلب اعتمادك."
+
+#. module: hr_overtime_management
+msgid "Overtime request submitted for approval."
+msgstr "تم إرسال طلب العمل الإضافي للاعتماد."
+
+#. module: hr_overtime_management
+msgid "Pay rate multiplier applied to the base hourly cost (e.g. 1.5 for time-and-a-half)."
+msgstr "مضاعف الأجر المطبّق على التكلفة الأساسية بالساعة (مثل 1.5 لساعة ونصف)."
+
+#. module: hr_overtime_management
+msgid "Payroll Integration"
+msgstr "تكامل الرواتب"
+
+#. module: hr_overtime_management
+msgid "Pending Approval"
+msgstr "بانتظار الاعتماد"
+
+#. module: hr_overtime_management
+msgid "Please provide a reason for refusal..."
+msgstr "يرجى ذكر سبب الرفض..."
+
+#. module: hr_overtime_management
+msgid "Print"
+msgstr "طباعة"
+
+#. module: hr_overtime_management
+msgid "Project"
+msgstr "المشروع"
+
+#. module: hr_overtime_management
+msgid "Rate Multiplier"
+msgstr "مضاعف الأجر"
+
+#. module: hr_overtime_management
+msgid "Reason"
+msgstr "السبب"
+
+#. module: hr_overtime_management
+msgid "Reference"
+msgstr "المرجع"
+
+#. module: hr_overtime_management
+msgid "Refuse"
+msgstr "رفض"
+
+#. module: hr_overtime_management
+msgid "Refuse Overtime Request"
+msgstr "رفض طلب العمل الإضافي"
+
+#. module: hr_overtime_management
+msgid "Refuse Request"
+msgstr "رفض الطلب"
+
+#. module: hr_overtime_management
+msgid "Refused"
+msgstr "مرفوض"
+
+#. module: hr_overtime_management
+msgid "Regular"
+msgstr "يوم عمل عادي"
+
+#. module: hr_overtime_management
+msgid "Regular Overtime"
+msgstr "عمل إضافي يوم عادي"
+
+#. module: hr_overtime_management
+msgid "Regular Overtime Type"
+msgstr "نوع العمل الإضافي (يوم عادي)"
+
+#. module: hr_overtime_management
+msgid "Request refused by %(user)s: %(reason)s"
+msgstr "تم رفض الطلب بواسطة %(user)s: %(reason)s"
+
+#. module: hr_overtime_management
+msgid "Reset to Draft"
+msgstr "إعادة إلى مسودة"
+
+#. module: hr_overtime_management
+msgid "Shared"
+msgstr "مشترك"
+
+#. module: hr_overtime_management
+msgid "Start Date & Time"
+msgstr "تاريخ ووقت البداية"
+
+#. module: hr_overtime_management
+msgid "State"
+msgstr "الحالة"
+
+#. module: hr_overtime_management
+msgid "Status"
+msgstr "الحالة"
+
+#. module: hr_overtime_management
+msgid "Submit"
+msgstr "إرسال"
+
+#. module: hr_overtime_management
+msgid "Submitted"
+msgstr "مُرسل"
+
+#. module: hr_overtime_management
+msgid "Task"
+msgstr "المهمة"
+
+#. module: hr_overtime_management
+msgid "Technical"
+msgstr "تقني"
+
+#. module: hr_overtime_management
+msgid "Technical code used internally (regular, weekend, holiday)."
+msgstr "رمز تقني داخلي (عادي، عطلة نهاية أسبوع، عطلة)."
+
+#. module: hr_overtime_management
+msgid "The company must match the employee\\'s company (%(company)s)."
+msgstr "يجب أن تطابق الشركة شركة الموظف (%(company)s)."
+
+#. module: hr_overtime_management
+msgid "The project "
+msgstr "المشروع "
+
+#. module: hr_overtime_management
+msgid "The rate multiplier must be strictly positive."
+msgstr "يجب أن يكون مضاعف الأجر أكبر من صفر."
+
+#. module: hr_overtime_management
+msgid "The selected approval step does not belong to this request."
+msgstr "خطوة الاعتماد المحددة لا تنتمي إلى هذا الطلب."
+
+#. module: hr_overtime_management
+msgid "The task must belong to the selected project."
+msgstr "يجب أن تنتمي المهمة إلى المشروع المحدد."
+
+#. module: hr_overtime_management
+msgid "This Month"
+msgstr "هذا الشهر"
+
+#. module: hr_overtime_management
+msgid "This overtime action is not allowed."
+msgstr "هذا الإجراء غير مسموح لطلبات العمل الإضافي."
+
+#. module: hr_overtime_management
+msgid "Timesheet Integration"
+msgstr "تكامل الجداول الزمنية"
+
+#. module: hr_overtime_management
+msgid "Timesheet Line"
+msgstr "بند الجدول الزمني"
+
+#. module: hr_overtime_management
+msgid "Timesheet projects for your company (or shared across companies)."
+msgstr "مشاريع الجداول الزمنية لشركتك (أو مشتركة بين الشركات)."
+
+#. module: hr_overtime_management
+msgid "To Approve"
+msgstr "بانتظار الاعتماد"
+
+#. module: hr_overtime_management
+msgid "Total Cost"
+msgstr "التكلفة الإجمالية"
+
+#. module: hr_overtime_management
+msgid "User: Own Overtime Requests"
+msgstr "مستخدم: طلبات العمل الإضافي الخاصة"
+
+#. module: hr_overtime_management
+msgid "Warning: overtime hours (%.2f) exceed the daily cap (%.2f)."
+msgstr "تحذير: ساعات العمل الإضافي (%.2f) تتجاوز الحد اليومي (%.2f)."
+
+#. module: hr_overtime_management
+msgid "Weekend"
+msgstr "عطلة نهاية الأسبوع"
+
+#. module: hr_overtime_management
+msgid "Weekend Overtime"
+msgstr "عمل إضافي عطلة نهاية الأسبوع"
+
+#. module: hr_overtime_management
+msgid "Weekend Overtime Type"
+msgstr "نوع العمل الإضافي (عطلة نهاية الأسبوع)"
+
+#. module: hr_overtime_management
+msgid "Weekend Weekdays"
+msgstr "أيام عطلة نهاية الأسبوع"
+
+#. module: hr_overtime_management
+msgid "Working Hours per Month"
+msgstr "ساعات العمل الشهرية"
+
+#. module: hr_overtime_management
+msgid "You are not allowed to approve this request."
+msgstr "غير مسموح لك باعتماد هذا الطلب."
+
+#. module: hr_overtime_management
+msgid "You are not allowed to refuse this request."
+msgstr "غير مسموح لك برفض هذا الطلب."
+
+#. module: hr_overtime_management
+msgid "You can only modify your own overtime requests."
+msgstr "يمكنك تعديل طلبات العمل الإضافي الخاصة بك فقط."
+
+#. module: hr_overtime_management
+msgid "Your employee record is linked to %(company)s, but that company is not in your "
+msgstr "سجل الموظف مربوط بـ %(company)s، لكن هذه الشركة غير مدرجة في "
+
+#. module: hr_overtime_management
+msgid "e.g. Regular Overtime"
+msgstr "مثال: عمل إضافي يوم عادي"

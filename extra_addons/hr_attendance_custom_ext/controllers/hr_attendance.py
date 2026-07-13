@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from odoo import http
+from odoo import _, http
 from odoo.exceptions import UserError
 from odoo.http import request
 
@@ -33,18 +33,18 @@ class HrAttendanceCustom(HrAttendance):
     def systray_punch(self, punch_type=False):
         employee = request.env.user.employee_id
         if not employee:
-            return {'status': 'error', 'message': 'No employee linked to user.'}
+            return {'status': 'error', 'message': _('No employee linked to user.')}
         if punch_type not in {'check_in', 'break_in', 'break_out', 'check_out'}:
-            return {'status': 'error', 'message': 'Invalid punch type.'}
+            return {'status': 'error', 'message': _('Invalid punch type.')}
         try:
             if punch_type == 'check_in':
                 employee._validate_attendance_check_in()
             result = employee.action_systray_punch(punch_type)
             if result.get('status') in {'duplicate', 'no_open_attendance', 'not_on_break'}:
                 messages = {
-                    'duplicate': 'This punch was already recorded.',
-                    'no_open_attendance': 'You must check in before using this punch.',
-                    'not_on_break': 'You are not currently on break.',
+                    'duplicate': _('This punch was already recorded.'),
+                    'no_open_attendance': _('You must check in before using this punch.'),
+                    'not_on_break': _('You are not currently on break.'),
                 }
                 return {'status': 'error', 'message': messages[result['status']]}
         except UserError as exc:
@@ -55,13 +55,13 @@ class HrAttendanceCustom(HrAttendance):
     def home_pin_check_in(self, pin_code=False):
         employee = request.env.user.employee_id
         if not employee:
-            return {'status': 'error', 'message': 'No employee linked to user.'}
+            return {'status': 'error', 'message': _('No employee linked to user.')}
         try:
             employee._validate_single_daily_check_in()
             if employee._get_attendance_scheduled_location() != 'home':
-                raise UserError('Home PIN check-in is only allowed on home schedule days.')
+                raise UserError(_('Home PIN check-in is only allowed on home schedule days.'))
             if not employee._verify_home_attendance_pin(pin_code):
-                raise UserError('Invalid PIN code.')
+                raise UserError(_('Invalid PIN code.'))
             attendance = employee.with_context(
                 attendance_via_home_pin=True,
             )._attendance_action_change()
@@ -71,5 +71,5 @@ class HrAttendanceCustom(HrAttendance):
         return {
             'status': 'passed',
             'attendance_id': attendance.id,
-            'message': 'OK',
+            'message': _('OK'),
         }

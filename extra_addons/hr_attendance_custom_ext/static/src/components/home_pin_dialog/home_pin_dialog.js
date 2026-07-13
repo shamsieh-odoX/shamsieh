@@ -21,6 +21,30 @@ export class HomePinDialog extends Component {
         });
     }
 
+    get dialogTitle() {
+        return _t("Home PIN Check In");
+    }
+
+    get instructions() {
+        return _t("Enter your personal home attendance PIN to complete check in.");
+    }
+
+    get pinPlaceholder() {
+        return _t("PIN code");
+    }
+
+    get cancelLabel() {
+        return _t("Cancel");
+    }
+
+    get checkingLabel() {
+        return _t("Checking...");
+    }
+
+    get submitLabel() {
+        return _t("Check In with PIN");
+    }
+
     async submitPin() {
         if (this.state.processing) {
             return;

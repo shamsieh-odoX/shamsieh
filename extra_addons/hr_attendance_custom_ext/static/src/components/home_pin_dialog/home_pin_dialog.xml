@@ -2,15 +2,13 @@
 <templates xml:space="preserve">
 
 <t t-name="hr_attendance_custom_ext.HomePinDialog">
-    <Dialog title="'Home PIN Check In'" size="'sm'">
+    <Dialog t-att-title="dialogTitle" size="'sm'">
         <div class="d-flex flex-column gap-3">
-            <p class="mb-0 text-muted">
-                Enter your personal home attendance PIN to complete check in.
-            </p>
+            <p class="mb-0 text-muted" t-esc="instructions"/>
             <input class="form-control"
                    type="password"
                    t-model="state.pinCode"
-                   placeholder="PIN code"
+                   t-att-placeholder="pinPlaceholder"
                    autocomplete="off"/>
             <div t-if="state.error" class="alert alert-danger mb-0" role="alert">
                 <t t-esc="state.error"/>
@@ -18,11 +16,11 @@
         </div>
         <t t-set-slot="footer">
             <button class="btn btn-secondary" t-on-click="props.close" t-att-disabled="state.processing">
-                Cancel
+                <t t-esc="cancelLabel"/>
             </button>
             <button class="btn btn-primary" t-on-click="submitPin" t-att-disabled="state.processing or !state.pinCode">
-                <t t-if="state.processing">Checking...</t>
-                <t t-else="">Check In with PIN</t>
+                <t t-if="state.processing" t-esc="checkingLabel"/>
+                <t t-else="" t-esc="submitLabel"/>
             </button>
         </t>
     </Dialog>

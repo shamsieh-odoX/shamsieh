@@ -7,11 +7,11 @@
             <div class="d-flex flex-column gap-3">
                 <div t-if="this.state.checkedIn" class="d-flex flex-wrap gap-3">
                     <div t-if="!this.isFirstAttendance" class="att_container flex-grow-1 flex-shrink-0">
-                        <small class="d-block text-muted">Before <t t-esc="this.lastCheckIn"/></small>
+                        <small class="d-block text-muted"><t t-esc="this.labelBefore"/> <t t-esc="this.lastCheckIn"/></small>
                         <div t-esc="this.hoursPreviouslyToday" class="fs-3 text-info text-end"/>
                     </div>
                     <div class="att_container flex-grow-1 flex-shrink-0">
-                        <small class="d-block text-muted">Since <t t-esc="this.lastCheckIn"/></small>
+                        <small class="d-block text-muted"><t t-esc="this.labelSince"/> <t t-esc="this.lastCheckIn"/></small>
                         <div t-esc="this.lastAttendanceWorkedHours" t-attf-class="fs-3 text-info {{ !this.isFirstAttendance ? 'text-end' : '' }}"/>
                     </div>
                 </div>
@@ -19,7 +19,7 @@
                     class="att_container d-flex flex-column"
                     t-att-class="this.state.checkedIn ? 'p-3 bg-100 rounded' : ''">
                     <div class="d-flex" t-att-class="this.state.checkedIn ? 'align-items-center justify-content-between' : 'flex-column'">
-                        <small class="text-muted">Total today</small>
+                        <small class="text-muted" t-esc="this.labelTotalToday"/>
                         <h2 t-esc="this.hoursToday" class="mb-0 fs-2"/>
                     </div>
                     <t t-call="hr_attendance_custom_ext.AttendancePunchButtons"/>

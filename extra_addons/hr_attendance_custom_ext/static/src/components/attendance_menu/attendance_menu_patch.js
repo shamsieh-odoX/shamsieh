@@ -36,6 +36,15 @@ patch(ActivityMenu.prototype, {
     get labelOfficeDayHint() {
         return _t("Office day — use the fingerprint device to check in and out.");
     },
+    get labelBefore() {
+        return _t("Before");
+    },
+    get labelSince() {
+        return _t("Since");
+    },
+    get labelTotalToday() {
+        return _t("Total today");
+    },
 
     _searchReadEmployeeFill() {
         super._searchReadEmployeeFill(...arguments);

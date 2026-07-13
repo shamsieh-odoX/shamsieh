@@ -1,0 +1,333 @@
+# Translation of Odoo Server.
+# Professional Arabic (ar) translations.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-07-13 10:40+0000\n"
+"PO-Revision-Date: 2026-07-13 10:40+0000\n"
+"Last-Translator: Shamsieh\n"
+"Language-Team: Arabic\n"
+"Language: ar\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=6; plural=(n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 ? 4 : 5);\n"
+
+
+#. module: project_custom_ext
+msgid "0% - 20%"
+msgstr "من 0٪ إلى 20٪"
+
+#. module: project_custom_ext
+msgid "20% - 50%"
+msgstr "من 20٪ إلى 50٪"
+
+#. module: project_custom_ext
+msgid "50% - 80%"
+msgstr "من 50٪ إلى 80٪"
+
+#. module: project_custom_ext
+msgid "80% - 100%"
+msgstr "من 80٪ إلى 100٪"
+
+#. module: project_custom_ext
+msgid "Add Standard Stages"
+msgstr "إضافة مراحل قياسية"
+
+#. module: project_custom_ext
+msgid "Allocated Until"
+msgstr "مخصص حتى"
+
+#. module: project_custom_ext
+msgid "CRM Setup Template"
+msgstr "قالب إعداد CRM"
+
+#. module: project_custom_ext
+msgid "Choose a workflow template…"
+msgstr "اختر قالب سير العمل…"
+
+#. module: project_custom_ext
+msgid "Closing Stage"
+msgstr "مرحلة الإغلاق"
+
+#. module: project_custom_ext
+msgid "Completed tasks / total tasks × 100 (tasks in a closing stage count as done)."
+msgstr "المهام المنجزة / إجمالي المهام × 100 (المهام في مرحلة الإغلاق تُحسب منجزة)."
+
+#. module: project_custom_ext
+msgid "Country"
+msgstr "الدولة"
+
+#. module: project_custom_ext
+msgid "Counts as Done"
+msgstr "يُحسب منجزاً"
+
+#. module: project_custom_ext
+msgid "Done"
+msgstr "منجز"
+
+#. module: project_custom_ext
+msgid "Employee"
+msgstr "الموظف"
+
+#. module: project_custom_ext
+msgid "Estimated Hours"
+msgstr "الساعات المقدرة"
+
+#. module: project_custom_ext
+msgid "Folded in Kanban"
+msgstr "مطوي في كانبان"
+
+#. module: project_custom_ext
+msgid "Implementation Project Template"
+msgstr "قالب مشروع التنفيذ"
+
+#. module: project_custom_ext
+msgid "In Progress"
+msgstr "قيد التنفيذ"
+
+#. module: project_custom_ext
+msgid "Location &amp; Team"
+msgstr "الموقع والفريق"
+
+#. module: project_custom_ext
+msgid "Marks this project stage as a closing/completed stage."
+msgstr "يحدد مرحلة المشروع كمرحلة إغلاق/إكمال."
+
+#. module: project_custom_ext
+msgid "Not allowed"
+msgstr "غير مسموح"
+
+#. module: project_custom_ext
+msgid "Notice"
+msgstr "تنبيه"
+
+#. module: project_custom_ext
+msgid "Optional"
+msgstr "اختياري"
+
+#. module: project_custom_ext
+msgid "Overdue Tasks"
+msgstr "مهام متأخرة"
+
+#. module: project_custom_ext
+msgid "Planned date and time when allocated work on this project should be completed."
+msgstr "التاريخ والوقت المخطط لإكمال العمل المخصص على هذا المشروع."
+
+#. module: project_custom_ext
+msgid "Planned date and time when allocated work on this task should be completed."
+msgstr "التاريخ والوقت المخطط لإكمال العمل المخصص على هذه المهمة."
+
+#. module: project_custom_ext
+msgid "Progress"
+msgstr "التقدم"
+
+#. module: project_custom_ext
+msgid "Progress %"
+msgstr "نسبة التقدم %"
+
+#. module: project_custom_ext
+msgid "Progress Range"
+msgstr "نطاق التقدم"
+
+#. module: project_custom_ext
+msgid "Project"
+msgstr "المشروع"
+
+#. module: project_custom_ext
+msgid "Project Create/Move"
+msgstr "إنشاء/نقل المشاريع"
+
+#. module: project_custom_ext
+msgid "Project Dashboard"
+msgstr "لوحة معلومات المشاريع"
+
+#. module: project_custom_ext
+msgid "Project Edit Only"
+msgstr "تعديل المشاريع فقط"
+
+#. module: project_custom_ext
+msgid "Project Manager"
+msgstr "مدير المشروع"
+
+#. module: project_custom_ext
+msgid "Project Progress %"
+msgstr "نسبة تقدم المشروع %"
+
+#. module: project_custom_ext
+msgid "Project Stage"
+msgstr "مرحلة المشروع"
+
+#. module: project_custom_ext
+msgid "Project Task: Edit Only users (write access)"
+msgstr "مهمة المشروع: مستخدمو التعديل فقط (صلاحية الكتابة)"
+
+#. module: project_custom_ext
+msgid "Project: Create/Move can create projects"
+msgstr "المشروع: إنشاء/نقل يمكنه إنشاء المشاريع"
+
+#. module: project_custom_ext
+msgid "Projects Overview"
+msgstr "نظرة عامة على المشاريع"
+
+#. module: project_custom_ext
+msgid "Projects by Country"
+msgstr "المشاريع حسب الدولة"
+
+#. module: project_custom_ext
+msgid "Projects by Manager"
+msgstr "المشاريع حسب المدير"
+
+#. module: project_custom_ext
+msgid "Projects by Project Manager"
+msgstr "المشاريع حسب مدير المشروع"
+
+#. module: project_custom_ext
+msgid "Projects by Stage"
+msgstr "المشاريع حسب المرحلة"
+
+#. module: project_custom_ext
+msgid "Remaining Hours"
+msgstr "الساعات المتبقية"
+
+#. module: project_custom_ext
+msgid "Review"
+msgstr "مراجعة"
+
+#. module: project_custom_ext
+msgid "Sales Team"
+msgstr "فريق المبيعات"
+
+#. module: project_custom_ext
+msgid "Select a template at project creation to auto-generate workflow stages (tasks are optional)."
+msgstr "اختر قالباً عند إنشاء المشروع لإنشاء مراحل سير العمل تلقائياً (المهام اختيارية)."
+
+#. module: project_custom_ext
+msgid "Select country"
+msgstr "اختر الدولة"
+
+#. module: project_custom_ext
+msgid "Spent Hours"
+msgstr "الساعات المنفقة"
+
+#. module: project_custom_ext
+msgid "Stage"
+msgstr "المرحلة"
+
+#. module: project_custom_ext
+msgid "Stage Template"
+msgstr "قالب المراحل"
+
+#. module: project_custom_ext
+msgid "Stage name (e.g. In Progress)"
+msgstr "اسم المرحلة (مثال: قيد التنفيذ)"
+
+#. module: project_custom_ext
+msgid "Stages"
+msgstr "المراحل"
+
+#. module: project_custom_ext
+msgid "Task Stages"
+msgstr "مراحل المهام"
+
+#. module: project_custom_ext
+msgid "Task Template"
+msgstr "قالب المهام"
+
+#. module: project_custom_ext
+msgid "Task Templates"
+msgstr "قوالب المهام"
+
+#. module: project_custom_ext
+msgid "Tasks by Stage"
+msgstr "المهام حسب المرحلة"
+
+#. module: project_custom_ext
+msgid "Template"
+msgstr "القالب"
+
+#. module: project_custom_ext
+msgid "The task template cannot be changed after it has been applied."
+msgstr "لا يمكن تغيير قالب المهام بعد تطبيقه."
+
+#. module: project_custom_ext
+msgid "This action is not allowed."
+msgstr "هذا الإجراء غير مسموح."
+
+#. module: project_custom_ext
+msgid "This template already has stages. Edit them in the list or remove them first."
+msgstr "هذا القالب يحتوي على مراحل بالفعل. عدّلها في القائمة أو احذفها أولاً."
+
+#. module: project_custom_ext
+msgid "Time Remaining Until"
+msgstr "الوقت المتبقي حتى"
+
+#. module: project_custom_ext
+msgid "Timesheet by Employee"
+msgstr "الجدول الزمني حسب الموظف"
+
+#. module: project_custom_ext
+msgid "Timesheet by Project"
+msgstr "الجدول الزمني حسب المشروع"
+
+#. module: project_custom_ext
+msgid "To Do"
+msgstr "للتنفيذ"
+
+#. module: project_custom_ext
+msgid "Validation"
+msgstr "تحقق"
+
+#. module: project_custom_ext
+msgid "Waiting"
+msgstr "في الانتظار"
+
+#. module: project_custom_ext
+msgid "Website Project Template"
+msgstr "قالب مشروع الموقع"
+
+#. module: project_custom_ext
+msgid "When enabled, tasks in this stage count as completed for the project progress % (e.g. Done or Completed)."
+msgstr "عند التفعيل، تُحسب المهام في هذه المرحلة منجزة لنسبة تقدم المشروع % (مثل منجز أو مكتمل)."
+
+#. module: project_custom_ext
+msgid "When enabled, tasks moved to this stage are treated as completed and increase the project progress %."
+msgstr "عند التفعيل، تُعامل المهام المنقولة إلى هذه المرحلة كمنجزة وتزيد نسبة تقدم المشروع %."
+
+#. module: project_custom_ext
+msgid "When should this template be used?"
+msgstr "متى يُستخدم هذا القالب؟"
+
+#. module: project_custom_ext
+msgid "Workflow Template"
+msgstr "قالب سير العمل"
+
+#. module: project_custom_ext
+msgid "Workflow template"
+msgstr "قالب سير العمل"
+
+#. module: project_custom_ext
+msgid "You cannot move tasks between stages with your current access level."
+msgstr "لا يمكنك نقل المهام بين المراحل بمستوى صلاحياتك الحالي."
+
+#. module: project_custom_ext
+msgid "You don"
+msgstr "لا تملك"
+
+#. module: project_custom_ext
+msgid "You need Project Create/Move or Manager rights to create projects."
+msgstr "تحتاج صلاحية إنشاء/نقل المشاريع أو مدير المشروع لإنشاء مشاريع."
+
+#. module: project_custom_ext
+msgid "e.g. To Do"
+msgstr "مثال: للتنفيذ"
+
+#. module: project_custom_ext
+msgid "e.g. Website Delivery Workflow"
+msgstr "مثال: سير عمل تسليم الموقع"
+
+#. module: project_custom_ext
+msgid "this item"
+msgstr "هذا العنصر"

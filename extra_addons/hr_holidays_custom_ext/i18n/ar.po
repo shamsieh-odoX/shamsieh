@@ -1,0 +1,557 @@
+# Translation of Odoo Server.
+# Professional Arabic (ar) translations.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-07-13 10:40+0000\n"
+"PO-Revision-Date: 2026-07-13 10:40+0000\n"
+"Last-Translator: Shamsieh\n"
+"Language-Team: Arabic\n"
+"Language: ar\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=6; plural=(n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 ? 4 : 5);\n"
+
+
+#. module: hr_holidays_custom_ext
+msgid "A refusal reason is required."
+msgstr "سبب الرفض مطلوب."
+
+#. module: hr_holidays_custom_ext
+msgid "A requester must be set before submitting."
+msgstr "يجب تحديد مقدّم الطلب قبل الإرسال."
+
+#. module: hr_holidays_custom_ext
+msgid "Allocation Origin"
+msgstr "مصدر التخصيص"
+
+#. module: hr_holidays_custom_ext
+msgid "Annual Leave %s"
+msgstr "إجازة سنوية %s"
+
+#. module: hr_holidays_custom_ext
+msgid "Annual Leave Carryover"
+msgstr "ترحيل الإجازة السنوية"
+
+#. module: hr_holidays_custom_ext
+msgid "Annual Leave Carryover Complete"
+msgstr "اكتمل ترحيل الإجازة السنوية"
+
+#. module: hr_holidays_custom_ext
+msgid "Annual Leave Carryover Log"
+msgstr "سجل ترحيل الإجازة السنوية"
+
+#. module: hr_holidays_custom_ext
+msgid "Annual Leave Carryover Log: multi-company"
+msgstr "سجل ترحيل الإجازة السنوية: متعدد الشركات"
+
+#. module: hr_holidays_custom_ext
+msgid "Annual Leave Days"
+msgstr "أيام الإجازة السنوية"
+
+#. module: hr_holidays_custom_ext
+msgid "Annual Leave Days Per Year"
+msgstr "أيام الإجازة السنوية سنوياً"
+
+#. module: hr_holidays_custom_ext
+msgid "Annual Leave Type"
+msgstr "نوع الإجازة السنوية"
+
+#. module: hr_holidays_custom_ext
+msgid "Annual Leave: Carry Forward and Forfeit (Jan 1)"
+msgstr "الإجازة السنوية: الترحيل والمصادرة (١ يناير)"
+
+#. module: hr_holidays_custom_ext
+msgid "Annual Sick Leave Days"
+msgstr "أيام الإجازة المرضية السنوية"
+
+#. module: hr_holidays_custom_ext
+msgid "Annual leave carryover for %(company)s (%(year)s): "
+msgstr "ترحيل الإجازة السنوية لـ %(company)s (%(year)s): "
+
+#. module: hr_holidays_custom_ext
+msgid "Approval History"
+msgstr "سجل الاعتمادات"
+
+#. module: hr_holidays_custom_ext
+msgid "Approval Step"
+msgstr "خطوة الاعتماد"
+
+#. module: hr_holidays_custom_ext
+msgid "Approval Trail"
+msgstr "مسار الاعتماد"
+
+#. module: hr_holidays_custom_ext
+msgid "Approvals"
+msgstr "الاعتمادات"
+
+#. module: hr_holidays_custom_ext
+msgid "Approve"
+msgstr "اعتماد"
+
+#. module: hr_holidays_custom_ext
+msgid "Approved"
+msgstr "معتمد"
+
+#. module: hr_holidays_custom_ext
+msgid "Approved requests cannot be cancelled."
+msgstr "لا يمكن إلغاء الطلبات المعتمدة."
+
+#. module: hr_holidays_custom_ext
+msgid "Approver"
+msgstr "المعتمد"
+
+#. module: hr_holidays_custom_ext
+msgid "As Of Date"
+msgstr "حتى تاريخ"
+
+#. module: hr_holidays_custom_ext
+msgid "Calendar year this automated allocation belongs to."
+msgstr "السنة الميلادية التي ينتمي إليها هذا التخصيص الآلي."
+
+#. module: hr_holidays_custom_ext
+msgid "Calendar year to create annual grants and carryover allocations for."
+msgstr "السنة الميلادية لإنشاء المنح السنوية وتخصيصات الترحيل لها."
+
+#. module: hr_holidays_custom_ext
+msgid "Cancel"
+msgstr "إلغاء"
+
+#. module: hr_holidays_custom_ext
+msgid "Cancelled"
+msgstr "ملغى"
+
+#. module: hr_holidays_custom_ext
+msgid "Carried-Over Balance"
+msgstr "الرصيد المرحّل"
+
+#. module: hr_holidays_custom_ext
+msgid "Carryover Days Capped"
+msgstr "أيام الترحيل المحددة بالسقف"
+
+#. module: hr_holidays_custom_ext
+msgid "Carryover from %s"
+msgstr "ترحيل من %s"
+
+#. module: hr_holidays_custom_ext
+msgid "Comment"
+msgstr "ملاحظة"
+
+#. module: hr_holidays_custom_ext
+msgid "Company"
+msgstr "الشركة"
+
+#. module: hr_holidays_custom_ext
+msgid "Current Approver"
+msgstr "المعتمد الحالي"
+
+#. module: hr_holidays_custom_ext
+msgid "Current-Year Balance"
+msgstr "رصيد السنة الحالية"
+
+#. module: hr_holidays_custom_ext
+msgid "Days Remaining"
+msgstr "الأيام المتبقية"
+
+#. module: hr_holidays_custom_ext
+msgid "Days Used"
+msgstr "الأيام المستخدمة"
+
+#. module: hr_holidays_custom_ext
+msgid "Decision Date"
+msgstr "تاريخ القرار"
+
+#. module: hr_holidays_custom_ext
+msgid "Department"
+msgstr "القسم"
+
+#. module: hr_holidays_custom_ext
+msgid "Draft"
+msgstr "مسودة"
+
+#. module: hr_holidays_custom_ext
+msgid "Employee"
+msgstr "الموظف"
+
+#. module: hr_holidays_custom_ext
+msgid "Employee Balance Summary"
+msgstr "ملخص أرصدة الموظفين"
+
+#. module: hr_holidays_custom_ext
+msgid "End Date"
+msgstr "تاريخ الانتهاء"
+
+#. module: hr_holidays_custom_ext
+msgid "Enter the refusal reason..."
+msgstr "أدخل سبب الرفض..."
+
+#. module: hr_holidays_custom_ext
+msgid "Exceptional Holiday"
+msgstr "عطلة استثنائية"
+
+#. module: hr_holidays_custom_ext
+msgid "Exceptional Holiday Request"
+msgstr "طلب عطلة استثنائية"
+
+#. module: hr_holidays_custom_ext
+msgid "Exceptional Holiday: multi-company"
+msgstr "العطلة الاستثنائية: متعدد الشركات"
+
+#. module: hr_holidays_custom_ext
+msgid "Exceptional Holidays"
+msgstr "العطل الاستثنائية"
+
+#. module: hr_holidays_custom_ext
+msgid "Exceptional holiday %(ref)s requires your approval."
+msgstr "العطلة الاستثنائية %(ref)s تتطلب اعتمادك."
+
+#. module: hr_holidays_custom_ext
+msgid "Exceptional holiday approval"
+msgstr "اعتماد عطلة استثنائية"
+
+#. module: hr_holidays_custom_ext
+msgid "Exceptional holiday request submitted for approval."
+msgstr "تم إرسال طلب العطلة الاستثنائية للاعتماد."
+
+#. module: hr_holidays_custom_ext
+msgid "Explain why this request is refused..."
+msgstr "اشرح سبب رفض هذا الطلب..."
+
+#. module: hr_holidays_custom_ext
+msgid "Fixed annual leave days granted to each active employee at year start."
+msgstr "عدد أيام الإجازة السنوية الثابتة الممنوحة لكل موظف نشط عند بداية السنة."
+
+#. module: hr_holidays_custom_ext
+msgid "Holiday Name"
+msgstr "اسم العطلة"
+
+#. module: hr_holidays_custom_ext
+msgid "Last Annual Leave Carryover"
+msgstr "آخر ترحيل للإجازة السنوية"
+
+#. module: hr_holidays_custom_ext
+msgid "Last Carryover Run"
+msgstr "آخر تشغيل للترحيل"
+
+#. module: hr_holidays_custom_ext
+msgid "Last Carryover Summary"
+msgstr "ملخص آخر ترحيل"
+
+#. module: hr_holidays_custom_ext
+msgid "Last Renewal Run"
+msgstr "آخر تشغيل للتجديد"
+
+#. module: hr_holidays_custom_ext
+msgid "Last Renewal Summary"
+msgstr "ملخص آخر تجديد"
+
+#. module: hr_holidays_custom_ext
+msgid "Last Sick Leave Renewal"
+msgstr "آخر تجديد للإجازة المرضية"
+
+#. module: hr_holidays_custom_ext
+msgid "Leave Approval Log"
+msgstr "سجل اعتماد الإجازات"
+
+#. module: hr_holidays_custom_ext
+msgid "Leave Balance Summary: multi-company"
+msgstr "ملخص رصيد الإجازات: متعدد الشركات"
+
+#. module: hr_holidays_custom_ext
+msgid "Leave Type"
+msgstr "نوع الإجازة"
+
+#. module: hr_holidays_custom_ext
+msgid "Leave empty to apply to all working schedules in the company."
+msgstr "اتركه فارغاً لتطبيقه على جميع جداول العمل في الشركة."
+
+#. module: hr_holidays_custom_ext
+msgid "Manual"
+msgstr "يدوي"
+
+#. module: hr_holidays_custom_ext
+msgid "Manual Carryover"
+msgstr "ترحيل يدوي"
+
+#. module: hr_holidays_custom_ext
+msgid "Manual Renewal"
+msgstr "تجديد يدوي"
+
+#. module: hr_holidays_custom_ext
+msgid "Max Carryover Days"
+msgstr "الحد الأقصى لأيام الترحيل"
+
+#. module: hr_holidays_custom_ext
+msgid "Maximum unused annual leave days carried into the new year per employee. "
+msgstr "الحد الأقصى لأيام الإجازة السنوية غير المستخدمة المرحّلة إلى السنة الجديدة لكل موظف. "
+
+#. module: hr_holidays_custom_ext
+msgid "New"
+msgstr "جديد"
+
+#. module: hr_holidays_custom_ext
+msgid "No Time Off manager is configured for final approval. "
+msgstr "لم يتم تهيئة مسؤول الإجازات للاعتماد النهائي. "
+
+#. module: hr_holidays_custom_ext
+msgid "No allocations were created or updated."
+msgstr "لم يتم إنشاء أو تحديث أي تخصيصات."
+
+#. module: hr_holidays_custom_ext
+msgid "No approval chain could be resolved for this requester."
+msgstr "تعذّر تحديد سلسلة الاعتماد لمقدّم هذا الطلب."
+
+#. module: hr_holidays_custom_ext
+msgid "No pending approval step found."
+msgstr "لم يتم العثور على خطوة اعتماد قيد الانتظار."
+
+#. module: hr_holidays_custom_ext
+msgid "No public holiday record is linked yet."
+msgstr "لا يوجد سجل عطلة رسمية مرتبط بعد."
+
+#. module: hr_holidays_custom_ext
+msgid "Number of sick leave days allocated to each active employee on annual renewal."
+msgstr "عدد أيام الإجازة المرضية المخصصة لكل موظف نشط عند التجديد السنوي."
+
+#. module: hr_holidays_custom_ext
+msgid "Only cancelled or refused requests can be reset to draft."
+msgstr "يمكن إعادة الطلبات الملغاة أو المرفوضة فقط إلى مسودة."
+
+#. module: hr_holidays_custom_ext
+msgid "Only draft requests can be edited."
+msgstr "يمكن تعديل طلبات المسودة فقط."
+
+#. module: hr_holidays_custom_ext
+msgid "Only draft requests can be submitted."
+msgstr "يمكن إرسال الطلبات في حالة المسودة فقط."
+
+#. module: hr_holidays_custom_ext
+msgid "Origin Year"
+msgstr "سنة المنشأ"
+
+#. module: hr_holidays_custom_ext
+msgid "Please refuse one time off request at a time."
+msgstr "يرجى رفض طلب إجازة واحد في كل مرة."
+
+#. module: hr_holidays_custom_ext
+msgid "Print"
+msgstr "طباعة"
+
+#. module: hr_holidays_custom_ext
+msgid "Print Approval Log"
+msgstr "طباعة سجل الاعتماد"
+
+#. module: hr_holidays_custom_ext
+msgid "Public Holiday"
+msgstr "عطلة رسمية"
+
+#. module: hr_holidays_custom_ext
+msgid "Public holiday created and is now active for attendance and overtime."
+msgstr "تم إنشاء العطلة الرسمية وهي الآن فعّالة للحضور والعمل الإضافي."
+
+#. module: hr_holidays_custom_ext
+msgid "Reason"
+msgstr "السبب"
+
+#. module: hr_holidays_custom_ext
+msgid "Reference"
+msgstr "المرجع"
+
+#. module: hr_holidays_custom_ext
+msgid "Refusal Reason"
+msgstr "سبب الرفض"
+
+#. module: hr_holidays_custom_ext
+msgid "Refuse"
+msgstr "رفض"
+
+#. module: hr_holidays_custom_ext
+msgid "Refuse Exceptional Holiday"
+msgstr "رفض العطلة الاستثنائية"
+
+#. module: hr_holidays_custom_ext
+msgid "Refuse Request"
+msgstr "رفض الطلب"
+
+#. module: hr_holidays_custom_ext
+msgid "Refuse Time Off"
+msgstr "رفض طلب الإجازة"
+
+#. module: hr_holidays_custom_ext
+msgid "Refused"
+msgstr "مرفوض"
+
+#. module: hr_holidays_custom_ext
+msgid "Renewal Year"
+msgstr "سنة التجديد"
+
+#. module: hr_holidays_custom_ext
+msgid "Renewal year must be between 2000 and 2100."
+msgstr "يجب أن تكون سنة التجديد بين ٢٠٠٠ و٢١٠٠."
+
+#. module: hr_holidays_custom_ext
+msgid "Request refused by %(user)s: %(reason)s"
+msgstr "تم رفض الطلب بواسطة %(user)s: %(reason)s"
+
+#. module: hr_holidays_custom_ext
+msgid "Requested By"
+msgstr "مقدّم الطلب"
+
+#. module: hr_holidays_custom_ext
+msgid "Requester"
+msgstr "مقدّم الطلب"
+
+#. module: hr_holidays_custom_ext
+msgid "Reset to Draft"
+msgstr "إعادة إلى مسودة"
+
+#. module: hr_holidays_custom_ext
+msgid "Run Annual Leave Carryover"
+msgstr "تشغيل ترحيل الإجازة السنوية"
+
+#. module: hr_holidays_custom_ext
+msgid "Run Carryover"
+msgstr "تشغيل الترحيل"
+
+#. module: hr_holidays_custom_ext
+msgid "Run Carryover Now"
+msgstr "تشغيل الترحيل الآن"
+
+#. module: hr_holidays_custom_ext
+msgid "Run Now"
+msgstr "تشغيل الآن"
+
+#. module: hr_holidays_custom_ext
+msgid "Run Renewal"
+msgstr "تشغيل التجديد"
+
+#. module: hr_holidays_custom_ext
+msgid "Run Sick Leave Renewal"
+msgstr "تشغيل تجديد الإجازة المرضية"
+
+#. module: hr_holidays_custom_ext
+msgid "Scheduled"
+msgstr "مجدول"
+
+#. module: hr_holidays_custom_ext
+msgid "Second Approval"
+msgstr "الاعتماد الثاني"
+
+#. module: hr_holidays_custom_ext
+msgid "Sick Leave"
+msgstr "إجازة مرضية"
+
+#. module: hr_holidays_custom_ext
+msgid "Sick Leave %s"
+msgstr "إجازة مرضية %s"
+
+#. module: hr_holidays_custom_ext
+msgid "Sick Leave Days Per Year"
+msgstr "أيام الإجازة المرضية سنوياً"
+
+#. module: hr_holidays_custom_ext
+msgid "Sick Leave Renewal"
+msgstr "تجديد الإجازة المرضية"
+
+#. module: hr_holidays_custom_ext
+msgid "Sick Leave Renewal Complete"
+msgstr "اكتمل تجديد الإجازة المرضية"
+
+#. module: hr_holidays_custom_ext
+msgid "Sick Leave Renewal Log"
+msgstr "سجل تجديد الإجازة المرضية"
+
+#. module: hr_holidays_custom_ext
+msgid "Sick Leave Renewal Log: multi-company"
+msgstr "سجل تجديد الإجازة المرضية: متعدد الشركات"
+
+#. module: hr_holidays_custom_ext
+msgid "Sick leave renewal for %(company)s (%(year)s): "
+msgstr "تجديد الإجازة المرضية لـ %(company)s (%(year)s): "
+
+#. module: hr_holidays_custom_ext
+msgid "Start Date"
+msgstr "تاريخ البداية"
+
+#. module: hr_holidays_custom_ext
+msgid "Status"
+msgstr "الحالة"
+
+#. module: hr_holidays_custom_ext
+msgid "Submit"
+msgstr "إرسال"
+
+#. module: hr_holidays_custom_ext
+msgid "Target Year"
+msgstr "السنة المستهدفة"
+
+#. module: hr_holidays_custom_ext
+msgid "Target year must be between 2000 and 2100."
+msgstr "يجب أن تكون السنة المستهدفة بين ٢٠٠٠ و٢١٠٠."
+
+#. module: hr_holidays_custom_ext
+msgid "The end date must be on or after the start date."
+msgstr "يجب أن يكون تاريخ الانتهاء في نفس يوم البداية أو بعده."
+
+#. module: hr_holidays_custom_ext
+msgid "The selected approval step does not belong to this request."
+msgstr "خطوة الاعتماد المحددة لا تنتمي إلى هذا الطلب."
+
+#. module: hr_holidays_custom_ext
+msgid "Time Off Request"
+msgstr "طلب إجازة"
+
+#. module: hr_holidays_custom_ext
+msgid "Time Off Type"
+msgstr "نوع الإجازة"
+
+#. module: hr_holidays_custom_ext
+msgid "Time Off: Renew Annual Sick Leave Allocations (Jan 1)"
+msgstr "الإجازات: تجديد تخصيصات الإجازة المرضية السنوية (١ يناير)"
+
+#. module: hr_holidays_custom_ext
+msgid "Time off request must be confirmed or validated in order to refuse it."
+msgstr "يجب أن يكون طلب الإجازة مؤكداً أو معتمداً لرفضه."
+
+#. module: hr_holidays_custom_ext
+msgid "Time off type used for annual leave grants and carryover."
+msgstr "نوع الإجازة المستخدم لمنح الإجازة السنوية والترحيل."
+
+#. module: hr_holidays_custom_ext
+msgid "To Approve"
+msgstr "بانتظار الاعتماد"
+
+#. module: hr_holidays_custom_ext
+msgid "Total Accrued"
+msgstr "إجمالي المستحق"
+
+#. module: hr_holidays_custom_ext
+msgid "Total Available"
+msgstr "إجمالي المتاح"
+
+#. module: hr_holidays_custom_ext
+msgid "Trail Steps"
+msgstr "خطوات المسار"
+
+#. module: hr_holidays_custom_ext
+msgid "Trigger"
+msgstr "آلية التشغيل"
+
+#. module: hr_holidays_custom_ext
+msgid "Unused balance above the company carryover limit that was not carried forward."
+msgstr "الرصيد غير المستخدم الذي يتجاوز حد الترحيل في الشركة ولم يُرحَّل."
+
+#. module: hr_holidays_custom_ext
+msgid "Working Hours"
+msgstr "ساعات العمل"
+
+#. module: hr_holidays_custom_ext
+msgid "Year"
+msgstr "السنة"
+
+#. module: hr_holidays_custom_ext
+msgid "You are not allowed to refuse this request."
+msgstr "غير مسموح لك برفض هذا الطلب."

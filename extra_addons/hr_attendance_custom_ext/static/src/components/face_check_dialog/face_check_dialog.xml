@@ -2,11 +2,9 @@
 <templates xml:space="preserve">
 
 <t t-name="hr_attendance_custom_ext.FaceCheckDialog">
-    <Dialog title="'Face Verification'" size="'md'">
+    <Dialog t-att-title="dialogTitle" size="'md'">
         <div class="d-flex flex-column gap-3">
-            <p class="mb-0 text-muted">
-                Position your face in the frame to verify your identity before checking in.
-            </p>
+            <p class="mb-0 text-muted" t-esc="instructions"/>
             <div class="position-relative bg-dark rounded overflow-hidden" style="aspect-ratio: 4/3;">
                 <video t-ref="video" autoplay="autoplay" playsinline="playsinline" muted="muted"
                        class="w-100 h-100 object-fit-cover"/>
@@ -18,11 +16,11 @@
         </div>
         <t t-set-slot="footer">
             <button class="btn btn-secondary" t-on-click="props.close" t-att-disabled="state.processing">
-                Cancel
+                <t t-esc="cancelLabel"/>
             </button>
             <button class="btn btn-primary" t-on-click="captureAndVerify" t-att-disabled="state.processing or state.error">
-                <t t-if="state.processing">Verifying...</t>
-                <t t-else="">Capture &amp; Check In</t>
+                <t t-if="state.processing" t-esc="verifyingLabel"/>
+                <t t-else="" t-esc="captureLabel"/>
             </button>
         </t>
     </Dialog>
