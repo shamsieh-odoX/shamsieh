@@ -38,8 +38,6 @@
                             <field name="policy_id"/>
                             <field name="api_type"/>
                             <field name="active"/>
-                            <field name="auto_sync" readonly="1"/>
-                            <field name="sync_interval_minutes" readonly="1"/>
                             <field name="sync_lookback_hours" invisible="api_type != 'hikvision'"/>
                             <field name="device_timezone" invisible="api_type != 'hikvision'"
                                    placeholder="e.g. Asia/Amman"/>
@@ -62,9 +60,14 @@
                     <group string="Automatic Sync">
                         <div class="text-muted" colspan="2">
                             With HTTP Listening enabled (recommended), scans appear in Odoo within
-                            seconds via device push. Scheduled polling runs only as a fallback when
-                            no push is received within the interval below.
+                            seconds via device push. Turn off Auto Sync when Odoo runs in the cloud
+                            and cannot reach the device LAN IP (Odoo.sh). Polling is only needed as
+                            a fallback on the same local network.
                         </div>
+                        <field name="auto_sync"/>
+                        <field name="sync_interval_minutes"
+                               invisible="not auto_sync"
+                               readonly="not auto_sync"/>
                         <field name="last_sync_at" readonly="1"/>
                         <field name="last_sync_checkpoint" readonly="1"/>
                         <field name="last_successful_event_serial" readonly="1"/>

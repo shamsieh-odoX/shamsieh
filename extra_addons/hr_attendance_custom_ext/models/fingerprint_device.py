@@ -79,7 +79,13 @@ class FingerprintDevice(models.Model):
     last_sync_at = fields.Datetime(readonly=True)
     last_sync_message = fields.Text(readonly=True)
     active = fields.Boolean(default=True)
-    auto_sync = fields.Boolean(string='Auto Sync', default=True)
+    auto_sync = fields.Boolean(
+        string='Auto Sync',
+        default=True,
+        help='Poll the device over the network on a schedule. '
+             'Disable this when using HTTP Listening push only (required on Odoo.sh '
+             'because the cloud cannot reach LAN device IPs).',
+    )
     sync_interval_minutes = fields.Float(
         string='Polling Fallback Interval (minutes)',
         default=15.0,
