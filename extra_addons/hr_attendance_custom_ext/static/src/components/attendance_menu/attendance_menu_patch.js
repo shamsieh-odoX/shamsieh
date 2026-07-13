@@ -15,6 +15,28 @@ patch(ActivityMenu.prototype, {
         this.state.onBreak = false;
     },
 
+    get labelCheckIn() {
+        return _t("Check In");
+    },
+    get labelCheckOut() {
+        return _t("Check Out");
+    },
+    get labelBreakIn() {
+        return _t("Break In");
+    },
+    get labelBreakOut() {
+        return _t("Break Out");
+    },
+    get labelOnBreak() {
+        return _t("On Break");
+    },
+    get labelWorking() {
+        return _t("Working");
+    },
+    get labelOfficeDayHint() {
+        return _t("Office day — use the fingerprint device to check in and out.");
+    },
+
     _searchReadEmployeeFill() {
         super._searchReadEmployeeFill(...arguments);
         if (this.employee?.id) {
@@ -32,42 +54,17 @@ patch(ActivityMenu.prototype, {
         this._attendanceInProgress = true;
         await this.searchReadEmployee();
 
+        if (this.employee?.manual_attendance_allowed === false) {
+            this.notification.add(this.labelOfficeDayHint, {
+                title: _t("Attendance"),
+                type: "warning",
+            });
+            this._attendanceInProgress = false;
+            return;
+        }
+
         if (punchType === "check_in") {
-            if (this.employee?.check_in_requires_face && this.employee?.check_in_requires_home_pin) {
-                this._attendanceInProgress = false;
-                this.dialogService.add(ConfirmationDialog, {
-                    title: _t("Choose Check-In Method"),
-                    body: _t("Use Face Verification or Home PIN to check in."),
-                    confirmLabel: _t("Face Verification"),
-                    cancelLabel: _t("Home PIN"),
-                    confirm: async () => {
-                        this._openFaceCheckDialog();
-                    },
-                    cancel: () => {
-                        this._openHomePinDialog();
-                    },
-                });
-                return;
-            }
-            if (this.employee?.check_in_requires_face) {
-                this._openFaceCheckDialog();
-                return;
-            }
-            if (this.employee?.check_in_requires_home_pin) {
-                this._openHomePinDialog();
-                return;
-            }
-            if (this.employee?.check_in_requires_office_geo) {
-                if (!this.employee.office_geo_configured) {
-                    this.notification.add(
-                        _t("Office geolocation is not configured. Please contact HR."),
-                        { title: _t("Attendance Error"), type: "danger" }
-                    );
-                    this._attendanceInProgress = false;
-                    return;
-                }
-                return this._officeGeoPunch(punchType);
-            }
+            return this._homeManualCheckIn();
         }
 
         if (punchType === "check_out") {
@@ -88,10 +85,28 @@ patch(ActivityMenu.prototype, {
 
     async signInOut() {
         await this.searchReadEmployee();
+        if (this.employee?.manual_attendance_allowed === false) {
+            this.notification.add(this.labelOfficeDayHint, {
+                title: _t("Attendance"),
+                type: "warning",
+            });
+            return;
+        }
         if (this.state.checkedIn) {
             return this._confirmCheckOut();
         }
         return this.punch("check_in");
+    },
+
+    async _homeManualCheckIn() {
+        try {
+            this.employee = await rpc("/hr_attendance/systray_check_in_out", {});
+            this._searchReadEmployeeFill();
+        } catch (error) {
+            this._handleAttendanceError(error);
+        } finally {
+            this._attendanceInProgress = false;
+        }
     },
 
     _handleAttendanceError(error) {

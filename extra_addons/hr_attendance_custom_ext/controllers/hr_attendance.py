@@ -58,7 +58,7 @@ class HrAttendanceCustom(HrAttendance):
             return {'status': 'error', 'message': 'No employee linked to user.'}
         try:
             employee._validate_single_daily_check_in()
-            if employee._get_effective_work_location_type() != 'home':
+            if employee._get_attendance_scheduled_location() != 'home':
                 raise UserError('Home PIN check-in is only allowed on home schedule days.')
             if not employee._verify_home_attendance_pin(pin_code):
                 raise UserError('Invalid PIN code.')

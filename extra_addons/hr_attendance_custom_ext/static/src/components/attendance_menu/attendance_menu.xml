@@ -32,32 +32,37 @@
 
 <t t-name="hr_attendance_custom_ext.AttendancePunchButtons">
     <div class="d-flex flex-column gap-2 mt-3">
-        <div t-if="this.state.onBreak" class="text-center">
-            <span class="badge text-bg-warning fs-6">On Break</span>
+        <div t-if="this.employee?.manual_attendance_allowed === false" class="alert alert-info mb-0 py-2 px-3">
+            <small t-esc="this.labelOfficeDayHint"/>
         </div>
-        <div t-elif="this.state.checkedIn" class="text-center">
-            <span class="badge text-bg-success fs-6">Working</span>
-        </div>
-        <button t-if="!this.state.checkedIn"
-                t-on-click="() => this.punch('check_in')"
-                class="btn btn-success w-100">
-            <i class="fa fa-sign-in me-1"/> Check In
-        </button>
-        <button t-if="this.state.checkedIn and !this.state.onBreak"
-                t-on-click="() => this.punch('break_in')"
-                class="btn btn-warning w-100">
-            <i class="fa fa-coffee me-1"/> Break In
-        </button>
-        <button t-if="this.state.onBreak"
-                t-on-click="() => this.punch('break_out')"
-                class="btn btn-info w-100">
-            <i class="fa fa-briefcase me-1"/> Break Out
-        </button>
-        <button t-if="this.state.checkedIn and !this.state.onBreak"
-                t-on-click="() => this._confirmCheckOut()"
-                class="btn btn-danger w-100">
-            <i class="fa fa-sign-out me-1"/> Check Out
-        </button>
+        <t t-if="this.employee?.manual_attendance_allowed !== false">
+            <div t-if="this.state.onBreak" class="text-center">
+                <span class="badge text-bg-warning fs-6" t-esc="this.labelOnBreak"/>
+            </div>
+            <div t-elif="this.state.checkedIn" class="text-center">
+                <span class="badge text-bg-success fs-6" t-esc="this.labelWorking"/>
+            </div>
+            <button t-if="!this.state.checkedIn"
+                    t-on-click="() => this.punch('check_in')"
+                    class="btn btn-success w-100">
+                <i class="fa fa-sign-in me-1"/> <t t-esc="this.labelCheckIn"/>
+            </button>
+            <button t-if="this.state.checkedIn and !this.state.onBreak"
+                    t-on-click="() => this.punch('break_in')"
+                    class="btn btn-warning w-100">
+                <i class="fa fa-coffee me-1"/> <t t-esc="this.labelBreakIn"/>
+            </button>
+            <button t-if="this.state.onBreak"
+                    t-on-click="() => this.punch('break_out')"
+                    class="btn btn-info w-100">
+                <i class="fa fa-briefcase me-1"/> <t t-esc="this.labelBreakOut"/>
+            </button>
+            <button t-if="this.state.checkedIn and !this.state.onBreak"
+                    t-on-click="() => this._confirmCheckOut()"
+                    class="btn btn-danger w-100">
+                <i class="fa fa-sign-out me-1"/> <t t-esc="this.labelCheckOut"/>
+            </button>
+        </t>
     </div>
 </t>
 

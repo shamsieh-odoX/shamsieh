@@ -1,0 +1,151 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* hr_attendance_custom_ext
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-07-13 08:00+0000\n"
+"PO-Revision-Date: 2026-07-13 08:00+0000\n"
+"Last-Translator: \n"
+"Language-Team: Arabic\n"
+"Language: ar\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=6; plural=(n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 ? 4 : 5);\n"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields.selection,name:hr_attendance_custom_ext.selection__hr_attendance__hikvision_punch_type__check_in
+#: model:ir.model.fields.selection,name:hr_attendance_custom_ext.selection__hr_attendance_punch_log__punch_type__check_in
+msgid "Check In"
+msgstr "تسجيل الحضور"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields.selection,name:hr_attendance_custom_ext.selection__hr_attendance__hikvision_punch_type__check_out
+#: model:ir.model.fields.selection,name:hr_attendance_custom_ext.selection__hr_attendance_punch_log__punch_type__check_out
+msgid "Check Out"
+msgstr "تسجيل الانصراف"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields.selection,name:hr_attendance_custom_ext.selection__hr_attendance__hikvision_punch_type__break_in
+#: model:ir.model.fields.selection,name:hr_attendance_custom_ext.selection__hr_attendance_punch_log__punch_type__break_in
+msgid "Break In"
+msgstr "بدء الاستراحة"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields.selection,name:hr_attendance_custom_ext.selection__hr_attendance__hikvision_punch_type__break_out
+#: model:ir.model.fields.selection,name:hr_attendance_custom_ext.selection__hr_attendance_punch_log__punch_type__break_out
+msgid "Break Out"
+msgstr "العودة من الاستراحة"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields.selection,name:hr_attendance_custom_ext.selection__hr_employee__hikvision_presence_status__working
+msgid "Working"
+msgstr "في العمل"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields.selection,name:hr_attendance_custom_ext.selection__hr_employee__hikvision_presence_status__on_break
+msgid "On Break"
+msgstr "في استراحة"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields.selection,name:hr_attendance_custom_ext.selection__hr_employee__hikvision_presence_status__checked_out
+msgid "Checked Out"
+msgstr "تم تسجيل الانصراف"
+
+#. module: hr_attendance_custom_ext
+#: code:addons/hr_attendance_custom_ext/static/src/components/attendance_menu/attendance_menu_patch.js:0
+msgid "Check In"
+msgstr "تسجيل الحضور"
+
+#. module: hr_attendance_custom_ext
+#: code:addons/hr_attendance_custom_ext/static/src/components/attendance_menu/attendance_menu_patch.js:0
+msgid "Check Out"
+msgstr "تسجيل الانصراف"
+
+#. module: hr_attendance_custom_ext
+#: code:addons/hr_attendance_custom_ext/static/src/components/attendance_menu/attendance_menu_patch.js:0
+msgid "Break In"
+msgstr "بدء الاستراحة"
+
+#. module: hr_attendance_custom_ext
+#: code:addons/hr_attendance_custom_ext/static/src/components/attendance_menu/attendance_menu_patch.js:0
+msgid "Break Out"
+msgstr "العودة من الاستراحة"
+
+#. module: hr_attendance_custom_ext
+#: code:addons/hr_attendance_custom_ext/static/src/components/attendance_menu/attendance_menu_patch.js:0
+msgid "On Break"
+msgstr "في استراحة"
+
+#. module: hr_attendance_custom_ext
+#: code:addons/hr_attendance_custom_ext/static/src/components/attendance_menu/attendance_menu_patch.js:0
+msgid "Working"
+msgstr "في العمل"
+
+#. module: hr_attendance_custom_ext
+#: code:addons/hr_attendance_custom_ext/static/src/components/attendance_menu/attendance_menu_patch.js:0
+msgid "Office day — use the fingerprint device to check in and out."
+msgstr "يوم عمل في المكتب — استخدم جهاز البصمة لتسجيل الحضور والانصراف."
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_hr_attendance__hikvision_punch_type
+msgid "Punch Type"
+msgstr "نوع التسجيل"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_hr_employee__hikvision_presence_status
+msgid "Work State"
+msgstr "حالة العمل"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_hr_attendance_punch_log__punch_history
+msgid "Punch History"
+msgstr "سجل التسجيلات"
+
+#. module: hr_attendance_custom_ext
+#: code:addons/hr_attendance_custom_ext/models/hr_employee.py:0
+msgid "Manual attendance is not allowed on office schedule days. Please use the fingerprint device to check in and out."
+msgstr "التسجيل اليدوي غير مسموح في أيام العمل بالمكتب. يرجى استخدام جهاز البصمة لتسجيل الحضور والانصراف."
+
+#. module: hr_attendance_custom_ext
+#: code:addons/hr_attendance_custom_ext/static/src/components/attendance_menu/attendance_menu_patch.js:0
+msgid "Attendance Error"
+msgstr "خطأ في الحضور"
+
+#. module: hr_attendance_custom_ext
+#: code:addons/hr_attendance_custom_ext/static/src/components/attendance_menu/attendance_menu_patch.js:0
+msgid "Check out"
+msgstr "تسجيل الانصراف"
+
+#. module: hr_attendance_custom_ext
+#: code:addons/hr_attendance_custom_ext/static/src/components/attendance_menu/attendance_menu_patch.js:0
+msgid "Are you sure you want to check out now? You will not be able to check in again today."
+msgstr "هل أنت متأكد من تسجيل الانصراف الآن؟ لن تتمكن من تسجيل الحضور مرة أخرى اليوم."
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields.selection,name:hr_attendance_custom_ext.selection__resource_calendar_attendance__location_type__office
+msgid "Office"
+msgstr "المكتب"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields.selection,name:hr_attendance_custom_ext.selection__resource_calendar_attendance__location_type__home
+msgid "Home"
+msgstr "العمل عن بُعد"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_fingerprint_device__http_listening_url
+msgid "Callback URL"
+msgstr "رابط الاستقبال"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_fingerprint_device__http_listening_enabled
+msgid "HTTP Listening"
+msgstr "الاستقبال عبر HTTP"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.ui.menu,name:hr_attendance_custom_ext.menu_fingerprint_devices
+msgid "Fingerprint Devices"
+msgstr "أجهزة البصمة"

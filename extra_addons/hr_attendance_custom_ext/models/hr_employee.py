@@ -292,6 +292,28 @@ class HrEmployee(models.Model):
         })
         return True
 
+    def _get_attendance_scheduled_location(self, check_datetime=None):
+        """Schedule-only location for attendance rules. Defaults to office."""
+        self.ensure_one()
+        location = self._get_schedule_location_type(
+            check_datetime=check_datetime or fields.Datetime.now(),
+        )
+        if location == 'home':
+            return 'home'
+        return 'office'
+
+    def _manual_attendance_allowed(self, check_datetime=None):
+        self.ensure_one()
+        return self._get_attendance_scheduled_location(check_datetime) == 'home'
+
+    def _raise_if_manual_attendance_blocked(self, check_datetime=None):
+        self.ensure_one()
+        if not self._manual_attendance_allowed(check_datetime):
+            raise UserError(_(
+                'Manual attendance is not allowed on office schedule days. '
+                'Please use the fingerprint device to check in and out.'
+            ))
+
     def _get_effective_work_location_type(self):
         self.ensure_one()
         schedule_location = self._get_schedule_location_type()
@@ -492,6 +514,7 @@ class HrEmployee(models.Model):
 
     def action_systray_punch(self, punch_type):
         self.ensure_one()
+        self._raise_if_manual_attendance_blocked()
         return self.hikvision_process_punch(
             punch_type=punch_type,
             punch_time=fields.Datetime.now(),
@@ -504,13 +527,16 @@ class HrEmployee(models.Model):
 
         self.ensure_one()
         response = HrAttendance._get_user_attendance_data(self)
-        location_type = self._get_effective_work_location_type()
+        scheduled_location = self._get_attendance_scheduled_location()
+        manual_allowed = scheduled_location == 'home'
         policy = self.env['fingerprint.attendance.policy'].get_company_default(self.company_id)
         response.update({
-            'work_location_type': location_type,
-            'check_in_requires_face': location_type == 'home' and bool(self.remote_attendance_allowed),
-            'check_in_requires_home_pin': location_type == 'home',
-            'check_in_requires_office_geo': location_type == 'office',
+            'scheduled_location': scheduled_location,
+            'manual_attendance_allowed': manual_allowed,
+            'work_location_type': scheduled_location,
+            'check_in_requires_face': False,
+            'check_in_requires_home_pin': False,
+            'check_in_requires_office_geo': False,
             'office_geo_configured': self._is_office_geo_configured(),
             'single_check_in_per_day': not policy.allow_multiple_attendances_per_day,
             'hikvision_presence_status': self.hikvision_presence_status or 'checked_out',
@@ -569,22 +595,11 @@ class HrEmployee(models.Model):
         if self.attendance_state == 'checked_in':
             return
 
+        self._raise_if_manual_attendance_blocked()
         self._validate_single_daily_check_in()
-        location_type = self._get_effective_work_location_type()
-
-        if location_type == 'home':
-            if not via_face and not via_home_pin:
-                raise UserError(_('Face verification or PIN is required when working from home.'))
-            return
-
-        if location_type == 'office':
-            if via_face or via_home_pin:
-                raise UserError(_('Office check-in requires geolocation. Use the attendance menu instead.'))
-            latitude = geo_information.get('latitude') if geo_information else False
-            longitude = geo_information.get('longitude') if geo_information else False
-            self._validate_office_geolocation(latitude, longitude, device_location=device_location)
 
     def _attendance_action_change(self, geo_information=None):
+        self._raise_if_manual_attendance_blocked()
         if self.attendance_state != 'checked_in':
             self._validate_attendance_check_in(
                 geo_information,

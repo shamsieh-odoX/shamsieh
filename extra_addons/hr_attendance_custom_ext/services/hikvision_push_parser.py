@@ -24,7 +24,21 @@ def _unwrap_event_dict(data: dict[str, Any]) -> dict[str, Any]:
     for key in ('AccessControllerEvent', 'AcsEvent', 'EventNotificationAlert'):
         nested = data.get(key)
         if isinstance(nested, dict):
-            return nested
+            merged = _unwrap_event_dict(nested)
+            for wrapper_key in (
+                'dateTime',
+                'time',
+                'eventType',
+                'eventState',
+                'eventDescription',
+                'ipAddress',
+                'channelID',
+                'majorEventType',
+                'subEventType',
+            ):
+                if wrapper_key in data and wrapper_key not in merged:
+                    merged[wrapper_key] = data[wrapper_key]
+            return merged
     if ACS_FIELD_MARKERS.intersection(data):
         return data
     event_list = data.get('EventNotificationAlertList')

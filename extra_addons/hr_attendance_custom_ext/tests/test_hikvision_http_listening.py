@@ -180,6 +180,7 @@ class TestHikvisionHttpListeningController(HttpCase):
         cls.env['ir.config_parameter'].sudo().set_param('web.base.url', cls.base_url())
         cls.employee = cls.env['hr.employee'].create({
             'name': 'HTTP Controller Employee',
+            'barcode': 'HC001',
             'biometric_device_user_id': 'HC001',
         })
         cls.device = cls.env['fingerprint.device'].create({
@@ -212,33 +213,30 @@ class TestHikvisionHttpListeningController(HttpCase):
     def test_valid_push_records_payload(self):
         payload = dict(SAMPLE_EVENT_LOG)
         payload['serialNo'] = 9200
+        payload['employeeNoString'] = 'HC001'
+        payload['attendanceStatus'] = 'checkIn'
         body = self._post_event_log(self.token, payload)
-        self.assertEqual(body, {'status': 'ok'})
-        log = self.env['fingerprint.device.log'].search([
-            ('device_id', '=', self.device.id),
-            ('serial_no', '=', '9200'),
+        self.assertEqual(body['status'], 'ok')
+        self.assertEqual(body.get('punch_type'), 'check_in')
+        attendance = self.env['hr.attendance'].search([
+            ('employee_id', '=', self.employee.id),
         ], limit=1)
-        self.assertTrue(log)
-        self.assertEqual(log.state, 'draft')
-        self.assertFalse(log.attendance_id)
-        self.assertEqual(log.raw_payload, payload)
-        self.assertEqual(log.event_type, 'AccessControllerEvent')
-        self.assertEqual(log.major, 5)
-        self.assertEqual(log.minor, 38)
-        self.assertEqual(log.verify_no, '42')
+        self.assertTrue(attendance)
+        self.assertEqual(attendance.attendance_source, 'fingerprint')
+        self.assertTrue(self.device.http_listening_last_at)
 
     def test_unknown_payload_keys_still_recorded(self):
         payload = dict(SAMPLE_EVENT_LOG)
         payload['serialNo'] = 9203
+        payload['employeeNoString'] = 'HC001'
+        payload['attendanceStatus'] = 'checkIn'
         payload['customField'] = 'probe'
         body = self._post_event_log(self.token, payload)
-        self.assertEqual(body, {'status': 'ok'})
-        log = self.env['fingerprint.device.log'].search([
-            ('device_id', '=', self.device.id),
-            ('serial_no', '=', '9203'),
+        self.assertEqual(body['status'], 'ok')
+        attendance = self.env['hr.attendance'].search([
+            ('employee_id', '=', self.employee.id),
         ], limit=1)
-        self.assertTrue(log)
-        self.assertEqual(log.raw_payload['customField'], 'probe')
+        self.assertTrue(attendance)
 
     def test_wrong_token(self):
         event_log = json.dumps(SAMPLE_EVENT_LOG)
