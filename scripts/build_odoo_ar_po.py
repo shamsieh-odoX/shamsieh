@@ -48,6 +48,12 @@ MODEL_REF = {
     'mail.activity.type': 'name',
     'hr.overtime.type': 'name',
     'hr.leave.type': 'name',
+    'project.task.template': 'name',
+    'project.task.template.line': 'name',
+}
+
+RECORD_TEXT_FIELDS = {
+    'project.task.template': ('name', 'description'),
 }
 
 
@@ -117,42 +123,64 @@ def po_escape(text: str) -> str:
 def extract_python(module: str, path: Path, get) -> None:
     text = path.read_text(encoding='utf-8', errors='replace')
     rel = str(path.relative_to(ROOT / 'extra_addons' / module))
-    current_model = None
-    for line in text.splitlines():
-        m = re.search(r"_name\s*=\s*['\"]([^'\"]+)['\"]", line)
-        if m:
-            current_model = m.group(1)
-        m = re.search(r"_description\s*=\s*['\"]([^'\"]+)['\"]", line)
-        if m and current_model:
-            msgid = m.group(1)
-            get(msgid).add(Occurrence(model_xmlid(module, current_model, 'name')))
-        for pattern, kind in (
-            (r"string\s*=\s*['\"]([^'\"]+)['\"]", 'string'),
-            (r"help\s*=\s*['\"]([^'\"]+)['\"]", 'help'),
-        ):
-            for m in re.finditer(pattern, line):
-                msgid = m.group(1)
-                if current_model and kind == 'string':
-                    get(msgid).add(Occurrence(field_xmlid(module, current_model, _field_name_from_line(line))))
-                elif current_model and kind == 'help':
-                    get(msgid).add(Occurrence(field_xmlid(module, current_model, _field_name_from_line(line))))
-        for m in re.finditer(r"selection\s*=\s*\[(.*?)\]", line, re.DOTALL):
-            if current_model:
-                field_name = _field_name_from_line(line)
-                for sm in re.finditer(r"\(\s*['\"]([^'\"]+)['\"]\s*,\s*['\"]([^'\"]+)['\"]", m.group(1)):
+    models = _detect_models(text)
+    if not models:
+        return
+    for model_name in models:
+        desc_m = re.search(r"_description\s*=\s*['\"]([^'\"]+)['\"]", text)
+        if desc_m:
+            get(desc_m.group(1)).add(Occurrence(model_xmlid(module, model_name, 'name')))
+        for field_name, block in _parse_field_blocks(text):
+            for sm in re.finditer(r"string\s*=\s*['\"]([^'\"]+)['\"]", block):
+                get(sm.group(1)).add(Occurrence(field_xmlid(module, model_name, field_name)))
+            for sm in re.finditer(r"help\s*=\s*['\"]([^'\"]+)['\"]", block):
+                get(sm.group(1)).add(Occurrence(field_xmlid(module, model_name, field_name)))
+            sel_m = re.search(r"selection\s*=\s*\[(.*?)\]\s*,?", block, re.DOTALL)
+            if not sel_m:
+                sel_m = re.search(r"selection\s*=\s*\[(.*?)\]\s*\)", block, re.DOTALL)
+            if sel_m:
+                for sm in re.finditer(
+                    r"\(\s*['\"]([^'\"]+)['\"]\s*,\s*['\"]([^'\"]+)['\"]",
+                    sel_m.group(1),
+                    re.DOTALL,
+                ):
                     value, label = sm.group(1), sm.group(2)
-                    get(label).add(Occurrence(selection_xmlid(module, current_model, field_name, value)))
-        for m in re.finditer(r"_\(\s*['\"]((?:\\.|[^'\"])+?)['\"]", line):
-            msgid = m.group(1)
-            get(msgid).add(code_ref(module, rel, js=False))
-        for m in re.finditer(r"(?:UserError|ValidationError|AccessError)\(_\(\s*['\"]((?:\\.|[^'\"])+?)['\"]", line):
-            msgid = m.group(1)
-            get(msgid).add(code_ref(module, rel, js=False))
+                    get(label).add(Occurrence(selection_xmlid(module, model_name, field_name, value)))
+    for m in re.finditer(r"_\(\s*['\"]((?:\\.|[^'\"])+?)['\"]", text):
+        get(m.group(1)).add(code_ref(module, rel, js=False))
+    for m in re.finditer(
+        r"(?:UserError|ValidationError|AccessError)\(_\(\s*['\"]((?:\\.|[^'\"])+?)['\"]",
+        text,
+    ):
+        get(m.group(1)).add(code_ref(module, rel, js=False))
 
 
-def _field_name_from_line(line: str) -> str:
-    m = re.match(r'\s*(\w+)\s*=\s*fields\.', line)
-    return m.group(1) if m else 'unknown'
+def _detect_models(text: str) -> list[str]:
+    name_m = re.search(r"^\s*_name\s*=\s*['\"]([^'\"]+)['\"]", text, re.MULTILINE)
+    inherit_m = re.search(r"^\s*_inherit\s*=\s*['\"]([^'\"]+)['\"]", text, re.MULTILINE)
+    if name_m:
+        return [name_m.group(1)]
+    if inherit_m:
+        return [inherit_m.group(1)]
+    return []
+
+
+def _parse_field_blocks(text: str) -> list[tuple[str, str]]:
+    results: list[tuple[str, str]] = []
+    for m in re.finditer(r'(\w+)\s*=\s*fields\.\w+\(', text):
+        field_name = m.group(1)
+        start = m.end() - 1
+        depth = 0
+        for i in range(start, len(text)):
+            ch = text[i]
+            if ch == '(':
+                depth += 1
+            elif ch == ')':
+                depth -= 1
+                if depth == 0:
+                    results.append((field_name, text[m.start():i + 1]))
+                    break
+    return results
 
 
 def extract_js(module: str, path: Path, get) -> None:
@@ -193,7 +221,18 @@ def extract_xml(module: str, path: Path, get) -> None:
         re.DOTALL,
     ):
         rec_id, rec_model, body = record_m.group(1), record_m.group(2), record_m.group(3)
-        if rec_model in MODEL_REF:
+        if rec_model in RECORD_TEXT_FIELDS:
+            for field_name in RECORD_TEXT_FIELDS[rec_model]:
+                name_m = re.search(
+                    rf'<field\s+name=["\']{field_name}["\'][^>]*>([^<]+)</field>',
+                    body,
+                )
+                if name_m:
+                    prop = 'name' if field_name == 'name' else field_name
+                    get(name_m.group(1).strip()).add(Occurrence(
+                        f'model:{rec_model},{prop}:{module}.{rec_id}'
+                    ))
+        elif rec_model in MODEL_REF:
             name_m = re.search(r'<field\s+name=["\']name["\'][^>]*>([^<]+)</field>', body)
             if name_m:
                 get(name_m.group(1).strip()).add(Occurrence(record_ref(rec_model, module, rec_id)))
@@ -214,6 +253,10 @@ def extract_xml(module: str, path: Path, get) -> None:
                 get(sm.group(1)).add(Occurrence(view_terms_ref(module, view_id)))
             for sm in re.finditer(r'title=["\']([^"\']+)["\']', body):
                 get(sm.group(1)).add(Occurrence(view_terms_ref(module, view_id)))
+            for sm in re.finditer(r'<(?:strong|p|em|li|span)[^>]*>([^<]{3,})</', body):
+                val = sm.group(1).strip()
+                if val and not val.startswith('<'):
+                    get(val).add(Occurrence(view_terms_ref(module, view_id)))
 
     for pattern in (
         r'string="([^"]+)"',

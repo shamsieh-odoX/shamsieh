@@ -30,12 +30,14 @@ class HrOvertimeRequest(models.Model):
     department_id = fields.Many2one(
         'hr.department',
         related='employee_id.department_id',
+        string='Department',
         store=True,
         readonly=True,
     )
     manager_id = fields.Many2one(
         'hr.employee',
         related='employee_id.parent_id',
+        string='Manager',
         store=True,
         readonly=True,
     )
@@ -96,7 +98,7 @@ class HrOvertimeRequest(models.Model):
         domain="[('project_id', '=', project_id), ('allow_timesheets', '=', True)]",
         tracking=True,
     )
-    description = fields.Text(required=True, tracking=True)
+    description = fields.Text(string='Description', required=True, tracking=True)
     attachment_ids = fields.Many2many('ir.attachment', string='Attachments')
     state = fields.Selection(
         selection=[

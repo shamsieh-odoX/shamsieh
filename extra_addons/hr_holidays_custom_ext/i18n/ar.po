@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 19.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-13 11:26+0000\n"
-"PO-Revision-Date: 2026-07-13 11:26+0000\n"
+"POT-Creation-Date: 2026-07-13 11:59+0000\n"
+"PO-Revision-Date: 2026-07-13 11:59+0000\n"
 "Last-Translator: Shamsieh\n"
 "Language-Team: Arabic\n"
 "Language: ar\n"
@@ -31,6 +31,16 @@ msgstr "سبب الرفض مطلوب."
 #: code:addons/hr_holidays_custom_ext/models/hr_exceptional_holiday.py:0
 msgid "A requester must be set before submitting."
 msgstr "يجب تحديد مقدّم الطلب قبل الإرسال."
+
+#. module: hr_holidays_custom_ext
+#: model:ir.model.fields,field_description:hr_holidays_custom_ext.field_hr_leave_allocation__allocation_origin
+msgid "Allocation Origin"
+msgstr "مصدر التخصيص"
+
+#. module: hr_holidays_custom_ext
+#: model:ir.model.fields.selection,name:hr_holidays_custom_ext.selection__hr_leave_allocation__allocation_origin__annual_grant
+msgid "Annual Grant"
+msgstr "منحة سنوية"
 
 #. module: hr_holidays_custom_ext
 #. odoo-python
@@ -70,8 +80,14 @@ msgid "Annual Leave Days"
 msgstr "أيام الإجازة السنوية"
 
 #. module: hr_holidays_custom_ext
+#: model:ir.model.fields,field_description:hr_holidays_custom_ext.field_res_company__annual_leave_days_per_year
+msgid "Annual Leave Days Per Year"
+msgstr "أيام الإجازة السنوية سنوياً"
+
+#. module: hr_holidays_custom_ext
 #. odoo-python
 #: code:addons/hr_holidays_custom_ext/views/res_config_settings_views.xml:0
+#: model:ir.model.fields,field_description:hr_holidays_custom_ext.field_res_company__annual_leave_type_id
 #: model_terms:ir.ui.view,arch_db:hr_holidays_custom_ext.res_config_settings_view_form_sick_leave_renewal
 msgid "Annual Leave Type"
 msgstr "نوع الإجازة السنوية"
@@ -85,22 +101,29 @@ msgstr "أيام الإجازة المرضية السنوية"
 
 #. module: hr_holidays_custom_ext
 #. odoo-python
+#: code:addons/hr_holidays_custom_ext/models/hr_annual_leave_carryover_log.py:0
+msgid "Annual leave carryover for %(company)s (%(year)s): "
+msgstr "ترحيل الإجازة السنوية لـ %(company)s (%(year)s): "
+
+#. module: hr_holidays_custom_ext
+#. odoo-python
 #: code:addons/hr_holidays_custom_ext/models/hr_exceptional_holiday.py:0
 #. odoo-python
 #: code:addons/hr_holidays_custom_ext/views/hr_exceptional_holiday_views.xml:0
-#: model:ir.model.fields,field_description:hr_holidays_custom_ext.field_hr_exceptional_holiday__unknown
+#: model:ir.model.fields,field_description:hr_holidays_custom_ext.field_hr_exceptional_holiday__approval_line_ids
 #: model_terms:ir.ui.view,arch_db:hr_holidays_custom_ext.hr_exceptional_holiday_view_form
 msgid "Approval History"
 msgstr "سجل الاعتمادات"
 
 #. module: hr_holidays_custom_ext
-#: model:ir.model.fields,field_description:hr_holidays_custom_ext.field_hr_exceptional_holiday_refuse_wizard__unknown
+#: model:ir.model.fields,field_description:hr_holidays_custom_ext.field_hr_exceptional_holiday_refuse_wizard__approval_line_id
 msgid "Approval Step"
 msgstr "خطوة الاعتماد"
 
 #. module: hr_holidays_custom_ext
 #. odoo-python
 #: code:addons/hr_holidays_custom_ext/views/hr_leave_approval_report_views.xml:0
+#: model:ir.model.fields,field_description:hr_holidays_custom_ext.field_hr_leave__approval_trail_ids
 #: model_terms:ir.ui.view,arch_db:hr_holidays_custom_ext.hr_leave_approval_log_form
 #: model_terms:ir.ui.view,arch_db:hr_holidays_custom_ext.hr_leave_view_form_approval_trail
 msgid "Approval Trail"
@@ -111,7 +134,7 @@ msgstr "مسار الاعتماد"
 #: code:addons/hr_holidays_custom_ext/views/hr_exceptional_holiday_views.xml:0
 #: model_terms:ir.ui.view,arch_db:hr_holidays_custom_ext.hr_exceptional_holiday_view_form
 msgid "Approvals"
-msgstr "الاعتمادات"
+msgstr "الموافقات"
 
 #. module: hr_holidays_custom_ext
 #. odoo-python
@@ -125,6 +148,9 @@ msgstr "اعتماد"
 #: code:addons/hr_holidays_custom_ext/views/hr_exceptional_holiday_views.xml:0
 #. odoo-python
 #: code:addons/hr_holidays_custom_ext/views/hr_leave_approval_report_views.xml:0
+#: model:ir.model.fields.selection,name:hr_holidays_custom_ext.selection__hr_exceptional_holiday__state__hr_approved
+#: model:ir.model.fields.selection,name:hr_holidays_custom_ext.selection__hr_exceptional_holiday_approval_line__state__approved
+#: model:ir.model.fields.selection,name:hr_holidays_custom_ext.selection__hr_leave_approval_trail__state__approved
 #: model_terms:ir.ui.view,arch_db:hr_holidays_custom_ext.hr_exceptional_holiday_view_search
 #: model_terms:ir.ui.view,arch_db:hr_holidays_custom_ext.hr_leave_approval_log_search
 msgid "Approved"
@@ -148,7 +174,12 @@ msgid "As Of Date"
 msgstr "حتى تاريخ"
 
 #. module: hr_holidays_custom_ext
-#: model:ir.model.fields,field_description:hr_holidays_custom_ext.field_hr_annual_leave_carryover_wizard__unknown
+#: model:ir.model.fields,field_description:hr_holidays_custom_ext.field_hr_leave_allocation__origin_year
+msgid "Calendar year this automated allocation belongs to."
+msgstr "السنة الميلادية التي ينتمي إليها هذا التخصيص الآلي."
+
+#. module: hr_holidays_custom_ext
+#: model:ir.model.fields,field_description:hr_holidays_custom_ext.field_hr_annual_leave_carryover_wizard__target_year
 msgid "Calendar year to create annual grants and carryover allocations for."
 msgstr "السنة الميلادية لإنشاء المنح السنوية وتخصيصات الترحيل لها."
 
@@ -174,6 +205,9 @@ msgstr "إلغاء"
 #. module: hr_holidays_custom_ext
 #. odoo-python
 #: code:addons/hr_holidays_custom_ext/views/hr_leave_approval_report_views.xml:0
+#: model:ir.model.fields.selection,name:hr_holidays_custom_ext.selection__hr_exceptional_holiday__state__cancel
+#: model:ir.model.fields.selection,name:hr_holidays_custom_ext.selection__hr_leave_approval_trail__stage__cancelled
+#: model:ir.model.fields.selection,name:hr_holidays_custom_ext.selection__hr_leave_approval_trail__state__cancelled
 #: model_terms:ir.ui.view,arch_db:hr_holidays_custom_ext.hr_leave_approval_log_search
 msgid "Cancelled"
 msgstr "ملغى"
@@ -184,7 +218,7 @@ msgid "Carried-Over Balance"
 msgstr "الرصيد المرحّل"
 
 #. module: hr_holidays_custom_ext
-#: model:ir.model.fields,field_description:hr_holidays_custom_ext.field_hr_annual_leave_carryover_log__unknown
+#: model:ir.model.fields,field_description:hr_holidays_custom_ext.field_hr_annual_leave_carryover_log__carryover_days_capped
 msgid "Carryover Days Capped"
 msgstr "أيام الترحيل المحددة بالسقف"
 
@@ -207,10 +241,10 @@ msgstr "ملاحظة"
 #: code:addons/hr_holidays_custom_ext/views/hr_leave_balance_summary_views.xml:0
 #. odoo-python
 #: code:addons/hr_holidays_custom_ext/views/hr_sick_leave_renewal_log_views.xml:0
-#: model:ir.model.fields,field_description:hr_holidays_custom_ext.field_hr_annual_leave_carryover_wizard__unknown
-#: model:ir.model.fields,field_description:hr_holidays_custom_ext.field_hr_exceptional_holiday__unknown
+#: model:ir.model.fields,field_description:hr_holidays_custom_ext.field_hr_annual_leave_carryover_wizard__company_id
+#: model:ir.model.fields,field_description:hr_holidays_custom_ext.field_hr_exceptional_holiday__company_id
 #: model:ir.model.fields,field_description:hr_holidays_custom_ext.field_hr_leave_balance_summary__company_id
-#: model:ir.model.fields,field_description:hr_holidays_custom_ext.field_hr_sick_leave_renewal_wizard__unknown
+#: model:ir.model.fields,field_description:hr_holidays_custom_ext.field_hr_sick_leave_renewal_wizard__company_id
 #: model_terms:ir.ui.view,arch_db:hr_holidays_custom_ext.hr_exceptional_holiday_view_search
 #: model_terms:ir.ui.view,arch_db:hr_holidays_custom_ext.hr_leave_balance_summary_view_search
 #: model_terms:ir.ui.view,arch_db:hr_holidays_custom_ext.view_hr_sick_leave_renewal_log_search
@@ -218,7 +252,7 @@ msgid "Company"
 msgstr "الشركة"
 
 #. module: hr_holidays_custom_ext
-#: model:ir.model.fields,field_description:hr_holidays_custom_ext.field_hr_exceptional_holiday__unknown
+#: model:ir.model.fields,field_description:hr_holidays_custom_ext.field_hr_exceptional_holiday__current_approver_id
 msgid "Current Approver"
 msgstr "المعتمد الحالي"
 
@@ -226,6 +260,16 @@ msgstr "المعتمد الحالي"
 #: model:ir.model.fields,field_description:hr_holidays_custom_ext.field_hr_leave_balance_summary__current_year_balance
 msgid "Current-Year Balance"
 msgstr "رصيد السنة الحالية"
+
+#. module: hr_holidays_custom_ext
+#: model_terms:ir.ui.view,arch_db:hr_holidays_custom_ext.res_config_settings_view_form_sick_leave_renewal
+msgid "Days"
+msgstr "Days"
+
+#. module: hr_holidays_custom_ext
+#: model_terms:ir.ui.view,arch_db:hr_holidays_custom_ext.res_config_settings_view_form_sick_leave_renewal
+msgid "Days (0 = unlimited)"
+msgstr "أيام (٠ = بلا حد)"
 
 #. module: hr_holidays_custom_ext
 #: model:ir.model.fields,field_description:hr_holidays_custom_ext.field_hr_leave_balance_summary__days_remaining
@@ -248,15 +292,21 @@ msgstr "تاريخ القرار"
 #: code:addons/hr_holidays_custom_ext/views/hr_leave_approval_report_views.xml:0
 #. odoo-python
 #: code:addons/hr_holidays_custom_ext/views/hr_leave_balance_summary_views.xml:0
-#: model:ir.model.fields,field_description:hr_holidays_custom_ext.field_hr_leave_balance_summary__unknown
+#: model:ir.model.fields,field_description:hr_holidays_custom_ext.field_hr_leave_balance_summary__department_id
 #: model_terms:ir.ui.view,arch_db:hr_holidays_custom_ext.hr_leave_approval_log_search
 #: model_terms:ir.ui.view,arch_db:hr_holidays_custom_ext.hr_leave_balance_summary_view_search
 msgid "Department"
 msgstr "القسم"
 
 #. module: hr_holidays_custom_ext
+#: model:ir.model.fields.selection,name:hr_holidays_custom_ext.selection__hr_exceptional_holiday_approval_line__role__dept_manager
+msgid "Department Manager"
+msgstr "مدير القسم"
+
+#. module: hr_holidays_custom_ext
 #. odoo-python
 #: code:addons/hr_holidays_custom_ext/views/hr_exceptional_holiday_views.xml:0
+#: model:ir.model.fields.selection,name:hr_holidays_custom_ext.selection__hr_exceptional_holiday__state__draft
 #: model_terms:ir.ui.view,arch_db:hr_holidays_custom_ext.hr_exceptional_holiday_view_search
 msgid "Draft"
 msgstr "مسودة"
@@ -299,8 +349,8 @@ msgid "Enter the refusal reason..."
 msgstr "أدخل سبب الرفض..."
 
 #. module: hr_holidays_custom_ext
-#: model:ir.model.fields,field_description:hr_holidays_custom_ext.field_hr_exceptional_holiday_approval_line__unknown
-#: model:ir.model.fields,field_description:hr_holidays_custom_ext.field_hr_exceptional_holiday_refuse_wizard__unknown
+#: model:ir.model.fields,field_description:hr_holidays_custom_ext.field_hr_exceptional_holiday_approval_line__request_id
+#: model:ir.model.fields,field_description:hr_holidays_custom_ext.field_hr_exceptional_holiday_refuse_wizard__holiday_request_id
 msgid "Exceptional Holiday"
 msgstr "عطلة استثنائية"
 
@@ -308,6 +358,11 @@ msgstr "عطلة استثنائية"
 #: model:ir.model,name:hr_holidays_custom_ext.model_hr_exceptional_holiday_approval_line
 msgid "Exceptional Holiday Approval Line"
 msgstr "سطر اعتماد العطلة الاستثنائية"
+
+#. module: hr_holidays_custom_ext
+#: model:ir.model.fields,field_description:hr_holidays_custom_ext.field_resource_calendar_leaves__exceptional_holiday_id
+msgid "Exceptional Holiday Request"
+msgstr "طلب عطلة استثنائية"
 
 #. module: hr_holidays_custom_ext
 #: model:ir.actions.act_window,name:hr_holidays_custom_ext.action_hr_exceptional_holiday
@@ -346,9 +401,29 @@ msgid "Explain why this request is refused..."
 msgstr "اشرح سبب رفض هذا الطلب..."
 
 #. module: hr_holidays_custom_ext
+#: model:ir.model.fields.selection,name:hr_holidays_custom_ext.selection__hr_leave_approval_trail__stage__first_approval
+msgid "First Approval"
+msgstr "الاعتماد الأول"
+
+#. module: hr_holidays_custom_ext
+#: model:ir.model.fields,field_description:hr_holidays_custom_ext.field_res_company__annual_leave_days_per_year
+msgid "Fixed annual leave days granted to each active employee at year start."
+msgstr "عدد أيام الإجازة السنوية الثابتة الممنوحة لكل موظف نشط عند بداية السنة."
+
+#. module: hr_holidays_custom_ext
+#: model:ir.model.fields.selection,name:hr_holidays_custom_ext.selection__hr_exceptional_holiday_approval_line__role__hr
+msgid "HR Officer"
+msgstr "مسؤول الموارد البشرية"
+
+#. module: hr_holidays_custom_ext
 #: model:ir.model.fields,field_description:hr_holidays_custom_ext.field_hr_exceptional_holiday__name
 msgid "Holiday Name"
 msgstr "اسم العطلة"
+
+#. module: hr_holidays_custom_ext
+#: model:ir.model.fields,field_description:hr_holidays_custom_ext.field_res_config_settings__annual_leave_last_carryover_date
+msgid "Last Annual Leave Carryover"
+msgstr "آخر ترحيل للإجازة السنوية"
 
 #. module: hr_holidays_custom_ext
 #. odoo-python
@@ -358,11 +433,26 @@ msgid "Last Carryover Run"
 msgstr "آخر تشغيل للترحيل"
 
 #. module: hr_holidays_custom_ext
+#: model:ir.model.fields,field_description:hr_holidays_custom_ext.field_res_config_settings__annual_leave_last_carryover_summary
+msgid "Last Carryover Summary"
+msgstr "ملخص آخر ترحيل"
+
+#. module: hr_holidays_custom_ext
 #. odoo-python
 #: code:addons/hr_holidays_custom_ext/views/res_config_settings_views.xml:0
 #: model_terms:ir.ui.view,arch_db:hr_holidays_custom_ext.res_config_settings_view_form_sick_leave_renewal
 msgid "Last Renewal Run"
 msgstr "آخر تشغيل للتجديد"
+
+#. module: hr_holidays_custom_ext
+#: model:ir.model.fields,field_description:hr_holidays_custom_ext.field_res_config_settings__sick_leave_last_renewal_summary
+msgid "Last Renewal Summary"
+msgstr "ملخص آخر تجديد"
+
+#. module: hr_holidays_custom_ext
+#: model:ir.model.fields,field_description:hr_holidays_custom_ext.field_res_config_settings__sick_leave_last_renewal_date
+msgid "Last Sick Leave Renewal"
+msgstr "آخر تجديد للإجازة المرضية"
 
 #. module: hr_holidays_custom_ext
 #. odoo-python
@@ -389,13 +479,21 @@ msgid "Leave Type"
 msgstr "نوع الإجازة"
 
 #. module: hr_holidays_custom_ext
-#: model:ir.model.fields,field_description:hr_holidays_custom_ext.field_hr_exceptional_holiday__unknown
+#: model:ir.model.fields,field_description:hr_holidays_custom_ext.field_hr_exceptional_holiday__calendar_id
 msgid "Leave empty to apply to all working schedules in the company."
 msgstr "اتركه فارغاً لتطبيقه على جميع جداول العمل في الشركة."
 
 #. module: hr_holidays_custom_ext
+#: model:ir.model.fields.selection,name:hr_holidays_custom_ext.selection__hr_exceptional_holiday__state__manager_approved
+msgid "Manager Approved"
+msgstr "معتمد من المدير"
+
+#. module: hr_holidays_custom_ext
 #. odoo-python
 #: code:addons/hr_holidays_custom_ext/views/hr_sick_leave_renewal_log_views.xml:0
+#: model:ir.model.fields.selection,name:hr_holidays_custom_ext.selection__hr_annual_leave_carryover_log__trigger__manual
+#: model:ir.model.fields.selection,name:hr_holidays_custom_ext.selection__hr_leave_allocation__allocation_origin__manual
+#: model:ir.model.fields.selection,name:hr_holidays_custom_ext.selection__hr_sick_leave_renewal_log__trigger__manual
 #: model_terms:ir.ui.view,arch_db:hr_holidays_custom_ext.view_hr_sick_leave_renewal_log_search
 msgid "Manual"
 msgstr "يدوي"
@@ -417,15 +515,27 @@ msgstr "تجديد يدوي"
 #. module: hr_holidays_custom_ext
 #. odoo-python
 #: code:addons/hr_holidays_custom_ext/views/res_config_settings_views.xml:0
+#: model:ir.model.fields,field_description:hr_holidays_custom_ext.field_res_company__annual_leave_carryover_max_days
 #: model_terms:ir.ui.view,arch_db:hr_holidays_custom_ext.res_config_settings_view_form_sick_leave_renewal
 msgid "Max Carryover Days"
 msgstr "الحد الأقصى لأيام الترحيل"
+
+#. module: hr_holidays_custom_ext
+#: model:ir.model.fields,field_description:hr_holidays_custom_ext.field_res_company__annual_leave_carryover_max_days
+msgid "Maximum unused annual leave days carried into the new year per employee. "
+msgstr "الحد الأقصى لأيام الإجازة السنوية غير المستخدمة المرحّلة إلى السنة الجديدة لكل موظف. "
 
 #. module: hr_holidays_custom_ext
 #. odoo-python
 #: code:addons/hr_holidays_custom_ext/models/hr_exceptional_holiday.py:0
 msgid "New"
 msgstr "جديد"
+
+#. module: hr_holidays_custom_ext
+#. odoo-python
+#: code:addons/hr_holidays_custom_ext/models/hr_exceptional_holiday.py:0
+msgid "No Time Off manager is configured for final approval. "
+msgstr "لم يتم تهيئة مسؤول الإجازات للاعتماد النهائي. "
 
 #. module: hr_holidays_custom_ext
 #. odoo-python
@@ -445,7 +555,7 @@ msgstr "تعذّر تحديد سلسلة الاعتماد لمقدّم هذا ا
 #. odoo-python
 #: code:addons/hr_holidays_custom_ext/models/hr_exceptional_holiday.py:0
 msgid "No pending approval step found."
-msgstr "لم يتم العثور على خطوة اعتماد قيد الانتظار."
+msgstr "لم يُعثر على خطوة اعتماد معلّقة."
 
 #. module: hr_holidays_custom_ext
 #. odoo-python
@@ -454,10 +564,15 @@ msgid "No public holiday record is linked yet."
 msgstr "لا يوجد سجل عطلة رسمية مرتبط بعد."
 
 #. module: hr_holidays_custom_ext
+#: model:ir.model.fields,field_description:hr_holidays_custom_ext.field_res_company__sick_leave_days_per_year
+msgid "Number of sick leave days allocated to each active employee on annual renewal."
+msgstr "عدد أيام الإجازة المرضية المخصصة لكل موظف نشط عند التجديد السنوي."
+
+#. module: hr_holidays_custom_ext
 #. odoo-python
 #: code:addons/hr_holidays_custom_ext/models/hr_exceptional_holiday.py:0
 msgid "Only cancelled or refused requests can be reset to draft."
-msgstr "يمكن إعادة الطلبات الملغاة أو المرفوضة فقط إلى مسودة."
+msgstr "يمكن إعادة الطلبات الملغاة أو المرفوضة إلى المسودة فقط."
 
 #. module: hr_holidays_custom_ext
 #. odoo-python
@@ -469,7 +584,17 @@ msgstr "يمكن تعديل طلبات المسودة فقط."
 #. odoo-python
 #: code:addons/hr_holidays_custom_ext/models/hr_exceptional_holiday.py:0
 msgid "Only draft requests can be submitted."
-msgstr "يمكن إرسال الطلبات في حالة المسودة فقط."
+msgstr "يمكن إرسال طلبات المسودة فقط."
+
+#. module: hr_holidays_custom_ext
+#: model:ir.model.fields,field_description:hr_holidays_custom_ext.field_hr_leave_allocation__origin_year
+msgid "Origin Year"
+msgstr "سنة المنشأ"
+
+#. module: hr_holidays_custom_ext
+#: model:ir.model.fields.selection,name:hr_holidays_custom_ext.selection__hr_exceptional_holiday_approval_line__state__pending
+msgid "Pending"
+msgstr "قيد الانتظار"
 
 #. module: hr_holidays_custom_ext
 #. odoo-python
@@ -494,7 +619,8 @@ msgstr "طباعة سجل الاعتماد"
 #. module: hr_holidays_custom_ext
 #. odoo-python
 #: code:addons/hr_holidays_custom_ext/models/hr_exceptional_holiday.py:0
-#: model:ir.model.fields,field_description:hr_holidays_custom_ext.field_hr_exceptional_holiday__unknown
+#: model:ir.model.fields,field_description:hr_holidays_custom_ext.field_hr_exceptional_holiday__calendar_leave_id
+#: model_terms:ir.ui.view,arch_db:hr_holidays_custom_ext.hr_exceptional_holiday_view_form
 msgid "Public Holiday"
 msgstr "عطلة رسمية"
 
@@ -512,9 +638,14 @@ msgid "Reason"
 msgstr "السبب"
 
 #. module: hr_holidays_custom_ext
-#: model:ir.model.fields,field_description:hr_holidays_custom_ext.field_hr_exceptional_holiday__unknown
+#: model:ir.model.fields,field_description:hr_holidays_custom_ext.field_hr_exceptional_holiday__reference
 msgid "Reference"
 msgstr "المرجع"
+
+#. module: hr_holidays_custom_ext
+#: model:ir.model.fields,field_description:hr_holidays_custom_ext.field_hr_leave__refuse_reason
+msgid "Refusal Reason"
+msgstr "سبب الرفض"
 
 #. module: hr_holidays_custom_ext
 #. odoo-python
@@ -566,13 +697,17 @@ msgstr "رفض طلب الإجازة"
 #: code:addons/hr_holidays_custom_ext/views/hr_exceptional_holiday_views.xml:0
 #. odoo-python
 #: code:addons/hr_holidays_custom_ext/views/hr_leave_approval_report_views.xml:0
+#: model:ir.model.fields.selection,name:hr_holidays_custom_ext.selection__hr_exceptional_holiday__state__refused
+#: model:ir.model.fields.selection,name:hr_holidays_custom_ext.selection__hr_exceptional_holiday_approval_line__state__refused
+#: model:ir.model.fields.selection,name:hr_holidays_custom_ext.selection__hr_leave_approval_trail__stage__refused
+#: model:ir.model.fields.selection,name:hr_holidays_custom_ext.selection__hr_leave_approval_trail__state__refused
 #: model_terms:ir.ui.view,arch_db:hr_holidays_custom_ext.hr_exceptional_holiday_view_search
 #: model_terms:ir.ui.view,arch_db:hr_holidays_custom_ext.hr_leave_approval_log_search
 msgid "Refused"
 msgstr "مرفوض"
 
 #. module: hr_holidays_custom_ext
-#: model:ir.model.fields,field_description:hr_holidays_custom_ext.field_hr_sick_leave_renewal_wizard__unknown
+#: model:ir.model.fields,field_description:hr_holidays_custom_ext.field_hr_sick_leave_renewal_wizard__renewal_year
 msgid "Renewal Year"
 msgstr "سنة التجديد"
 
@@ -586,10 +721,10 @@ msgstr "يجب أن تكون سنة التجديد بين ٢٠٠٠ و٢١٠٠."
 #. odoo-python
 #: code:addons/hr_holidays_custom_ext/models/hr_exceptional_holiday.py:0
 msgid "Request refused by %(user)s: %(reason)s"
-msgstr "تم رفض الطلب بواسطة %(user)s: %(reason)s"
+msgstr "تم رفض الطلب من قِبل %(user)s: %(reason)s"
 
 #. module: hr_holidays_custom_ext
-#: model:ir.model.fields,field_description:hr_holidays_custom_ext.field_hr_exceptional_holiday__unknown
+#: model:ir.model.fields,field_description:hr_holidays_custom_ext.field_hr_exceptional_holiday__employee_id
 msgid "Requested By"
 msgstr "مقدّم الطلب"
 
@@ -654,6 +789,8 @@ msgstr "تشغيل تجديد الإجازة المرضية"
 #. module: hr_holidays_custom_ext
 #. odoo-python
 #: code:addons/hr_holidays_custom_ext/views/hr_sick_leave_renewal_log_views.xml:0
+#: model:ir.model.fields.selection,name:hr_holidays_custom_ext.selection__hr_annual_leave_carryover_log__trigger__cron
+#: model:ir.model.fields.selection,name:hr_holidays_custom_ext.selection__hr_sick_leave_renewal_log__trigger__cron
 #: model_terms:ir.ui.view,arch_db:hr_holidays_custom_ext.view_hr_sick_leave_renewal_log_search
 msgid "Scheduled"
 msgstr "مجدول"
@@ -661,6 +798,7 @@ msgstr "مجدول"
 #. module: hr_holidays_custom_ext
 #. odoo-python
 #: code:addons/hr_holidays_custom_ext/views/hr_leave_approval_report_views.xml:0
+#: model:ir.model.fields.selection,name:hr_holidays_custom_ext.selection__hr_leave_approval_trail__stage__second_approval
 #: model_terms:ir.ui.view,arch_db:hr_holidays_custom_ext.hr_leave_approval_log_search
 msgid "Second Approval"
 msgstr "الاعتماد الثاني"
@@ -677,12 +815,18 @@ msgid "Sick Leave %s"
 msgstr "إجازة مرضية %s"
 
 #. module: hr_holidays_custom_ext
+#: model:ir.model.fields,field_description:hr_holidays_custom_ext.field_res_company__sick_leave_days_per_year
+msgid "Sick Leave Days Per Year"
+msgstr "أيام الإجازة المرضية سنوياً"
+
+#. module: hr_holidays_custom_ext
 #. odoo-python
 #: code:addons/hr_holidays_custom_ext/models/res_config_settings.py:0
 #. odoo-python
 #: code:addons/hr_holidays_custom_ext/views/res_config_settings_views.xml:0
 #. odoo-python
 #: code:addons/hr_holidays_custom_ext/wizard/hr_sick_leave_renewal_wizard.py:0
+#: model:ir.model.fields.selection,name:hr_holidays_custom_ext.selection__hr_leave_allocation__allocation_origin__sick_renewal
 #: model_terms:ir.ui.view,arch_db:hr_holidays_custom_ext.res_config_settings_view_form_sick_leave_renewal
 msgid "Sick Leave Renewal"
 msgstr "تجديد الإجازة المرضية"
@@ -702,6 +846,12 @@ msgstr "سجل تجديد الإجازة المرضية"
 
 #. module: hr_holidays_custom_ext
 #. odoo-python
+#: code:addons/hr_holidays_custom_ext/models/hr_sick_leave_renewal_log.py:0
+msgid "Sick leave renewal for %(company)s (%(year)s): "
+msgstr "تجديد الإجازة المرضية لـ %(company)s (%(year)s): "
+
+#. module: hr_holidays_custom_ext
+#. odoo-python
 #: code:addons/hr_holidays_custom_ext/views/hr_leave_approval_report_views.xml:0
 #: model:ir.model.fields,field_description:hr_holidays_custom_ext.field_hr_exceptional_holiday__date_from
 #: model_terms:ir.ui.view,arch_db:hr_holidays_custom_ext.hr_leave_approval_log_search
@@ -713,9 +863,9 @@ msgstr "تاريخ البداية"
 #: code:addons/hr_holidays_custom_ext/views/hr_exceptional_holiday_views.xml:0
 #. odoo-python
 #: code:addons/hr_holidays_custom_ext/views/hr_leave_approval_report_views.xml:0
-#: model:ir.model.fields,field_description:hr_holidays_custom_ext.field_hr_exceptional_holiday__unknown
-#: model:ir.model.fields,field_description:hr_holidays_custom_ext.field_hr_exceptional_holiday_approval_line__unknown
-#: model:ir.model.fields,field_description:hr_holidays_custom_ext.field_hr_leave_approval_trail__unknown
+#: model:ir.model.fields,field_description:hr_holidays_custom_ext.field_hr_exceptional_holiday__state
+#: model:ir.model.fields,field_description:hr_holidays_custom_ext.field_hr_exceptional_holiday_approval_line__state
+#: model:ir.model.fields,field_description:hr_holidays_custom_ext.field_hr_leave_approval_trail__state
 #: model_terms:ir.ui.view,arch_db:hr_holidays_custom_ext.hr_exceptional_holiday_view_search
 #: model_terms:ir.ui.view,arch_db:hr_holidays_custom_ext.hr_leave_approval_log_search
 msgid "Status"
@@ -729,7 +879,14 @@ msgid "Submit"
 msgstr "إرسال"
 
 #. module: hr_holidays_custom_ext
-#: model:ir.model.fields,field_description:hr_holidays_custom_ext.field_hr_annual_leave_carryover_wizard__unknown
+#: model:ir.model.fields.selection,name:hr_holidays_custom_ext.selection__hr_exceptional_holiday__state__submitted
+#: model:ir.model.fields.selection,name:hr_holidays_custom_ext.selection__hr_leave_approval_trail__stage__submitted
+#: model:ir.model.fields.selection,name:hr_holidays_custom_ext.selection__hr_leave_approval_trail__state__submitted
+msgid "Submitted"
+msgstr "مُرسل"
+
+#. module: hr_holidays_custom_ext
+#: model:ir.model.fields,field_description:hr_holidays_custom_ext.field_hr_annual_leave_carryover_wizard__target_year
 msgid "Target Year"
 msgstr "السنة المستهدفة"
 
@@ -752,8 +909,8 @@ msgid "The selected approval step does not belong to this request."
 msgstr "خطوة الاعتماد المحددة لا تنتمي إلى هذا الطلب."
 
 #. module: hr_holidays_custom_ext
-#: model:ir.model.fields,field_description:hr_holidays_custom_ext.field_hr_leave_approval_trail__unknown
-#: model:ir.model.fields,field_description:hr_holidays_custom_ext.field_hr_leave_refuse_wizard__unknown
+#: model:ir.model.fields,field_description:hr_holidays_custom_ext.field_hr_leave_approval_trail__leave_id
+#: model:ir.model.fields,field_description:hr_holidays_custom_ext.field_hr_leave_refuse_wizard__leave_id
 msgid "Time Off Request"
 msgstr "طلب إجازة"
 
@@ -772,10 +929,16 @@ msgid "Time off request must be confirmed or validated in order to refuse it."
 msgstr "يجب أن يكون طلب الإجازة مؤكداً أو معتمداً لرفضه."
 
 #. module: hr_holidays_custom_ext
+#: model:ir.model.fields,field_description:hr_holidays_custom_ext.field_res_company__annual_leave_type_id
+msgid "Time off type used for annual leave grants and carryover."
+msgstr "نوع الإجازة المستخدم لمنح الإجازة السنوية والترحيل."
+
+#. module: hr_holidays_custom_ext
 #. odoo-python
 #: code:addons/hr_holidays_custom_ext/views/hr_exceptional_holiday_views.xml:0
 #. odoo-python
 #: code:addons/hr_holidays_custom_ext/views/hr_leave_approval_report_views.xml:0
+#: model:ir.model.fields.selection,name:hr_holidays_custom_ext.selection__hr_exceptional_holiday_approval_line__state__to_approve
 #: model_terms:ir.ui.view,arch_db:hr_holidays_custom_ext.hr_exceptional_holiday_view_search
 #: model_terms:ir.ui.view,arch_db:hr_holidays_custom_ext.hr_leave_approval_log_search
 msgid "To Approve"
@@ -806,12 +969,22 @@ msgid "Trigger"
 msgstr "آلية التشغيل"
 
 #. module: hr_holidays_custom_ext
-#: model:ir.model.fields,field_description:hr_holidays_custom_ext.field_hr_annual_leave_carryover_log__unknown
+#: model:ir.model.fields,field_description:hr_holidays_custom_ext.field_hr_annual_leave_carryover_log__carryover_days_capped
 msgid "Unused balance above the company carryover limit that was not carried forward."
 msgstr "الرصيد غير المستخدم الذي يتجاوز حد الترحيل في الشركة ولم يُرحَّل."
 
 #. module: hr_holidays_custom_ext
-#: model:ir.model.fields,field_description:hr_holidays_custom_ext.field_hr_exceptional_holiday__unknown
+#: model:ir.model.fields.selection,name:hr_holidays_custom_ext.selection__hr_exceptional_holiday_approval_line__role__upper_manager
+msgid "Upper Manager"
+msgstr "المدير الأعلى"
+
+#. module: hr_holidays_custom_ext
+#: model:ir.model.fields.selection,name:hr_holidays_custom_ext.selection__hr_exceptional_holiday__state__upper_manager_approved
+msgid "Upper Manager Approved"
+msgstr "معتمد من المدير الأعلى"
+
+#. module: hr_holidays_custom_ext
+#: model:ir.model.fields,field_description:hr_holidays_custom_ext.field_hr_exceptional_holiday__calendar_id
 msgid "Working Hours"
 msgstr "ساعات العمل"
 
@@ -821,6 +994,11 @@ msgstr "ساعات العمل"
 #: model_terms:ir.ui.view,arch_db:hr_holidays_custom_ext.view_hr_sick_leave_renewal_log_search
 msgid "Year"
 msgstr "السنة"
+
+#. module: hr_holidays_custom_ext
+#: model:ir.model.fields.selection,name:hr_holidays_custom_ext.selection__hr_leave_allocation__allocation_origin__year_carryover
+msgid "Year Carryover"
+msgstr "ترحيل سنوي"
 
 #. module: hr_holidays_custom_ext
 #. odoo-python

@@ -142,13 +142,11 @@
                             <div><field name="project_id"/></div>
                             <div><field name="date"/> — <field name="overtime_hours" widget="float_time"/> h</div>
                             <div class="mt-2">
-                                <button name="action_approve" type="object" class="btn btn-sm btn-primary me-1"
+                                <button name="action_approve" type="object" class="btn btn-sm btn-primary me-1" string="Approve"
                                     invisible="not can_approve_request">
-                                    Approve
                                 </button>
-                                <button name="action_refuse" type="object" class="btn btn-sm btn-secondary"
+                                <button name="action_refuse" type="object" class="btn btn-sm btn-secondary" string="Refuse"
                                     invisible="not can_refuse_request">
-                                    Refuse
                                 </button>
                             </div>
                         </div>

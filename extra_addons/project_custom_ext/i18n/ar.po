@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 19.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-13 11:26+0000\n"
-"PO-Revision-Date: 2026-07-13 11:26+0000\n"
+"POT-Creation-Date: 2026-07-13 11:59+0000\n"
+"PO-Revision-Date: 2026-07-13 11:59+0000\n"
 "Last-Translator: Shamsieh\n"
 "Language-Team: Arabic\n"
 "Language: ar\n"
@@ -19,6 +19,7 @@ msgstr ""
 #. module: project_custom_ext
 #. odoo-python
 #: code:addons/project_custom_ext/views/project_project_views.xml:0
+#: model:ir.model.fields.selection,name:project_custom_ext.selection__project_project__progress_range__0_20
 #: model_terms:ir.ui.view,arch_db:project_custom_ext.project_project_search_custom
 msgid "0% - 20%"
 msgstr "من 0٪ إلى 20٪"
@@ -26,6 +27,7 @@ msgstr "من 0٪ إلى 20٪"
 #. module: project_custom_ext
 #. odoo-python
 #: code:addons/project_custom_ext/views/project_project_views.xml:0
+#: model:ir.model.fields.selection,name:project_custom_ext.selection__project_project__progress_range__20_50
 #: model_terms:ir.ui.view,arch_db:project_custom_ext.project_project_search_custom
 msgid "20% - 50%"
 msgstr "من 20٪ إلى 50٪"
@@ -33,6 +35,7 @@ msgstr "من 20٪ إلى 50٪"
 #. module: project_custom_ext
 #. odoo-python
 #: code:addons/project_custom_ext/views/project_project_views.xml:0
+#: model:ir.model.fields.selection,name:project_custom_ext.selection__project_project__progress_range__50_80
 #: model_terms:ir.ui.view,arch_db:project_custom_ext.project_project_search_custom
 msgid "50% - 80%"
 msgstr "من 50٪ إلى 80٪"
@@ -40,6 +43,7 @@ msgstr "من 50٪ إلى 80٪"
 #. module: project_custom_ext
 #. odoo-python
 #: code:addons/project_custom_ext/views/project_project_views.xml:0
+#: model:ir.model.fields.selection,name:project_custom_ext.selection__project_project__progress_range__80_100
 #: model_terms:ir.ui.view,arch_db:project_custom_ext.project_project_search_custom
 msgid "80% - 100%"
 msgstr "من 80٪ إلى 100٪"
@@ -52,6 +56,32 @@ msgid "Add Standard Stages"
 msgstr "إضافة مراحل قياسية"
 
 #. module: project_custom_ext
+#: model_terms:ir.ui.view,arch_db:project_custom_ext.project_task_template_view_form
+msgid "Add a line"
+msgstr "Add a line"
+
+#. module: project_custom_ext
+#: model:ir.model.fields,field_description:project_custom_ext.field_project_project__allocated_datetime
+#: model:ir.model.fields,field_description:project_custom_ext.field_project_task__allocated_until
+msgid "Allocated Until"
+msgstr "مخصص حتى"
+
+#. module: project_custom_ext
+#: model_terms:ir.ui.view,arch_db:project_custom_ext.project_task_template_view_form
+msgid "Build your workflow."
+msgstr "ابنِ سير عملك."
+
+#. module: project_custom_ext
+#: model:project.task.template,name:project_custom_ext.task_template_crm
+msgid "CRM Setup Template"
+msgstr "قالب إعداد CRM"
+
+#. module: project_custom_ext
+#: model:project.task.template,description:project_custom_ext.task_template_crm
+msgid "CRM pipeline and setup workflow stages."
+msgstr "مراحل سير عمل خط أنابيب CRM والإعداد."
+
+#. module: project_custom_ext
 #. odoo-python
 #: code:addons/project_custom_ext/views/project_project_views.xml:0
 #: model_terms:ir.ui.view,arch_db:project_custom_ext.project_project_create_form_custom
@@ -59,8 +89,19 @@ msgid "Choose a workflow template…"
 msgstr "اختر قالب سير العمل…"
 
 #. module: project_custom_ext
+#: model:ir.model.fields,field_description:project_custom_ext.field_project_project_stage__is_closing_stage
+msgid "Closing Stage"
+msgstr "مرحلة الإغلاق"
+
+#. module: project_custom_ext
+#: model:ir.model.fields,field_description:project_custom_ext.field_project_project__progress_percentage
+msgid "Completed tasks / total tasks × 100 (tasks in a closing stage count as done)."
+msgstr "المهام المنجزة / إجمالي المهام × 100 (المهام في مرحلة الإغلاق تُحسب منجزة)."
+
+#. module: project_custom_ext
 #. odoo-python
 #: code:addons/project_custom_ext/views/project_project_views.xml:0
+#: model:ir.model.fields,field_description:project_custom_ext.field_project_project__country_id
 #: model_terms:ir.ui.view,arch_db:project_custom_ext.project_project_quick_create_custom
 #: model_terms:ir.ui.view,arch_db:project_custom_ext.project_project_search_custom
 msgid "Country"
@@ -73,12 +114,20 @@ msgstr "الدولة"
 #: code:addons/project_custom_ext/views/project_task_template_views.xml:0
 #. odoo-python
 #: code:addons/project_custom_ext/views/project_task_type_views.xml:0
-#: model:ir.model.fields,field_description:project_custom_ext.field_project_task_template_line__unknown
+#: model:ir.model.fields,field_description:project_custom_ext.field_project_task_template__is_closing_stage
+#: model:ir.model.fields,field_description:project_custom_ext.field_project_task_type__is_closing_stage
 #: model_terms:ir.ui.view,arch_db:project_custom_ext.project_project_form_custom
 #: model_terms:ir.ui.view,arch_db:project_custom_ext.project_task_template_view_form
 #: model_terms:ir.ui.view,arch_db:project_custom_ext.project_task_type_form_custom
 msgid "Counts as Done"
 msgstr "يُحسب منجزاً"
+
+#. module: project_custom_ext
+#: model:project.task.template.line,name:project_custom_ext.task_template_crm_stage_done
+#: model:project.task.template.line,name:project_custom_ext.task_template_impl_stage_done
+#: model:project.task.template.line,name:project_custom_ext.task_template_web_stage_done
+msgid "Done"
+msgstr "منجز"
 
 #. module: project_custom_ext
 #. odoo-python
@@ -88,6 +137,11 @@ msgid "Employee"
 msgstr "الموظف"
 
 #. module: project_custom_ext
+#: model:ir.model.fields,field_description:project_custom_ext.field_project_project__estimated_hours
+msgid "Estimated Hours"
+msgstr "الساعات المقدرة"
+
+#. module: project_custom_ext
 #. odoo-python
 #: code:addons/project_custom_ext/views/project_project_views.xml:0
 #: model_terms:ir.ui.view,arch_db:project_custom_ext.project_project_form_custom
@@ -95,11 +149,28 @@ msgid "Folded in Kanban"
 msgstr "مطوي في كانبان"
 
 #. module: project_custom_ext
+#: model:project.task.template,name:project_custom_ext.task_template_implementation
+msgid "Implementation Project Template"
+msgstr "قالب مشروع التنفيذ"
+
+#. module: project_custom_ext
+#: model:project.task.template.line,name:project_custom_ext.task_template_crm_stage_progress
+#: model:project.task.template.line,name:project_custom_ext.task_template_impl_stage_progress
+#: model:project.task.template.line,name:project_custom_ext.task_template_web_stage_progress
+msgid "In Progress"
+msgstr "قيد التنفيذ"
+
+#. module: project_custom_ext
 #. odoo-python
 #: code:addons/project_custom_ext/views/project_project_views.xml:0
 #: model_terms:ir.ui.view,arch_db:project_custom_ext.project_project_create_form_custom
 msgid "Location &amp; Team"
 msgstr "الموقع والفريق"
+
+#. module: project_custom_ext
+#: model:ir.model.fields,field_description:project_custom_ext.field_project_project_stage__is_closing_stage
+msgid "Marks this project stage as a closing/completed stage."
+msgstr "يحدد مرحلة المشروع كمرحلة إغلاق/إكمال."
 
 #. module: project_custom_ext
 #. odoo-javascript
@@ -135,6 +206,16 @@ msgid "Overview"
 msgstr "نظرة عامة"
 
 #. module: project_custom_ext
+#: model:ir.model.fields,field_description:project_custom_ext.field_project_project__allocated_datetime
+msgid "Planned date and time when allocated work on this project should be completed."
+msgstr "التاريخ والوقت المخطط لإكمال العمل المخصص على هذا المشروع."
+
+#. module: project_custom_ext
+#: model:ir.model.fields,field_description:project_custom_ext.field_project_task__allocated_until
+msgid "Planned date and time when allocated work on this task should be completed."
+msgstr "التاريخ والوقت المخطط لإكمال العمل المخصص على هذه المهمة."
+
+#. module: project_custom_ext
 #. odoo-python
 #: code:addons/project_custom_ext/views/project_project_views.xml:0
 #: model_terms:ir.ui.view,arch_db:project_custom_ext.project_project_search_custom
@@ -151,6 +232,7 @@ msgstr "نسبة التقدم %"
 #. module: project_custom_ext
 #. odoo-python
 #: code:addons/project_custom_ext/views/project_project_views.xml:0
+#: model:ir.model.fields,field_description:project_custom_ext.field_project_project__progress_range
 #: model_terms:ir.ui.view,arch_db:project_custom_ext.project_project_search_custom
 msgid "Progress Range"
 msgstr "نطاق التقدم"
@@ -189,9 +271,15 @@ msgid "Project Manager"
 msgstr "مدير المشروع"
 
 #. module: project_custom_ext
+#: model_terms:ir.ui.view,arch_db:project_custom_ext.project_project_form_custom
+msgid "Project Progress"
+msgstr "Project Progress"
+
+#. module: project_custom_ext
 #. odoo-python
 #: code:addons/project_custom_ext/views/project_dashboard_views.xml:0
 #: model:ir.actions.act_window,name:project_custom_ext.project_dashboard_progress_action
+#: model:ir.model.fields,field_description:project_custom_ext.field_project_project__progress_percentage
 #: model:ir.ui.menu,name:project_custom_ext.menu_project_dashboard_progress
 #: model_terms:ir.ui.view,arch_db:project_custom_ext.project_dashboard_progress_graph
 msgid "Project Progress %"
@@ -209,11 +297,6 @@ msgstr "مرحلة المشروع"
 #: model:ir.model,name:project_custom_ext.model_project_task_template
 msgid "Project Stage Template"
 msgstr "Project Stage Template"
-
-#. module: project_custom_ext
-#: model:ir.model,name:project_custom_ext.model_project_task_template_line
-msgid "Project Stage Template Line"
-msgstr "Project Stage Template Line"
 
 #. module: project_custom_ext
 #. odoo-python
@@ -252,8 +335,21 @@ msgid "Projects by Stage"
 msgstr "المشاريع حسب المرحلة"
 
 #. module: project_custom_ext
+#: model:ir.model.fields,field_description:project_custom_ext.field_project_project__remaining_hours
+msgid "Remaining Hours"
+msgstr "الساعات المتبقية"
+
+#. module: project_custom_ext
+#: model:project.task.template.line,name:project_custom_ext.task_template_crm_stage_review
+#: model:project.task.template.line,name:project_custom_ext.task_template_impl_stage_review
+#: model:project.task.template.line,name:project_custom_ext.task_template_web_stage_review
+msgid "Review"
+msgstr "مراجعة"
+
+#. module: project_custom_ext
 #. odoo-python
 #: code:addons/project_custom_ext/views/project_project_views.xml:0
+#: model:ir.model.fields,field_description:project_custom_ext.field_project_project__sales_team_id
 #: model_terms:ir.ui.view,arch_db:project_custom_ext.project_project_create_form_custom
 #: model_terms:ir.ui.view,arch_db:project_custom_ext.project_project_form_custom
 #: model_terms:ir.ui.view,arch_db:project_custom_ext.project_project_search_custom
@@ -261,11 +357,21 @@ msgid "Sales Team"
 msgstr "فريق المبيعات"
 
 #. module: project_custom_ext
+#: model:ir.model.fields,field_description:project_custom_ext.field_project_project__task_template_id
+msgid "Select a template at project creation to auto-generate workflow stages (tasks are optional)."
+msgstr "اختر قالباً عند إنشاء المشروع لإنشاء مراحل سير العمل تلقائياً (المهام اختيارية)."
+
+#. module: project_custom_ext
 #. odoo-python
 #: code:addons/project_custom_ext/views/project_project_views.xml:0
 #: model_terms:ir.ui.view,arch_db:project_custom_ext.project_project_create_form_custom
 msgid "Select country"
 msgstr "اختر الدولة"
+
+#. module: project_custom_ext
+#: model:ir.model.fields,field_description:project_custom_ext.field_project_project__spent_hours
+msgid "Spent Hours"
+msgstr "الساعات المنفقة"
 
 #. module: project_custom_ext
 #. odoo-python
@@ -291,11 +397,21 @@ msgstr "اسم المرحلة (مثال: قيد التنفيذ)"
 #. module: project_custom_ext
 #. odoo-python
 #: code:addons/project_custom_ext/views/project_task_template_views.xml:0
-#: model:ir.model.fields,field_description:project_custom_ext.field_project_task_template__unknown
+#: model:ir.model.fields,field_description:project_custom_ext.field_project_task_template__stage_ids
 #: model_terms:ir.ui.view,arch_db:project_custom_ext.project_task_template_view_form
 #: model_terms:ir.ui.view,arch_db:project_custom_ext.project_task_template_view_list
 msgid "Stages"
 msgstr "المراحل"
+
+#. module: project_custom_ext
+#: model_terms:ir.ui.view,arch_db:project_custom_ext.project_project_create_form_custom
+msgid "Stages only."
+msgstr "Stages only."
+
+#. module: project_custom_ext
+#: model:project.task.template,description:project_custom_ext.task_template_implementation
+msgid "Standard ERP / system implementation workflow stages."
+msgstr "مراحل سير عمل تنفيذ ERP / النظام القياسية."
 
 #. module: project_custom_ext
 #. odoo-python
@@ -307,6 +423,7 @@ msgstr "مراحل المهام"
 #. module: project_custom_ext
 #. odoo-python
 #: code:addons/project_custom_ext/views/project_project_views.xml:0
+#: model:ir.model.fields,field_description:project_custom_ext.field_project_project__task_template_id
 #: model_terms:ir.ui.view,arch_db:project_custom_ext.project_project_create_form_custom
 #: model_terms:ir.ui.view,arch_db:project_custom_ext.project_project_form_custom
 #: model_terms:ir.ui.view,arch_db:project_custom_ext.project_project_search_custom
@@ -355,6 +472,12 @@ msgid "This template already has stages. Edit them in the list or remove them fi
 msgstr "هذا القالب يحتوي على مراحل بالفعل. عدّلها في القائمة أو احذفها أولاً."
 
 #. module: project_custom_ext
+#: model:ir.model.fields,field_description:project_custom_ext.field_project_project__time_remaining_datetime
+#: model:ir.model.fields,field_description:project_custom_ext.field_project_task__time_remaining_until
+msgid "Time Remaining Until"
+msgstr "الوقت المتبقي حتى"
+
+#. module: project_custom_ext
 #. odoo-python
 #: code:addons/project_custom_ext/views/project_dashboard_views.xml:0
 #: model:ir.actions.act_window,name:project_custom_ext.project_dashboard_timesheet_employee_action
@@ -373,15 +496,44 @@ msgid "Timesheet by Project"
 msgstr "الجدول الزمني حسب المشروع"
 
 #. module: project_custom_ext
+#: model:project.task.template.line,name:project_custom_ext.task_template_crm_stage_todo
+#: model:project.task.template.line,name:project_custom_ext.task_template_impl_stage_todo
+#: model:project.task.template.line,name:project_custom_ext.task_template_web_stage_todo
+msgid "To Do"
+msgstr "للتنفيذ"
+
+#. module: project_custom_ext
 #. odoo-javascript
 #: code:addons/project_custom_ext/static/src/project_notifications.js:0
 msgid "Validation"
 msgstr "تحقق"
 
 #. module: project_custom_ext
-#: model:ir.model.fields,field_description:project_custom_ext.field_project_task_template_line__unknown
+#: model:project.task.template.line,name:project_custom_ext.task_template_crm_stage_waiting
+#: model:project.task.template.line,name:project_custom_ext.task_template_impl_stage_waiting
+#: model:project.task.template.line,name:project_custom_ext.task_template_web_stage_waiting
+msgid "Waiting"
+msgstr "في الانتظار"
+
+#. module: project_custom_ext
+#: model:project.task.template,name:project_custom_ext.task_template_website
+msgid "Website Project Template"
+msgstr "قالب مشروع الموقع"
+
+#. module: project_custom_ext
+#: model:project.task.template,description:project_custom_ext.task_template_website
+msgid "Website design, development, and delivery workflow stages."
+msgstr "مراحل سير عمل تصميم وتطوير وتسليم الموقع."
+
+#. module: project_custom_ext
+#: model:ir.model.fields,field_description:project_custom_ext.field_project_task_template__is_closing_stage
 msgid "When enabled, tasks in this stage count as completed for the project progress % (e.g. Done or Completed)."
 msgstr "عند التفعيل، تُحسب المهام في هذه المرحلة منجزة لنسبة تقدم المشروع % (مثل منجز أو مكتمل)."
+
+#. module: project_custom_ext
+#: model:ir.model.fields,field_description:project_custom_ext.field_project_task_type__is_closing_stage
+msgid "When enabled, tasks moved to this stage are treated as completed and increase the project progress %."
+msgstr "عند التفعيل، تُعامل المهام المنقولة إلى هذه المرحلة كمنجزة وتزيد نسبة تقدم المشروع %."
 
 #. module: project_custom_ext
 #. odoo-python
