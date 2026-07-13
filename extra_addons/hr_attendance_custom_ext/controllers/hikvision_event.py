@@ -1,17 +1,20 @@
 # -*- coding: utf-8 -*-
 
-import json
 import logging
 from datetime import timedelta
 
 from odoo import fields, http
 from odoo.http import request
 
+from odoo.addons.hr_attendance_custom_ext.models.fingerprint_device import (
+    HTTP_LISTENING_KEEPALIVE_THROTTLE_SECONDS,
+)
 from odoo.addons.hr_attendance_custom_ext.services.hikvision_http_push import (
     process_http_push,
 )
 from odoo.addons.hr_attendance_custom_ext.services.hikvision_push_parser import (
-    parse_hikvision_push_body,
+    extract_hikvision_push_from_request,
+    request_has_event_form_data,
 )
 
 _logger = logging.getLogger(__name__)
@@ -52,19 +55,31 @@ class HikvisionEventController(http.Controller):
         ])
         return recent_count >= HTTP_LISTENING_RATE_LIMIT
 
-    def _parse_push_payload(self):
+    def _parse_push_payload(self, route_kwargs=None):
         http_request = request.httprequest
-        body = http_request.get_data(cache=True, as_text=False) or b''
-        content_type = http_request.content_type or ''
         try:
-            return parse_hikvision_push_body(body, content_type)
-        except ValueError as exc:
-            _logger.warning(
-                'Hikvision HTTP push parse failed: %s content_type=%r bytes=%s',
-                exc,
-                content_type,
-                len(body),
+            return extract_hikvision_push_from_request(
+                http_request,
+                route_kwargs=route_kwargs,
             )
+        except ValueError as exc:
+            message = str(exc)
+            if message.startswith('Empty') and not request_has_event_form_data(
+                http_request, route_kwargs,
+            ):
+                _logger.debug(
+                    'Hikvision HTTP push keepalive for %s: %s content_type=%r',
+                    http_request.path,
+                    message,
+                    http_request.content_type,
+                )
+            else:
+                _logger.warning(
+                    'Hikvision HTTP push parse failed: %s content_type=%r bytes=%s',
+                    message,
+                    http_request.content_type,
+                    len(http_request.get_data(cache=True, as_text=False) or b''),
+                )
             return None
 
     @http.route(
@@ -91,15 +106,17 @@ class HikvisionEventController(http.Controller):
         if self._is_rate_limited(device):
             return self._json_response({'status': 'error', 'message': 'Rate limit exceeded'}, status=429)
 
-        raw_fields = self._parse_push_payload()
+        raw_fields = self._parse_push_payload(kwargs)
         if raw_fields is None:
-            device.sudo().write({'http_listening_last_at': fields.Datetime.now()})
+            device.sudo()._touch_http_listening_last_at(
+                throttle_seconds=HTTP_LISTENING_KEEPALIVE_THROTTLE_SECONDS,
+            )
             return self._json_response({'status': 'ok', 'reason': 'unparsed payload'})
 
         try:
             device = device.with_company(device.company_id)
             result = process_http_push(device, raw_fields)
-            device.sudo().write({'http_listening_last_at': fields.Datetime.now()})
+            device.sudo()._touch_http_listening_last_at(force=True)
             if result.get('status') == 'error':
                 return self._json_response(result, status=400)
             return self._json_response({'status': 'ok', **result})

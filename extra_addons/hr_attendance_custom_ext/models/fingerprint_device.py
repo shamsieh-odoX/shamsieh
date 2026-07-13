@@ -4,12 +4,18 @@ import logging
 import secrets
 from datetime import timedelta
 
+import psycopg2
+from psycopg2 import errorcodes
+
 from odoo import _, api, fields, models
 from odoo.exceptions import UserError, ValidationError
 
 from ..services.hikvision_connector import HikvisionConnector
 
 _logger = logging.getLogger(__name__)
+
+HTTP_LISTENING_TOUCH_THROTTLE_SECONDS = 30
+HTTP_LISTENING_KEEPALIVE_THROTTLE_SECONDS = 60
 
 
 class FingerprintDevice(models.Model):
@@ -167,6 +173,50 @@ class FingerprintDevice(models.Model):
         return remote_ip.strip() in allowed
 
     @api.model
+    def _is_pg_concurrency_error(self, exc):
+        if isinstance(exc, psycopg2.errors.SerializationFailure):
+            return True
+        pgcode = getattr(exc, 'pgcode', None)
+        if pgcode in (errorcodes.SERIALIZATION_FAILURE, errorcodes.DEADLOCK_DETECTED):
+            return True
+        message = str(exc).lower()
+        return (
+            'could not serialize access' in message
+            or 'concurrent update' in message
+        )
+
+    def _touch_http_listening_last_at(self, force=False, throttle_seconds=None):
+        """Update Last HTTP Push, throttled to avoid concurrent write conflicts."""
+        self.ensure_one()
+        now = fields.Datetime.now()
+        throttle = (
+            HTTP_LISTENING_TOUCH_THROTTLE_SECONDS
+            if throttle_seconds is None
+            else throttle_seconds
+        )
+        if (
+            not force
+            and throttle
+            and self.http_listening_last_at
+            and (now - self.http_listening_last_at).total_seconds() < throttle
+        ):
+            return
+        try:
+            with self.env.cr.savepoint():
+                self.sudo().with_context(
+                    tracking_disable=True,
+                    mail_notrack=True,
+                ).write({'http_listening_last_at': now})
+        except Exception as exc:
+            if self._is_pg_concurrency_error(exc):
+                _logger.debug(
+                    'Concurrent update skipped for http_listening_last_at on %s',
+                    self.name,
+                )
+                return
+            raise
+
+    @api.model
     def _find_http_listening_device(self, token):
         if not token:
             return self.browse()
@@ -186,6 +236,8 @@ class FingerprintDevice(models.Model):
     def create(self, vals_list):
         for vals in vals_list:
             if vals.get('http_listening_enabled'):
+                if 'auto_sync' not in vals:
+                    vals['auto_sync'] = False
                 if not vals.get('http_listening_token'):
                     vals['http_listening_token'] = self._generate_http_listening_token()
                 if not vals.get('http_listening_allowed_ips') and vals.get('device_ip'):
@@ -193,6 +245,8 @@ class FingerprintDevice(models.Model):
         return super().create(vals_list)
 
     def write(self, vals):
+        if vals.get('http_listening_enabled') and 'auto_sync' not in vals:
+            vals = dict(vals, auto_sync=False)
         res = super().write(vals)
         if vals.get('http_listening_enabled'):
             for device in self.filtered('http_listening_enabled'):

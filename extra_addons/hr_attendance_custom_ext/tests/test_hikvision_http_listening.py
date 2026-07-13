@@ -9,7 +9,10 @@ from odoo.tests import HttpCase, TransactionCase
 
 from odoo.addons.hr_attendance_custom_ext.services.hikvision_connector import HikvisionConnector
 from odoo.addons.hr_attendance_custom_ext.services.hikvision_push_parser import (
+    extract_hikvision_push_from_request,
     parse_hikvision_push_body,
+    parse_hikvision_push_form,
+    parse_hikvision_push_route_kwargs,
 )
 
 SAMPLE_EVENT = {
@@ -64,6 +67,44 @@ class TestHikvisionPushParser(TransactionCase):
     def test_parse_empty_body_raises(self):
         with self.assertRaises(ValueError):
             parse_hikvision_push_body(b'', 'application/json')
+
+    def test_parse_werkzeug_form_event_log(self):
+        parsed = parse_hikvision_push_form({
+            'event_log': json.dumps(SAMPLE_EVENT_LOG),
+        })
+        self.assertEqual(parsed['employeeNoString'], '2')
+
+    def test_parse_werkzeug_form_access_controller_event(self):
+        parsed = parse_hikvision_push_form({
+            'AccessControllerEvent': json.dumps(SAMPLE_EVENT),
+        })
+        self.assertEqual(parsed['serialNo'], 9001)
+
+    def test_parse_route_kwargs_dict(self):
+        parsed = parse_hikvision_push_route_kwargs({
+            'event_log': SAMPLE_EVENT_LOG,
+        })
+        self.assertEqual(parsed['serialNo'], 9001)
+
+    def test_extract_from_parsed_form_when_body_empty(self):
+        class _FormRequest:
+            content_type = 'multipart/form-data; boundary=MIME_boundary'
+            form = {'event_log': json.dumps(SAMPLE_EVENT_LOG)}
+            files = {}
+
+            def get_data(self, cache=True, as_text=False):
+                return b''
+
+            @property
+            def content_length(self):
+                return 0
+
+            @property
+            def environ(self):
+                return {}
+
+        parsed = extract_hikvision_push_from_request(_FormRequest())
+        self.assertEqual(parsed['employeeNoString'], '2')
 
 
 class TestHikvisionPushIngest(TransactionCase):
@@ -131,10 +172,33 @@ class TestHikvisionPushIngest(TransactionCase):
             'http_listening_last_at': fields.Datetime.now() - timedelta(minutes=20),
             'sync_interval_minutes': 15.0,
             'last_sync_at': False,
+            'auto_sync': True,
         })
         with patch.object(type(self.device), '_sync_device') as mock_sync:
             self.env['fingerprint.device']._cron_sync_all()
             mock_sync.assert_called_once()
+
+    def test_cron_skips_poll_when_auto_sync_disabled(self):
+        self.device.write({
+            'auto_sync': False,
+            'http_listening_last_at': fields.Datetime.now() - timedelta(minutes=20),
+            'last_sync_at': False,
+        })
+        with patch.object(type(self.device), '_sync_device') as mock_sync:
+            self.env['fingerprint.device']._cron_sync_all()
+            mock_sync.assert_not_called()
+
+    def test_touch_http_listening_last_at_throttled(self):
+        self.device.write({'http_listening_last_at': fields.Datetime.now()})
+        before = self.device.http_listening_last_at
+        self.device._touch_http_listening_last_at(throttle_seconds=60)
+        self.assertEqual(self.device.http_listening_last_at, before)
+
+    def test_touch_http_listening_last_at_forced(self):
+        past = fields.Datetime.now() - timedelta(minutes=5)
+        self.device.write({'http_listening_last_at': past})
+        self.device._touch_http_listening_last_at(force=True)
+        self.assertGreater(self.device.http_listening_last_at, past)
 
     def test_ingest_duplicate(self):
         connector = HikvisionConnector(self.device)

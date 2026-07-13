@@ -32,6 +32,8 @@ def post_init_hook(env):
             patch['http_listening_token'] = Device._generate_http_listening_token()
         if not device.http_listening_allowed_ips and device.device_ip:
             patch['http_listening_allowed_ips'] = device.device_ip
+        if device.http_listening_enabled and device.auto_sync:
+            patch['auto_sync'] = False
         if patch:
             device.write(patch)
 
