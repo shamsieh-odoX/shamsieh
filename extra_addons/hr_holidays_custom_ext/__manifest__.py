@@ -1,6 +1,6 @@
 {
     'name': 'HR Holidays Custom Extensions',
-    'version': '19.0.1.3.3',
+    'version': '19.0.1.3.4',
     'category': 'Human Resources/Time Off',
     'summary': 'Exceptional holidays, leave balance summary, annual sick leave renewal, and annual leave carryover',
     'author': 'Custom',
@@ -33,4 +33,5 @@
     'installable': True,
     'application': False,
     'license': 'LGPL-3',
+    'post_init_hook': 'post_init_hook',
 }

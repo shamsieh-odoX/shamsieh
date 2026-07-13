@@ -1,12 +1,8 @@
-# Part of Odoo. See LICENSE file for full copyright and licensing details.
+# -*- coding: utf-8 -*-
 
 
-def post_init_hook(env):
-    env['res.company']._ensure_overtime_types_for_all_companies()
-    _reload_ar_translations(env, 'hr_overtime_management')
-
-
-def _reload_ar_translations(env, module_name):
+def reload_ar_translations(env, module_name):
+    """Force-reload ar.po into ar_001 after upgrade."""
     lang = env['res.lang'].with_context(active_test=False).search(
         [('code', 'in', ['ar_001', 'ar'])], limit=1,
     )

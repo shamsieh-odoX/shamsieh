@@ -1,5 +1,16 @@
 # -*- coding: utf-8 -*-
 
+def _reload_ar_translations(env, module_name):
+    lang = env['res.lang'].with_context(active_test=False).search(
+        [('code', 'in', ['ar_001', 'ar'])], limit=1,
+    )
+    if not lang:
+        return
+    mod = env['ir.module.module'].search([('name', '=', module_name)], limit=1)
+    if mod:
+        mod._update_translations(filter_lang=[lang.code], overwrite=True)
+
+
 def post_init_hook(env):
     """Backfill attendance_source and create default attendance policies."""
     Attendance = env['hr.attendance']
@@ -36,6 +47,8 @@ def post_init_hook(env):
             patch['auto_sync'] = False
         if patch:
             device.write(patch)
+
+    _reload_ar_translations(env, 'hr_attendance_custom_ext')
 
     Log = env['fingerprint.device.log']
     logs_with_employee = Log.search([('employee_id', '!=', False)])

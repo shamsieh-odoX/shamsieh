@@ -1,12 +1,12 @@
 # Translation of Odoo Server.
-# Professional Arabic (ar) translations.
+# Professional Arabic (ar) translations — Odoo-compliant format.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 19.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-13 10:40+0000\n"
-"PO-Revision-Date: 2026-07-13 10:40+0000\n"
+"POT-Creation-Date: 2026-07-13 11:26+0000\n"
+"PO-Revision-Date: 2026-07-13 11:26+0000\n"
 "Last-Translator: Shamsieh\n"
 "Language-Team: Arabic\n"
 "Language: ar\n"
@@ -17,17 +17,8 @@ msgstr ""
 
 
 #. module: hr_overtime_payroll
-msgid "Link Overtime to Payroll"
-msgstr "ربط العمل الإضافي بالرواتب"
-
-#. module: hr_overtime_payroll
-msgid "Overtime"
-msgstr "العمل الإضافي"
-
-#. module: hr_overtime_payroll
-msgid "Payslip Input"
-msgstr "مدخل قسيمة الراتب"
-
-#. module: hr_overtime_payroll
+#. odoo-python
+#: code:addons/hr_overtime_payroll/views/res_config_settings_views.xml:0
+#: model_terms:ir.ui.view,arch_db:hr_overtime_payroll.res_config_settings_view_form_overtime_payroll
 msgid "Push Overtime to Payslips"
 msgstr "إرسال العمل الإضافي إلى قسائم الرواتب"

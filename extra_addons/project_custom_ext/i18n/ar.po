@@ -1,12 +1,12 @@
 # Translation of Odoo Server.
-# Professional Arabic (ar) translations.
+# Professional Arabic (ar) translations — Odoo-compliant format.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 19.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-13 10:40+0000\n"
-"PO-Revision-Date: 2026-07-13 10:40+0000\n"
+"POT-Creation-Date: 2026-07-13 11:26+0000\n"
+"PO-Revision-Date: 2026-07-13 11:26+0000\n"
 "Last-Translator: Shamsieh\n"
 "Language-Team: Arabic\n"
 "Language: ar\n"
@@ -17,317 +17,427 @@ msgstr ""
 
 
 #. module: project_custom_ext
+#. odoo-python
+#: code:addons/project_custom_ext/views/project_project_views.xml:0
+#: model_terms:ir.ui.view,arch_db:project_custom_ext.project_project_search_custom
 msgid "0% - 20%"
 msgstr "من 0٪ إلى 20٪"
 
 #. module: project_custom_ext
+#. odoo-python
+#: code:addons/project_custom_ext/views/project_project_views.xml:0
+#: model_terms:ir.ui.view,arch_db:project_custom_ext.project_project_search_custom
 msgid "20% - 50%"
 msgstr "من 20٪ إلى 50٪"
 
 #. module: project_custom_ext
+#. odoo-python
+#: code:addons/project_custom_ext/views/project_project_views.xml:0
+#: model_terms:ir.ui.view,arch_db:project_custom_ext.project_project_search_custom
 msgid "50% - 80%"
 msgstr "من 50٪ إلى 80٪"
 
 #. module: project_custom_ext
+#. odoo-python
+#: code:addons/project_custom_ext/views/project_project_views.xml:0
+#: model_terms:ir.ui.view,arch_db:project_custom_ext.project_project_search_custom
 msgid "80% - 100%"
 msgstr "من 80٪ إلى 100٪"
 
 #. module: project_custom_ext
+#. odoo-python
+#: code:addons/project_custom_ext/views/project_task_template_views.xml:0
+#: model_terms:ir.ui.view,arch_db:project_custom_ext.project_task_template_view_form
 msgid "Add Standard Stages"
 msgstr "إضافة مراحل قياسية"
 
 #. module: project_custom_ext
-msgid "Allocated Until"
-msgstr "مخصص حتى"
-
-#. module: project_custom_ext
-msgid "CRM Setup Template"
-msgstr "قالب إعداد CRM"
-
-#. module: project_custom_ext
+#. odoo-python
+#: code:addons/project_custom_ext/views/project_project_views.xml:0
+#: model_terms:ir.ui.view,arch_db:project_custom_ext.project_project_create_form_custom
 msgid "Choose a workflow template…"
 msgstr "اختر قالب سير العمل…"
 
 #. module: project_custom_ext
-msgid "Closing Stage"
-msgstr "مرحلة الإغلاق"
-
-#. module: project_custom_ext
-msgid "Completed tasks / total tasks × 100 (tasks in a closing stage count as done)."
-msgstr "المهام المنجزة / إجمالي المهام × 100 (المهام في مرحلة الإغلاق تُحسب منجزة)."
-
-#. module: project_custom_ext
+#. odoo-python
+#: code:addons/project_custom_ext/views/project_project_views.xml:0
+#: model_terms:ir.ui.view,arch_db:project_custom_ext.project_project_quick_create_custom
+#: model_terms:ir.ui.view,arch_db:project_custom_ext.project_project_search_custom
 msgid "Country"
 msgstr "الدولة"
 
 #. module: project_custom_ext
+#. odoo-python
+#: code:addons/project_custom_ext/views/project_project_views.xml:0
+#. odoo-python
+#: code:addons/project_custom_ext/views/project_task_template_views.xml:0
+#. odoo-python
+#: code:addons/project_custom_ext/views/project_task_type_views.xml:0
+#: model:ir.model.fields,field_description:project_custom_ext.field_project_task_template_line__unknown
+#: model_terms:ir.ui.view,arch_db:project_custom_ext.project_project_form_custom
+#: model_terms:ir.ui.view,arch_db:project_custom_ext.project_task_template_view_form
+#: model_terms:ir.ui.view,arch_db:project_custom_ext.project_task_type_form_custom
 msgid "Counts as Done"
 msgstr "يُحسب منجزاً"
 
 #. module: project_custom_ext
-msgid "Done"
-msgstr "منجز"
-
-#. module: project_custom_ext
+#. odoo-python
+#: code:addons/project_custom_ext/views/project_task_search_views.xml:0
+#: model_terms:ir.ui.view,arch_db:project_custom_ext.project_task_search_custom
 msgid "Employee"
 msgstr "الموظف"
 
 #. module: project_custom_ext
-msgid "Estimated Hours"
-msgstr "الساعات المقدرة"
-
-#. module: project_custom_ext
+#. odoo-python
+#: code:addons/project_custom_ext/views/project_project_views.xml:0
+#: model_terms:ir.ui.view,arch_db:project_custom_ext.project_project_form_custom
 msgid "Folded in Kanban"
 msgstr "مطوي في كانبان"
 
 #. module: project_custom_ext
-msgid "Implementation Project Template"
-msgstr "قالب مشروع التنفيذ"
-
-#. module: project_custom_ext
-msgid "In Progress"
-msgstr "قيد التنفيذ"
-
-#. module: project_custom_ext
+#. odoo-python
+#: code:addons/project_custom_ext/views/project_project_views.xml:0
+#: model_terms:ir.ui.view,arch_db:project_custom_ext.project_project_create_form_custom
 msgid "Location &amp; Team"
 msgstr "الموقع والفريق"
 
 #. module: project_custom_ext
-msgid "Marks this project stage as a closing/completed stage."
-msgstr "يحدد مرحلة المشروع كمرحلة إغلاق/إكمال."
-
-#. module: project_custom_ext
+#. odoo-javascript
+#: code:addons/project_custom_ext/static/src/project_notifications.js:0
 msgid "Not allowed"
 msgstr "غير مسموح"
 
 #. module: project_custom_ext
+#. odoo-javascript
+#: code:addons/project_custom_ext/static/src/project_notifications.js:0
 msgid "Notice"
 msgstr "تنبيه"
 
 #. module: project_custom_ext
+#. odoo-python
+#: code:addons/project_custom_ext/views/project_project_views.xml:0
+#: model_terms:ir.ui.view,arch_db:project_custom_ext.project_project_create_form_custom
 msgid "Optional"
 msgstr "اختياري"
 
 #. module: project_custom_ext
+#. odoo-python
+#: code:addons/project_custom_ext/views/project_task_search_views.xml:0
+#: model:ir.actions.act_window,name:project_custom_ext.project_dashboard_overdue_tasks_action
+#: model:ir.ui.menu,name:project_custom_ext.menu_project_dashboard_overdue
+#: model_terms:ir.ui.view,arch_db:project_custom_ext.project_task_search_custom
 msgid "Overdue Tasks"
 msgstr "مهام متأخرة"
 
 #. module: project_custom_ext
-msgid "Planned date and time when allocated work on this project should be completed."
-msgstr "التاريخ والوقت المخطط لإكمال العمل المخصص على هذا المشروع."
+#: model:ir.ui.menu,name:project_custom_ext.menu_project_custom_dashboard
+msgid "Overview"
+msgstr "نظرة عامة"
 
 #. module: project_custom_ext
-msgid "Planned date and time when allocated work on this task should be completed."
-msgstr "التاريخ والوقت المخطط لإكمال العمل المخصص على هذه المهمة."
-
-#. module: project_custom_ext
+#. odoo-python
+#: code:addons/project_custom_ext/views/project_project_views.xml:0
+#: model_terms:ir.ui.view,arch_db:project_custom_ext.project_project_search_custom
 msgid "Progress"
 msgstr "التقدم"
 
 #. module: project_custom_ext
+#. odoo-python
+#: code:addons/project_custom_ext/views/project_project_views.xml:0
+#: model_terms:ir.ui.view,arch_db:project_custom_ext.project_project_list_custom
 msgid "Progress %"
 msgstr "نسبة التقدم %"
 
 #. module: project_custom_ext
+#. odoo-python
+#: code:addons/project_custom_ext/views/project_project_views.xml:0
+#: model_terms:ir.ui.view,arch_db:project_custom_ext.project_project_search_custom
 msgid "Progress Range"
 msgstr "نطاق التقدم"
 
 #. module: project_custom_ext
+#. odoo-python
+#: code:addons/project_custom_ext/views/project_task_search_views.xml:0
+#: model_terms:ir.ui.view,arch_db:project_custom_ext.project_task_search_custom
 msgid "Project"
 msgstr "المشروع"
 
 #. module: project_custom_ext
+#: model:res.groups,name:project_custom_ext.group_project_create_move
 msgid "Project Create/Move"
 msgstr "إنشاء/نقل المشاريع"
 
 #. module: project_custom_ext
+#: model:ir.model,name:project_custom_ext.model_project_custom_access_mixin
+msgid "Project Custom Access Helpers"
+msgstr "Project Custom Access Helpers"
+
+#. module: project_custom_ext
+#: model:ir.actions.act_window,name:project_custom_ext.project_custom_dashboard_action
+#: model:ir.ui.menu,name:project_custom_ext.menu_project_custom_dashboard_root
 msgid "Project Dashboard"
 msgstr "لوحة معلومات المشاريع"
 
 #. module: project_custom_ext
+#: model:res.groups,name:project_custom_ext.group_project_edit_only
 msgid "Project Edit Only"
 msgstr "تعديل المشاريع فقط"
 
 #. module: project_custom_ext
+#: model:res.groups,name:project_custom_ext.group_project_custom_manager
 msgid "Project Manager"
 msgstr "مدير المشروع"
 
 #. module: project_custom_ext
+#. odoo-python
+#: code:addons/project_custom_ext/views/project_dashboard_views.xml:0
+#: model:ir.actions.act_window,name:project_custom_ext.project_dashboard_progress_action
+#: model:ir.ui.menu,name:project_custom_ext.menu_project_dashboard_progress
+#: model_terms:ir.ui.view,arch_db:project_custom_ext.project_dashboard_progress_graph
 msgid "Project Progress %"
 msgstr "نسبة تقدم المشروع %"
 
 #. module: project_custom_ext
+#. odoo-python
+#: code:addons/project_custom_ext/views/project_project_views.xml:0
+#: model_terms:ir.ui.view,arch_db:project_custom_ext.project_project_form_custom
+#: model_terms:ir.ui.view,arch_db:project_custom_ext.project_project_search_custom
 msgid "Project Stage"
 msgstr "مرحلة المشروع"
 
 #. module: project_custom_ext
-msgid "Project Task: Edit Only users (write access)"
-msgstr "مهمة المشروع: مستخدمو التعديل فقط (صلاحية الكتابة)"
+#: model:ir.model,name:project_custom_ext.model_project_task_template
+msgid "Project Stage Template"
+msgstr "Project Stage Template"
 
 #. module: project_custom_ext
-msgid "Project: Create/Move can create projects"
-msgstr "المشروع: إنشاء/نقل يمكنه إنشاء المشاريع"
+#: model:ir.model,name:project_custom_ext.model_project_task_template_line
+msgid "Project Stage Template Line"
+msgstr "Project Stage Template Line"
 
 #. module: project_custom_ext
+#. odoo-python
+#: code:addons/project_custom_ext/views/project_dashboard_views.xml:0
+#: model_terms:ir.ui.view,arch_db:project_custom_ext.project_dashboard_overview_pivot
 msgid "Projects Overview"
 msgstr "نظرة عامة على المشاريع"
 
 #. module: project_custom_ext
+#. odoo-python
+#: code:addons/project_custom_ext/views/project_dashboard_views.xml:0
+#: model_terms:ir.ui.view,arch_db:project_custom_ext.project_dashboard_by_country_graph
 msgid "Projects by Country"
 msgstr "المشاريع حسب الدولة"
 
 #. module: project_custom_ext
+#: model:ir.actions.act_window,name:project_custom_ext.project_dashboard_by_manager_action
+#: model:ir.ui.menu,name:project_custom_ext.menu_project_dashboard_by_manager
 msgid "Projects by Manager"
 msgstr "المشاريع حسب المدير"
 
 #. module: project_custom_ext
+#. odoo-python
+#: code:addons/project_custom_ext/views/project_dashboard_views.xml:0
+#: model_terms:ir.ui.view,arch_db:project_custom_ext.project_dashboard_by_manager_graph
 msgid "Projects by Project Manager"
 msgstr "المشاريع حسب مدير المشروع"
 
 #. module: project_custom_ext
+#. odoo-python
+#: code:addons/project_custom_ext/views/project_dashboard_views.xml:0
+#: model:ir.actions.act_window,name:project_custom_ext.project_dashboard_by_stage_action
+#: model:ir.ui.menu,name:project_custom_ext.menu_project_dashboard_by_stage
+#: model_terms:ir.ui.view,arch_db:project_custom_ext.project_dashboard_by_stage_graph
 msgid "Projects by Stage"
 msgstr "المشاريع حسب المرحلة"
 
 #. module: project_custom_ext
-msgid "Remaining Hours"
-msgstr "الساعات المتبقية"
-
-#. module: project_custom_ext
-msgid "Review"
-msgstr "مراجعة"
-
-#. module: project_custom_ext
+#. odoo-python
+#: code:addons/project_custom_ext/views/project_project_views.xml:0
+#: model_terms:ir.ui.view,arch_db:project_custom_ext.project_project_create_form_custom
+#: model_terms:ir.ui.view,arch_db:project_custom_ext.project_project_form_custom
+#: model_terms:ir.ui.view,arch_db:project_custom_ext.project_project_search_custom
 msgid "Sales Team"
 msgstr "فريق المبيعات"
 
 #. module: project_custom_ext
-msgid "Select a template at project creation to auto-generate workflow stages (tasks are optional)."
-msgstr "اختر قالباً عند إنشاء المشروع لإنشاء مراحل سير العمل تلقائياً (المهام اختيارية)."
-
-#. module: project_custom_ext
+#. odoo-python
+#: code:addons/project_custom_ext/views/project_project_views.xml:0
+#: model_terms:ir.ui.view,arch_db:project_custom_ext.project_project_create_form_custom
 msgid "Select country"
 msgstr "اختر الدولة"
 
 #. module: project_custom_ext
-msgid "Spent Hours"
-msgstr "الساعات المنفقة"
-
-#. module: project_custom_ext
+#. odoo-python
+#: code:addons/project_custom_ext/views/project_task_template_views.xml:0
+#: model_terms:ir.ui.view,arch_db:project_custom_ext.project_task_template_view_form
 msgid "Stage"
 msgstr "المرحلة"
 
 #. module: project_custom_ext
+#. odoo-python
+#: code:addons/project_custom_ext/views/project_task_template_views.xml:0
+#: model_terms:ir.ui.view,arch_db:project_custom_ext.project_task_template_view_form
 msgid "Stage Template"
 msgstr "قالب المراحل"
 
 #. module: project_custom_ext
+#. odoo-python
+#: code:addons/project_custom_ext/views/project_task_template_views.xml:0
+#: model_terms:ir.ui.view,arch_db:project_custom_ext.project_task_template_view_form
 msgid "Stage name (e.g. In Progress)"
 msgstr "اسم المرحلة (مثال: قيد التنفيذ)"
 
 #. module: project_custom_ext
+#. odoo-python
+#: code:addons/project_custom_ext/views/project_task_template_views.xml:0
+#: model:ir.model.fields,field_description:project_custom_ext.field_project_task_template__unknown
+#: model_terms:ir.ui.view,arch_db:project_custom_ext.project_task_template_view_form
+#: model_terms:ir.ui.view,arch_db:project_custom_ext.project_task_template_view_list
 msgid "Stages"
 msgstr "المراحل"
 
 #. module: project_custom_ext
+#. odoo-python
+#: code:addons/project_custom_ext/views/project_project_views.xml:0
+#: model_terms:ir.ui.view,arch_db:project_custom_ext.project_project_form_custom
 msgid "Task Stages"
 msgstr "مراحل المهام"
 
 #. module: project_custom_ext
+#. odoo-python
+#: code:addons/project_custom_ext/views/project_project_views.xml:0
+#: model_terms:ir.ui.view,arch_db:project_custom_ext.project_project_create_form_custom
+#: model_terms:ir.ui.view,arch_db:project_custom_ext.project_project_form_custom
+#: model_terms:ir.ui.view,arch_db:project_custom_ext.project_project_search_custom
 msgid "Task Template"
 msgstr "قالب المهام"
 
 #. module: project_custom_ext
+#: model:ir.actions.act_window,name:project_custom_ext.project_task_template_action
+#: model:ir.ui.menu,name:project_custom_ext.menu_project_task_templates
 msgid "Task Templates"
 msgstr "قوالب المهام"
 
 #. module: project_custom_ext
+#. odoo-python
+#: code:addons/project_custom_ext/views/project_dashboard_views.xml:0
+#: model:ir.actions.act_window,name:project_custom_ext.project_dashboard_tasks_status_action
+#: model:ir.ui.menu,name:project_custom_ext.menu_project_dashboard_tasks_status
+#: model_terms:ir.ui.view,arch_db:project_custom_ext.project_dashboard_tasks_by_stage_pivot
+#: model_terms:ir.ui.view,arch_db:project_custom_ext.project_dashboard_tasks_by_status_graph
 msgid "Tasks by Stage"
 msgstr "المهام حسب المرحلة"
 
 #. module: project_custom_ext
+#. odoo-python
+#: code:addons/project_custom_ext/views/project_project_views.xml:0
+#: model_terms:ir.ui.view,arch_db:project_custom_ext.project_project_quick_create_custom
 msgid "Template"
 msgstr "القالب"
 
 #. module: project_custom_ext
+#. odoo-python
+#: code:addons/project_custom_ext/models/project_project.py:0
 msgid "The task template cannot be changed after it has been applied."
 msgstr "لا يمكن تغيير قالب المهام بعد تطبيقه."
 
 #. module: project_custom_ext
+#. odoo-javascript
+#: code:addons/project_custom_ext/static/src/project_notifications.js:0
 msgid "This action is not allowed."
 msgstr "هذا الإجراء غير مسموح."
 
 #. module: project_custom_ext
+#. odoo-python
+#: code:addons/project_custom_ext/models/project_task_template.py:0
 msgid "This template already has stages. Edit them in the list or remove them first."
 msgstr "هذا القالب يحتوي على مراحل بالفعل. عدّلها في القائمة أو احذفها أولاً."
 
 #. module: project_custom_ext
-msgid "Time Remaining Until"
-msgstr "الوقت المتبقي حتى"
-
-#. module: project_custom_ext
+#. odoo-python
+#: code:addons/project_custom_ext/views/project_dashboard_views.xml:0
+#: model:ir.actions.act_window,name:project_custom_ext.project_dashboard_timesheet_employee_action
+#: model:ir.ui.menu,name:project_custom_ext.menu_project_dashboard_timesheet_employee
+#: model_terms:ir.ui.view,arch_db:project_custom_ext.project_dashboard_timesheet_employee_pivot
 msgid "Timesheet by Employee"
 msgstr "الجدول الزمني حسب الموظف"
 
 #. module: project_custom_ext
+#. odoo-python
+#: code:addons/project_custom_ext/views/project_dashboard_views.xml:0
+#: model:ir.actions.act_window,name:project_custom_ext.project_dashboard_timesheet_project_action
+#: model:ir.ui.menu,name:project_custom_ext.menu_project_dashboard_timesheet_project
+#: model_terms:ir.ui.view,arch_db:project_custom_ext.project_dashboard_timesheet_project_pivot
 msgid "Timesheet by Project"
 msgstr "الجدول الزمني حسب المشروع"
 
 #. module: project_custom_ext
-msgid "To Do"
-msgstr "للتنفيذ"
-
-#. module: project_custom_ext
+#. odoo-javascript
+#: code:addons/project_custom_ext/static/src/project_notifications.js:0
 msgid "Validation"
 msgstr "تحقق"
 
 #. module: project_custom_ext
-msgid "Waiting"
-msgstr "في الانتظار"
-
-#. module: project_custom_ext
-msgid "Website Project Template"
-msgstr "قالب مشروع الموقع"
-
-#. module: project_custom_ext
+#: model:ir.model.fields,field_description:project_custom_ext.field_project_task_template_line__unknown
 msgid "When enabled, tasks in this stage count as completed for the project progress % (e.g. Done or Completed)."
 msgstr "عند التفعيل، تُحسب المهام في هذه المرحلة منجزة لنسبة تقدم المشروع % (مثل منجز أو مكتمل)."
 
 #. module: project_custom_ext
-msgid "When enabled, tasks moved to this stage are treated as completed and increase the project progress %."
-msgstr "عند التفعيل، تُعامل المهام المنقولة إلى هذه المرحلة كمنجزة وتزيد نسبة تقدم المشروع %."
-
-#. module: project_custom_ext
+#. odoo-python
+#: code:addons/project_custom_ext/views/project_task_template_views.xml:0
+#: model_terms:ir.ui.view,arch_db:project_custom_ext.project_task_template_view_form
 msgid "When should this template be used?"
 msgstr "متى يُستخدم هذا القالب؟"
 
 #. module: project_custom_ext
+#. odoo-python
+#: code:addons/project_custom_ext/views/project_project_views.xml:0
+#: model_terms:ir.ui.view,arch_db:project_custom_ext.project_project_create_form_custom
 msgid "Workflow Template"
 msgstr "قالب سير العمل"
 
 #. module: project_custom_ext
+#. odoo-python
+#: code:addons/project_custom_ext/views/project_project_views.xml:0
+#: model_terms:ir.ui.view,arch_db:project_custom_ext.project_project_quick_create_custom
 msgid "Workflow template"
 msgstr "قالب سير العمل"
 
 #. module: project_custom_ext
+#. odoo-python
+#: code:addons/project_custom_ext/models/project_task.py:0
 msgid "You cannot move tasks between stages with your current access level."
 msgstr "لا يمكنك نقل المهام بين المراحل بمستوى صلاحياتك الحالي."
 
 #. module: project_custom_ext
+#. odoo-javascript
+#: code:addons/project_custom_ext/static/src/project_notifications.js:0
 msgid "You don"
 msgstr "لا تملك"
 
 #. module: project_custom_ext
+#. odoo-python
+#: code:addons/project_custom_ext/models/project_project.py:0
 msgid "You need Project Create/Move or Manager rights to create projects."
 msgstr "تحتاج صلاحية إنشاء/نقل المشاريع أو مدير المشروع لإنشاء مشاريع."
 
 #. module: project_custom_ext
+#. odoo-python
+#: code:addons/project_custom_ext/views/project_project_views.xml:0
+#: model_terms:ir.ui.view,arch_db:project_custom_ext.project_project_form_custom
 msgid "e.g. To Do"
 msgstr "مثال: للتنفيذ"
 
 #. module: project_custom_ext
+#. odoo-python
+#: code:addons/project_custom_ext/views/project_task_template_views.xml:0
+#: model_terms:ir.ui.view,arch_db:project_custom_ext.project_task_template_view_form
 msgid "e.g. Website Delivery Workflow"
 msgstr "مثال: سير عمل تسليم الموقع"
 
 #. module: project_custom_ext
+#. odoo-javascript
+#: code:addons/project_custom_ext/static/src/project_notifications.js:0
 msgid "this item"
 msgstr "هذا العنصر"

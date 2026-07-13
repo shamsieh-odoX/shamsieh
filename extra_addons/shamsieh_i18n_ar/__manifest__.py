@@ -1,6 +1,6 @@
 {
     'name': 'Shamsieh Professional Arabic (HR & Project)',
-    'version': '19.0.1.0.2',
+    'version': '19.0.1.0.3',
     'category': 'Hidden',
     'summary': 'Professional Arabic translations for attendance, overtime, project, and related Odoo apps',
     'author': 'Custom',

@@ -52,3 +52,25 @@ def load_standard_ar_translations(env):
 
 def post_init_hook(env):
     load_standard_ar_translations(env)
+    _reload_custom_module_translations(env)
+
+
+def _reload_custom_module_translations(env):
+    lang = env['res.lang'].with_context(active_test=False).search(
+        [('code', 'in', ['ar_001', 'ar'])], limit=1,
+    )
+    if not lang:
+        return
+    for module_name in (
+        'hr_attendance_custom_ext',
+        'hr_holidays_custom_ext',
+        'hr_overtime_management',
+        'hr_overtime_payroll',
+        'project_custom_ext',
+    ):
+        mod = env['ir.module.module'].search([
+            ('name', '=', module_name),
+            ('state', '=', 'installed'),
+        ], limit=1)
+        if mod:
+            mod._update_translations(filter_lang=[lang.code], overwrite=True)

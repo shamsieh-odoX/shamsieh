@@ -1,9 +1,4 @@
-# Part of Odoo. See LICENSE file for full copyright and licensing details.
-
-
-def post_init_hook(env):
-    env['res.company']._ensure_overtime_types_for_all_companies()
-    _reload_ar_translations(env, 'hr_overtime_management')
+# -*- coding: utf-8 -*-
 
 
 def _reload_ar_translations(env, module_name):
@@ -15,3 +10,7 @@ def _reload_ar_translations(env, module_name):
     mod = env['ir.module.module'].search([('name', '=', module_name)], limit=1)
     if mod:
         mod._update_translations(filter_lang=[lang.code], overwrite=True)
+
+
+def post_init_hook(env):
+    _reload_ar_translations(env, 'hr_overtime_payroll')
