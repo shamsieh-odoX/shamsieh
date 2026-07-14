@@ -1,4 +1,4 @@
-from odoo import api, fields, models
+from odoo import _, api, fields, models
 
 
 class ShamsTodoDashboard(models.TransientModel):
@@ -6,7 +6,7 @@ class ShamsTodoDashboard(models.TransientModel):
     _description = 'Group Dashboard'
     _rec_name = 'name'
 
-    name = fields.Char(default='Group Dashboard', readonly=True)
+    name = fields.Char(compute='_compute_labels')
     total_task_count = fields.Integer(compute='_compute_counts')
     my_task_count = fields.Integer(compute='_compute_counts')
     overdue_task_count = fields.Integer(compute='_compute_counts')
@@ -16,6 +16,43 @@ class ShamsTodoDashboard(models.TransientModel):
         compute='_compute_my_task_ids',
         string='My Assigned Tasks',
     )
+
+    # Translated UI labels (view text nodes are unreliable for button spans).
+    title_label = fields.Char(compute='_compute_labels')
+    subtitle_label = fields.Char(compute='_compute_labels')
+    open_tasks_label = fields.Char(compute='_compute_labels')
+    open_tasks_hint = fields.Char(compute='_compute_labels')
+    my_tasks_label = fields.Char(compute='_compute_labels')
+    my_tasks_hint = fields.Char(compute='_compute_labels')
+    overdue_label = fields.Char(compute='_compute_labels')
+    overdue_hint = fields.Char(compute='_compute_labels')
+    completed_label = fields.Char(compute='_compute_labels')
+    completed_hint = fields.Char(compute='_compute_labels')
+    by_group_label = fields.Char(compute='_compute_labels')
+    by_group_hint = fields.Char(compute='_compute_labels')
+    my_section_label = fields.Char(compute='_compute_labels')
+    view_all_label = fields.Char(compute='_compute_labels')
+
+    @api.depends_context('lang')
+    def _compute_labels(self):
+        for dashboard in self:
+            dashboard.name = _('Group Dashboard')
+            dashboard.title_label = _('Group To-Do Overview')
+            dashboard.subtitle_label = _(
+                'Track shared team tasks across your groups at a glance.'
+            )
+            dashboard.open_tasks_label = _('Open Tasks')
+            dashboard.open_tasks_hint = _('Active group tasks you can access')
+            dashboard.my_tasks_label = _('Assigned to Me')
+            dashboard.my_tasks_hint = _('Open tasks waiting on you')
+            dashboard.overdue_label = _('Overdue')
+            dashboard.overdue_hint = _('Past due and still open')
+            dashboard.completed_label = _('Completed')
+            dashboard.completed_hint = _('Finished group tasks')
+            dashboard.by_group_label = _('Tasks by Group')
+            dashboard.by_group_hint = _('Open pivot analysis')
+            dashboard.my_section_label = _('My Assigned Tasks')
+            dashboard.view_all_label = _('View all')
 
     @api.depends_context('uid')
     def _compute_my_task_ids(self):
@@ -48,7 +85,7 @@ class ShamsTodoDashboard(models.TransientModel):
     def action_view_all_tasks(self):
         return self._get_task_action(
             [('status', 'not in', ['done', 'cancelled'])],
-            name='Open Tasks',
+            name=_('Open Tasks'),
         )
 
     def action_view_my_tasks(self):
@@ -61,15 +98,18 @@ class ShamsTodoDashboard(models.TransientModel):
         return self._get_task_action([
             ('due_date', '<', today),
             ('status', 'not in', ['done', 'cancelled']),
-        ])
+        ], name=_('Overdue'))
 
     def action_view_done_tasks(self):
-        return self._get_task_action([('status', '=', 'done')])
+        return self._get_task_action(
+            [('status', '=', 'done')],
+            name=_('Completed'),
+        )
 
     def action_view_tasks_by_group(self):
         return {
             'type': 'ir.actions.act_window',
-            'name': 'Tasks by Group',
+            'name': _('Tasks by Group'),
             'res_model': 'shams.todo.task',
             'view_mode': 'pivot,list,kanban,calendar,form',
             'context': {
@@ -78,10 +118,10 @@ class ShamsTodoDashboard(models.TransientModel):
             },
         }
 
-    def _get_task_action(self, domain, name='Tasks'):
+    def _get_task_action(self, domain, name=None):
         return {
             'type': 'ir.actions.act_window',
-            'name': name,
+            'name': name or _('Tasks'),
             'res_model': 'shams.todo.task',
             'view_mode': 'list,kanban,calendar,form',
             'domain': domain,
@@ -92,7 +132,7 @@ class ShamsTodoDashboard(models.TransientModel):
         dashboard = self.create({})
         return {
             'type': 'ir.actions.act_window',
-            'name': 'Group Dashboard',
+            'name': _('Group Dashboard'),
             'res_model': 'shams.todo.dashboard',
             'view_mode': 'form',
             'res_id': dashboard.id,

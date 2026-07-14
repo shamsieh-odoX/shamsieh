@@ -8,9 +8,11 @@
             <form string="Group Dashboard" create="false" delete="false" class="o_shams_todo_dashboard_form">
                 <sheet class="o_shams_todo_dashboard_sheet">
                     <div class="mb-3">
-                        <h1 class="mb-1">Group To-Do Overview</h1>
+                        <h1 class="mb-1">
+                            <field name="title_label" nolabel="1" readonly="1" class="o_shams_todo_dash_title"/>
+                        </h1>
                         <p class="text-muted mb-0">
-                            Track shared team tasks across your groups at a glance.
+                            <field name="subtitle_label" nolabel="1" readonly="1"/>
                         </p>
                     </div>
                     <div class="o_shams_todo_dashboard_grid">
@@ -19,45 +21,68 @@
                             <span class="o_stat_value">
                                 <field name="total_task_count" nolabel="1"/>
                             </span>
-                            <span class="o_stat_text">Open Tasks</span>
-                            <span class="o_stat_hint">Active group tasks you can access</span>
+                            <span class="o_stat_text">
+                                <field name="open_tasks_label" nolabel="1" readonly="1"/>
+                            </span>
+                            <span class="o_stat_hint">
+                                <field name="open_tasks_hint" nolabel="1" readonly="1"/>
+                            </span>
                         </button>
                         <button name="action_view_my_tasks" type="object"
                             class="o_shams_todo_stat_card o_shams_todo_stat_card--info">
                             <span class="o_stat_value">
                                 <field name="my_task_count" nolabel="1"/>
                             </span>
-                            <span class="o_stat_text">Assigned to Me</span>
-                            <span class="o_stat_hint">Open tasks waiting on you</span>
+                            <span class="o_stat_text">
+                                <field name="my_tasks_label" nolabel="1" readonly="1"/>
+                            </span>
+                            <span class="o_stat_hint">
+                                <field name="my_tasks_hint" nolabel="1" readonly="1"/>
+                            </span>
                         </button>
                         <button name="action_view_overdue_tasks" type="object"
                             class="o_shams_todo_stat_card o_shams_todo_stat_card--warning">
                             <span class="o_stat_value">
                                 <field name="overdue_task_count" nolabel="1"/>
                             </span>
-                            <span class="o_stat_text">Overdue</span>
-                            <span class="o_stat_hint">Past due and still open</span>
+                            <span class="o_stat_text">
+                                <field name="overdue_label" nolabel="1" readonly="1"/>
+                            </span>
+                            <span class="o_stat_hint">
+                                <field name="overdue_hint" nolabel="1" readonly="1"/>
+                            </span>
                         </button>
                         <button name="action_view_done_tasks" type="object"
                             class="o_shams_todo_stat_card o_shams_todo_stat_card--success">
                             <span class="o_stat_value">
                                 <field name="done_task_count" nolabel="1"/>
                             </span>
-                            <span class="o_stat_text">Completed</span>
-                            <span class="o_stat_hint">Finished group tasks</span>
+                            <span class="o_stat_text">
+                                <field name="completed_label" nolabel="1" readonly="1"/>
+                            </span>
+                            <span class="o_stat_hint">
+                                <field name="completed_hint" nolabel="1" readonly="1"/>
+                            </span>
                         </button>
                         <button name="action_view_tasks_by_group" type="object"
                             class="o_shams_todo_stat_card o_shams_todo_stat_card--chart">
                             <span class="o_stat_value"><i class="fa fa-bar-chart"/></span>
-                            <span class="o_stat_text">Tasks by Group</span>
-                            <span class="o_stat_hint">Open pivot analysis</span>
+                            <span class="o_stat_text">
+                                <field name="by_group_label" nolabel="1" readonly="1"/>
+                            </span>
+                            <span class="o_stat_hint">
+                                <field name="by_group_hint" nolabel="1" readonly="1"/>
+                            </span>
                         </button>
                     </div>
                     <div class="o_shams_todo_dashboard_my_tasks mt-4">
                         <div class="d-flex justify-content-between align-items-center mb-2">
-                            <h2 class="h4 mb-0">My Assigned Tasks</h2>
-                            <button name="action_view_my_tasks" type="object"
-                                string="View all" class="btn btn-link"/>
+                            <h2 class="h4 mb-0">
+                                <field name="my_section_label" nolabel="1" readonly="1"/>
+                            </h2>
+                            <button name="action_view_my_tasks" type="object" class="btn btn-link">
+                                <field name="view_all_label" nolabel="1" readonly="1"/>
+                            </button>
                         </div>
                         <field name="my_task_ids" nolabel="1">
                             <list create="false" delete="false"

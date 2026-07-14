@@ -33,8 +33,7 @@ msgid "Assigned To"
 msgstr "مُعيَّن إلى"
 
 #. module: shams_todo_groups
-#: model_terms:ir.ui.view,arch_db:shams_todo_groups.todo_dashboard_views
-#: model_terms:ir.ui.view,arch_db:shams_todo_groups.shams_todo_dashboard_view_form
+#: #: model_terms:ir.ui.view,arch_db:shams_todo_groups.shams_todo_dashboard_view_form
 msgid "Assigned to Me"
 msgstr "مُعيَّنة لي"
 
@@ -454,3 +453,101 @@ msgstr "الوصف"
 #: model:ir.model.fields,field_description:shams_todo_groups.field_shams_todo_task__name
 msgid "Name"
 msgstr "الاسم"
+
+# --- Python code translations for dashboard labels ---
+
+#. module: shams_todo_groups
+#. odoo-python
+#: code:addons/shams_todo_groups/models/todo_dashboard.py:0
+msgid "Group Dashboard"
+msgstr "لوحة معلومات المجموعات"
+
+#. module: shams_todo_groups
+#. odoo-python
+#: code:addons/shams_todo_groups/models/todo_dashboard.py:0
+msgid "Group To-Do Overview"
+msgstr "نظرة عامة على مهام المجموعات"
+
+#. module: shams_todo_groups
+#. odoo-python
+#: code:addons/shams_todo_groups/models/todo_dashboard.py:0
+msgid "Track shared team tasks across your groups at a glance."
+msgstr "تتبع مهام الفريق المشتركة عبر مجموعاتك بنظرة سريعة."
+
+#. module: shams_todo_groups
+#. odoo-python
+#: code:addons/shams_todo_groups/models/todo_dashboard.py:0
+msgid "Open Tasks"
+msgstr "المهام المفتوحة"
+
+#. module: shams_todo_groups
+#. odoo-python
+#: code:addons/shams_todo_groups/models/todo_dashboard.py:0
+msgid "Active group tasks you can access"
+msgstr "مهام المجموعات النشطة التي يمكنك الوصول إليها"
+
+#. module: shams_todo_groups
+#. odoo-python
+#: code:addons/shams_todo_groups/models/todo_dashboard.py:0
+msgid "Assigned to Me"
+msgstr "مُعيَّنة لي"
+
+#. module: shams_todo_groups
+#. odoo-python
+#: code:addons/shams_todo_groups/models/todo_dashboard.py:0
+msgid "Open tasks waiting on you"
+msgstr "مهام مفتوحة بانتظارك"
+
+#. module: shams_todo_groups
+#. odoo-python
+#: code:addons/shams_todo_groups/models/todo_dashboard.py:0
+msgid "Overdue"
+msgstr "متأخرة"
+
+#. module: shams_todo_groups
+#. odoo-python
+#: code:addons/shams_todo_groups/models/todo_dashboard.py:0
+msgid "Past due and still open"
+msgstr "متأخرة وما زالت مفتوحة"
+
+#. module: shams_todo_groups
+#. odoo-python
+#: code:addons/shams_todo_groups/models/todo_dashboard.py:0
+msgid "Completed"
+msgstr "مكتملة"
+
+#. module: shams_todo_groups
+#. odoo-python
+#: code:addons/shams_todo_groups/models/todo_dashboard.py:0
+msgid "Finished group tasks"
+msgstr "مهام المجموعات المنجزة"
+
+#. module: shams_todo_groups
+#. odoo-python
+#: code:addons/shams_todo_groups/models/todo_dashboard.py:0
+msgid "Tasks by Group"
+msgstr "المهام حسب المجموعة"
+
+#. module: shams_todo_groups
+#. odoo-python
+#: code:addons/shams_todo_groups/models/todo_dashboard.py:0
+msgid "Open pivot analysis"
+msgstr "فتح تحليل المحور"
+
+#. module: shams_todo_groups
+#. odoo-python
+#: code:addons/shams_todo_groups/models/todo_dashboard.py:0
+msgid "My Assigned Tasks"
+msgstr "مهامي المُعيَّنة"
+
+#. module: shams_todo_groups
+#. odoo-python
+#: code:addons/shams_todo_groups/models/todo_dashboard.py:0
+msgid "View all"
+msgstr "عرض الكل"
+
+#. module: shams_todo_groups
+#. odoo-python
+#: code:addons/shams_todo_groups/models/todo_dashboard.py:0
+msgid "Tasks"
+msgstr "المهام"
