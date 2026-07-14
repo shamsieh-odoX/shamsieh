@@ -15,7 +15,7 @@
         </record>
         <record model="crm.stage" id="crm.stage_lead4">
             <field name="name">Won</field>
-            <field name="sequence">11</field>
+            <field name="sequence">13</field>
             <field name="is_won" eval="True"/>
         </record>
     </data>
@@ -38,28 +38,38 @@
         </record>
         <record model="crm.stage" id="stage_shamsieh_negotiation">
             <field name="name">Negotiation</field>
-            <field name="sequence">7</field>
+            <field name="sequence">8</field>
             <field name="color">2</field>
+        </record>
+        <record model="crm.stage" id="stage_shamsieh_scope_of_work">
+            <field name="name">Scope of Work</field>
+            <field name="sequence">7</field>
+            <field name="color">8</field>
+        </record>
+        <record model="crm.stage" id="stage_shamsieh_contract">
+            <field name="name">Contract</field>
+            <field name="sequence">9</field>
+            <field name="color">5</field>
         </record>
         <record model="crm.stage" id="stage_shamsieh_pending_decision">
             <field name="name">Pending Decision</field>
-            <field name="sequence">8</field>
+            <field name="sequence">10</field>
             <field name="color">6</field>
         </record>
         <record model="crm.stage" id="stage_shamsieh_followup_required">
             <field name="name">Follow-up Required</field>
-            <field name="sequence">9</field>
+            <field name="sequence">11</field>
             <field name="color">1</field>
         </record>
         <record model="crm.stage" id="stage_shamsieh_on_hold">
             <field name="name">On Hold</field>
-            <field name="sequence">10</field>
+            <field name="sequence">12</field>
             <field name="fold" eval="True"/>
             <field name="color">9</field>
         </record>
         <record model="crm.stage" id="stage_shamsieh_lost">
             <field name="name">Lost</field>
-            <field name="sequence">12</field>
+            <field name="sequence">14</field>
             <field name="fold" eval="True"/>
             <field name="color">0</field>
         </record>

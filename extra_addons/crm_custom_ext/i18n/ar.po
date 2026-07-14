@@ -296,6 +296,16 @@ msgid "Lost"
 msgstr "ضائع"
 
 #. module: crm_custom_ext
+#: model:crm.stage,name:crm_custom_ext.stage_shamsieh_scope_of_work
+msgid "Scope of Work"
+msgstr "نطاق العمل"
+
+#. module: crm_custom_ext
+#: model:crm.stage,name:crm_custom_ext.stage_shamsieh_contract
+msgid "Contract"
+msgstr "العقد"
+
+#. module: crm_custom_ext
 #: model:ir.actions.act_window,name:crm_custom_ext.crm_dashboard_lost_leads_action
 #: model:ir.ui.menu,name:crm_custom_ext.menu_crm_dashboard_lost
 msgid "Lost Leads"
