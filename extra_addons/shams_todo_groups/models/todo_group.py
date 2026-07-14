@@ -2,6 +2,21 @@ from odoo import _, api, fields, models
 from odoo.exceptions import ValidationError
 
 
+def _m2m_ids_from_commands(commands):
+    """Extract user ids from typical Many2many create/write commands."""
+    ids = set()
+    for cmd in commands or []:
+        if not cmd:
+            continue
+        if cmd[0] == 4:
+            ids.add(cmd[1])
+        elif cmd[0] == 6:
+            ids.update(cmd[2] or [])
+        elif cmd[0] == 5:
+            ids.clear()
+    return ids
+
+
 class ShamsTodoGroup(models.Model):
     _name = 'shams.todo.group'
     _description = 'To-Do Group'
@@ -51,22 +66,36 @@ class ShamsTodoGroup(models.Model):
     def create(self, vals_list):
         user = self.env.user
         for vals in vals_list:
-            member_commands = vals.get('member_ids') or []
-            member_ids = {
-                cmd[1]
-                for cmd in member_commands
-                if cmd[0] == 4
-            }
-            member_ids.update(
-                user_id
-                for cmd in member_commands
-                if cmd[0] == 6
-                for user_id in cmd[2]
-            )
-            if user.id not in member_ids:
-                member_commands.append((4, user.id))
+            member_commands = list(vals.get('member_ids') or [])
+            manager_commands = list(vals.get('manager_ids') or [])
+
+            member_ids = _m2m_ids_from_commands(member_commands)
+            manager_ids = _m2m_ids_from_commands(manager_commands)
+
+            # Creator must be able to manage the group they create.
+            if user.id not in manager_ids:
+                manager_commands.append((4, user.id))
+                manager_ids.add(user.id)
+                vals['manager_ids'] = manager_commands
+
+            # Managers must also be members (constraint + record-rule read).
+            missing_members = (manager_ids | {user.id}) - member_ids
+            for user_id in missing_members:
+                member_commands.append((4, user_id))
+            if missing_members or user.id not in member_ids:
                 vals['member_ids'] = member_commands
         return super().create(vals_list)
+
+    def write(self, vals):
+        result = super().write(vals)
+        if 'manager_ids' in vals:
+            for group in self:
+                missing = group.manager_ids - group.member_ids
+                if missing:
+                    super(ShamsTodoGroup, group).write({
+                        'member_ids': [(4, user.id) for user in missing],
+                    })
+        return result
 
     def action_view_tasks(self):
         self.ensure_one()

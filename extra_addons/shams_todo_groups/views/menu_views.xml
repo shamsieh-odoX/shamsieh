@@ -2,10 +2,17 @@
 <odoo>
 
     <menuitem id="menu_shams_todo_personal_tasks"
-        name="My Tasks"
+        name="Personal Tasks"
         parent="project_todo.menu_todo_todos"
         action="project_todo.project_task_action_todo"
         sequence="10"/>
+
+    <menuitem id="menu_shams_todo_my_assigned_tasks"
+        name="My Assigned Tasks"
+        parent="project_todo.menu_todo_todos"
+        action="shams_todo_task_action_my_tasks"
+        sequence="12"
+        groups="shams_todo_groups.group_todo_user"/>
 
     <menuitem id="menu_shams_todo_dashboard"
         name="Group Dashboard"

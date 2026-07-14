@@ -226,7 +226,7 @@
                 <filter string="Done" name="done" domain="[('status', '=', 'done')]"/>
                 <separator/>
                 <filter string="High Priority" name="high_priority"
-                    domain="[('priority', 'in', ['high', 'urgent'])]"/>
+                    domain="[('priority', 'in', ['2', '3'])]"/>
                 <filter string="Archived" name="inactive" domain="[('active', '=', False)]"/>
                 <group>
                     <filter string="Group" name="group_by_group" context="{'group_by': 'group_id'}"/>

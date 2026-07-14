@@ -29,15 +29,16 @@ class ShamsTodoTask(models.Model):
         string='Group Members',
     )
     due_date = fields.Date(tracking=True)
+    # Values match Odoo's priority widget ('0'..'3'), same as project.task.
     priority = fields.Selection(
         selection=[
-            ('low', 'Low'),
-            ('normal', 'Normal'),
-            ('high', 'High'),
-            ('urgent', 'Urgent'),
+            ('0', 'Low'),
+            ('1', 'Normal'),
+            ('2', 'High'),
+            ('3', 'Urgent'),
         ],
         string='Priority',
-        default='normal',
+        default='1',
         required=True,
         tracking=True,
     )
@@ -149,11 +150,14 @@ class ShamsTodoTask(models.Model):
     @api.model_create_multi
     def create(self, vals_list):
         user = self.env.user
+        Group = self.env['shams.todo.group']
         for vals in vals_list:
-            if not vals.get('assigned_user_id'):
-                vals['assigned_user_id'] = user.id
             if not vals.get('created_by_id'):
                 vals['created_by_id'] = user.id
+            if not vals.get('assigned_user_id') and vals.get('group_id'):
+                group = Group.browse(vals['group_id'])
+                if user in group.member_ids:
+                    vals['assigned_user_id'] = user.id
             if vals.get('status') == 'done' and not vals.get('completed_date'):
                 vals['completed_date'] = fields.Datetime.now()
         records = super().create(vals_list)

@@ -33,7 +33,6 @@
             <field name="model_id" ref="model_shams_todo_group"/>
             <field name="domain_force">[('manager_ids', 'in', user.id)]</field>
             <field name="groups" eval="[(4, ref('group_todo_manager'))]"/>
-            <field name="perm_read" eval="False"/>
             <field name="perm_unlink" eval="False"/>
         </record>
 
