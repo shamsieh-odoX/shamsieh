@@ -10,6 +10,7 @@ MODULES = [
     'extra_addons/hr_overtime_management',
     'extra_addons/hr_overtime_payroll',
     'extra_addons/project_custom_ext',
+    'extra_addons/crm_custom_ext',
 ]
 SKIP = {'doc', 'tests', '.venv', '__pycache__', 'migrations', 'i18n'}
 

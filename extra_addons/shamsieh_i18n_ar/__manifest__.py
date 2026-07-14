@@ -1,8 +1,8 @@
 {
     'name': 'Shamsieh Professional Arabic (HR & Project)',
-    'version': '19.0.1.0.4',
+    'version': '19.0.1.0.5',
     'category': 'Hidden',
-    'summary': 'Professional Arabic translations for attendance, overtime, project, and related Odoo apps',
+    'summary': 'Professional Arabic translations for attendance, overtime, project, CRM, and related Odoo apps',
     'author': 'Custom',
     'depends': [
         'hr',
@@ -18,6 +18,7 @@
         'resource',
         'analytic',
         'crm',
+        'crm_custom_ext',
         'sale',
         'spreadsheet_dashboard_hr_timesheet',
     ],

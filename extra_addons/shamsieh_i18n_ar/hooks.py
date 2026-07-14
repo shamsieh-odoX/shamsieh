@@ -67,6 +67,7 @@ def _reload_custom_module_translations(env):
         'hr_overtime_management',
         'hr_overtime_payroll',
         'project_custom_ext',
+        'crm_custom_ext',
     ):
         mod = env['ir.module.module'].search([
             ('name', '=', module_name),
