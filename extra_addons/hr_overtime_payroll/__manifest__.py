@@ -1,6 +1,6 @@
 {
     'name': 'HR Overtime Payroll Integration',
-    'version': '19.0.1.0.3',
+    'version': '19.0.1.0.4',
     'category': 'Human Resources/Payroll',
     'summary': 'Push approved overtime costs to payslip inputs',
     'author': 'Custom',
