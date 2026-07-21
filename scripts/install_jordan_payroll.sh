@@ -22,10 +22,10 @@ fi
 
 cd "$ROOT"
 
-echo "Installing payroll prerequisites and hr_payroll_jo_custom_ext on $DB..."
+echo "Installing payroll prerequisites on $DB..."
 exec "$PYTHON" odoo-bin \
   -c debian/odoo.conf \
   -d "$DB" \
-  -i hr_payroll,l10n_jo_hr_payroll,hr_overtime_payroll,hr_payroll_custom_ext,hr_payroll_jo_custom_ext \
+  -i hr_payroll,l10n_jo_hr_payroll,hr_overtime_payroll \
   --stop-after-init \
   "$@"
