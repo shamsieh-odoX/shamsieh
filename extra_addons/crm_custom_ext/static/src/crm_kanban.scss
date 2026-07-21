@@ -1,13 +1,15 @@
+// CRM custom kanban — light mode (no Sass variables; safe for assets_web_dark too).
+
 .o_crm_custom_kanban {
     --KanbanRecord-padding-v: 0.85rem;
     --KanbanRecord-padding-h: 0.9rem;
     --KanbanRecord-gap-v: 0.65rem;
     --Card-Footer-gap: 0.5rem;
 
-    --crm-kanban-ref-bg: #{rgba($o-gray-900, 0.05)};
-    --crm-kanban-badge-bg: #{rgba($o-gray-900, 0.06)};
-    --crm-kanban-badge-color: var(--o-main-text-color, #{$o-main-text-color});
-    --crm-kanban-badge-border: #{rgba($o-gray-900, 0.14)};
+    --crm-kanban-ref-bg: rgba(17, 24, 39, 0.05);
+    --crm-kanban-badge-bg: rgba(17, 24, 39, 0.06);
+    --crm-kanban-badge-color: var(--o-main-text-color, #212529);
+    --crm-kanban-badge-border: rgba(17, 24, 39, 0.14);
 
     .o_kanban_record {
         .o_crm_custom_kanban_body {
@@ -37,7 +39,7 @@
             font-size: 0.78rem;
             font-weight: 600;
             font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-            color: var(--o-main-text-color, #{$o-main-text-color});
+            color: var(--o-main-text-color, #212529);
             background: var(--crm-kanban-ref-bg);
             border: none;
             border-radius: 0.3rem;
@@ -130,11 +132,11 @@
 
             .o_priority > .o_priority_star {
                 &.fa-star {
-                    color: $o-main-favorite-color !important;
+                    color: #f7b84b !important;
                 }
 
                 &.fa-star-o {
-                    color: #{rgba($o-main-favorite-color, 0.35)} !important;
+                    color: rgba(247, 184, 75, 0.35) !important;
                 }
             }
         }
