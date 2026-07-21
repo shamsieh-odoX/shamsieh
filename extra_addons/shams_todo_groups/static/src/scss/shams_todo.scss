@@ -1,66 +1,43 @@
-// Odoo 19 dark mode: assets_backend is recompiled into web.assets_web_dark
-// with $o-webclient-color-scheme == dark. Branch colors at compile time.
+// Shams To-Do — light mode (web.assets_backend)
+// Dark overrides live in shams_todo.dark.scss (web.assets_web_dark).
 
-$o-webclient-color-scheme: bright !default;
-
-$_shams-todo-dash-bg: linear-gradient(135deg, #f8f9fc 0%, #eef2f7 100%);
-$_shams-todo-card-bg: #ffffff;
-$_shams-todo-card-border: #dee2e6;
-$_shams-todo-card-shadow: 0 1px 2px rgba(16, 24, 40, 0.06);
-$_shams-todo-card-shadow-hover: 0 8px 20px rgba(16, 24, 40, 0.08);
-$_shams-todo-value: #111827;
-$_shams-todo-text: #374151;
-$_shams-todo-hint: #6b7280;
-$_shams-todo-section-bg: #ffffff;
-$_shams-todo-title: #111827;
-$_shams-todo-badge-bg: #f3f4f6;
-$_shams-todo-badge-color: #4b5563;
-$_shams-todo-overdue: #dc2626;
-$_shams-todo-meta: #6b7280;
-$_shams-todo-accent-primary: #714b67;
-$_shams-todo-accent-info: #0ea5e9;
-$_shams-todo-accent-warning: #f59e0b;
-$_shams-todo-accent-success: #10b981;
-$_shams-todo-accent-chart: #6366f1;
-$_shams-todo-done: #198754;
-$_shams-todo-done-muted: #adb5bd;
-
-@if $o-webclient-color-scheme == dark {
-    $_shams-todo-dash-bg: linear-gradient(
-        135deg,
-        rgba(255, 255, 255, 0.05) 0%,
-        rgba(255, 255, 255, 0.02) 100%
-    ) !global;
-    $_shams-todo-card-bg: rgba(255, 255, 255, 0.07) !global;
-    $_shams-todo-card-border: rgba(255, 255, 255, 0.14) !global;
-    $_shams-todo-card-shadow: none !global;
-    $_shams-todo-card-shadow-hover: 0 8px 24px rgba(0, 0, 0, 0.4) !global;
-    $_shams-todo-value: #f3f4f6 !global;
-    $_shams-todo-text: #e5e7eb !global;
-    $_shams-todo-hint: #9ca3af !global;
-    $_shams-todo-section-bg: rgba(255, 255, 255, 0.04) !global;
-    $_shams-todo-title: #f9fafb !global;
-    $_shams-todo-badge-bg: rgba(255, 255, 255, 0.08) !global;
-    $_shams-todo-badge-color: #d1d5db !global;
-    $_shams-todo-overdue: #f87171 !global;
-    $_shams-todo-meta: #9ca3af !global;
-    $_shams-todo-accent-primary: lighten(#714b67, 18%) !global;
-    $_shams-todo-accent-info: lighten(#0ea5e9, 10%) !global;
-    $_shams-todo-accent-warning: lighten(#f59e0b, 8%) !global;
-    $_shams-todo-accent-success: lighten(#10b981, 8%) !global;
-    $_shams-todo-accent-chart: lighten(#6366f1, 10%) !global;
-    $_shams-todo-done: lighten(#198754, 12%) !global;
-    $_shams-todo-done-muted: #6b7280 !global;
+.o_shams_todo_dashboard_sheet,
+.o_shams_todo_stat_card,
+.o_shams_todo_dashboard_my_tasks,
+.o_shams_todo_kanban,
+.o_shams_todo_group_kanban,
+.o_shams_todo_done_button {
+    --shams-todo-dash-bg: linear-gradient(135deg, #f8f9fc 0%, #eef2f7 100%);
+    --shams-todo-card-bg: #ffffff;
+    --shams-todo-card-border: #dee2e6;
+    --shams-todo-card-shadow: 0 1px 2px rgba(16, 24, 40, 0.06);
+    --shams-todo-card-shadow-hover: 0 8px 20px rgba(16, 24, 40, 0.08);
+    --shams-todo-value: #111827;
+    --shams-todo-text: #374151;
+    --shams-todo-hint: #6b7280;
+    --shams-todo-section-bg: #ffffff;
+    --shams-todo-title: #111827;
+    --shams-todo-badge-bg: #f3f4f6;
+    --shams-todo-badge-color: #4b5563;
+    --shams-todo-overdue: #dc2626;
+    --shams-todo-meta: #6b7280;
+    --shams-todo-accent-primary: #714b67;
+    --shams-todo-accent-info: #0ea5e9;
+    --shams-todo-accent-warning: #f59e0b;
+    --shams-todo-accent-success: #10b981;
+    --shams-todo-accent-chart: #6366f1;
+    --shams-todo-done: #198754;
+    --shams-todo-done-muted: #adb5bd;
 }
 
 .o_shams_todo_dashboard_sheet {
-    background: $_shams-todo-dash-bg;
+    background: var(--shams-todo-dash-bg);
     border-radius: 0.5rem;
     padding: 1.5rem;
-    color: $_shams-todo-title;
+    color: var(--shams-todo-title);
 
     h1, h2, .h4 {
-        color: $_shams-todo-title;
+        color: var(--shams-todo-title);
     }
 }
 
@@ -77,54 +54,54 @@ $_shams-todo-done-muted: #adb5bd;
     align-items: flex-start;
     width: 100%;
     padding: 1.25rem;
-    border: 1px solid $_shams-todo-card-border;
+    border: 1px solid var(--shams-todo-card-border);
     border-radius: 0.75rem;
-    background: $_shams-todo-card-bg !important;
-    box-shadow: $_shams-todo-card-shadow;
+    background: var(--shams-todo-card-bg) !important;
+    box-shadow: var(--shams-todo-card-shadow);
     transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
     text-align: start;
     border-inline-start-width: 4px;
     border-inline-start-style: solid;
-    color: $_shams-todo-text;
+    color: var(--shams-todo-text);
 }
 
 .o_shams_todo_stat_card:hover {
     transform: translateY(-2px);
-    box-shadow: $_shams-todo-card-shadow-hover;
+    box-shadow: var(--shams-todo-card-shadow-hover);
 }
 
 .o_shams_todo_stat_card .o_stat_value {
     font-size: 2rem;
     font-weight: 700;
     line-height: 1.1;
-    color: $_shams-todo-value !important;
+    color: var(--shams-todo-value) !important;
 }
 
 .o_shams_todo_stat_card .o_stat_text {
     font-size: 0.95rem;
     font-weight: 600;
-    color: $_shams-todo-text !important;
+    color: var(--shams-todo-text) !important;
     margin-top: 0.35rem;
 }
 
 .o_shams_todo_stat_card .o_stat_hint {
     font-size: 0.8rem;
-    color: $_shams-todo-hint !important;
+    color: var(--shams-todo-hint) !important;
     margin-top: 0.25rem;
 }
 
-.o_shams_todo_stat_card--primary { border-inline-start-color: $_shams-todo-accent-primary; }
-.o_shams_todo_stat_card--info { border-inline-start-color: $_shams-todo-accent-info; }
-.o_shams_todo_stat_card--warning { border-inline-start-color: $_shams-todo-accent-warning; }
-.o_shams_todo_stat_card--success { border-inline-start-color: $_shams-todo-accent-success; }
-.o_shams_todo_stat_card--chart { border-inline-start-color: $_shams-todo-accent-chart; }
+.o_shams_todo_stat_card--primary { border-inline-start-color: var(--shams-todo-accent-primary); }
+.o_shams_todo_stat_card--info { border-inline-start-color: var(--shams-todo-accent-info); }
+.o_shams_todo_stat_card--warning { border-inline-start-color: var(--shams-todo-accent-warning); }
+.o_shams_todo_stat_card--success { border-inline-start-color: var(--shams-todo-accent-success); }
+.o_shams_todo_stat_card--chart { border-inline-start-color: var(--shams-todo-accent-chart); }
 
 .o_shams_todo_dashboard_my_tasks {
-    background: $_shams-todo-section-bg !important;
-    border: 1px solid $_shams-todo-card-border;
+    background: var(--shams-todo-section-bg) !important;
+    border: 1px solid var(--shams-todo-card-border);
     border-radius: 0.75rem;
     padding: 1rem 1.25rem;
-    box-shadow: $_shams-todo-card-shadow;
+    box-shadow: var(--shams-todo-card-shadow);
 }
 
 .o_shams_todo_dashboard_my_tasks .o_list_table {
@@ -140,8 +117,8 @@ $_shams-todo-done-muted: #adb5bd;
     max-width: 100%;
     padding: 0.15rem 0.5rem;
     border-radius: 999px;
-    background: $_shams-todo-badge-bg;
-    color: $_shams-todo-badge-color;
+    background: var(--shams-todo-badge-bg);
+    color: var(--shams-todo-badge-color);
     font-size: 0.75rem;
     font-weight: 600;
     white-space: nowrap;
@@ -150,11 +127,10 @@ $_shams-todo-done-muted: #adb5bd;
 }
 
 .o_shams_todo_kanban .o_shams_todo_overdue {
-    color: $_shams-todo-overdue;
+    color: var(--shams-todo-overdue);
     font-weight: 600;
 }
 
-// Inherit form surface (do not force white).
 .o_shams_todo_form .o_shams_todo_form_sheet,
 .o_form_view .o_shams_todo_form_sheet {
     background: transparent !important;
@@ -165,26 +141,25 @@ $_shams-todo-done-muted: #adb5bd;
 }
 
 .o_shams_todo_group_kanban .o_shams_todo_group_meta {
-    color: $_shams-todo-meta;
+    color: var(--shams-todo-meta);
     font-size: 0.85rem;
 }
 
 .o_shams_todo_done_button {
-    color: $_shams-todo-done-muted;
+    color: var(--shams-todo-done-muted);
     cursor: pointer;
     line-height: 1;
 }
 
 .o_shams_todo_done_button:hover,
 .o_shams_todo_done_button_enabled {
-    color: $_shams-todo-done;
+    color: var(--shams-todo-done);
 }
 
 .o_shams_todo_done_checkmark_cell {
     width: 2rem;
 }
 
-// Dashboard labels are readonly Char fields — strip input styling.
 .o_shams_todo_dashboard_sheet {
     .o_stat_text .o_field_widget,
     .o_stat_hint .o_field_widget,

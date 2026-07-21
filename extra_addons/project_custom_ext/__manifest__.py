@@ -2,7 +2,7 @@
 
     'name': 'Project Custom Extensions',
 
-    'version': '19.0.2.1.8',
+    'version': '19.0.2.1.9',
 
     'category': 'Services/Project',
 

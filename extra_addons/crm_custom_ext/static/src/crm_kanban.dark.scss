@@ -1,21 +1,21 @@
 // Dark-mode surface tweaks for CRM custom kanban (web.assets_web_dark).
-// Text colors inherit from the theme like Project kanban cards.
+// Hardcoded colors only — avoid Sass vars that can break dark bundle compile.
 
 .o_crm_custom_kanban {
-    --crm-kanban-ref-bg: #{rgba($white, 0.06)};
-    --crm-kanban-badge-bg: #{rgba($white, 0.06)};
-    --crm-kanban-badge-color: #{$gray-300};
-    --crm-kanban-badge-border: #{rgba($white, 0.14)};
+    --crm-kanban-ref-bg: rgba(255, 255, 255, 0.06);
+    --crm-kanban-badge-bg: rgba(255, 255, 255, 0.06);
+    --crm-kanban-badge-color: #d1d5db;
+    --crm-kanban-badge-border: rgba(255, 255, 255, 0.14);
 
     .o_kanban_record {
         footer {
             .o_priority > .o_priority_star {
                 &.fa-star {
-                    color: #{lighten($o-main-favorite-color, 6%)} !important;
+                    color: #f8c45c !important;
                 }
 
                 &.fa-star-o {
-                    color: #{rgba($o-main-favorite-color, 0.4)} !important;
+                    color: rgba(247, 184, 75, 0.4) !important;
                 }
             }
         }
