@@ -2,7 +2,7 @@
 
     'name': 'Project Custom Extensions',
 
-    'version': '19.0.2.1.10',
+    'version': '19.0.2.1.11',
 
     'category': 'Services/Project',
 
@@ -48,6 +48,8 @@
 
             'project_custom_ext/static/src/css/project_custom.css',
 
+            'project_custom_ext/static/src/css/project_custom.dark.css',
+
             'project_custom_ext/static/src/compact_hours_field.xml',
 
             'project_custom_ext/static/src/compact_hours_field.js',
@@ -55,12 +57,6 @@
             'project_custom_ext/static/src/action_restore_form.js',
 
             'project_custom_ext/static/src/project_notifications.js',
-
-        ],
-
-        'web.assets_web_dark': [
-
-            'project_custom_ext/static/src/css/project_custom.dark.css',
 
         ],
 

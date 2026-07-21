@@ -1,6 +1,10 @@
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 
+import logging
+
 from odoo import api, fields, models
+
+_logger = logging.getLogger(__name__)
 
 _OVERTIME_TYPE_FIELDS = {
     'regular': 'overtime_default_type_id',
@@ -54,7 +58,11 @@ class ResCompany(models.Model):
     @api.model_create_multi
     def create(self, vals_list):
         companies = super().create(vals_list)
-        companies._ensure_overtime_types()
+        try:
+            companies._ensure_overtime_types()
+        except Exception:
+            # Never block company/module install on type provisioning.
+            _logger.exception('Overtime type provisioning skipped during company create')
         return companies
 
     @api.model

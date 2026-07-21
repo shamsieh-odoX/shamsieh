@@ -1,6 +1,6 @@
 {
     'name': 'Shams To-Do Groups',
-    'version': '19.0.1.0.22',
+    'version': '19.0.1.0.23',
     'category': 'Productivity/To-Do',
     'summary': 'Shared To-Do groups with member-based task visibility',
     'author': 'Custom',
@@ -21,13 +21,13 @@
     'installable': True,
     'application': False,
     'license': 'LGPL-3',
+    # No web.assets_web_dark entry: production DB still had ir.asset rows pointing
+    # at deleted scss that contained invalid "#" comments and broke the dark bundle.
     'assets': {
-        # Plain CSS (not SCSS) so these never go through the Sass compiler.
         'web.assets_backend': [
             'shams_todo_groups/static/src/css/shams_todo.css',
-        ],
-        'web.assets_web_dark': [
             'shams_todo_groups/static/src/css/shams_todo.dark.css',
         ],
     },
+    'pre_init_hook': 'pre_init_hook',
 }
