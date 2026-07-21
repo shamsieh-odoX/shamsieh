@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo noupdate="1">
 
+    <!-- Shared templates (no company). Per-company copies are created by _ensure_overtime_types. -->
     <record id="overtime_type_regular" model="hr.overtime.type">
         <field name="name">Regular Overtime</field>
         <field name="code">regular</field>
         <field name="category">regular</field>
         <field name="rate_multiplier">1.5</field>
         <field name="sequence">1</field>
+        <field name="company_id" eval="False"/>
     </record>
 
     <record id="overtime_type_weekend" model="hr.overtime.type">
@@ -15,6 +17,7 @@
         <field name="category">weekend</field>
         <field name="rate_multiplier">2.0</field>
         <field name="sequence">2</field>
+        <field name="company_id" eval="False"/>
     </record>
 
     <record id="overtime_type_holiday" model="hr.overtime.type">
@@ -23,6 +26,7 @@
         <field name="category">day_off</field>
         <field name="rate_multiplier">2.5</field>
         <field name="sequence">3</field>
+        <field name="company_id" eval="False"/>
     </record>
 
 </odoo>

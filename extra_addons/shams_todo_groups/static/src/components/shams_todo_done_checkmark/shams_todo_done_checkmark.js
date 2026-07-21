@@ -1,3 +1,5 @@
+/** @odoo-module **/
+
 import { registry } from "@web/core/registry";
 import { BooleanField, booleanField } from "@web/views/fields/boolean/boolean_field";
 

@@ -102,4 +102,5 @@ class HrOvertimeType(models.Model):
             'rate_multiplier': defaults['rate_multiplier'],
             'sequence': defaults['sequence'],
             'company_id': company.id,
+            'active': True,
         })

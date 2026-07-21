@@ -1,9 +1,19 @@
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 
+import logging
+
+_logger = logging.getLogger(__name__)
+
 
 def post_init_hook(env):
-    env['res.company']._ensure_overtime_types_for_all_companies()
-    _reload_ar_translations(env, 'hr_overtime_management')
+    try:
+        env['res.company']._ensure_overtime_types_for_all_companies()
+    except Exception:
+        _logger.exception('hr_overtime_management: failed ensuring overtime types')
+    try:
+        _reload_ar_translations(env, 'hr_overtime_management')
+    except Exception:
+        _logger.exception('hr_overtime_management: failed reloading Arabic translations')
 
 
 def _reload_ar_translations(env, module_name):
