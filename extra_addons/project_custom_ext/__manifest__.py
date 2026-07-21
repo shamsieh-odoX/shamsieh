@@ -2,7 +2,7 @@
 
     'name': 'Project Custom Extensions',
 
-    'version': '19.0.2.1.9',
+    'version': '19.0.2.1.10',
 
     'category': 'Services/Project',
 
@@ -42,15 +42,17 @@
 
     'assets': {
 
+        # Plain CSS so these never go through the Sass compiler.
+
         'web.assets_backend': [
 
-            'project_custom_ext/static/src/project_custom.scss',
+            'project_custom_ext/static/src/css/project_custom.css',
 
             'project_custom_ext/static/src/compact_hours_field.xml',
 
             'project_custom_ext/static/src/compact_hours_field.js',
 
-            'project_custom_ext/static/src/action_restore_fix.js',
+            'project_custom_ext/static/src/action_restore_form.js',
 
             'project_custom_ext/static/src/project_notifications.js',
 
@@ -58,7 +60,7 @@
 
         'web.assets_web_dark': [
 
-            'project_custom_ext/static/src/project_custom.dark.scss',
+            'project_custom_ext/static/src/css/project_custom.dark.css',
 
         ],
 

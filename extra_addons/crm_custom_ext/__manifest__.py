@@ -1,6 +1,6 @@
 {
     'name': 'CRM Custom Extensions',
-    'version': '19.0.1.0.9',
+    'version': '19.0.1.0.10',
     'category': 'Sales/CRM',
     'summary': 'Shamsieh CRM fields, security, teams, targets, and dashboards',
     'author': 'Custom',
@@ -30,11 +30,12 @@
     'application': False,
     'license': 'LGPL-3',
     'assets': {
+        # Plain CSS so these never go through the Sass compiler.
         'web.assets_backend': [
-            'crm_custom_ext/static/src/crm_kanban.scss',
+            'crm_custom_ext/static/src/css/crm_kanban.css',
         ],
         'web.assets_web_dark': [
-            'crm_custom_ext/static/src/crm_kanban.dark.scss',
+            'crm_custom_ext/static/src/css/crm_kanban.dark.css',
         ],
     },
 }

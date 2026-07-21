@@ -1,6 +1,6 @@
 {
     'name': 'Shams To-Do Groups',
-    'version': '19.0.1.0.20',
+    'version': '19.0.1.0.21',
     'category': 'Productivity/To-Do',
     'summary': 'Shared To-Do groups with member-based task visibility',
     'author': 'Custom',
@@ -22,11 +22,12 @@
     'application': False,
     'license': 'LGPL-3',
     'assets': {
+        # Plain CSS (not SCSS) so these never go through the Sass compiler.
         'web.assets_backend': [
-            'shams_todo_groups/static/src/scss/shams_todo.scss',
+            'shams_todo_groups/static/src/css/shams_todo.css',
         ],
         'web.assets_web_dark': [
-            'shams_todo_groups/static/src/scss/shams_todo.dark.scss',
+            'shams_todo_groups/static/src/css/shams_todo.dark.css',
         ],
     },
 }
