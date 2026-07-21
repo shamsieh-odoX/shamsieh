@@ -156,3 +156,4 @@ Project module customizations: security groups, progress tracking, task template
 ## Upstream Odoo
 
 This repository is based on [Odoo 19](https://www.odoo.com/documentation/19.0/). For generic install and developer docs, see the [Odoo documentation](https://www.odoo.com/documentation/19.0/).
+##
