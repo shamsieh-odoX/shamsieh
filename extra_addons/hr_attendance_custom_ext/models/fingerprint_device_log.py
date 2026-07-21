@@ -76,10 +76,8 @@ class FingerprintDeviceLog(models.Model):
         default='unknown',
     )
 
-    _device_external_uniq = models.Constraint(
-        'unique(device_id, external_id)',
-        'Device log external ID must be unique per device.',
-    )
+    # Unique(device_id, external_id) removed: blank/duplicate device ids from sync
+    # prevented module upgrades on production databases.
 
     @api.depends('employee_id', 'employee_id.name', 'employee_name')
     def _compute_display_employee_name(self):

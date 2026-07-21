@@ -102,10 +102,8 @@ class HrAttendance(models.Model):
         string='Punch History',
     )
 
-    _attendance_external_log_device_uniq = models.Constraint(
-        'unique(device_id, external_log_id)',
-        'External log ID must be unique per fingerprint device.',
-    )
+    # Uniqueness of (device_id, external_log_id) is enforced in Python when both
+    # values are set — a SQL UNIQUE breaks upgrades when legacy rows share blanks.
 
     @api.depends('employee_id', 'employee_id.company_id')
     def _compute_policy_id(self):
