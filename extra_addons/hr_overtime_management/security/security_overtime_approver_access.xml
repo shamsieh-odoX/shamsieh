@@ -9,6 +9,4 @@
         ]</field>
     </record>
 
-    <function model="hr.overtime.request" name="_recompute_current_approvers"/>
-
 </odoo>

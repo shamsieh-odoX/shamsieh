@@ -88,7 +88,7 @@
                             <list create="false" delete="false"
                                 decoration-danger="is_overdue"
                                 default_order="due_date asc, priority desc, id desc">
-                                <field name="is_done" widget="shams_todo_done_checkmark" nolabel="1"
+                                <field name="is_done" widget="boolean_toggle" nolabel="1"
                                     width="30px" class="o_shams_todo_done_checkmark_cell"/>
                                 <field name="name"/>
                                 <field name="group_id"/>

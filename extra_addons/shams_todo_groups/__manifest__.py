@@ -1,6 +1,6 @@
 {
     'name': 'Shams To-Do Groups',
-    'version': '19.0.1.0.19',
+    'version': '19.0.1.0.20',
     'category': 'Productivity/To-Do',
     'summary': 'Shared To-Do groups with member-based task visibility',
     'author': 'Custom',
@@ -24,9 +24,6 @@
     'assets': {
         'web.assets_backend': [
             'shams_todo_groups/static/src/scss/shams_todo.scss',
-            'shams_todo_groups/static/src/components/shams_todo_done_checkmark/shams_todo_done_checkmark.scss',
-            'shams_todo_groups/static/src/components/shams_todo_done_checkmark/shams_todo_done_checkmark.xml',
-            'shams_todo_groups/static/src/components/shams_todo_done_checkmark/shams_todo_done_checkmark.js',
         ],
         'web.assets_web_dark': [
             'shams_todo_groups/static/src/scss/shams_todo.dark.scss',

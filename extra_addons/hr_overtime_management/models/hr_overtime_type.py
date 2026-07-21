@@ -43,16 +43,12 @@ class HrOvertimeType(models.Model):
     company_id = fields.Many2one(
         'res.company',
         string='Company Branch',
-        default=lambda self: self.env.company,
+        default=False,
         index=True,
         help='Leave empty only for shared template records. Each branch should have its own set.',
     )
     active = fields.Boolean(default=True)
 
-    _code_company_uniq = models.Constraint(
-        'unique(code, company_id)',
-        'The overtime type code must be unique per company.',
-    )
     _rate_multiplier_positive = models.Constraint(
         'CHECK(rate_multiplier > 0)',
         'The rate multiplier must be strictly positive.',
