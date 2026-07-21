@@ -1,6 +1,6 @@
 {
     'name': 'Shams To-Do Groups',
-    'version': '19.0.1.0.21',
+    'version': '19.0.1.0.22',
     'category': 'Productivity/To-Do',
     'summary': 'Shared To-Do groups with member-based task visibility',
     'author': 'Custom',
