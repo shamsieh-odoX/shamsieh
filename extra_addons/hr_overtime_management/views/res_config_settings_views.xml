@@ -29,10 +29,6 @@
                     <setting string="Hourly Cost Divisor" help="Monthly working hours used to convert contract wage to hourly cost (wage ÷ hours).">
                         <field name="overtime_hours_per_month"/>
                     </setting>
-                    <setting string="Payroll Integration" help="Install the payroll glue module to push overtime costs to payslips."
-                        id="overtime_payroll_setting">
-                        <field name="module_hr_overtime_payroll"/>
-                    </setting>
                 </block>
             </xpath>
         </field>

@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 # Install Jordan payroll stack on mydb_shamsieh.
+# Custom payroll addons were removed from extra_addons; this only installs
+# standard/enterprise payroll modules if present.
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
@@ -26,6 +28,6 @@ echo "Installing payroll prerequisites on $DB..."
 exec "$PYTHON" odoo-bin \
   -c debian/odoo.conf \
   -d "$DB" \
-  -i hr_payroll,l10n_jo_hr_payroll,hr_overtime_payroll \
+  -i hr_payroll,l10n_jo_hr_payroll \
   --stop-after-init \
   "$@"

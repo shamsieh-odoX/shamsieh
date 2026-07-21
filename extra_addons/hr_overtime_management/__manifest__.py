@@ -1,6 +1,6 @@
 {
     'name': 'HR Overtime Management',
-    'version': '19.0.1.5.7',
+    'version': '19.0.1.5.8',
     'category': 'Human Resources/Overtime',
     'summary': 'Overtime requests with multi-level approval and timesheet integration',
     'author': 'Custom',

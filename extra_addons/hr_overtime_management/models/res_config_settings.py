@@ -37,15 +37,3 @@ class ResConfigSettings(models.TransientModel):
         related='company_id.overtime_hours_per_month',
         readonly=False,
     )
-    module_hr_overtime_payroll = fields.Boolean(
-        string='Link Overtime to Payroll',
-        help='Install the payroll glue module to push approved overtime costs to payslips.',
-    )
-
-    @api.model
-    def _is_payroll_installed(self):
-        module = self.env['ir.module.module'].sudo().search([
-            ('name', '=', 'hr_payroll'),
-            ('state', '=', 'installed'),
-        ], limit=1)
-        return bool(module)

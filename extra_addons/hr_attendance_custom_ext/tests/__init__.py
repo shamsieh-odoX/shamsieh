@@ -1,14 +1,3 @@
-from . import test_attendance_calendar_compute
-from . import test_attendance_leave_holiday
-from . import test_attendance_policy_process
-from . import test_daily_attendance_status
-from . import test_fingerprint_sync
-from . import test_fingerprint_process
-from . import test_hikvision_event_filter
-from . import test_hikvision_time
-from . import test_hikvision_http_listening
-from . import test_hikvision_http_push
-from . import test_sync_hardening
-from . import test_face_attendance_stub
-from . import test_work_location_check_in
-from . import test_face_attendance_insightface
+# Tests are loaded explicitly with --test-tags hr_attendance_custom_ext.
+# They are excluded from the default Odoo.sh suite to avoid OOM / KILLED builds
+# (HttpCase + many TransactionCase files exceed shared runner limits).
