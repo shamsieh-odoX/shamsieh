@@ -3,6 +3,7 @@
 import binascii
 import hashlib
 import hmac
+import logging
 import os
 
 from odoo import _, api, fields, models
@@ -10,6 +11,24 @@ from odoo.exceptions import UserError
 
 from odoo.addons.hr_attendance_custom_ext.services.face_provider_insightface import (
     haversine_distance_meters,
+)
+
+_logger = logging.getLogger(__name__)
+
+# Primary mapping order for Hikvision / fingerprint device_user_id.
+_DEVICE_USER_ID_LOOKUP_FIELDS = (
+    'biometric_device_user_id',
+    'barcode',  # standard hr: labeled "Badge ID" (RFID/Badge Number)
+    'shams_employee_code',
+    'identification_id',
+    'pin',
+)
+# Extra RFID/badge fields from custom modules (skipped if missing).
+_RFID_BADGE_FIELD_CANDIDATES = (
+    'rfid',
+    'rfid_code',
+    'badge_id',
+    'badge_number',
 )
 
 
@@ -249,6 +268,89 @@ class HrEmployee(models.Model):
                 'state': 'draft',
                 'error_message': False,
             })
+
+    @api.model
+    def _normalize_device_user_id(self, value):
+        if value in (False, None):
+            return ''
+        return str(value).strip()
+
+    @api.model
+    def _device_user_id_lookup_fields(self):
+        """Ordered employee fields used to match a device user id."""
+        field_names = [
+            name for name in _DEVICE_USER_ID_LOOKUP_FIELDS
+            if name in self._fields
+        ]
+        for name in _RFID_BADGE_FIELD_CANDIDATES:
+            if name in self._fields and name not in field_names:
+                field_names.append(name)
+        return field_names
+
+    @api.model
+    def resolve_by_device_user_id(self, device_user_id, company):
+        """Match device_user_id to one employee.
+
+        Returns ``(employee_recordset, matched_field_name_or_False)``.
+        Comparison is stringified and stripped on both sides.
+        """
+        needle = self._normalize_device_user_id(device_user_id)
+        company_id = company.id if getattr(company, 'id', None) else company
+        if not needle or not company_id:
+            return self.browse(), False
+
+        lookup_fields = self._device_user_id_lookup_fields()
+        _logger.info(
+            'Hikvision mapping lookup: device_user_id=%r company_id=%s fields=%s',
+            needle,
+            company_id,
+            lookup_fields,
+        )
+
+        employees = self.search([('company_id', '=', company_id)])
+        for field_name in lookup_fields:
+            matches = employees.filtered(
+                lambda emp, fname=field_name: (
+                    self._normalize_device_user_id(emp[fname]) == needle
+                ),
+            )
+            if not matches:
+                continue
+            if len(matches) > 1:
+                _logger.warning(
+                    'Hikvision mapping: device_user_id=%r matched %s employees '
+                    'via %s; using employee_id=%s',
+                    needle,
+                    len(matches),
+                    field_name,
+                    matches[0].id,
+                )
+            employee = matches[0]
+            _logger.info(
+                'Hikvision mapping matched: device_user_id=%r employee_id=%s '
+                'employee_name=%r field=%s',
+                needle,
+                employee.id,
+                employee.name,
+                field_name,
+            )
+            return employee, field_name
+
+        candidates = []
+        for emp in employees:
+            row = {
+                'id': emp.id,
+                'name': emp.name,
+            }
+            for field_name in lookup_fields:
+                row[field_name] = self._normalize_device_user_id(emp[field_name])
+            candidates.append(row)
+        _logger.info(
+            'Hikvision mapping no match for device_user_id=%r. Candidates: %s',
+            needle,
+            candidates,
+        )
+        return self.browse(), False
 
     def action_open_face_enroll_wizard(self):
         self.ensure_one()
