@@ -1,0 +1,12 @@
+{
+  "eventType": "AccessControllerEvent",
+  "majorEventType": 5,
+  "subEventType": 38,
+  "serialNo": 9999,
+  "verifyNo": 42,
+  "dateTime": "2026-07-07T13:40:51+03:00",
+  "employeeNoString": "5",
+  "name": "mohammad_noor",
+  "currentVerifyMode": "fp",
+  "status": "success"
+}
