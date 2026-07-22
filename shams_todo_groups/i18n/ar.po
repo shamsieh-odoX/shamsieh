@@ -33,7 +33,7 @@ msgid "Assigned To"
 msgstr "مُعيَّن إلى"
 
 #. module: shams_todo_groups
-#: #: model_terms:ir.ui.view,arch_db:shams_todo_groups.shams_todo_dashboard_view_form
+#: model_terms:ir.ui.view,arch_db:shams_todo_groups.shams_todo_dashboard_view_form
 msgid "Assigned to Me"
 msgstr "مُعيَّنة لي"
 

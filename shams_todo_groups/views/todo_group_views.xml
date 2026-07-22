@@ -42,8 +42,8 @@
                                 <field name="description"/>
                             </div>
                             <div class="d-flex gap-3 o_shams_todo_group_meta">
-                                <span><i class="fa fa-users me-1"/> <field name="member_count"/> members</span>
-                                <span><i class="fa fa-tasks me-1"/> <field name="task_count"/> tasks</span>
+                                <span><i class="fa fa-users me-1" title="Members"/> <field name="member_count"/> members</span>
+                                <span><i class="fa fa-tasks me-1" title="Tasks"/> <field name="task_count"/> tasks</span>
                             </div>
                         </div>
                     </t>
