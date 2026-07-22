@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+
+    <record id="seq_hr_exceptional_holiday" model="ir.sequence">
+        <field name="name">Exceptional Holiday Request</field>
+        <field name="code">hr.exceptional.holiday</field>
+        <field name="prefix">EH/%(year)s/</field>
+        <field name="padding">4</field>
+        <field name="company_id" eval="False"/>
+    </record>
+
+</odoo>

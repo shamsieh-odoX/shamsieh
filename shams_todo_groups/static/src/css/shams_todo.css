@@ -1,0 +1,197 @@
+/* Shams To-Do light styles (plain CSS, no Sass) */
+.o_shams_todo_dashboard_sheet,
+.o_shams_todo_stat_card,
+.o_shams_todo_dashboard_my_tasks,
+.o_shams_todo_kanban,
+.o_shams_todo_group_kanban,
+.o_shams_todo_done_button {
+  --shams-todo-dash-bg: linear-gradient(135deg, #f8f9fc 0%, #eef2f7 100%);
+  --shams-todo-card-bg: #ffffff;
+  --shams-todo-card-border: #dee2e6;
+  --shams-todo-card-shadow: 0 1px 2px rgba(16, 24, 40, 0.06);
+  --shams-todo-card-shadow-hover: 0 8px 20px rgba(16, 24, 40, 0.08);
+  --shams-todo-value: #111827;
+  --shams-todo-text: #374151;
+  --shams-todo-hint: #6b7280;
+  --shams-todo-section-bg: #ffffff;
+  --shams-todo-title: #111827;
+  --shams-todo-badge-bg: #f3f4f6;
+  --shams-todo-badge-color: #4b5563;
+  --shams-todo-overdue: #dc2626;
+  --shams-todo-meta: #6b7280;
+  --shams-todo-accent-primary: #714b67;
+  --shams-todo-accent-info: #0ea5e9;
+  --shams-todo-accent-warning: #f59e0b;
+  --shams-todo-accent-success: #10b981;
+  --shams-todo-accent-chart: #6366f1;
+  --shams-todo-done: #198754;
+  --shams-todo-done-muted: #adb5bd;
+}
+
+.o_shams_todo_dashboard_sheet {
+  background: var(--shams-todo-dash-bg);
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+  color: var(--shams-todo-title);
+}
+
+.o_shams_todo_dashboard_sheet h1, .o_shams_todo_dashboard_sheet h2, .o_shams_todo_dashboard_sheet .h4 {
+  color: var(--shams-todo-title);
+}
+
+.o_shams_todo_dashboard_grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.o_shams_todo_stat_card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+  padding: 1.25rem;
+  border: 1px solid var(--shams-todo-card-border);
+  border-radius: 0.75rem;
+  background: var(--shams-todo-card-bg) !important;
+  box-shadow: var(--shams-todo-card-shadow);
+  transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+  text-align: start;
+  border-inline-start-width: 4px;
+  border-inline-start-style: solid;
+  color: var(--shams-todo-text);
+}
+
+.o_shams_todo_stat_card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shams-todo-card-shadow-hover);
+}
+
+.o_shams_todo_stat_card .o_stat_value {
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1.1;
+  color: var(--shams-todo-value) !important;
+}
+
+.o_shams_todo_stat_card .o_stat_text {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--shams-todo-text) !important;
+  margin-top: 0.35rem;
+}
+
+.o_shams_todo_stat_card .o_stat_hint {
+  font-size: 0.8rem;
+  color: var(--shams-todo-hint) !important;
+  margin-top: 0.25rem;
+}
+
+.o_shams_todo_stat_card--primary {
+  border-inline-start-color: var(--shams-todo-accent-primary);
+}
+
+.o_shams_todo_stat_card--info {
+  border-inline-start-color: var(--shams-todo-accent-info);
+}
+
+.o_shams_todo_stat_card--warning {
+  border-inline-start-color: var(--shams-todo-accent-warning);
+}
+
+.o_shams_todo_stat_card--success {
+  border-inline-start-color: var(--shams-todo-accent-success);
+}
+
+.o_shams_todo_stat_card--chart {
+  border-inline-start-color: var(--shams-todo-accent-chart);
+}
+
+.o_shams_todo_dashboard_my_tasks {
+  background: var(--shams-todo-section-bg) !important;
+  border: 1px solid var(--shams-todo-card-border);
+  border-radius: 0.75rem;
+  padding: 1rem 1.25rem;
+  box-shadow: var(--shams-todo-card-shadow);
+}
+
+.o_shams_todo_dashboard_my_tasks .o_list_table {
+  margin-bottom: 0;
+}
+
+.o_shams_todo_kanban .o_kanban_record {
+  border-radius: 0.65rem;
+}
+
+.o_shams_todo_kanban .o_shams_todo_group_badge {
+  display: inline-block;
+  max-width: 100%;
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+  background: var(--shams-todo-badge-bg);
+  color: var(--shams-todo-badge-color);
+  font-size: 0.75rem;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.o_shams_todo_kanban .o_shams_todo_overdue {
+  color: var(--shams-todo-overdue);
+  font-weight: 600;
+}
+
+.o_shams_todo_form .o_shams_todo_form_sheet,
+.o_form_view .o_shams_todo_form_sheet {
+  background: transparent !important;
+}
+
+.o_shams_todo_group_kanban .o_kanban_record {
+  border-radius: 0.75rem;
+}
+
+.o_shams_todo_group_kanban .o_shams_todo_group_meta {
+  color: var(--shams-todo-meta);
+  font-size: 0.85rem;
+}
+
+.o_shams_todo_done_button {
+  color: var(--shams-todo-done-muted);
+  cursor: pointer;
+  line-height: 1;
+}
+
+.o_shams_todo_done_button:hover,
+.o_shams_todo_done_button_enabled {
+  color: var(--shams-todo-done);
+}
+
+.o_shams_todo_done_checkmark_cell {
+  width: 2rem;
+}
+
+.o_shams_todo_dashboard_sheet .o_stat_text .o_field_widget,
+.o_shams_todo_dashboard_sheet .o_stat_hint .o_field_widget,
+.o_shams_todo_dashboard_sheet h1 .o_field_widget,
+.o_shams_todo_dashboard_sheet h2 .o_field_widget,
+.o_shams_todo_dashboard_sheet p .o_field_widget,
+.o_shams_todo_dashboard_sheet .btn-link .o_field_widget {
+  pointer-events: none;
+}
+
+.o_shams_todo_dashboard_sheet .o_stat_text .o_input,
+.o_shams_todo_dashboard_sheet .o_stat_hint .o_input,
+.o_shams_todo_dashboard_sheet h1 .o_input,
+.o_shams_todo_dashboard_sheet h2 .o_input,
+.o_shams_todo_dashboard_sheet p .o_input,
+.o_shams_todo_dashboard_sheet .btn-link .o_input {
+  border: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  min-height: 0 !important;
+  color: inherit !important;
+  font: inherit !important;
+}

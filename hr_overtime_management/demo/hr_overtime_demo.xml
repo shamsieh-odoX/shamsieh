@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+
+    <!-- Three-stage chain: employee -> dept manager -> upper manager -> HR -->
+    <record id="demo_overtime_employee_user" model="res.users">
+        <field name="name">Demo OT Employee (3-stage)</field>
+        <field name="login">demo_ot_emp3</field>
+        <field name="email">demo_ot_emp3@example.com</field>
+        <field name="group_ids" eval="[(4, ref('hr_overtime_management.group_overtime_user'))]"/>
+    </record>
+    <record id="demo_overtime_dept_manager_user" model="res.users">
+        <field name="name">Demo OT Dept Manager</field>
+        <field name="login">demo_ot_dept_mgr</field>
+        <field name="email">demo_ot_dept_mgr@example.com</field>
+    </record>
+    <record id="demo_overtime_upper_manager_user" model="res.users">
+        <field name="name">Demo OT Upper Manager</field>
+        <field name="login">demo_ot_upper_mgr</field>
+        <field name="email">demo_ot_upper_mgr@example.com</field>
+    </record>
+
+    <record id="demo_overtime_upper_manager" model="hr.employee">
+        <field name="name">Demo OT Upper Manager</field>
+        <field name="user_id" ref="demo_overtime_upper_manager_user"/>
+    </record>
+    <record id="demo_overtime_dept_manager" model="hr.employee">
+        <field name="name">Demo OT Department Manager</field>
+        <field name="user_id" ref="demo_overtime_dept_manager_user"/>
+        <field name="parent_id" ref="demo_overtime_upper_manager"/>
+    </record>
+    <record id="demo_overtime_employee" model="hr.employee">
+        <field name="name">Demo OT Employee (3-stage)</field>
+        <field name="user_id" ref="demo_overtime_employee_user"/>
+        <field name="parent_id" ref="demo_overtime_dept_manager"/>
+    </record>
+
+    <!-- Two-stage chain: employee -> solo dept manager -> HR -->
+    <record id="demo_overtime_solo_employee_user" model="res.users">
+        <field name="name">Demo OT Employee (2-stage)</field>
+        <field name="login">demo_ot_emp2</field>
+        <field name="email">demo_ot_emp2@example.com</field>
+        <field name="group_ids" eval="[(4, ref('hr_overtime_management.group_overtime_user'))]"/>
+    </record>
+    <record id="demo_overtime_solo_manager_user" model="res.users">
+        <field name="name">Demo OT Solo Manager</field>
+        <field name="login">demo_ot_solo_mgr</field>
+        <field name="email">demo_ot_solo_mgr@example.com</field>
+    </record>
+
+    <record id="demo_overtime_solo_manager" model="hr.employee">
+        <field name="name">Demo OT Solo Manager</field>
+        <field name="user_id" ref="demo_overtime_solo_manager_user"/>
+    </record>
+    <record id="demo_overtime_solo_employee" model="hr.employee">
+        <field name="name">Demo OT Employee (2-stage)</field>
+        <field name="user_id" ref="demo_overtime_solo_employee_user"/>
+        <field name="parent_id" ref="demo_overtime_solo_manager"/>
+    </record>
+
+</odoo>

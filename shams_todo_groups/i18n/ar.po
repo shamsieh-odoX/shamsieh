@@ -1,0 +1,553 @@
+# Translation of Odoo Server.
+# Professional Arabic (ar) translations — Shams To-Do Groups.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-07-14 07:00+0000\n"
+"PO-Revision-Date: 2026-07-14 07:00+0000\n"
+"Last-Translator: Shamsieh\n"
+"Language-Team: Arabic\n"
+"Language: ar\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=6; plural=(n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 ? 4 : 5);\n"
+
+#. module: shams_todo_groups
+#: model_terms:ir.ui.view,arch_db:shams_todo_groups.shams_todo_group_view_form
+#: model_terms:ir.ui.view,arch_db:shams_todo_groups.shams_todo_task_view_form
+msgid "Archived"
+msgstr "مؤرشف"
+
+#. module: shams_todo_groups
+#: model_terms:ir.ui.view,arch_db:shams_todo_groups.shams_todo_task_view_form
+msgid "Assign to me"
+msgstr "تعيين لي"
+
+#. module: shams_todo_groups
+#: model:ir.model.fields,field_description:shams_todo_groups.field_shams_todo_task__assigned_user_id
+#: model_terms:ir.ui.view,arch_db:shams_todo_groups.shams_todo_task_view_search
+msgid "Assigned To"
+msgstr "مُعيَّن إلى"
+
+#. module: shams_todo_groups
+#: #: model_terms:ir.ui.view,arch_db:shams_todo_groups.shams_todo_dashboard_view_form
+msgid "Assigned to Me"
+msgstr "مُعيَّنة لي"
+
+#. module: shams_todo_groups
+#: model_terms:ir.ui.view,arch_db:shams_todo_groups.shams_todo_task_view_search
+msgid "Assigned User"
+msgstr "المستخدم المُعيَّن"
+
+#. module: shams_todo_groups
+#: model:ir.actions.act_window,name:shams_todo_groups.shams_todo_task_action_all_tasks
+#: model:ir.ui.menu,name:shams_todo_groups.menu_shams_todo_all_tasks
+msgid "All Group Tasks"
+msgstr "كل مهام المجموعات"
+
+#. module: shams_todo_groups
+#: model_terms:ir.ui.view,arch_db:shams_todo_groups.shams_todo_dashboard_view_form
+msgid "Active group tasks you can access"
+msgstr "مهام المجموعات النشطة التي يمكنك الوصول إليها"
+
+#. module: shams_todo_groups
+#: model_terms:ir.ui.view,arch_db:shams_todo_groups.shams_todo_task_view_form
+msgid "Add details, links, or notes for the team..."
+msgstr "أضف تفاصيل أو روابط أو ملاحظات للفريق..."
+
+#. module: shams_todo_groups
+#: model_terms:ir.ui.view,arch_db:shams_todo_groups.shams_todo_group_view_form
+msgid "About"
+msgstr "حول"
+
+#. module: shams_todo_groups
+#: model:ir.model.fields.selection,name:shams_todo_groups.selection__shams_todo_task__status__cancelled
+msgid "Cancelled"
+msgstr "ملغاة"
+
+#. module: shams_todo_groups
+#: model:ir.model.fields,field_description:shams_todo_groups.field_shams_todo_group__color
+msgid "Color"
+msgstr "اللون"
+
+#. module: shams_todo_groups
+#: model:ir.model.fields,field_description:shams_todo_groups.field_shams_todo_task__color
+msgid "Color Index"
+msgstr "مؤشر اللون"
+
+#. module: shams_todo_groups
+#: model:ir.model.fields,field_description:shams_todo_groups.field_shams_todo_group__company_id
+#: model:ir.model.fields,field_description:shams_todo_groups.field_shams_todo_task__company_id
+#: model_terms:ir.ui.view,arch_db:shams_todo_groups.shams_todo_group_view_search
+msgid "Company"
+msgstr "الشركة"
+
+#. module: shams_todo_groups
+#: model_terms:ir.ui.view,arch_db:shams_todo_groups.shams_todo_dashboard_view_form
+msgid "Completed"
+msgstr "مكتملة"
+
+#. module: shams_todo_groups
+#: model:ir.model.fields,field_description:shams_todo_groups.field_shams_todo_task__completed_date
+msgid "Completed Date"
+msgstr "تاريخ الإنجاز"
+
+#. module: shams_todo_groups
+#: model_terms:ir.actions.act_window,help:shams_todo_groups.shams_todo_group_action_configuration
+msgid "Configure To-Do groups"
+msgstr "تهيئة مجموعات المهام"
+
+#. module: shams_todo_groups
+#: model_terms:ir.actions.act_window,help:shams_todo_groups.shams_todo_group_action
+msgid "Create a team group"
+msgstr "أنشئ مجموعة فريق"
+
+#. module: shams_todo_groups
+#: model_terms:ir.actions.act_window,help:shams_todo_groups.shams_todo_task_action
+msgid "Create your first group task"
+msgstr "أنشئ أول مهمة مجموعة"
+
+#. module: shams_todo_groups
+#: model:ir.model.fields,field_description:shams_todo_groups.field_shams_todo_task__created_by_id
+msgid "Created By"
+msgstr "أنشئ بواسطة"
+
+#. module: shams_todo_groups
+#: model_terms:ir.ui.view,arch_db:shams_todo_groups.shams_todo_task_view_form
+msgid "Description"
+msgstr "الوصف"
+
+#. module: shams_todo_groups
+#: model:ir.model.fields,field_description:shams_todo_groups.field_shams_todo_task__is_done
+#: model:ir.model.fields.selection,name:shams_todo_groups.selection__shams_todo_task__status__done
+#: model_terms:ir.ui.view,arch_db:shams_todo_groups.shams_todo_task_view_search
+msgid "Done"
+msgstr "منجزة"
+
+#. module: shams_todo_groups
+#: model:ir.model.fields,field_description:shams_todo_groups.field_shams_todo_task__due_date
+#: model_terms:ir.ui.view,arch_db:shams_todo_groups.shams_todo_task_view_search
+msgid "Due Date"
+msgstr "تاريخ الاستحقاق"
+
+#. module: shams_todo_groups
+#: model_terms:ir.ui.view,arch_db:shams_todo_groups.shams_todo_task_view_search
+msgid "Due Today"
+msgstr "مستحقة اليوم"
+
+#. module: shams_todo_groups
+#: code:addons/shams_todo_groups/models/todo_group.py:0
+msgid ""
+"Every manager must also be a member of the group \"%(group)s\". The following "
+"users are managers but not members: %(users)s"
+msgstr ""
+"يجب أن يكون كل مدير عضواً أيضاً في المجموعة \"%(group)s\". المستخدمون التاليون "
+"مديرون لكنهم ليسوا أعضاء: %(users)s"
+
+#. module: shams_todo_groups
+#: code:addons/shams_todo_groups/models/todo_task.py:0
+msgid "The assigned user must be a member of the group \"%(group)s\"."
+msgstr "يجب أن يكون المستخدم المُعيَّن عضواً في المجموعة \"%(group)s\"."
+
+#. module: shams_todo_groups
+#: code:addons/shams_todo_groups/models/todo_task.py:0
+msgid "You must be a member of the group \"%(group)s\" to assign this task to yourself."
+msgstr "يجب أن تكون عضواً في المجموعة \"%(group)s\" لتعيين هذه المهمة لنفسك."
+
+#. module: shams_todo_groups
+#: model_terms:ir.ui.view,arch_db:shams_todo_groups.shams_todo_dashboard_view_form
+msgid "Finished group tasks"
+msgstr "مهام المجموعات المنجزة"
+
+#. module: shams_todo_groups
+#: model:ir.model.fields,field_description:shams_todo_groups.field_shams_todo_task__group_id
+#: model_terms:ir.ui.view,arch_db:shams_todo_groups.shams_todo_group_view_form
+#: model_terms:ir.ui.view,arch_db:shams_todo_groups.shams_todo_task_view_search
+msgid "Group"
+msgstr "المجموعة"
+
+#. module: shams_todo_groups
+#: model:ir.ui.menu,name:shams_todo_groups.menu_shams_todo_configuration
+msgid "Group Configuration"
+msgstr "تهيئة المجموعات"
+
+#. module: shams_todo_groups
+#: model:ir.actions.server,name:shams_todo_groups.shams_todo_dashboard_action
+#: model:ir.model,name:shams_todo_groups.model_shams_todo_dashboard
+#: model:ir.ui.menu,name:shams_todo_groups.menu_shams_todo_dashboard
+#: model_terms:ir.ui.view,arch_db:shams_todo_groups.shams_todo_dashboard_view_form
+msgid "Group Dashboard"
+msgstr "لوحة معلومات المجموعات"
+
+#. module: shams_todo_groups
+#: model:ir.model.fields,field_description:shams_todo_groups.field_shams_todo_task__member_user_ids
+msgid "Group Members"
+msgstr "أعضاء المجموعة"
+
+#. module: shams_todo_groups
+#: model:ir.actions.act_window,name:shams_todo_groups.shams_todo_task_action_group_tasks
+#: model:ir.ui.menu,name:shams_todo_groups.menu_shams_todo_group_tasks
+msgid "Group Tasks"
+msgstr "مهام المجموعات"
+
+#. module: shams_todo_groups
+#: model_terms:ir.ui.view,arch_db:shams_todo_groups.shams_todo_dashboard_view_form
+msgid "Group To-Do Overview"
+msgstr "نظرة عامة على مهام المجموعات"
+
+#. module: shams_todo_groups
+#: model_terms:ir.actions.act_window,help:shams_todo_groups.shams_todo_group_action
+msgid "Groups let teammates share tasks with clear membership and manager roles."
+msgstr "تتيح المجموعات لزملاء الفريق مشاركة المهام مع أدوار عضوية وإدارة واضحة."
+
+#. module: shams_todo_groups
+#: model:ir.model.fields.selection,name:shams_todo_groups.selection__shams_todo_task__priority__2
+msgid "High"
+msgstr "عالٍ"
+
+#. module: shams_todo_groups
+#: model_terms:ir.ui.view,arch_db:shams_todo_groups.shams_todo_task_view_search
+msgid "High Priority"
+msgstr "أولوية عالية"
+
+#. module: shams_todo_groups
+#: model:ir.model.fields.selection,name:shams_todo_groups.selection__shams_todo_task__status__in_progress
+#: model_terms:ir.ui.view,arch_db:shams_todo_groups.shams_todo_task_view_search
+msgid "In Progress"
+msgstr "قيد التنفيذ"
+
+#. module: shams_todo_groups
+#: model:ir.model.fields.selection,name:shams_todo_groups.selection__shams_todo_task__priority__0
+msgid "Low"
+msgstr "منخفض"
+
+#. module: shams_todo_groups
+#: model_terms:ir.actions.act_window,help:shams_todo_groups.shams_todo_group_action_configuration
+msgid "Manage all groups, members, and managers across the organization."
+msgstr "إدارة جميع المجموعات والأعضاء والمديرين عبر المؤسسة."
+
+#. module: shams_todo_groups
+#: model_terms:ir.ui.view,arch_db:shams_todo_groups.shams_todo_group_view_search
+msgid "Managed by Me"
+msgstr "أديرها أنا"
+
+#. module: shams_todo_groups
+#: model:ir.model.fields,field_description:shams_todo_groups.field_shams_todo_group__manager_ids
+#: model_terms:ir.ui.view,arch_db:shams_todo_groups.shams_todo_group_view_list
+msgid "Managers"
+msgstr "المديرون"
+
+#. module: shams_todo_groups
+#: model:ir.model.fields,field_description:shams_todo_groups.field_shams_todo_group__member_ids
+#: model_terms:ir.ui.view,arch_db:shams_todo_groups.shams_todo_group_view_list
+msgid "Members"
+msgstr "الأعضاء"
+
+#. module: shams_todo_groups
+#: model:ir.model.fields.selection,name:shams_todo_groups.selection__shams_todo_task__priority__1
+msgid "Normal"
+msgstr "عادي"
+
+#. module: shams_todo_groups
+#: model:ir.actions.act_window,name:shams_todo_groups.shams_todo_task_action_my_tasks
+#: model:ir.ui.menu,name:shams_todo_groups.menu_shams_todo_my_assigned_tasks
+#: model_terms:ir.ui.view,arch_db:shams_todo_groups.shams_todo_dashboard_view_form
+#: model_terms:ir.ui.view,arch_db:shams_todo_groups.shams_todo_task_view_search
+msgid "My Assigned Tasks"
+msgstr "مهامي المُعيَّنة"
+
+#. module: shams_todo_groups
+#: model:ir.actions.act_window,name:shams_todo_groups.shams_todo_group_action_my_groups
+#: model:ir.ui.menu,name:shams_todo_groups.menu_shams_todo_my_groups
+#: model_terms:ir.ui.view,arch_db:shams_todo_groups.shams_todo_group_view_search
+msgid "My Groups"
+msgstr "مجموعاتي"
+
+#. module: shams_todo_groups
+#: model_terms:ir.ui.view,arch_db:shams_todo_groups.shams_todo_task_view_search
+msgid "My Tasks"
+msgstr "مهامي"
+
+#. module: shams_todo_groups
+#: model:ir.model.fields.selection,name:shams_todo_groups.selection__shams_todo_task__priority__3
+msgid "Urgent"
+msgstr "عاجل"
+
+#. module: shams_todo_groups
+#: model_terms:ir.ui.view,arch_db:shams_todo_groups.shams_todo_dashboard_view_form
+msgid "Open Tasks"
+msgstr "المهام المفتوحة"
+
+#. module: shams_todo_groups
+#: model_terms:ir.ui.view,arch_db:shams_todo_groups.shams_todo_task_view_search
+msgid "Open"
+msgstr "مفتوحة"
+
+#. module: shams_todo_groups
+#: model_terms:ir.ui.view,arch_db:shams_todo_groups.shams_todo_dashboard_view_form
+msgid "Open pivot analysis"
+msgstr "فتح تحليل المحور"
+
+#. module: shams_todo_groups
+#: model_terms:ir.ui.view,arch_db:shams_todo_groups.shams_todo_dashboard_view_form
+msgid "Open tasks waiting on you"
+msgstr "مهام مفتوحة بانتظارك"
+
+#. module: shams_todo_groups
+#: model_terms:ir.ui.view,arch_db:shams_todo_groups.shams_todo_dashboard_view_form
+#: model_terms:ir.ui.view,arch_db:shams_todo_groups.shams_todo_task_view_form
+#: model_terms:ir.ui.view,arch_db:shams_todo_groups.shams_todo_task_view_search
+msgid "Overdue"
+msgstr "متأخرة"
+
+#. module: shams_todo_groups
+#: model_terms:ir.ui.view,arch_db:shams_todo_groups.shams_todo_dashboard_view_form
+msgid "Past due and still open"
+msgstr "متأخرة وما زالت مفتوحة"
+
+#. module: shams_todo_groups
+#: model:ir.ui.menu,name:shams_todo_groups.menu_shams_todo_personal_tasks
+msgid "Personal Tasks"
+msgstr "المهام الشخصية"
+
+#. module: shams_todo_groups
+#: model_terms:ir.actions.act_window,help:shams_todo_groups.shams_todo_task_action
+msgid "Pick a group, assign a teammate, and track progress on the kanban board."
+msgstr "اختر مجموعة، وعيّن زميلاً، وتتبع التقدم على لوحة كانبان."
+
+#. module: shams_todo_groups
+#: model:ir.model.fields,field_description:shams_todo_groups.field_shams_todo_task__priority
+#: model_terms:ir.ui.view,arch_db:shams_todo_groups.shams_todo_task_view_search
+msgid "Priority"
+msgstr "الأولوية"
+
+#. module: shams_todo_groups
+#: model_terms:ir.ui.view,arch_db:shams_todo_groups.shams_todo_group_view_form
+msgid "Select managers..."
+msgstr "اختر المديرين..."
+
+#. module: shams_todo_groups
+#: model_terms:ir.ui.view,arch_db:shams_todo_groups.shams_todo_group_view_form
+msgid "Select members..."
+msgstr "اختر الأعضاء..."
+
+#. module: shams_todo_groups
+#: model:ir.model.fields,field_description:shams_todo_groups.field_shams_todo_task__status
+#: model_terms:ir.ui.view,arch_db:shams_todo_groups.shams_todo_task_view_search
+msgid "Status"
+msgstr "الحالة"
+
+#. module: shams_todo_groups
+#: model_terms:ir.ui.view,arch_db:shams_todo_groups.shams_todo_task_view_form
+msgid "Schedule"
+msgstr "الجدول"
+
+#. module: shams_todo_groups
+#: model_terms:ir.ui.view,arch_db:shams_todo_groups.shams_todo_task_view_form
+msgid "Assignment"
+msgstr "التعيين"
+
+#. module: shams_todo_groups
+#: model_terms:ir.ui.view,arch_db:shams_todo_groups.shams_todo_task_view_form
+msgid "Task title..."
+msgstr "عنوان المهمة..."
+
+#. module: shams_todo_groups
+#: model_terms:ir.ui.view,arch_db:shams_todo_groups.shams_todo_task_view_search
+msgid "Task"
+msgstr "المهمة"
+
+#. module: shams_todo_groups
+#: model:ir.actions.act_window,name:shams_todo_groups.shams_todo_task_action
+#: model:ir.model.fields,field_description:shams_todo_groups.field_shams_todo_group__task_ids
+#: model_terms:ir.ui.view,arch_db:shams_todo_groups.shams_todo_group_view_form
+#: model_terms:ir.ui.view,arch_db:shams_todo_groups.shams_todo_group_view_list
+#: model_terms:ir.ui.view,arch_db:shams_todo_groups.shams_todo_task_view_calendar
+msgid "Tasks"
+msgstr "المهام"
+
+#. module: shams_todo_groups
+#: model_terms:ir.ui.view,arch_db:shams_todo_groups.shams_todo_dashboard_view_form
+#: model_terms:ir.ui.view,arch_db:shams_todo_groups.shams_todo_task_view_pivot
+msgid "Tasks by Group"
+msgstr "المهام حسب المجموعة"
+
+#. module: shams_todo_groups
+#: model_terms:ir.ui.view,arch_db:shams_todo_groups.shams_todo_task_view_graph
+msgid "Tasks Overview"
+msgstr "نظرة عامة على المهام"
+
+#. module: shams_todo_groups
+#: model_terms:ir.ui.view,arch_db:shams_todo_groups.shams_todo_group_view_form
+msgid "Team"
+msgstr "الفريق"
+
+#. module: shams_todo_groups
+#: model:ir.model.fields.selection,name:shams_todo_groups.selection__shams_todo_task__status__todo
+msgid "To Do"
+msgstr "للتنفيذ"
+
+#. module: shams_todo_groups
+#: model:ir.actions.act_window,name:shams_todo_groups.shams_todo_group_action
+#: model:ir.ui.menu,name:shams_todo_groups.menu_shams_todo_groups_configuration
+msgid "To-Do Groups"
+msgstr "مجموعات المهام"
+
+#. module: shams_todo_groups
+#: model:ir.actions.act_window,name:shams_todo_groups.shams_todo_group_action_configuration
+msgid "To-Do Groups Configuration"
+msgstr "تهيئة مجموعات المهام"
+
+#. module: shams_todo_groups
+#: model:ir.model,name:shams_todo_groups.model_shams_todo_group
+msgid "To-Do Group"
+msgstr "مجموعة المهام"
+
+#. module: shams_todo_groups
+#: model:ir.model,name:shams_todo_groups.model_shams_todo_task
+msgid "To-Do Task"
+msgstr "مهمة للتنفيذ"
+
+#. module: shams_todo_groups
+#: model_terms:ir.ui.view,arch_db:shams_todo_groups.shams_todo_dashboard_view_form
+msgid "Track shared team tasks across your groups at a glance."
+msgstr "تتبع مهام الفريق المشتركة عبر مجموعاتك بنظرة سريعة."
+
+#. module: shams_todo_groups
+#: model_terms:ir.ui.view,arch_db:shams_todo_groups.shams_todo_dashboard_view_form
+msgid "View all"
+msgstr "عرض الكل"
+
+#. module: shams_todo_groups
+#: model:ir.model.fields.selection,name:shams_todo_groups.selection__shams_todo_task__status__waiting_review
+#: model_terms:ir.ui.view,arch_db:shams_todo_groups.shams_todo_task_view_search
+msgid "Waiting Review"
+msgstr "بانتظار المراجعة"
+
+#. module: shams_todo_groups
+#: model_terms:ir.ui.view,arch_db:shams_todo_groups.shams_todo_group_view_form
+msgid "What is this group for? Who should use it?"
+msgstr "ما الغرض من هذه المجموعة؟ من يجب أن يستخدمها؟"
+
+#. module: shams_todo_groups
+#: model_terms:ir.ui.view,arch_db:shams_todo_groups.shams_todo_task_view_form_quick_create
+msgid "What needs to be done?"
+msgstr "ما الذي يجب إنجازه؟"
+
+#. module: shams_todo_groups
+#: model_terms:ir.ui.view,arch_db:shams_todo_groups.shams_todo_group_view_form
+msgid "Group name..."
+msgstr "اسم المجموعة..."
+
+#. module: shams_todo_groups
+#: model:ir.model.fields,field_description:shams_todo_groups.field_shams_todo_group__description
+#: model:ir.model.fields,field_description:shams_todo_groups.field_shams_todo_task__description
+msgid "Description"
+msgstr "الوصف"
+
+#. module: shams_todo_groups
+#: model:ir.model.fields,field_description:shams_todo_groups.field_shams_todo_group__name
+#: model:ir.model.fields,field_description:shams_todo_groups.field_shams_todo_task__name
+msgid "Name"
+msgstr "الاسم"
+
+# --- Python code translations for dashboard labels ---
+
+#. module: shams_todo_groups
+#. odoo-python
+#: code:addons/shams_todo_groups/models/todo_dashboard.py:0
+msgid "Group Dashboard"
+msgstr "لوحة معلومات المجموعات"
+
+#. module: shams_todo_groups
+#. odoo-python
+#: code:addons/shams_todo_groups/models/todo_dashboard.py:0
+msgid "Group To-Do Overview"
+msgstr "نظرة عامة على مهام المجموعات"
+
+#. module: shams_todo_groups
+#. odoo-python
+#: code:addons/shams_todo_groups/models/todo_dashboard.py:0
+msgid "Track shared team tasks across your groups at a glance."
+msgstr "تتبع مهام الفريق المشتركة عبر مجموعاتك بنظرة سريعة."
+
+#. module: shams_todo_groups
+#. odoo-python
+#: code:addons/shams_todo_groups/models/todo_dashboard.py:0
+msgid "Open Tasks"
+msgstr "المهام المفتوحة"
+
+#. module: shams_todo_groups
+#. odoo-python
+#: code:addons/shams_todo_groups/models/todo_dashboard.py:0
+msgid "Active group tasks you can access"
+msgstr "مهام المجموعات النشطة التي يمكنك الوصول إليها"
+
+#. module: shams_todo_groups
+#. odoo-python
+#: code:addons/shams_todo_groups/models/todo_dashboard.py:0
+msgid "Assigned to Me"
+msgstr "مُعيَّنة لي"
+
+#. module: shams_todo_groups
+#. odoo-python
+#: code:addons/shams_todo_groups/models/todo_dashboard.py:0
+msgid "Open tasks waiting on you"
+msgstr "مهام مفتوحة بانتظارك"
+
+#. module: shams_todo_groups
+#. odoo-python
+#: code:addons/shams_todo_groups/models/todo_dashboard.py:0
+msgid "Overdue"
+msgstr "متأخرة"
+
+#. module: shams_todo_groups
+#. odoo-python
+#: code:addons/shams_todo_groups/models/todo_dashboard.py:0
+msgid "Past due and still open"
+msgstr "متأخرة وما زالت مفتوحة"
+
+#. module: shams_todo_groups
+#. odoo-python
+#: code:addons/shams_todo_groups/models/todo_dashboard.py:0
+msgid "Completed"
+msgstr "مكتملة"
+
+#. module: shams_todo_groups
+#. odoo-python
+#: code:addons/shams_todo_groups/models/todo_dashboard.py:0
+msgid "Finished group tasks"
+msgstr "مهام المجموعات المنجزة"
+
+#. module: shams_todo_groups
+#. odoo-python
+#: code:addons/shams_todo_groups/models/todo_dashboard.py:0
+msgid "Tasks by Group"
+msgstr "المهام حسب المجموعة"
+
+#. module: shams_todo_groups
+#. odoo-python
+#: code:addons/shams_todo_groups/models/todo_dashboard.py:0
+msgid "Open pivot analysis"
+msgstr "فتح تحليل المحور"
+
+#. module: shams_todo_groups
+#. odoo-python
+#: code:addons/shams_todo_groups/models/todo_dashboard.py:0
+msgid "My Assigned Tasks"
+msgstr "مهامي المُعيَّنة"
+
+#. module: shams_todo_groups
+#. odoo-python
+#: code:addons/shams_todo_groups/models/todo_dashboard.py:0
+msgid "View all"
+msgstr "عرض الكل"
+
+#. module: shams_todo_groups
+#. odoo-python
+#: code:addons/shams_todo_groups/models/todo_dashboard.py:0
+msgid "Tasks"
+msgstr "المهام"

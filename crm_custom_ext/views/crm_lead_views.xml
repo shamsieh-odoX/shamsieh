@@ -1,0 +1,370 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="crm_lead_view_form_custom" model="ir.ui.view">
+        <field name="name">crm.lead.form.custom</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="crm.crm_lead_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='stage_id'][@widget='rotting_statusbar_duration']" position="attributes">
+                <attribute name="invisible">not active</attribute>
+            </xpath>
+
+            <xpath expr="//div[hasclass('oe_title')]" position="before">
+                <group col="4" invisible="not lead_ref">
+                    <field name="lead_ref" readonly="1" string="Lead ID" colspan="2"/>
+                </group>
+            </xpath>
+
+            <xpath expr="//field[@name='partner_name']" position="attributes">
+                <attribute name="string">Company / Client</attribute>
+            </xpath>
+
+            <xpath expr="//field[@name='user_id'][@widget='many2one_avatar_leader_user']" position="attributes">
+                <attribute name="string">Sales Owner</attribute>
+            </xpath>
+
+            <xpath expr="//label[@for='expected_revenue']" position="attributes">
+                <attribute name="string">Expected Value</attribute>
+            </xpath>
+
+            <xpath expr="//label[@for='date_deadline']" position="attributes">
+                <attribute name="string">Close Date</attribute>
+            </xpath>
+
+            <!-- Shamsieh fields: grouped sections below the main contact row -->
+            <xpath expr="//group[@name='lead_priority']" position="after">
+                <group string="Classification" invisible="type == 'opportunity'" colspan="2">
+                    <group>
+                        <field name="sector_id" options="{'no_create': True, 'no_open': True}"/>
+                        <field name="channel_id" options="{'no_open': True}"/>
+                        <field name="interest_level"/>
+                    </group>
+                    <group>
+                        <field name="source_id" string="Lead Source"/>
+                    </group>
+                </group>
+                <group string="Follow-up" invisible="type == 'opportunity'" colspan="2">
+                    <group>
+                        <field name="first_contact_date"/>
+                        <field name="last_contact_date"/>
+                    </group>
+                    <group>
+                        <field name="next_followup_date"/>
+                    </group>
+                </group>
+                <group string="Classification" invisible="type == 'lead'" colspan="2">
+                    <group>
+                        <field name="sector_id" options="{'no_create': True, 'no_open': True}"/>
+                        <field name="channel_id" options="{'no_open': True}"/>
+                        <field name="interest_level"/>
+                        <field name="source_id" string="Lead Source"/>
+                    </group>
+                    <group>
+                        <field name="team_id" options="{'no_open': True, 'no_create': True}" context="{'kanban_view_ref': 'sales_team.crm_team_view_kanban'}"/>
+                    </group>
+                </group>
+                <group string="Follow-up" invisible="type == 'lead'" colspan="2">
+                    <group>
+                        <field name="last_contact_date"/>
+                        <field name="next_followup_date"/>
+                    </group>
+                </group>
+                <group string="Deal Milestones" invisible="type == 'lead'" colspan="2">
+                    <group>
+                        <field name="demo_date"/>
+                        <field name="proposal_sent_date"/>
+                    </group>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="crm_case_tree_view_leads_custom" model="ir.ui.view">
+        <field name="name">crm.lead.list.lead.custom</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="crm.crm_case_tree_view_leads"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='name']" position="before">
+                <field name="lead_ref" optional="show"/>
+            </xpath>
+            <xpath expr="//field[@name='team_id']" position="after">
+                <field name="sector_id" optional="hide"/>
+                <field name="channel_id" optional="hide"/>
+                <field name="interest_level" optional="show"/>
+                <field name="next_followup_date" optional="show"/>
+                <field name="stage_id" optional="show"/>
+            </xpath>
+            <xpath expr="//field[@name='user_id']" position="attributes">
+                <attribute name="string">Sales Owner</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="crm_case_tree_view_oppor_custom" model="ir.ui.view">
+        <field name="name">crm.lead.list.opportunity.custom</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="crm.crm_case_tree_view_oppor"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='name']" position="before">
+                <field name="lead_ref" optional="show"/>
+            </xpath>
+            <xpath expr="//field[@name='team_id']" position="after">
+                <field name="sector_id" optional="hide"/>
+                <field name="channel_id" optional="hide"/>
+                <field name="interest_level" optional="show"/>
+                <field name="next_followup_date" optional="show"/>
+            </xpath>
+            <xpath expr="//field[@name='user_id']" position="attributes">
+                <attribute name="string">Sales Owner</attribute>
+            </xpath>
+            <xpath expr="//field[@name='expected_revenue']" position="attributes">
+                <attribute name="string">Expected Value</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_crm_case_leads_filter_custom" model="ir.ui.view">
+        <field name="name">crm.lead.search.lead.custom</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="crm.view_crm_case_leads_filter"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='name']" position="before">
+                <field name="lead_ref" string="Lead ID" filter_domain="[('lead_ref', 'ilike', self)]"/>
+            </xpath>
+            <xpath expr="//field[@name='name']" position="attributes">
+                <attribute name="filter_domain">['|','|','|','|',('lead_ref', 'ilike', self),('partner_name', 'ilike', self),('email_from', 'ilike', self), ('contact_name', 'ilike', self), ('name', 'ilike', self)]</attribute>
+            </xpath>
+            <xpath expr="//field[@name='source_id']" position="after">
+                <field name="sector_id" string="Sector"/>
+                <field name="channel_id" string="Channel"/>
+                <field name="interest_level" string="Interest Level"/>
+                <field name="next_followup_date"/>
+                <field name="stage_id"/>
+            </xpath>
+            <xpath expr="//filter[@name='lost']" position="before">
+                <separator string="Follow-ups"/>
+                <filter string="Follow-ups Today" name="filter_followups_today" domain="[('next_followup_date', '=', 'today')]"/>
+                <filter string="Overdue Follow-ups" name="filter_followups_overdue" domain="[('next_followup_date', '&lt;', 'today')]"/>
+                <separator string="Interest Level"/>
+                <filter string="Hot" name="filter_hot_leads" domain="[('interest_level', '=', 'hot')]"/>
+                <filter string="Warm" name="filter_interest_warm" domain="[('interest_level', '=', 'warm')]"/>
+                <filter string="Cold" name="filter_interest_cold" domain="[('interest_level', '=', 'cold')]"/>
+                <filter string="Not Interested" name="filter_interest_not_interested" domain="[('interest_level', '=', 'not_interested')]"/>
+                <separator string="Country"/>
+                <filter string="Jordan Leads" name="filter_team_jordan" domain="[('country_id.code', '=', 'JO')]"/>
+                <filter string="KSA Leads" name="filter_team_ksa" domain="[('country_id.code', '=', 'SA')]"/>
+                <filter string="UAE Leads" name="filter_team_uae" domain="[('country_id.code', '=', 'AE')]"/>
+                <filter string="Qatar Leads" name="filter_team_qatar" domain="[('country_id.code', '=', 'QA')]"/>
+                <separator string="Status"/>
+            </xpath>
+            <xpath expr="//filter[@name='salesperson']" position="attributes">
+                <attribute name="string">Sales Owner</attribute>
+            </xpath>
+            <xpath expr="//filter[@name='source']" position="after">
+                <filter string="Sector" name="group_sector" context="{'group_by': 'sector_id'}"/>
+                <filter string="Channel" name="group_channel" context="{'group_by': 'channel_id'}"/>
+                <filter string="Interest Level" name="group_interest_level" context="{'group_by': 'interest_level'}"/>
+                <filter string="Next Follow-up Date" name="group_next_followup" context="{'group_by': 'next_followup_date'}"/>
+                <filter string="Status" name="group_stage" context="{'group_by': 'stage_id'}"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_crm_case_opportunities_filter_custom" model="ir.ui.view">
+        <field name="name">crm.lead.search.opportunity.custom</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="crm.view_crm_case_opportunities_filter"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='name']" position="before">
+                <field name="lead_ref" string="Lead ID" filter_domain="[('lead_ref', 'ilike', self)]"/>
+            </xpath>
+            <xpath expr="//field[@name='name']" position="attributes">
+                <attribute name="filter_domain">['|', '|', '|', '|', '|', ('lead_ref', 'ilike', self), ('partner_id', 'ilike', self), ('partner_name', 'ilike', self), ('email_from', 'ilike', self), ('name', 'ilike', self), ('contact_name', 'ilike', self)]</attribute>
+            </xpath>
+            <xpath expr="//field[@name='stage_id']" position="after">
+                <field name="sector_id" string="Sector"/>
+                <field name="channel_id" string="Channel"/>
+                <field name="interest_level" string="Interest Level"/>
+                <field name="next_followup_date"/>
+            </xpath>
+            <xpath expr="//filter[@name='filter_won_status_won']" position="before">
+                <separator string="Follow-ups"/>
+                <filter string="Follow-ups Today" name="filter_followups_today" domain="[('next_followup_date', '=', 'today')]"/>
+                <filter string="Overdue Follow-ups" name="filter_followups_overdue" domain="[('next_followup_date', '&lt;', 'today')]"/>
+                <separator string="Interest Level"/>
+                <filter string="Hot" name="filter_hot_leads" domain="[('interest_level', '=', 'hot')]"/>
+                <filter string="Warm" name="filter_interest_warm" domain="[('interest_level', '=', 'warm')]"/>
+                <filter string="Cold" name="filter_interest_cold" domain="[('interest_level', '=', 'cold')]"/>
+                <filter string="Not Interested" name="filter_interest_not_interested" domain="[('interest_level', '=', 'not_interested')]"/>
+                <separator string="Country"/>
+                <filter string="Jordan Leads" name="filter_team_jordan" domain="[('country_id.code', '=', 'JO')]"/>
+                <filter string="KSA Leads" name="filter_team_ksa" domain="[('country_id.code', '=', 'SA')]"/>
+                <filter string="UAE Leads" name="filter_team_uae" domain="[('country_id.code', '=', 'AE')]"/>
+                <filter string="Qatar Leads" name="filter_team_qatar" domain="[('country_id.code', '=', 'QA')]"/>
+                <separator string="Status"/>
+            </xpath>
+            <xpath expr="//filter[@name='salesperson']" position="attributes">
+                <attribute name="string">Sales Owner</attribute>
+            </xpath>
+            <xpath expr="//filter[@name='source']" position="after">
+                <filter string="Sector" name="group_sector" context="{'group_by': 'sector_id'}"/>
+                <filter string="Channel" name="group_channel" context="{'group_by': 'channel_id'}"/>
+                <filter string="Interest Level" name="group_interest_level" context="{'group_by': 'interest_level'}"/>
+                <filter string="Next Follow-up Date" name="group_next_followup" context="{'group_by': 'next_followup_date'}"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="crm_case_kanban_view_leads_custom" model="ir.ui.view">
+        <field name="name">crm.lead.kanban.pipeline.custom</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="crm.crm_case_kanban_view_leads"/>
+        <field name="arch" type="xml">
+            <xpath expr="//kanban" position="attributes">
+                <attribute name="class" add="o_crm_custom_kanban" separator=" "/>
+            </xpath>
+            <xpath expr="//field[@name='team_id']" position="after">
+                <field name="lead_ref"/>
+                <field name="sector_id"/>
+                <field name="channel_id"/>
+                <field name="interest_level"/>
+                <field name="next_followup_date"/>
+            </xpath>
+            <xpath expr="//t[@t-name='card']/field[@name='name']" position="replace">
+                <div class="o_crm_custom_kanban_body">
+                    <div class="row g-3 o_crm_custom_kanban_row">
+                        <div class="col-6 o_crm_custom_kanban_cell">
+                            <field name="lead_ref" class="o_crm_lead_ref" invisible="not lead_ref"/>
+                        </div>
+                        <div class="col-6 o_crm_custom_kanban_cell text-end">
+                            <field name="interest_level"
+                                widget="label_selection"
+                                invisible="not interest_level"
+                                options="{'classes': {'hot': 'danger', 'warm': 'warning', 'cold': 'info', 'not_interested': 'secondary'}}"/>
+                        </div>
+                    </div>
+                    <div class="row g-3 o_crm_custom_kanban_row">
+                        <div class="col-12 o_crm_custom_kanban_cell">
+                            <field class="fw-bold fs-5 o_crm_custom_kanban_title mb-0" name="name"/>
+                        </div>
+                    </div>
+                    <div class="row g-3 o_crm_custom_kanban_row">
+                        <div class="col-6 o_crm_custom_kanban_cell">
+                            <div class="o_crm_custom_kanban_contact text-truncate">
+                                <div class="d-flex align-items-center" invisible="not partner_id">
+                                    <field name="partner_id" widget="many2one_avatar" class="text-truncate" readonly="1" options="{'no_create': 1, 'no_open': 1}"/>
+                                    <field name="partner_id" class="ms-1 text-truncate text-muted"/>
+                                </div>
+                                <field name="contact_name" class="text-muted text-truncate" invisible="partner_id"/>
+                                <field name="partner_name" class="text-muted text-truncate" invisible="partner_id or contact_name"/>
+                            </div>
+                        </div>
+                        <div class="col-6 o_crm_custom_kanban_cell text-end">
+                            <div class="o_kanban_card_crm_lead_revenue o_crm_custom_kanban_revenue text-success">
+                                <t t-if="record.expected_revenue.raw_value">
+                                    <field name="expected_revenue" widget="monetary" options="{'currency_field': 'company_currency'}"/>
+                                    <span t-if="record.recurring_revenue and record.recurring_revenue.raw_value" groups="crm.group_use_recurring_revenues"> + </span>
+                                </t>
+                                <t t-if="record.recurring_revenue and record.recurring_revenue.raw_value">
+                                    <field class="me-1" name="recurring_revenue" widget="monetary" options="{'currency_field': 'company_currency'}" groups="crm.group_use_recurring_revenues"/>
+                                    <field name="recurring_plan" groups="crm.group_use_recurring_revenues"/>
+                                </t>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row g-3 o_crm_custom_kanban_row" invisible="not sector_id and not channel_id">
+                        <div class="col-6 o_crm_custom_kanban_cell">
+                            <field name="sector_id" widget="badge" invisible="not sector_id"/>
+                        </div>
+                        <div class="col-6 o_crm_custom_kanban_cell text-end">
+                            <field name="channel_id" widget="badge" invisible="not channel_id"/>
+                        </div>
+                    </div>
+                    <div class="row g-3 o_crm_custom_kanban_row" invisible="not next_followup_date and not tag_ids">
+                        <div class="col-6 o_crm_custom_kanban_cell">
+                            <div class="o_crm_custom_kanban_followup d-flex align-items-center gap-1 text-muted small" invisible="not next_followup_date">
+                                <i class="fa fa-calendar-o"/>
+                                <field name="next_followup_date"/>
+                            </div>
+                        </div>
+                        <div class="col-6 o_crm_custom_kanban_cell text-end">
+                            <field name="tag_ids" class="o_crm_custom_kanban_tags justify-content-end" widget="many2many_tags"/>
+                        </div>
+                    </div>
+                </div>
+            </xpath>
+            <xpath expr="//t[@t-name='card']/div[hasclass('o_kanban_card_crm_lead_revenue')]" position="replace"/>
+            <xpath expr="//t[@t-name='card']/div[hasclass('d-flex')][field[@name='partner_id']]" position="replace"/>
+            <xpath expr="//t[@t-name='card']/field[@name='contact_name']" position="replace"/>
+            <xpath expr="//t[@t-name='card']/field[@name='partner_name']" position="replace"/>
+            <xpath expr="//t[@t-name='card']/field[@name='tag_ids']" position="replace"/>
+            <xpath expr="//t[@t-name='card']/field[@name='lead_properties']" position="replace"/>
+        </field>
+    </record>
+
+    <record id="view_crm_lead_kanban_custom" model="ir.ui.view">
+        <field name="name">crm.lead.kanban.custom</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="crm.view_crm_lead_kanban"/>
+        <field name="arch" type="xml">
+            <xpath expr="//kanban" position="attributes">
+                <attribute name="class" add="o_crm_custom_kanban" separator=" "/>
+            </xpath>
+            <xpath expr="//kanban" position="inside">
+                <field name="lead_ref"/>
+                <field name="sector_id"/>
+                <field name="channel_id"/>
+                <field name="interest_level"/>
+                <field name="next_followup_date"/>
+            </xpath>
+            <xpath expr="//t[@t-name='card']/field[@name='name']" position="replace">
+                <div class="o_crm_custom_kanban_body">
+                    <div class="row g-3 o_crm_custom_kanban_row">
+                        <div class="col-6 o_crm_custom_kanban_cell">
+                            <field name="lead_ref" class="o_crm_lead_ref" invisible="not lead_ref"/>
+                        </div>
+                        <div class="col-6 o_crm_custom_kanban_cell text-end">
+                            <field name="interest_level"
+                                widget="label_selection"
+                                invisible="not interest_level"
+                                options="{'classes': {'hot': 'danger', 'warm': 'warning', 'cold': 'info', 'not_interested': 'secondary'}}"/>
+                        </div>
+                    </div>
+                    <div class="row g-3 o_crm_custom_kanban_row">
+                        <div class="col-12 o_crm_custom_kanban_cell">
+                            <field class="fw-bold fs-5 o_crm_custom_kanban_title mb-0" name="name"/>
+                        </div>
+                    </div>
+                    <div class="row g-3 o_crm_custom_kanban_row">
+                        <div class="col-6 o_crm_custom_kanban_cell">
+                            <field name="contact_name" class="text-muted text-truncate o_crm_custom_kanban_contact"/>
+                        </div>
+                        <div class="col-6 o_crm_custom_kanban_cell text-end" invisible="not sector_id and not channel_id">
+                            <field name="sector_id" widget="badge" invisible="not sector_id"/>
+                        </div>
+                    </div>
+                    <div class="row g-3 o_crm_custom_kanban_row" invisible="not channel_id and not next_followup_date">
+                        <div class="col-6 o_crm_custom_kanban_cell">
+                            <field name="channel_id" widget="badge" invisible="not channel_id"/>
+                        </div>
+                        <div class="col-6 o_crm_custom_kanban_cell text-end">
+                            <div class="o_crm_custom_kanban_followup d-flex align-items-center justify-content-end gap-1 text-muted small" invisible="not next_followup_date">
+                                <i class="fa fa-calendar-o"/>
+                                <field name="next_followup_date"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row g-3 o_crm_custom_kanban_row" invisible="not tag_ids">
+                        <div class="col-12 o_crm_custom_kanban_cell">
+                            <field name="tag_ids" class="o_crm_custom_kanban_tags" widget="many2many_tags"/>
+                        </div>
+                    </div>
+                </div>
+            </xpath>
+            <xpath expr="//t[@t-name='card']/field[@name='contact_name']" position="replace"/>
+            <xpath expr="//t[@t-name='card']/field[@name='tag_ids']" position="replace"/>
+        </field>
+    </record>
+
+</odoo>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Approvers may read/write via active approval line (not only stored current_approver_id). -->
+    <record id="hr_overtime_request_rule_manager" model="ir.rule">
+        <field name="domain_force">['|',
+            ('current_approver_id', '=', user.id),
+            '&amp;', ('approval_line_ids.approver_id', '=', user.id), ('approval_line_ids.state', '=', 'to_approve')
+        ]</field>
+    </record>
+
+</odoo>

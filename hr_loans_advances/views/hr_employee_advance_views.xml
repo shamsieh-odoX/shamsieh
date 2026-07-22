@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="hr_employee_advance_view_list" model="ir.ui.view">
+        <field name="name">hr.employee.advance.list</field>
+        <field name="model">hr.employee.advance</field>
+        <field name="arch" type="xml">
+            <list decoration-danger="state == 'refused'" decoration-success="state in ('hr_approved', 'repaid')">
+                <field name="name"/>
+                <field name="employee_id" widget="many2one_avatar_employee"/>
+                <field name="request_date"/>
+                <field name="amount"/>
+                <field name="amount_remaining"/>
+                <field name="current_approver_id" optional="hide"/>
+                <field name="state" widget="badge"
+                    decoration-info="state in ('draft', 'submitted')"
+                    decoration-warning="state == 'manager_approved'"
+                    decoration-success="state in ('hr_approved', 'repaid')"
+                    decoration-danger="state == 'refused'"/>
+                <field name="company_id" groups="base.group_multi_company" optional="hide"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="hr_employee_advance_view_form" model="ir.ui.view">
+        <field name="name">hr.employee.advance.form</field>
+        <field name="model">hr.employee.advance</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <field name="can_submit_request" invisible="1"/>
+                    <field name="can_approve_request" invisible="1"/>
+                    <field name="can_refuse_request" invisible="1"/>
+                    <field name="can_cancel_request" invisible="1"/>
+                    <field name="can_reset_request" invisible="1"/>
+                    <button name="action_submit" string="Submit" type="object" class="btn-primary"
+                        invisible="not can_submit_request"/>
+                    <button name="action_approve" string="Approve" type="object" class="btn-primary"
+                        invisible="not can_approve_request"/>
+                    <button name="action_refuse" string="Refuse" type="object"
+                        invisible="not can_refuse_request"/>
+                    <button name="action_cancel" string="Cancel" type="object"
+                        invisible="not can_cancel_request"/>
+                    <button name="action_reset_to_draft" string="Reset to Draft" type="object"
+                        invisible="not can_reset_request"/>
+                    <field name="state" widget="statusbar"
+                        statusbar_visible="draft,submitted,manager_approved,hr_approved,repaid"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_approval_lines" type="object" class="oe_stat_button" icon="fa-check-square-o"
+                            invisible="approval_line_count == 0">
+                            <field name="approval_line_count" widget="statinfo" string="Approvals"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="employee_id" readonly="state != 'draft'"/>
+                            <field name="department_id"/>
+                            <field name="company_id" groups="base.group_multi_company" readonly="state != 'draft'"/>
+                            <field name="request_date" readonly="state != 'draft'"/>
+                        </group>
+                        <group>
+                            <field name="currency_id" invisible="1"/>
+                            <field name="amount" readonly="state != 'draft'"/>
+                            <field name="amount_repaid" readonly="1"/>
+                            <field name="amount_remaining" readonly="1"/>
+                            <field name="deduct_from_next_payslip" readonly="state != 'draft'"/>
+                            <field name="current_approver_id" readonly="1"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="reason" readonly="state != 'draft'"/>
+                    </group>
+                    <notebook>
+                        <page string="Approval History" name="approval_history">
+                            <field name="approval_line_ids" readonly="1">
+                                <list>
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="role"/>
+                                    <field name="approver_id"/>
+                                    <field name="state" widget="badge"/>
+                                    <field name="decision_date"/>
+                                    <field name="comment"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Repayments" name="repayments">
+                            <field name="repayment_ids" readonly="1">
+                                <list>
+                                    <field name="date"/>
+                                    <field name="amount"/>
+                                    <field name="source"/>
+                                    <field name="balance_after"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="hr_employee_advance_view_search" model="ir.ui.view">
+        <field name="name">hr.employee.advance.search</field>
+        <field name="model">hr.employee.advance</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="employee_id"/>
+                <filter name="my_advances" string="My Advances"
+                    domain="[('employee_id.user_id', '=', uid)]"/>
+                <filter name="pending" string="Pending Approval"
+                    domain="[('state', 'in', ('submitted', 'manager_approved'))]"/>
+                <filter name="approved" string="Approved"
+                    domain="[('state', 'in', ('hr_approved', 'repaid'))]"/>
+                <group>
+                    <filter name="group_employee" string="Employee" context="{'group_by': 'employee_id'}"/>
+                    <filter name="group_state" string="Status" context="{'group_by': 'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_hr_employee_advance" model="ir.actions.act_window">
+        <field name="name">Salary Advances</field>
+        <field name="res_model">hr.employee.advance</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="hr_employee_advance_view_search"/>
+        <field name="context">{'search_default_my_advances': 1}</field>
+    </record>
+
+    <record id="action_hr_employee_advance_all" model="ir.actions.act_window">
+        <field name="name">All Salary Advances</field>
+        <field name="res_model">hr.employee.advance</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="hr_employee_advance_view_search"/>
+    </record>
+
+</odoo>

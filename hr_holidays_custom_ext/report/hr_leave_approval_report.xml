@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="action_report_hr_leave_approval" model="ir.actions.report">
+        <field name="name">Leave Approval Log</field>
+        <field name="model">hr.leave</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">hr_holidays_custom_ext.report_hr_leave_approval</field>
+        <field name="report_file">hr_holidays_custom_ext.report_hr_leave_approval</field>
+        <field name="print_report_name">'Leave Approval - %s' % (object.employee_id.name)</field>
+        <field name="binding_model_id" ref="hr_holidays.model_hr_leave"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <template id="report_hr_leave_approval">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <h2>Leave Approval Log</h2>
+                        <div class="row mt-4">
+                            <div class="col-6">
+                                <strong>Employee:</strong> <span t-field="doc.employee_id"/><br/>
+                                <strong>Department:</strong> <span t-field="doc.department_id"/><br/>
+                                <strong>Leave Type:</strong> <span t-field="doc.holiday_status_id"/><br/>
+                            </div>
+                            <div class="col-6">
+                                <strong>Start:</strong> <span t-field="doc.date_from"/><br/>
+                                <strong>End:</strong> <span t-field="doc.date_to"/><br/>
+                                <strong>Duration:</strong> <span t-field="doc.duration_display"/><br/>
+                                <strong>Status:</strong> <span t-field="doc.state"/><br/>
+                            </div>
+                        </div>
+                        <div class="mt-3" t-if="doc.refuse_reason">
+                            <strong>Refusal Reason:</strong>
+                            <p t-field="doc.refuse_reason"/>
+                        </div>
+                        <h4 class="mt-4">Approval Trail</h4>
+                        <table class="table table-sm o_main_table">
+                            <thead>
+                                <tr>
+                                    <th>Stage</th>
+                                    <th>Approver</th>
+                                    <th>Status</th>
+                                    <th>Date</th>
+                                    <th>Comment</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr t-foreach="doc.approval_trail_ids" t-as="line">
+                                    <td><span t-field="line.stage"/></td>
+                                    <td><span t-field="line.approver_id"/></td>
+                                    <td><span t-field="line.state"/></td>
+                                    <td><span t-field="line.decision_date"/></td>
+                                    <td><span t-field="line.comment"/></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+</odoo>

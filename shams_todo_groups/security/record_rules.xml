@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <data noupdate="1">
+
+        <!-- Multi-company (global rules, AND-ed with group-specific rules) -->
+        <record id="shams_todo_group_comp_rule" model="ir.rule">
+            <field name="name">To-Do Group: multi-company</field>
+            <field name="model_id" ref="model_shams_todo_group"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+
+        <record id="shams_todo_task_comp_rule" model="ir.rule">
+            <field name="name">To-Do Task: multi-company</field>
+            <field name="model_id" ref="model_shams_todo_task"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+
+        <!-- Groups: member read -->
+        <record id="shams_todo_group_rule_member_read" model="ir.rule">
+            <field name="name">To-Do Group: member read</field>
+            <field name="model_id" ref="model_shams_todo_group"/>
+            <field name="domain_force">[('member_ids', 'in', user.id)]</field>
+            <field name="groups" eval="[(4, ref('group_todo_user'))]"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_unlink" eval="False"/>
+        </record>
+
+        <!-- Groups: manager read/write -->
+        <record id="shams_todo_group_rule_manager_write" model="ir.rule">
+            <field name="name">To-Do Group: manager read/write</field>
+            <field name="model_id" ref="model_shams_todo_group"/>
+            <field name="domain_force">[('manager_ids', 'in', user.id)]</field>
+            <field name="groups" eval="[(4, ref('group_todo_manager'))]"/>
+            <field name="perm_unlink" eval="False"/>
+        </record>
+
+        <!-- Groups: management all -->
+        <record id="shams_todo_group_rule_management_all" model="ir.rule">
+            <field name="name">To-Do Group: management all</field>
+            <field name="model_id" ref="model_shams_todo_group"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="groups" eval="[(4, ref('group_todo_management'))]"/>
+        </record>
+
+        <!-- Tasks: member access -->
+        <record id="shams_todo_task_rule_member_access" model="ir.rule">
+            <field name="name">To-Do Task: member access</field>
+            <field name="model_id" ref="model_shams_todo_task"/>
+            <field name="domain_force">[('group_id.member_ids', 'in', user.id)]</field>
+            <field name="groups" eval="[(4, ref('group_todo_user'))]"/>
+            <field name="perm_unlink" eval="False"/>
+        </record>
+
+        <!-- Tasks: manager access -->
+        <record id="shams_todo_task_rule_manager_access" model="ir.rule">
+            <field name="name">To-Do Task: manager access</field>
+            <field name="model_id" ref="model_shams_todo_task"/>
+            <field name="domain_force">[('group_id.manager_ids', 'in', user.id)]</field>
+            <field name="groups" eval="[(4, ref('group_todo_manager'))]"/>
+            <field name="perm_unlink" eval="False"/>
+        </record>
+
+        <!-- Tasks: manager delete -->
+        <record id="shams_todo_task_rule_manager_unlink" model="ir.rule">
+            <field name="name">To-Do Task: manager delete</field>
+            <field name="model_id" ref="model_shams_todo_task"/>
+            <field name="domain_force">[('group_id.manager_ids', 'in', user.id)]</field>
+            <field name="groups" eval="[(4, ref('group_todo_manager'))]"/>
+            <field name="perm_read" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_write" eval="False"/>
+        </record>
+
+        <!-- Tasks: management all -->
+        <record id="shams_todo_task_rule_management_all" model="ir.rule">
+            <field name="name">To-Do Task: management all</field>
+            <field name="model_id" ref="model_shams_todo_task"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="groups" eval="[(4, ref('group_todo_management'))]"/>
+        </record>
+
+    </data>
+
+</odoo>

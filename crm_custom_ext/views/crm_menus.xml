@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <menuitem
+        id="menu_crm_custom_dashboard_root"
+        name="Shamsieh Dashboard"
+        parent="crm.crm_menu_report"
+        sequence="5"
+    />
+
+    <menuitem
+        id="menu_crm_custom_dashboard"
+        name="Overview"
+        parent="menu_crm_custom_dashboard_root"
+        action="crm_custom_ext.crm_custom_dashboard_action"
+        sequence="1"
+    />
+    <menuitem
+        id="menu_crm_dashboard_by_stage"
+        name="Leads by Status"
+        parent="menu_crm_custom_dashboard_root"
+        action="crm_custom_ext.crm_dashboard_leads_by_stage_action"
+        sequence="2"
+    />
+    <menuitem
+        id="menu_crm_dashboard_by_owner"
+        name="Leads by Sales Owner"
+        parent="menu_crm_custom_dashboard_root"
+        action="crm_custom_ext.crm_dashboard_leads_by_owner_action"
+        sequence="3"
+    />
+    <menuitem
+        id="menu_crm_dashboard_by_team"
+        name="Leads by Sales Team"
+        parent="menu_crm_custom_dashboard_root"
+        action="crm_custom_ext.crm_dashboard_leads_by_team_action"
+        sequence="4"
+    />
+    <menuitem
+        id="menu_crm_dashboard_by_country"
+        name="Leads by Country"
+        parent="menu_crm_custom_dashboard_root"
+        action="crm_custom_ext.crm_dashboard_leads_by_country_action"
+        sequence="5"
+    />
+    <menuitem
+        id="menu_crm_dashboard_hot_leads"
+        name="Hot Leads"
+        parent="menu_crm_custom_dashboard_root"
+        action="crm_custom_ext.crm_dashboard_hot_leads_action"
+        sequence="6"
+    />
+    <menuitem
+        id="menu_crm_dashboard_followups_today"
+        name="Follow-ups Today"
+        parent="menu_crm_custom_dashboard_root"
+        action="crm_custom_ext.crm_dashboard_followups_today_action"
+        sequence="7"
+    />
+    <menuitem
+        id="menu_crm_dashboard_followups_overdue"
+        name="Overdue Follow-ups"
+        parent="menu_crm_custom_dashboard_root"
+        action="crm_custom_ext.crm_dashboard_followups_overdue_action"
+        sequence="8"
+    />
+    <menuitem
+        id="menu_crm_dashboard_expected_revenue"
+        name="Expected Revenue"
+        parent="menu_crm_custom_dashboard_root"
+        action="crm_custom_ext.crm_dashboard_expected_revenue_action"
+        sequence="9"
+    />
+    <menuitem
+        id="menu_crm_dashboard_won"
+        name="Won Leads"
+        parent="menu_crm_custom_dashboard_root"
+        action="crm_custom_ext.crm_dashboard_won_leads_action"
+        sequence="10"
+    />
+    <menuitem
+        id="menu_crm_dashboard_lost"
+        name="Lost Leads"
+        parent="menu_crm_custom_dashboard_root"
+        action="crm_custom_ext.crm_dashboard_lost_leads_action"
+        sequence="11"
+    />
+    <menuitem
+        id="menu_crm_dashboard_target"
+        name="Target vs Actual"
+        parent="menu_crm_custom_dashboard_root"
+        action="crm_custom_ext.crm_dashboard_target_action"
+        sequence="12"
+        groups="sales_team.group_sale_manager"
+    />
+
+    <menuitem
+        id="menu_crm_lead_sectors"
+        name="Sectors"
+        parent="crm.crm_menu_config"
+        action="crm_custom_ext.crm_lead_sector_action"
+        sequence="24"
+        groups="sales_team.group_sale_manager"
+    />
+
+    <menuitem
+        id="menu_crm_team_targets"
+        name="Sales Team Targets"
+        parent="crm.crm_menu_config"
+        action="crm_custom_ext.crm_team_target_action"
+        sequence="25"
+        groups="sales_team.group_sale_manager"
+    />
+
+</odoo>

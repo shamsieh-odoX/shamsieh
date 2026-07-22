@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <menuitem
+        id="menu_hr_loans_advances_root"
+        name="Loans &amp; Advances"
+        parent="hr.menu_hr_root"
+        sequence="45"/>
+
+    <menuitem
+        id="menu_hr_employee_advance"
+        name="My Salary Advances"
+        parent="menu_hr_loans_advances_root"
+        action="action_hr_employee_advance"
+        sequence="10"/>
+
+    <menuitem
+        id="menu_hr_employee_loan"
+        name="My Employee Loans"
+        parent="menu_hr_loans_advances_root"
+        action="action_hr_employee_loan"
+        sequence="20"/>
+
+    <menuitem
+        id="menu_hr_loans_advances_reporting"
+        name="Reporting"
+        parent="menu_hr_loans_advances_root"
+        groups="hr_loans_advances.group_loans_advances_hr_officer"
+        sequence="90"/>
+
+    <menuitem
+        id="menu_hr_employee_advance_all"
+        name="All Salary Advances"
+        parent="menu_hr_loans_advances_reporting"
+        action="action_hr_employee_advance_all"
+        groups="hr_loans_advances.group_loans_advances_hr_officer"
+        sequence="10"/>
+
+    <menuitem
+        id="menu_hr_employee_loan_all"
+        name="All Employee Loans"
+        parent="menu_hr_loans_advances_reporting"
+        action="action_hr_employee_loan_all"
+        groups="hr_loans_advances.group_loans_advances_hr_officer"
+        sequence="20"/>
+
+</odoo>
