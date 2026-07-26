@@ -82,14 +82,15 @@ class HrAttendance(models.Model):
     hikvision_punch_type = fields.Selection(
         selection=[
             ('check_in', 'Check In'),
-            ('break_in', 'Break In'),
-            ('break_out', 'Break Out'),
+            ('break_out', 'Break Out'),  # start break
+            ('break_in', 'Break In'),    # end break
             ('check_out', 'Check Out'),
         ],
         string='Punch Type',
         tracking=True,
         index=True,
-        help='Last punch recorded for this attendance day.',
+        help='Last punch recorded for this attendance day. '
+             'Break Out starts a break; Break In ends a break.',
     )
     hikvision_presence_status = fields.Selection(
         related='employee_id.hikvision_presence_status',

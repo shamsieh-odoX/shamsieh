@@ -44,7 +44,7 @@ class HrAttendanceCustom(HrAttendance):
                 messages = {
                     'duplicate': _('This punch was already recorded.'),
                     'no_open_attendance': _('You must check in before using this punch.'),
-                    'not_on_break': _('You are not currently on break.'),
+                    'not_on_break': _('You are not currently on break. Use Break Out to start a break first.'),
                 }
                 return {'status': 'error', 'message': messages[result['status']]}
         except UserError as exc:
