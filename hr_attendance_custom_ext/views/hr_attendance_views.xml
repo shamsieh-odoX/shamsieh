@@ -5,6 +5,11 @@
         <field name="model">hr.attendance</field>
         <field name="inherit_id" ref="hr_attendance.view_attendance_tree"/>
         <field name="arch" type="xml">
+            <xpath expr="//list" position="attributes">
+                <attribute name="create">false</attribute>
+                <attribute name="edit">false</attribute>
+                <attribute name="delete">false</attribute>
+            </xpath>
             <xpath expr="//field[@name='in_mode']" position="replace"/>
             <xpath expr="//field[@name='out_mode']" position="replace"/>
             <xpath expr="//field[@name='in_latitude']" position="replace"/>
@@ -60,8 +65,15 @@
                 <field name="device_user_id" readonly="1"/>
                 <field name="external_log_id" readonly="1"/>
             </xpath>
+            <xpath expr="//field[@name='check_in']" position="attributes">
+                <attribute name="readonly">1</attribute>
+            </xpath>
             <xpath expr="//field[@name='check_out']" position="attributes">
+                <attribute name="readonly">1</attribute>
                 <attribute name="placeholder">Currently Working</attribute>
+            </xpath>
+            <xpath expr="//field[@name='employee_id']" position="attributes">
+                <attribute name="readonly">1</attribute>
             </xpath>
             <xpath expr="//separator[@name='check_out_separator']" position="before">
                 <separator string="Punch History"/>

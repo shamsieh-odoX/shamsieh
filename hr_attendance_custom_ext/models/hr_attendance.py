@@ -2,11 +2,19 @@
 
 from datetime import timedelta
 
-from odoo import api, fields, models
+from odoo import _, api, fields, models
+from odoo.exceptions import UserError
 
 
 class HrAttendance(models.Model):
     _inherit = 'hr.attendance'
+
+    # Fields that must not be manually changed after a punch is recorded.
+    _ATTENDANCE_LOCKED_FIELDS = frozenset({
+        'check_in',
+        'check_out',
+        'employee_id',
+    })
 
     attendance_source = fields.Selection(
         selection=[
@@ -142,15 +150,53 @@ class HrAttendance(models.Model):
 
     @api.model_create_multi
     def create(self, vals_list):
+        if not (
+            self.env.su
+            or self.env.context.get('attendance_punch_update')
+            or self.env.context.get('attendance_allow_manual_edit')
+            or self.env.user.has_group('hr_attendance.group_hr_attendance_manager')
+        ):
+            raise UserError(_(
+                'You cannot create attendance records manually. '
+                'Use the fingerprint device or the attendance check-in button.'
+            ))
         records = super().create(vals_list)
         records._refresh_daily_status()
         return records
 
+    def _attendance_time_edit_allowed(self):
+        """Technical punch flows (device/systray) may update times; UI users may not."""
+        return bool(
+            self.env.su
+            or self.env.context.get('attendance_punch_update')
+            or self.env.context.get('attendance_allow_manual_edit')
+        )
+
+    def _raise_if_locked_attendance_edit(self, vals):
+        locked = self._ATTENDANCE_LOCKED_FIELDS & set(vals)
+        if not locked or self._attendance_time_edit_allowed():
+            return
+        raise UserError(_(
+            'Check-in and check-out times cannot be edited after they are recorded. '
+            'Use the fingerprint device or attendance punches only.'
+        ))
+
     def write(self, vals):
+        self._raise_if_locked_attendance_edit(vals)
         res = super().write(vals)
         if {'check_in', 'check_out', 'employee_id'} & set(vals):
             self._refresh_daily_status()
         return res
+
+    def unlink(self):
+        if not self._attendance_time_edit_allowed() and not self.env.user.has_group(
+            'hr_attendance.group_hr_attendance_manager',
+        ):
+            raise UserError(_(
+                'You cannot delete attendance records. '
+                'Contact an Attendance Manager if a correction is required.'
+            ))
+        return super().unlink()
 
     def _defer_penalties_until_checkout(self):
         """Deprecated: late minutes are computed immediately on check-in."""

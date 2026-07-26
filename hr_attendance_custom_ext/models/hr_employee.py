@@ -583,7 +583,7 @@ class HrEmployee(models.Model):
                     'attendance_id': today_attendance.id if today_attendance else False,
                     'reason': 'already_checked_in_today',
                 }
-            attendance = Attendance.create({
+            attendance = Attendance.with_context(attendance_punch_update=True).create({
                 'employee_id': self.id,
                 'check_in': punch_time,
                 'hikvision_punch_type': punch_type,
@@ -604,7 +604,7 @@ class HrEmployee(models.Model):
         if punch_type == 'check_out':
             if not open_attendance:
                 return {'status': 'no_open_attendance'}
-            open_attendance.write({
+            open_attendance.with_context(attendance_punch_update=True).write({
                 'check_out': punch_time,
                 'hikvision_punch_type': punch_type,
                 'out_mode': 'technical',
@@ -628,7 +628,9 @@ class HrEmployee(models.Model):
             if self.hikvision_presence_status == 'on_break':
                 return {'status': 'duplicate', 'attendance_id': open_attendance.id}
             self.sudo().hikvision_presence_status = 'on_break'
-            open_attendance.write({'hikvision_punch_type': punch_type})
+            open_attendance.with_context(attendance_punch_update=True).write({
+                'hikvision_punch_type': punch_type,
+            })
             PunchLog.create({
                 'attendance_id': open_attendance.id,
                 'punch_type': punch_type,
@@ -651,7 +653,9 @@ class HrEmployee(models.Model):
                 if not last_punch or last_punch.punch_type != 'break_out':
                     return {'status': 'not_on_break', 'attendance_id': open_attendance.id}
             self.sudo().hikvision_presence_status = 'working'
-            open_attendance.write({'hikvision_punch_type': punch_type})
+            open_attendance.with_context(attendance_punch_update=True).write({
+                'hikvision_punch_type': punch_type,
+            })
             PunchLog.create({
                 'attendance_id': open_attendance.id,
                 'punch_type': punch_type,
@@ -786,6 +790,7 @@ class HrEmployee(models.Model):
                 via_home_pin=self.env.context.get('attendance_via_home_pin'),
                 device_location=self.env.context.get('attendance_device_location'),
             )
+        self = self.with_context(attendance_punch_update=True)
         attendance = super()._attendance_action_change(geo_information=geo_information)
         if attendance and not attendance.attendance_source:
             mode_map = {
@@ -796,5 +801,7 @@ class HrEmployee(models.Model):
                 source = mode_map.get(attendance.in_mode, 'manual')
             else:
                 source = mode_map.get(attendance.out_mode, 'manual')
-            attendance.attendance_source = source
+            attendance.with_context(attendance_punch_update=True).write({
+                'attendance_source': source,
+            })
         return attendance
