@@ -69,7 +69,7 @@ class TestHikvisionHttpPush(TransactionCase):
         })
         result = process_http_push(self.device, {
             'employeeNoString': '5',
-            'attendanceStatus': 'breakIn',
+            'attendanceStatus': 'breakOut',
             'dateTime': '2026-07-13T10:00:00+03:00',
             'serialNo': 1004,
             'subEventType': 38,
@@ -81,3 +81,12 @@ class TestHikvisionHttpPush(TransactionCase):
         ], limit=1)
         self.assertTrue(attendance)
         self.assertEqual(self.employee.hikvision_presence_status, 'on_break')
+        end_result = process_http_push(self.device, {
+            'employeeNoString': '5',
+            'attendanceStatus': 'breakIn',
+            'dateTime': '2026-07-13T10:30:00+03:00',
+            'serialNo': 1005,
+            'subEventType': 38,
+        })
+        self.assertEqual(end_result['status'], 'break_ended')
+        self.assertEqual(self.employee.hikvision_presence_status, 'working')

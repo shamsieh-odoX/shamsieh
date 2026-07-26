@@ -408,12 +408,32 @@ class HrEmployee(models.Model):
         self.ensure_one()
         return self._get_attendance_scheduled_location(check_datetime) == 'home'
 
+    def _is_attendance_administrator(self):
+        """Settings administrators may punch breaks from Odoo on any schedule day."""
+        return self.env.user.has_group('base.group_system')
+
+    def _systray_break_punch_allowed(self, check_datetime=None):
+        """Break In/Out from Odoo: home days for everyone, always for administrators."""
+        self.ensure_one()
+        return (
+            self._manual_attendance_allowed(check_datetime)
+            or self._is_attendance_administrator()
+        )
+
     def _raise_if_manual_attendance_blocked(self, check_datetime=None):
         self.ensure_one()
         if not self._manual_attendance_allowed(check_datetime):
             raise UserError(_(
                 'Manual attendance is not allowed on office schedule days. '
                 'Please use the fingerprint device to check in and out.'
+            ))
+
+    def _raise_if_systray_break_blocked(self, check_datetime=None):
+        self.ensure_one()
+        if not self._systray_break_punch_allowed(check_datetime):
+            raise UserError(_(
+                'Break punches from Odoo are only allowed on home schedule days, '
+                'or for administrators.'
             ))
 
     def _get_effective_work_location_type(self):
@@ -551,7 +571,8 @@ class HrEmployee(models.Model):
             self.sudo().hikvision_presence_status = 'checked_out'
             return {'status': 'closed', 'attendance_id': open_attendance.id}
 
-        if punch_type == 'break_in':
+        if punch_type == 'break_out':
+            # Break Out = leave for break (break started)
             if not open_attendance:
                 return {'status': 'no_open_attendance'}
             if self.hikvision_presence_status == 'on_break':
@@ -568,7 +589,8 @@ class HrEmployee(models.Model):
             })
             return {'status': 'break_started', 'attendance_id': open_attendance.id}
 
-        if punch_type == 'break_out':
+        if punch_type == 'break_in':
+            # Break In = return from break (break ended)
             if not open_attendance:
                 return {'status': 'no_open_attendance'}
             on_break = self.hikvision_presence_status == 'on_break'
@@ -576,7 +598,7 @@ class HrEmployee(models.Model):
                 last_punch = PunchLog.search([
                     ('attendance_id', '=', open_attendance.id),
                 ], order='punch_time desc, id desc', limit=1)
-                if not last_punch or last_punch.punch_type != 'break_in':
+                if not last_punch or last_punch.punch_type != 'break_out':
                     return {'status': 'not_on_break', 'attendance_id': open_attendance.id}
             self.sudo().hikvision_presence_status = 'working'
             open_attendance.write({'hikvision_punch_type': punch_type})
@@ -616,7 +638,10 @@ class HrEmployee(models.Model):
 
     def action_systray_punch(self, punch_type):
         self.ensure_one()
-        self._raise_if_manual_attendance_blocked()
+        if punch_type in ('break_in', 'break_out'):
+            self._raise_if_systray_break_blocked()
+        else:
+            self._raise_if_manual_attendance_blocked()
         return self.hikvision_process_punch(
             punch_type=punch_type,
             punch_time=fields.Datetime.now(),
@@ -631,10 +656,12 @@ class HrEmployee(models.Model):
         response = HrAttendance._get_user_attendance_data(self)
         scheduled_location = self._get_attendance_scheduled_location()
         manual_allowed = scheduled_location == 'home'
+        break_allowed = self._systray_break_punch_allowed()
         policy = self.env['fingerprint.attendance.policy'].get_company_default(self.company_id)
         response.update({
             'scheduled_location': scheduled_location,
             'manual_attendance_allowed': manual_allowed,
+            'break_punch_allowed': break_allowed,
             'work_location_type': scheduled_location,
             'check_in_requires_face': False,
             'check_in_requires_home_pin': False,

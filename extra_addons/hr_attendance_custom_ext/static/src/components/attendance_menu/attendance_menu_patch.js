@@ -36,6 +36,9 @@ patch(ActivityMenu.prototype, {
     get labelOfficeDayHint() {
         return _t("Office day — use the fingerprint device to check in and out.");
     },
+    get labelAdminBreakHint() {
+        return _t("Administrators can record Break Out / Break In from Odoo.");
+    },
     get labelBefore() {
         return _t("Before");
     },
@@ -44,6 +47,13 @@ patch(ActivityMenu.prototype, {
     },
     get labelTotalToday() {
         return _t("Total today");
+    },
+
+    get breakPunchAllowed() {
+        if (this.employee?.break_punch_allowed !== undefined) {
+            return this.employee.break_punch_allowed !== false;
+        }
+        return this.employee?.manual_attendance_allowed !== false;
     },
 
     _searchReadEmployeeFill() {
@@ -63,7 +73,17 @@ patch(ActivityMenu.prototype, {
         this._attendanceInProgress = true;
         await this.searchReadEmployee();
 
-        if (this.employee?.manual_attendance_allowed === false) {
+        const isBreakPunch = punchType === "break_in" || punchType === "break_out";
+        if (isBreakPunch) {
+            if (!this.breakPunchAllowed) {
+                this.notification.add(this.labelOfficeDayHint, {
+                    title: _t("Attendance"),
+                    type: "warning",
+                });
+                this._attendanceInProgress = false;
+                return;
+            }
+        } else if (this.employee?.manual_attendance_allowed === false) {
             this.notification.add(this.labelOfficeDayHint, {
                 title: _t("Attendance"),
                 type: "warning",

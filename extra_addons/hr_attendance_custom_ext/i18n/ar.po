@@ -191,7 +191,7 @@ msgstr "معرّف المستخدم في جهاز البصمة"
 #: model:ir.model.fields.selection,name:hr_attendance_custom_ext.selection__hr_attendance_punch_log__punch_type__break_in
 #: model_terms:ir.ui.view,arch_db:hr_attendance_custom_ext.hr_attendance_view_filter_custom
 msgid "Break In"
-msgstr "بدء الاستراحة"
+msgstr "إنهاء الاستراحة / العودة للعمل"
 
 #. module: hr_attendance_custom_ext
 #. odoo-javascript
@@ -202,7 +202,7 @@ msgstr "بدء الاستراحة"
 #: model:ir.model.fields.selection,name:hr_attendance_custom_ext.selection__hr_attendance_punch_log__punch_type__break_out
 #: model_terms:ir.ui.view,arch_db:hr_attendance_custom_ext.hr_attendance_view_filter_custom
 msgid "Break Out"
-msgstr "العودة من الاستراحة"
+msgstr "بدء الاستراحة"
 
 #. module: hr_attendance_custom_ext
 #: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_fingerprint_device__import_file_data
