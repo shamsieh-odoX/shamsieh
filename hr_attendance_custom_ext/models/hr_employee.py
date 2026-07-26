@@ -409,11 +409,15 @@ class HrEmployee(models.Model):
         return self._get_attendance_scheduled_location(check_datetime) == 'home'
 
     def _is_attendance_administrator(self):
-        """Settings administrators may punch breaks from Odoo on any schedule day."""
-        return self.env.user.has_group('base.group_system')
+        """Attendance and Settings administrators may punch breaks on office days."""
+        user = self.env.user
+        return (
+            user.has_group('hr_attendance.group_hr_attendance_manager')
+            or user.has_group('base.group_system')
+        )
 
     def _systray_break_punch_allowed(self, check_datetime=None):
-        """Break In/Out from Odoo: home days for everyone, always for administrators."""
+        """Allow Odoo breaks at home, plus office-day breaks for administrators."""
         self.ensure_one()
         return (
             self._manual_attendance_allowed(check_datetime)
