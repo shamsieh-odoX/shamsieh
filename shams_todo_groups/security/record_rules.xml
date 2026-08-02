@@ -27,6 +27,27 @@
             <field name="perm_unlink" eval="False"/>
         </record>
 
+        <!-- Groups: list owner write (lists they manage) -->
+        <record id="shams_todo_group_rule_owner_write" model="ir.rule">
+            <field name="name">To-Do Group: owner write</field>
+            <field name="model_id" ref="model_shams_todo_group"/>
+            <field name="domain_force">[('manager_ids', 'in', user.id)]</field>
+            <field name="groups" eval="[(4, ref('group_todo_user'))]"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_unlink" eval="False"/>
+        </record>
+
+        <!-- Groups: any member can create a new list -->
+        <record id="shams_todo_group_rule_user_create" model="ir.rule">
+            <field name="name">To-Do Group: user create list</field>
+            <field name="model_id" ref="model_shams_todo_group"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="groups" eval="[(4, ref('group_todo_user'))]"/>
+            <field name="perm_read" eval="False"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_unlink" eval="False"/>
+        </record>
+
         <!-- Groups: manager read/write -->
         <record id="shams_todo_group_rule_manager_write" model="ir.rule">
             <field name="name">To-Do Group: manager read/write</field>

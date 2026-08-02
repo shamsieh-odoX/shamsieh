@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="shams_todo_groups.TodoApp">
+        <div class="o_shams_todo_app">
+            <aside class="o_shams_todo_sidebar">
+                <div class="o_shams_todo_sidebar_brand">To Do</div>
+                <nav class="o_shams_todo_smart_lists">
+                    <t t-foreach="state.smartLists" t-as="list" t-key="list.key">
+                        <button type="button"
+                            class="o_shams_todo_nav_item"
+                            t-att-class="{ 'is-active': isSmartActive(list.key) }"
+                            t-on-click="() => this.selectSmartList(list.key)">
+                            <i t-att-class="'fa ' + iconClass(list.icon)" />
+                            <span class="o_shams_todo_nav_label" t-esc="list.label"/>
+                            <span class="o_shams_todo_nav_count" t-if="list.count" t-esc="list.count"/>
+                        </button>
+                    </t>
+                </nav>
+
+                <div class="o_shams_todo_sidebar_divider"/>
+
+                <div class="o_shams_todo_lists_header">Lists</div>
+                <nav class="o_shams_todo_group_lists">
+                    <t t-foreach="state.groups" t-as="group" t-key="group.id">
+                        <button type="button"
+                            class="o_shams_todo_nav_item"
+                            t-att-class="{ 'is-active': isGroupActive(group.id) }"
+                            t-on-click="() => this.selectGroup(group.id)">
+                            <i class="fa fa-list-ul"/>
+                            <span class="o_shams_todo_nav_label" t-esc="group.name"/>
+                            <span class="o_shams_todo_nav_count" t-if="group.count" t-esc="group.count"/>
+                        </button>
+                    </t>
+                </nav>
+
+                <div class="o_shams_todo_new_list">
+                    <t t-if="state.showNewList">
+                        <form class="o_shams_todo_new_list_form" t-on-submit="onCreateList">
+                            <input type="text"
+                                class="o_shams_todo_new_list_input"
+                                placeholder="List name"
+                                t-ref="newListInput"
+                                t-model="state.newListName"/>
+                            <button type="submit" class="o_shams_todo_new_list_submit">Add</button>
+                        </form>
+                    </t>
+                    <t t-else="">
+                        <button type="button" class="o_shams_todo_new_list_btn" t-on-click="openNewList">
+                            <i class="fa fa-plus"/> New list
+                        </button>
+                    </t>
+                </div>
+            </aside>
+
+            <main class="o_shams_todo_main" t-att-class="{ 'has-detail': !!state.selectedTask }">
+                <header class="o_shams_todo_main_header">
+                    <div>
+                        <h1 class="o_shams_todo_main_title" t-esc="state.title"/>
+                        <div class="o_shams_todo_main_date" t-if="state.listKey === 'my_day'" t-esc="formatTodayLabel()"/>
+                    </div>
+                    <button type="button"
+                        class="o_shams_todo_share_btn"
+                        t-if="state.listKey === 'group'"
+                        t-on-click="toggleShare">
+                        <i class="fa fa-user-plus"/> Share
+                    </button>
+                </header>
+
+                <div class="o_shams_todo_share_panel" t-if="state.showShare and state.listKey === 'group'">
+                    <div class="o_shams_todo_share_title">Share this list</div>
+                    <p class="o_shams_todo_share_hint">
+                        Add people to the list, then assign tasks to them.
+                    </p>
+                    <ul class="o_shams_todo_share_members">
+                        <t t-foreach="state.shareMembers" t-as="member" t-key="member.id">
+                            <li>
+                                <span t-esc="member.name"/>
+                                <button type="button"
+                                    class="o_shams_todo_share_remove"
+                                    t-if="state.canShareList and member.id !== state.currentUserId"
+                                    t-on-click="() => this.onRemoveMember(member.id)">
+                                    Remove
+                                </button>
+                            </li>
+                        </t>
+                    </ul>
+                    <form class="o_shams_todo_share_add" t-if="state.canShareList" t-on-submit="onAddMember">
+                        <select t-model="state.addMemberId" required="required">
+                            <option value="">Select a person…</option>
+                            <t t-foreach="state.shareCandidates" t-as="candidate" t-key="candidate.id">
+                                <option t-att-value="candidate.id" t-esc="candidate.name"/>
+                            </t>
+                        </select>
+                        <button type="submit">Add</button>
+                    </form>
+                    <div class="o_shams_todo_share_hint" t-if="!state.canShareList">
+                        Only list managers can share this list.
+                    </div>
+                </div>
+
+                <form class="o_shams_todo_add_row" t-on-submit="onAddTask">
+                    <span class="o_shams_todo_add_circle"/>
+                    <input type="text"
+                        class="o_shams_todo_add_input"
+                        placeholder="Add a task"
+                        t-ref="addInput"
+                        t-model="state.newTaskName"/>
+                    <button type="submit" class="o_shams_todo_add_btn">Add</button>
+                </form>
+
+                <div class="o_shams_todo_task_list" t-if="!state.loading">
+                    <t t-foreach="state.tasks" t-as="task" t-key="task.id">
+                        <div class="o_shams_todo_task_row"
+                            t-att-class="{
+                                'is-selected': state.selectedTask and state.selectedTask.id === task.id,
+                                'is-done': task.is_done,
+                            }"
+                            t-on-click="() => this.selectTask(task)">
+                            <button type="button"
+                                class="o_shams_todo_check"
+                                t-att-class="{ 'is-checked': task.is_done }"
+                                t-on-click="(ev) => this.onToggleDone(task, ev)"
+                                title="Mark complete"/>
+                            <div class="o_shams_todo_task_body">
+                                <div class="o_shams_todo_task_name" t-esc="task.name"/>
+                                <div class="o_shams_todo_task_meta">
+                                    <span t-if="task.assigned_user_name">
+                                        <i class="fa fa-user-o"/> <t t-esc="task.assigned_user_name"/>
+                                    </span>
+                                    <span t-if="task.group_name and state.listKey !== 'group'" t-esc="task.group_name"/>
+                                    <span t-if="task.due_date"
+                                        t-att-class="{ 'is-overdue': task.is_overdue }"
+                                        t-esc="formatDate(task.due_date)"/>
+                                </div>
+                            </div>
+                            <button type="button"
+                                class="o_shams_todo_star"
+                                t-att-class="{ 'is-active': task.is_important }"
+                                t-on-click="(ev) => this.onToggleImportant(task, ev)"
+                                title="Important">
+                                <i class="fa fa-star"/>
+                            </button>
+                        </div>
+                    </t>
+                    <div class="o_shams_todo_empty" t-if="!state.tasks.length">
+                        No tasks here yet. Add one above.
+                    </div>
+                </div>
+                <div class="o_shams_todo_loading" t-else="">Loading…</div>
+            </main>
+
+            <aside class="o_shams_todo_detail" t-if="state.selectedTask">
+                <div class="o_shams_todo_detail_top">
+                    <button type="button" class="o_shams_todo_detail_close" t-on-click="closeDetail">×</button>
+                </div>
+                <input class="o_shams_todo_detail_title"
+                    type="text"
+                    t-model="state.detail.name"
+                    t-on-change="saveDetail"/>
+
+                <label class="o_shams_todo_detail_row">
+                    <input type="checkbox" t-model="state.detail.is_done" t-on-change="saveDetail"/>
+                    <span>Completed</span>
+                </label>
+
+                <label class="o_shams_todo_detail_row">
+                    <input type="checkbox" t-model="state.detail.in_my_day" t-on-change="saveDetail"/>
+                    <span>My Day</span>
+                </label>
+
+                <label class="o_shams_todo_detail_row">
+                    <input type="checkbox" t-model="state.detail.is_important" t-on-change="saveDetail"/>
+                    <span>Important</span>
+                </label>
+
+                <label class="o_shams_todo_detail_field">
+                    <span>Assign to</span>
+                    <select t-model="state.detail.assigned_user_id" t-on-change="saveDetail">
+                        <option value="">Unassigned</option>
+                        <t t-foreach="assignableMembers" t-as="member" t-key="member.id">
+                            <option t-att-value="member.id" t-esc="member.name"/>
+                        </t>
+                    </select>
+                </label>
+                <div class="o_shams_todo_assign_hint" t-if="assignableMembers.length &lt;= 1">
+                    Share the list first to assign this task to someone else.
+                </div>
+
+                <label class="o_shams_todo_detail_field">
+                    <span>Due</span>
+                    <input type="date" t-model="state.detail.due_date" t-on-change="saveDetail"/>
+                </label>
+
+                <label class="o_shams_todo_detail_field">
+                    <span>Priority</span>
+                    <select t-model="state.detail.priority" t-on-change="saveDetail">
+                        <option value="0">Low</option>
+                        <option value="1">Normal</option>
+                        <option value="2">High</option>
+                        <option value="3">Urgent</option>
+                    </select>
+                </label>
+
+                <label class="o_shams_todo_detail_field o_shams_todo_detail_notes">
+                    <span>Notes</span>
+                    <textarea rows="8"
+                        t-model="state.detail.description_text"
+                        t-on-change="saveDetail"
+                        placeholder="Add notes"/>
+                </label>
+
+                <div class="o_shams_todo_detail_meta" t-if="state.selectedTask.group_name">
+                    List: <t t-esc="state.selectedTask.group_name"/>
+                </div>
+            </aside>
+        </div>
+    </t>
+
+</templates>
