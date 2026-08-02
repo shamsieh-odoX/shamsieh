@@ -5,6 +5,8 @@ import logging
 import re
 from datetime import timedelta
 
+from markupsafe import Markup, escape
+
 from odoo import fields, http
 from odoo.http import request
 
@@ -13,6 +15,13 @@ _logger = logging.getLogger(__name__)
 RATE_LIMIT_MAX = 5
 RATE_LIMIT_WINDOW_SECONDS = 3600
 EMAIL_RE = re.compile(r'^[^@\s]+@[^@\s]+\.[^@\s]+$')
+
+# Extra label aliases for older website payloads.
+SERVICE_INTEREST_EXTRA_ALIASES = {
+    'odoo implementation': 'implementation',
+    'support & maintenance': 'support',
+    'cloud hosting': 'other',
+}
 
 
 class WebsiteLeadController(http.Controller):
@@ -69,13 +78,51 @@ class WebsiteLeadController(http.Controller):
             return 'Invalid email address'
         return None
 
+    def _resolve_country_id(self, country_value):
+        raw = (country_value or '').strip()
+        if not raw or raw.lower() == 'other':
+            return False
+        Country = request.env['res.country'].sudo()
+        country = Country.search([('code', '=ilike', raw)], limit=1)
+        if country:
+            return country.id
+        country = Country.search([('name', '=ilike', raw)], limit=1)
+        return country.id if country else False
+
+    def _selection_aliases(self, field_name, extra=None):
+        selection = request.env['crm.lead']._fields[field_name].selection
+        if callable(selection):
+            selection = selection(request.env['crm.lead'])
+        aliases = {key.lower(): key for key, _label in selection}
+        aliases.update({label.lower(): key for key, label in selection})
+        if extra:
+            aliases.update(extra)
+        return aliases
+
+    def _resolve_service_interest(self, service_value):
+        raw = (service_value or '').strip()
+        if not raw:
+            return False
+        aliases = self._selection_aliases('service_interest', SERVICE_INTEREST_EXTRA_ALIASES)
+        return aliases.get(raw.lower(), False)
+
+    def _resolve_preferred_contact_method(self, method_value):
+        raw = (method_value or '').strip()
+        if not raw:
+            return False
+        aliases = self._selection_aliases('preferred_contact_method')
+        return aliases.get(raw.lower(), False)
+
     def _build_lead_vals(self, data):
         name = data.get('name', '').strip()
         email = data.get('email', '').strip()
         company = (data.get('company') or '').strip()
         phone = (data.get('phone') or '').strip()
-        service = (data.get('service') or '').strip()
-        message = data.get('message', '').strip()
+        service_interest = self._resolve_service_interest(data.get('service'))
+        preferred_contact_method = self._resolve_preferred_contact_method(
+            data.get('contact_method')
+        )
+        country_id = self._resolve_country_id(data.get('country'))
 
         channel = request.env.ref('crm_custom_ext.channel_website', raise_if_not_found=False)
         utm_source = request.env.ref('crm_custom_ext.utm_source_website_shamsieh', raise_if_not_found=False)
@@ -86,14 +133,27 @@ class WebsiteLeadController(http.Controller):
             'email_from': email,
             'phone': phone,
             'partner_name': company,
-            'description': f"Service: {service or 'N/A'}\n\n{message}",
             'type': 'lead',
         }
+        if country_id:
+            vals['country_id'] = country_id
+        if service_interest:
+            vals['service_interest'] = service_interest
+        if preferred_contact_method:
+            vals['preferred_contact_method'] = preferred_contact_method
         if channel:
             vals['channel_id'] = channel.id
         if utm_source:
             vals['source_id'] = utm_source.id
         return vals
+
+    def _post_inquiry_message(self, lead, message):
+        body = Markup('<p>%s</p>') % escape(message).replace('\n', Markup('<br/>'))
+        lead.message_post(
+            body=body,
+            message_type='comment',
+            subtype_xmlid='mail.mt_comment',
+        )
 
     @http.route(
         '/api/website/lead',
@@ -131,6 +191,10 @@ class WebsiteLeadController(http.Controller):
 
             lead_vals = self._build_lead_vals(data)
             lead = request.env['crm.lead'].sudo().create(lead_vals)
+
+            message = data.get('message', '').strip()
+            if message:
+                self._post_inquiry_message(lead, message)
 
             request.env['website.lead.submission.log'].sudo().create({
                 'ip_address': ip_address,
