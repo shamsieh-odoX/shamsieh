@@ -6,7 +6,14 @@
         <field name="action" ref="shams_todo_app_action"/>
     </record>
 
-    <!-- Settings (admins only) — keep out of the main header clutter -->
+    <!-- Keep native Odoo personal tasks visible in the app header -->
+    <menuitem id="menu_shams_todo_personal_tasks"
+        name="Personal Tasks"
+        parent="project_todo.menu_todo_todos"
+        action="project_todo.project_task_action_todo"
+        sequence="10"/>
+
+    <!-- Settings (admins only) -->
     <menuitem id="menu_shams_todo_configuration"
         name="Settings"
         parent="project_todo.menu_todo_todos"
@@ -24,13 +31,6 @@
         parent="menu_shams_todo_configuration"
         action="shams_todo_task_action_all_tasks"
         sequence="20"
-        groups="shams_todo_groups.group_todo_management"/>
-
-    <menuitem id="menu_shams_todo_personal_tasks"
-        name="Odoo Personal Tasks"
-        parent="menu_shams_todo_configuration"
-        action="project_todo.project_task_action_todo"
-        sequence="30"
         groups="shams_todo_groups.group_todo_management"/>
 
     <!-- Hide legacy top-level entries from previous versions (safe if recreated) -->

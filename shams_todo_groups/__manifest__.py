@@ -1,8 +1,8 @@
 {
     'name': 'Shams To-Do Groups',
-    'version': '19.0.1.1.2',
+    'version': '19.0.1.1.5',
     'category': 'Productivity/To-Do',
-    'summary': 'Microsoft To Do–style shared lists with assign, My Day, and Important',
+    'summary': 'Microsoft To Do–style shared lists with dark mode, due dates, and completed section',
     'author': 'Custom',
     'depends': [
         'base',
@@ -23,8 +23,7 @@
     'installable': True,
     'application': False,
     'license': 'LGPL-3',
-    # No web.assets_web_dark entry: production DB still had ir.asset rows pointing
-    # at deleted scss that contained invalid "#" comments and broke the dark bundle.
+    # No SCSS in web.assets_web_dark — plain CSS only (older SCSS broke production dark bundles).
     'assets': {
         'web.assets_backend': [
             'shams_todo_groups/static/src/css/shams_todo.css',
@@ -32,6 +31,9 @@
             'shams_todo_groups/static/src/todo_app/todo_app.css',
             'shams_todo_groups/static/src/todo_app/todo_app.js',
             'shams_todo_groups/static/src/todo_app/todo_app.xml',
+        ],
+        'web.assets_web_dark': [
+            'shams_todo_groups/static/src/todo_app/todo_app.dark.css',
         ],
     },
     'pre_init_hook': 'pre_init_hook',

@@ -125,15 +125,21 @@
                             <div class="o_shams_todo_task_body">
                                 <div class="o_shams_todo_task_name" t-esc="task.name"/>
                                 <div class="o_shams_todo_task_meta">
-                                    <span t-if="task.assigned_user_name">
-                                        <i class="fa fa-user-o"/> <t t-esc="task.assigned_user_name"/>
+                                    <span t-if="task.assigned_user_name" class="o_shams_todo_meta_assignee">
+                                        <i class="fa fa-user"/> <t t-esc="task.assigned_user_name"/>
                                     </span>
                                     <span t-if="task.group_name and state.listKey !== 'group'" t-esc="task.group_name"/>
-                                    <span t-if="task.due_date"
-                                        t-att-class="{ 'is-overdue': task.is_overdue }"
-                                        t-esc="formatDate(task.due_date)"/>
                                 </div>
                             </div>
+                            <div class="o_shams_todo_task_due"
+                                t-if="task.due_date"
+                                t-att-class="{ 'is-overdue': task.is_overdue }">
+                                <i class="fa fa-calendar"/>
+                                <span t-esc="dueLabel(task)"/>
+                            </div>
+                            <span class="o_shams_todo_task_due is-empty" t-else="">
+                                <i class="fa fa-calendar-o"/>
+                            </span>
                             <button type="button"
                                 class="o_shams_todo_star"
                                 t-att-class="{ 'is-active': task.is_important }"
@@ -143,8 +149,53 @@
                             </button>
                         </div>
                     </t>
-                    <div class="o_shams_todo_empty" t-if="!state.tasks.length">
+
+                    <div class="o_shams_todo_empty" t-if="!state.tasks.length and !state.completedTasks.length">
                         No tasks here yet. Add one above.
+                    </div>
+
+                    <div class="o_shams_todo_completed" t-if="state.completedTasks.length">
+                        <button type="button"
+                            class="o_shams_todo_completed_toggle"
+                            t-on-click="toggleCompletedSection">
+                            <i t-att-class="state.showCompleted ? 'fa fa-chevron-down' : 'fa fa-chevron-right'"/>
+                            Completed <span t-esc="state.completedTasks.length"/>
+                        </button>
+                        <div t-if="state.showCompleted" class="o_shams_todo_completed_list">
+                            <t t-foreach="state.completedTasks" t-as="task" t-key="task.id">
+                                <div class="o_shams_todo_task_row is-done"
+                                    t-att-class="{
+                                        'is-selected': state.selectedTask and state.selectedTask.id === task.id,
+                                    }"
+                                    t-on-click="() => this.selectTask(task)">
+                                    <button type="button"
+                                        class="o_shams_todo_check is-checked"
+                                        t-on-click="(ev) => this.onToggleDone(task, ev)"
+                                        title="Mark incomplete"/>
+                                    <div class="o_shams_todo_task_body">
+                                        <div class="o_shams_todo_task_name" t-esc="task.name"/>
+                                        <div class="o_shams_todo_task_meta">
+                                            <span t-if="task.assigned_user_name">
+                                                <i class="fa fa-user"/> <t t-esc="task.assigned_user_name"/>
+                                            </span>
+                                            <span t-if="task.group_name and state.listKey !== 'group'" t-esc="task.group_name"/>
+                                        </div>
+                                    </div>
+                                    <div class="o_shams_todo_task_due" t-if="task.due_date">
+                                        <i class="fa fa-calendar"/>
+                                        <span t-esc="dueLabel(task)"/>
+                                    </div>
+                                    <span class="o_shams_todo_task_due is-empty" t-else=""/>
+                                    <button type="button"
+                                        class="o_shams_todo_star"
+                                        t-att-class="{ 'is-active': task.is_important }"
+                                        t-on-click="(ev) => this.onToggleImportant(task, ev)"
+                                        title="Important">
+                                        <i class="fa fa-star"/>
+                                    </button>
+                                </div>
+                            </t>
+                        </div>
                     </div>
                 </div>
                 <div class="o_shams_todo_loading" t-else="">Loading…</div>
@@ -166,7 +217,7 @@
 
                 <label class="o_shams_todo_detail_row">
                     <input type="checkbox" t-model="state.detail.in_my_day" t-on-change="saveDetail"/>
-                    <span>My Day</span>
+                    <span>Add to My Day</span>
                 </label>
 
                 <label class="o_shams_todo_detail_row">
@@ -188,7 +239,7 @@
                 </div>
 
                 <label class="o_shams_todo_detail_field">
-                    <span>Due</span>
+                    <span>Due date</span>
                     <input type="date" t-model="state.detail.due_date" t-on-change="saveDetail"/>
                 </label>
 
@@ -207,11 +258,19 @@
                     <textarea rows="8"
                         t-model="state.detail.description_text"
                         t-on-change="saveDetail"
-                        placeholder="Add notes"/>
+                        placeholder="Add note"/>
                 </label>
 
-                <div class="o_shams_todo_detail_meta" t-if="state.selectedTask.group_name">
-                    List: <t t-esc="state.selectedTask.group_name"/>
+                <div class="o_shams_todo_detail_footer">
+                    <div class="o_shams_todo_detail_meta" t-if="state.selectedTask.group_name">
+                        List: <t t-esc="state.selectedTask.group_name"/>
+                    </div>
+                    <button type="button"
+                        class="o_shams_todo_detail_delete"
+                        t-on-click="onDeleteTask"
+                        title="Delete task">
+                        <i class="fa fa-trash"/>
+                    </button>
                 </div>
             </aside>
         </div>

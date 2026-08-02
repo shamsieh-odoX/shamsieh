@@ -33,6 +33,8 @@ export class ShamsTodoApp extends Component {
             smartLists: [],
             groups: [],
             tasks: [],
+            completedTasks: [],
+            showCompleted: true,
             selectedTask: null,
             newTaskName: "",
             newListName: "",
@@ -104,6 +106,7 @@ export class ShamsTodoApp extends Component {
         this.state.smartLists = data.smart_lists || [];
         this.state.groups = data.groups || [];
         this.state.tasks = data.tasks || [];
+        this.state.completedTasks = data.completed_tasks || [];
         this.state.defaultGroupId = data.default_group_id || false;
         this.state.canShareList = !!data.can_share_list;
         this.state.shareMembers = data.share_members || [];
@@ -114,7 +117,10 @@ export class ShamsTodoApp extends Component {
 
         let selected = data.selected_task || null;
         if (!selected && selectedId) {
-            selected = this.state.tasks.find((t) => t.id === selectedId) || null;
+            selected =
+                this.state.tasks.find((t) => t.id === selectedId) ||
+                this.state.completedTasks.find((t) => t.id === selectedId) ||
+                null;
         }
         this.state.selectedTask = selected;
         if (selected) {
@@ -149,6 +155,17 @@ export class ShamsTodoApp extends Component {
 
     get assignableMembers() {
         return this.state.selectedTask?.assignable_members || [];
+    }
+
+    toggleCompletedSection() {
+        this.state.showCompleted = !this.state.showCompleted;
+    }
+
+    dueLabel(task) {
+        if (!task?.due_date) {
+            return "";
+        }
+        return this.formatDate(task.due_date);
     }
 
     async loadBoard(listKey, groupId = false, taskId = null) {
@@ -329,6 +346,29 @@ export class ShamsTodoApp extends Component {
             this.applyBoard(data);
         } catch (error) {
             this.notification.add(error.data?.message || error.message || _t("Could not save task."), {
+                type: "danger",
+            });
+        }
+    }
+
+    async onDeleteTask() {
+        if (!this.state.selectedTask) {
+            return;
+        }
+        const name = this.state.selectedTask.name || _t("this task");
+        if (!window.confirm(`Delete "${name}"?`)) {
+            return;
+        }
+        try {
+            const data = await this.orm.call("shams.todo.task", "delete_todo_from_board", [
+                this.state.selectedTask.id,
+                this.state.listKey,
+                this.state.groupId || null,
+            ]);
+            this.state.selectedTask = null;
+            this.applyBoard(data, false);
+        } catch (error) {
+            this.notification.add(error.data?.message || error.message || _t("Could not delete task."), {
                 type: "danger",
             });
         }

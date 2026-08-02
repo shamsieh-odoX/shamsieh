@@ -134,22 +134,25 @@ class ShamsTodoTask(models.Model):
         return True
 
     @api.model
-    def _smart_list_domain(self, list_key, group_id=None):
+    def _smart_list_domain(self, list_key, group_id=None, include_done=False):
         """Domain for Microsoft To Do–style smart lists and group lists."""
         user = self.env.user
         today = fields.Date.context_today(self)
-        open_domain = [('status', 'not in', ('done', 'cancelled'))]
+        if include_done:
+            status_domain = [('status', '=', 'done')]
+        else:
+            status_domain = [('status', 'not in', ('done', 'cancelled'))]
         if list_key == 'my_day':
-            return open_domain + [('my_day_date', '=', today)]
+            return status_domain + [('my_day_date', '=', today)]
         if list_key == 'important':
-            return open_domain + [('is_important', '=', True)]
+            return status_domain + [('is_important', '=', True)]
         if list_key == 'planned':
-            return open_domain + [('due_date', '!=', False)]
+            return status_domain + [('due_date', '!=', False)]
         if list_key == 'assigned':
-            return open_domain + [('assigned_user_id', '=', user.id)]
+            return status_domain + [('assigned_user_id', '=', user.id)]
         if list_key == 'group' and group_id:
-            return open_domain + [('group_id', '=', group_id)]
-        return open_domain
+            return status_domain + [('group_id', '=', group_id)]
+        return status_domain
 
     @api.model
     def get_todo_board(self, list_key='my_day', group_id=None, task_id=None):
@@ -159,8 +162,10 @@ class ShamsTodoTask(models.Model):
         today = fields.Date.context_today(self)
 
         groups = Group.search([('member_ids', 'in', user.id)], order='name')
-        domain = self._smart_list_domain(list_key, group_id=group_id)
-        tasks = self.search(domain, order='is_done asc, due_date asc, priority desc, id desc', limit=200)
+        open_domain = self._smart_list_domain(list_key, group_id=group_id, include_done=False)
+        done_domain = self._smart_list_domain(list_key, group_id=group_id, include_done=True)
+        tasks = self.search(open_domain, order='due_date asc, priority desc, id desc', limit=200)
+        completed_tasks = self.search(done_domain, order='completed_date desc, id desc', limit=100)
 
         def _task_row(task):
             return {
@@ -217,7 +222,6 @@ class ShamsTodoTask(models.Model):
                 'name': member.name,
                 'is_manager': member in active_group.manager_ids,
             } for member in active_group.member_ids.sorted('name')]
-            # Internal users not already on the list (for “Assign / Share”).
             existing_ids = set(active_group.member_ids.ids)
             candidates = self.env['res.users'].search([
                 ('share', '=', False),
@@ -249,6 +253,7 @@ class ShamsTodoTask(models.Model):
                 'color': g.color,
             } for g in groups],
             'tasks': [_task_row(t) for t in tasks],
+            'completed_tasks': [_task_row(t) for t in completed_tasks],
             'selected_task': selected,
             'default_group_id': groups[:1].id if groups else False,
         }
@@ -317,6 +322,20 @@ class ShamsTodoTask(models.Model):
         list_key = values.get('list_key') or 'my_day'
         group_id = values.get('group_id') or False
         return self.get_todo_board(list_key=list_key, group_id=group_id or None, task_id=task.id)
+
+    @api.model
+    def delete_todo_from_board(self, task_id, list_key='my_day', group_id=None):
+        """Delete a task from the board detail pane."""
+        task = self.browse(task_id).exists()
+        if not task:
+            raise ValidationError(_('Task not found.'))
+        user = self.env.user
+        if user.id not in task.group_id.member_ids.ids and not user.has_group(
+            'shams_todo_groups.group_todo_management'
+        ):
+            raise ValidationError(_('You can only delete tasks in lists you belong to.'))
+        task.unlink()
+        return self.get_todo_board(list_key=list_key, group_id=group_id or None)
 
     @api.depends('due_date', 'status')
     def _compute_is_overdue(self):

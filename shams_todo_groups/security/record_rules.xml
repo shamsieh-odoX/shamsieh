@@ -74,6 +74,17 @@
             <field name="perm_unlink" eval="False"/>
         </record>
 
+        <!-- Tasks: member delete (noupdate-safe new rule for MS To Do trash) -->
+        <record id="shams_todo_task_rule_member_unlink" model="ir.rule">
+            <field name="name">To-Do Task: member delete</field>
+            <field name="model_id" ref="model_shams_todo_task"/>
+            <field name="domain_force">[('group_id.member_ids', 'in', user.id)]</field>
+            <field name="groups" eval="[(4, ref('group_todo_user'))]"/>
+            <field name="perm_read" eval="False"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+        </record>
+
         <!-- Tasks: manager access -->
         <record id="shams_todo_task_rule_manager_access" model="ir.rule">
             <field name="name">To-Do Task: manager access</field>
