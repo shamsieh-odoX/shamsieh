@@ -4,9 +4,15 @@ import { registry } from "@web/core/registry";
 import { rpc } from "@web/core/network/rpc";
 
 /**
- * Loads the hosted Botify widget (widget.iife.js) into the Odoo backend and,
- * when identity is configured, exchanges a server-minted assertion so widget
- * API calls run as the logged-in employee.
+ * Loads the hosted Botify widget into the Odoo backend and, when identity is
+ * configured, exchanges a server-minted assertion so widget API calls run as
+ * the logged-in employee.
+ *
+ * Odoo's command palette / home-menu search listens on window and only treats
+ * light-DOM inputs as editable. Botify's composer lives in Shadow DOM, so
+ * without a guard Odoo steals keystrokes into Cmd+K (and native "Ask AI"
+ * picks them up). We stop those events at the host after the shadow input has
+ * already handled them.
  */
 const SCRIPT_ATTR = "data-botify-widget";
 
@@ -14,15 +20,149 @@ const state = {
     loading: null,
     apiUrl: "",
     agentId: "",
+    widgetScriptUrl: "",
     identityToken: null,
     identityExpiresAt: 0,
     fetchPatched: false,
     originalFetch: null,
 };
 
+function isEditableElement(el) {
+    if (!(el instanceof HTMLElement)) {
+        return false;
+    }
+    if (el.isContentEditable) {
+        return true;
+    }
+    const tag = el.tagName;
+    if (tag !== "INPUT" && tag !== "TEXTAREA" && tag !== "SELECT") {
+        return false;
+    }
+    if (tag === "INPUT") {
+        const type = (el.type || "text").toLowerCase();
+        if (type === "checkbox" || type === "radio" || type === "button" || type === "file") {
+            return false;
+        }
+    }
+    return true;
+}
+
+function eventFromBotifyEditable(ev) {
+    const path = typeof ev.composedPath === "function" ? ev.composedPath() : [];
+    const deepTarget = path[0];
+    if (!isEditableElement(deepTarget)) {
+        return false;
+    }
+    const shamsi = window.Shamsi;
+    const shadow = shamsi?.shadow;
+    if (shadow && path.includes(shadow.host)) {
+        return true;
+    }
+    return path.some(
+        (node) =>
+            node instanceof Element &&
+            node.shadowRoot &&
+            (node.className?.toString?.().toLowerCase?.().includes("botify") ||
+                node.id?.toLowerCase?.().includes("botify") ||
+                node.tagName?.toLowerCase?.().includes("botify") ||
+                node.className?.toString?.().toLowerCase?.().includes("chatagent") ||
+                node.id?.toLowerCase?.().includes("chatagent"))
+    );
+}
+
+function dismissOdooCommandPalette() {
+    const paletteInput = document.querySelector(
+        ".o_command_palette input, .o_command_palette_search input"
+    );
+    if (!paletteInput) {
+        return;
+    }
+    document.dispatchEvent(
+        new KeyboardEvent("keydown", {
+            key: "Escape",
+            code: "Escape",
+            bubbles: true,
+            cancelable: true,
+        })
+    );
+}
+
+function installOdooKeyGuard(host) {
+    if (!host || host.dataset.botifyKeyGuard === "1") {
+        return;
+    }
+    host.dataset.botifyKeyGuard = "1";
+
+    const stopOdooShortcuts = (ev) => {
+        if (!eventFromBotifyEditable(ev)) {
+            return;
+        }
+        // Input already received the event inside the shadow tree; prevent
+        // window/document listeners (command palette, home menu) from seeing it.
+        ev.stopPropagation();
+    };
+
+    for (const type of ["keydown", "keypress", "keyup"]) {
+        host.addEventListener(type, stopOdooShortcuts);
+    }
+
+    host.addEventListener(
+        "focusin",
+        () => {
+            dismissOdooCommandPalette();
+        },
+        true
+    );
+}
+
+function guardMountedWidget(widget) {
+    const host =
+        widget?.shadow?.host ||
+        widget?.el ||
+        widget?.root ||
+        document.querySelector(
+            "[data-botify-widget-host], #botify-widget, .botify-widget, #chatagent-widget-root"
+        );
+    if (host) {
+        installOdooKeyGuard(host);
+        return;
+    }
+    const observer = new MutationObserver(() => {
+        const shamsi = window.Shamsi;
+        const lateHost =
+            shamsi?.shadow?.host || document.querySelector("#chatagent-widget-root");
+        if (lateHost) {
+            installOdooKeyGuard(lateHost);
+            observer.disconnect();
+        }
+    });
+    observer.observe(document.body, { childList: true, subtree: true });
+    setTimeout(() => observer.disconnect(), 10000);
+}
+
+function mountBotifyWidget({ agentId, apiUrl }) {
+    const Widget = window.BotifyWidget?.ChatWidget;
+    if (window.Shamsi) {
+        guardMountedWidget(window.Shamsi);
+        return window.Shamsi;
+    }
+    if (!Widget) {
+        // IIFE auto-boot may still create window.Shamsi; guard when it appears.
+        guardMountedWidget(null);
+        return null;
+    }
+    const widget = new Widget({ agentId, apiUrl });
+    widget.mount().then(() => {
+        window.Shamsi = widget;
+        guardMountedWidget(widget);
+    });
+    return widget;
+}
+
 function injectWidgetScript({ agentId, apiUrl, widgetScriptUrl }) {
     const existing = document.querySelector(`script[${SCRIPT_ATTR}]`);
     if (existing) {
+        mountBotifyWidget({ agentId, apiUrl });
         return existing;
     }
     const script = document.createElement("script");
@@ -31,6 +171,9 @@ function injectWidgetScript({ agentId, apiUrl, widgetScriptUrl }) {
     script.setAttribute(SCRIPT_ATTR, "1");
     script.setAttribute("data-agent-id", agentId);
     script.setAttribute("data-api-url", apiUrl);
+    // Dynamically injected scripts leave document.currentScript null, so the
+    // IIFE may not auto-boot — mount ChatWidget ourselves after load.
+    script.onload = () => mountBotifyWidget({ agentId, apiUrl });
     document.body.appendChild(script);
     return script;
 }
@@ -102,6 +245,7 @@ export async function ensureBotifyWidget() {
 
         state.apiUrl = config.api_url.replace(/\/+$/, "");
         state.agentId = config.agent_id;
+        state.widgetScriptUrl = config.widget_script_url;
         injectWidgetScript({
             agentId: config.agent_id,
             apiUrl: state.apiUrl,
@@ -112,7 +256,6 @@ export async function ensureBotifyWidget() {
             try {
                 await refreshIdentityIfNeeded();
             } catch (err) {
-                // Widget still loads; Odoo tools stay unavailable until identity works.
                 console.warn("[botify_agent] identity exchange failed:", err);
             }
         }
@@ -148,7 +291,6 @@ export function revokeBotifyIdentity() {
 export const botifyWidgetService = {
     dependencies: [],
     start() {
-        // Floating bubble on every backend page once Settings → Botify is enabled.
         ensureBotifyWidget().catch(() => {});
         window.addEventListener("pagehide", revokeBotifyIdentity);
         return {

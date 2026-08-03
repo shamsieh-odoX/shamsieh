@@ -19,7 +19,7 @@ Two endpoints do the work:
   applies that user's access rights, record rules and allowed companies to every
   read and write. No permission is copied into Botify, so none can go stale.
 """,
-    "version": "19.0.1.1.0",
+    "version": "19.0.1.1.1",
     "category": "Productivity/Discuss",
     "license": "LGPL-3",
     "author": "Botify",
