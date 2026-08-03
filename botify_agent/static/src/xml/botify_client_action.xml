@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="botify_agent.Assistant">
+        <div class="o_botify_assistant d-flex flex-column align-items-start justify-content-center h-100 p-4">
+            <div t-if="state.error" class="alert alert-warning" role="alert">
+                <t t-esc="state.error"/>
+            </div>
+
+            <div t-elif="!state.ready" class="text-muted">
+                Loading the Botify assistant…
+            </div>
+
+            <t t-else="">
+                <h2 class="mb-2">Assistant</h2>
+                <p class="text-muted mb-3" style="max-width: 36rem;">
+                    The Botify chat bubble is available in the corner of your screen.
+                    Open it from any Odoo page to ask questions.
+                </p>
+                <p t-if="state.identityReady" class="text-muted small mb-0">
+                    Signed in with your Odoo account — the assistant only sees what
+                    your permissions allow.
+                </p>
+                <p t-else="" class="text-muted small mb-0">
+                    Chat is available. Configure the shared secret and connection ID
+                    under Settings → Botify to unlock ERP tools as your user.
+                </p>
+            </t>
+        </div>
+    </t>
+
+</templates>
