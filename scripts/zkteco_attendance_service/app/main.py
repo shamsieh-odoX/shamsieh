@@ -4,8 +4,6 @@
 Preferred mode (like Hikvision): the ZKTeco device pushes ATTLOG to this PC
 over plain HTTP (/iclock/...), and we forward events into Odoo via XML-RPC.
 
-Optional poll mode still exists for diagnostics when ADMS is not configured.
-
 Usage:
   pip install -r requirements.txt
   copy .env.example .env
@@ -28,15 +26,10 @@ from dotenv import load_dotenv
 from fastapi import FastAPI, Request, Response
 import uvicorn
 
-ROOT = Path(__file__).resolve().parents[2]
-MODULE_SERVICES = ROOT / 'extra_addons' / 'hr_attendance_custom_ext' / 'services'
-sys.path.insert(0, str(MODULE_SERVICES))
+from .attlog import parse_attlog_body
 
-from zkteco import ZktecoClient  # noqa: E402
-from zkteco_adms import parse_attlog_body  # noqa: E402
-from zkteco_exceptions import ZktecoError  # noqa: E402
-
-load_dotenv(Path(__file__).resolve().parent / '.env')
+SERVICE_DIR = Path(__file__).resolve().parents[1]
+load_dotenv(SERVICE_DIR / '.env')
 
 logging.basicConfig(
     level=logging.DEBUG if os.getenv('VERBOSE_LOGGING', 'true').lower() == 'true' else logging.INFO,
@@ -52,6 +45,19 @@ def _env_bool(name: str, default: bool = False) -> bool:
     if raw is None:
         return default
     return raw.strip().lower() in {'1', 'true', 'yes', 'on'}
+
+
+def _find_odoo_services_dir() -> Path | None:
+    """Locate hr_attendance_custom_ext/services for optional pyzk poll mode."""
+    here = Path(__file__).resolve()
+    for parent in here.parents:
+        for candidate in (
+            parent / 'extra_addons' / 'hr_attendance_custom_ext' / 'services',
+            parent / 'hr_attendance_custom_ext' / 'services',
+        ):
+            if (candidate / 'zkteco.py').is_file():
+                return candidate
+    return None
 
 
 def odoo_models():
@@ -148,7 +154,16 @@ async def root():
 
 
 def poll_once() -> dict:
-    device_id = int(os.environ['ZKTECO_DEVICE_ID'])
+    services = _find_odoo_services_dir()
+    if not services:
+        raise RuntimeError(
+            'Cannot find hr_attendance_custom_ext/services for poll mode. '
+            'Keep ENABLE_POLL=false and use ADMS push instead.'
+        )
+    if str(services) not in sys.path:
+        sys.path.insert(0, str(services))
+    from zkteco import ZktecoClient  # noqa: WPS433
+
     lookback = float(os.getenv('LOOKBACK_HOURS', '24'))
     date_to = datetime.utcnow()
     date_from = date_to - timedelta(hours=lookback)
@@ -172,10 +187,8 @@ def _poll_loop():
     while True:
         try:
             poll_once()
-        except ZktecoError as exc:
+        except Exception as exc:
             _logger.error('ZK poll error: %s', exc)
-        except Exception:
-            _logger.exception('Unexpected poll failure')
         time.sleep(interval)
 
 
