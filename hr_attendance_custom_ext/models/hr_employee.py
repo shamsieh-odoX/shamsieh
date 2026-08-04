@@ -51,8 +51,8 @@ class HrEmployee(models.Model):
         string='Hikvision Presence',
         default='checked_out',
         index=True,
-        groups='hr_attendance.group_hr_attendance_officer',
-        help='Live work state from the Hikvision fingerprint bridge.',
+        help='Live work state from Hikvision / Odoo punches. '
+             'Break Out starts a break; Break In ends a break.',
     )
     live_check_in = fields.Datetime(
         string='Checked In At',
@@ -547,6 +547,56 @@ class HrEmployee(models.Model):
             ('employee_id', '=', self.id),
             ('date', '=', today),
         ]))
+
+    def _get_tz(self):
+        """Prefer a real local timezone over UTC for attendance lateness.
+
+        Working hours (e.g. 08:00-16:00) are business-local. If the calendar is
+        still set to UTC, fall back to the employee/user/company Asia/Amman zone.
+        """
+        self.ensure_one()
+        candidates = [
+            self.tz,
+            self.resource_id.tz if self.resource_id else False,
+            self.resource_calendar_id.tz if self.resource_calendar_id else False,
+            self.company_id.resource_calendar_id.tz if self.company_id.resource_calendar_id else False,
+            self.env.user.tz,
+            'Asia/Amman',
+        ]
+        for tz_name in candidates:
+            if tz_name and tz_name != 'UTC':
+                return tz_name
+        return 'Asia/Amman'
+
+    def _sync_hikvision_presence_from_last_punch(self):
+        """Align work state with the latest punch (Break Out=on break, Break In=working)."""
+        PunchLog = self.env['hr.attendance.punch.log'].sudo()
+        Attendance = self.env['hr.attendance'].sudo()
+        for employee in self:
+            open_attendance = Attendance.search([
+                ('employee_id', '=', employee.id),
+                ('check_out', '=', False),
+            ], order='check_in desc', limit=1)
+            if not open_attendance:
+                if employee.hikvision_presence_status != 'checked_out':
+                    employee.sudo().hikvision_presence_status = 'checked_out'
+                continue
+            last_punch = PunchLog.search([
+                ('attendance_id', '=', open_attendance.id),
+            ], order='punch_time desc, id desc', limit=1)
+            punch_type = last_punch.punch_type if last_punch else open_attendance.hikvision_punch_type
+            if punch_type == 'break_out':
+                status = 'on_break'
+            elif punch_type in ('check_in', 'break_in'):
+                status = 'working'
+            elif punch_type == 'check_out':
+                status = 'checked_out'
+            else:
+                status = 'working'
+            if employee.hikvision_presence_status != status:
+                employee.sudo().hikvision_presence_status = status
+            if punch_type and open_attendance.hikvision_punch_type != punch_type:
+                open_attendance.hikvision_punch_type = punch_type
 
     def hikvision_process_punch(
         self,
