@@ -17,3 +17,1524 @@
 2026-08-04 11:00:59,089 INFO Fetched 10 attendance row(s) from device
 2026-08-04 11:00:59,681 INFO Pushing 10 poll event(s) to Odoo device 2
 2026-08-04 11:00:59,950 INFO Odoo ingest stats: {'fetched': 10, 'stored': 0, 'ignored': 0, 'duplicates': 10, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:01:21,218 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:01:23,572 INFO Fetched 10 attendance row(s) from device
+2026-08-04 11:01:24,226 INFO Pushing 10 poll event(s) to Odoo device 2
+2026-08-04 11:01:24,520 INFO Odoo ingest stats: {'fetched': 10, 'stored': 0, 'ignored': 0, 'duplicates': 10, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:01:29,966 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:01:32,943 INFO Fetched 10 attendance row(s) from device
+2026-08-04 11:01:33,165 ERROR ZK poll error: <ProtocolError for shamsieh.odoo.com/xmlrpc/2/common: 503 SERVICE UNAVAILABLE> — close Attendance Management if it is Connected
+2026-08-04 11:01:54,522 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:01:57,061 INFO Fetched 10 attendance row(s) from device
+2026-08-04 11:01:57,739 INFO Pushing 10 poll event(s) to Odoo device 2
+2026-08-04 11:01:58,425 INFO Odoo ingest stats: {'fetched': 10, 'stored': 0, 'ignored': 0, 'duplicates': 10, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:02:03,170 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:02:05,546 INFO Fetched 10 attendance row(s) from device
+2026-08-04 11:02:06,128 INFO Pushing 10 poll event(s) to Odoo device 2
+2026-08-04 11:02:06,422 INFO Odoo ingest stats: {'fetched': 10, 'stored': 0, 'ignored': 0, 'duplicates': 10, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:02:28,427 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:02:30,441 INFO Fetched 10 attendance row(s) from device
+2026-08-04 11:02:31,079 INFO Pushing 10 poll event(s) to Odoo device 2
+2026-08-04 11:02:31,390 INFO Odoo ingest stats: {'fetched': 10, 'stored': 0, 'ignored': 0, 'duplicates': 10, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:02:36,425 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:02:39,016 INFO Fetched 10 attendance row(s) from device
+2026-08-04 11:02:39,635 INFO Pushing 10 poll event(s) to Odoo device 2
+2026-08-04 11:02:39,951 INFO Odoo ingest stats: {'fetched': 10, 'stored': 0, 'ignored': 0, 'duplicates': 10, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:03:01,397 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:03:04,230 INFO Fetched 10 attendance row(s) from device
+2026-08-04 11:03:04,850 INFO Pushing 10 poll event(s) to Odoo device 2
+2026-08-04 11:03:05,160 INFO Odoo ingest stats: {'fetched': 10, 'stored': 0, 'ignored': 0, 'duplicates': 10, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:03:09,955 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:03:13,639 INFO Fetched 10 attendance row(s) from device
+2026-08-04 11:03:14,248 INFO Pushing 10 poll event(s) to Odoo device 2
+2026-08-04 11:03:14,554 INFO Odoo ingest stats: {'fetched': 10, 'stored': 0, 'ignored': 0, 'duplicates': 10, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:03:35,166 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:03:38,039 INFO Fetched 10 attendance row(s) from device
+2026-08-04 11:03:38,678 INFO Pushing 10 poll event(s) to Odoo device 2
+2026-08-04 11:03:38,985 INFO Odoo ingest stats: {'fetched': 10, 'stored': 0, 'ignored': 0, 'duplicates': 10, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:03:44,556 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:03:47,266 INFO Fetched 10 attendance row(s) from device
+2026-08-04 11:03:47,870 INFO Pushing 10 poll event(s) to Odoo device 2
+2026-08-04 11:03:48,181 INFO Odoo ingest stats: {'fetched': 10, 'stored': 0, 'ignored': 0, 'duplicates': 10, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:04:08,990 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:04:11,968 INFO Fetched 11 attendance row(s) from device
+2026-08-04 11:04:12,592 INFO Pushing 11 poll event(s) to Odoo device 2
+2026-08-04 11:04:13,000 INFO Odoo ingest stats: {'fetched': 11, 'stored': 1, 'ignored': 0, 'duplicates': 10, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:04:18,189 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:04:19,611 INFO Fetched 11 attendance row(s) from device
+2026-08-04 11:04:20,233 INFO Pushing 11 poll event(s) to Odoo device 2
+2026-08-04 11:04:20,600 INFO Odoo ingest stats: {'fetched': 11, 'stored': 0, 'ignored': 0, 'duplicates': 11, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:04:43,004 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:04:45,445 INFO Fetched 11 attendance row(s) from device
+2026-08-04 11:04:46,055 INFO Pushing 11 poll event(s) to Odoo device 2
+2026-08-04 11:04:46,422 INFO Odoo ingest stats: {'fetched': 11, 'stored': 0, 'ignored': 0, 'duplicates': 11, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:04:50,604 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:04:53,508 INFO Fetched 11 attendance row(s) from device
+2026-08-04 11:04:54,149 INFO Pushing 11 poll event(s) to Odoo device 2
+2026-08-04 11:04:54,519 INFO Odoo ingest stats: {'fetched': 11, 'stored': 0, 'ignored': 0, 'duplicates': 11, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:05:16,429 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:05:18,472 INFO Fetched 11 attendance row(s) from device
+2026-08-04 11:05:19,076 INFO Pushing 11 poll event(s) to Odoo device 2
+2026-08-04 11:05:19,436 INFO Odoo ingest stats: {'fetched': 11, 'stored': 0, 'ignored': 0, 'duplicates': 11, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:05:24,522 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:05:26,788 INFO Fetched 11 attendance row(s) from device
+2026-08-04 11:05:27,395 INFO Pushing 11 poll event(s) to Odoo device 2
+2026-08-04 11:05:27,775 INFO Odoo ingest stats: {'fetched': 11, 'stored': 0, 'ignored': 0, 'duplicates': 11, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:05:49,440 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:05:50,802 INFO Fetched 11 attendance row(s) from device
+2026-08-04 11:05:51,438 INFO Pushing 11 poll event(s) to Odoo device 2
+2026-08-04 11:05:51,876 INFO Odoo ingest stats: {'fetched': 11, 'stored': 0, 'ignored': 0, 'duplicates': 11, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:05:57,779 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:06:00,507 INFO Fetched 11 attendance row(s) from device
+2026-08-04 11:06:01,148 INFO Pushing 11 poll event(s) to Odoo device 2
+2026-08-04 11:06:01,582 INFO Odoo ingest stats: {'fetched': 11, 'stored': 0, 'ignored': 0, 'duplicates': 11, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:06:21,883 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:06:23,711 INFO Fetched 11 attendance row(s) from device
+2026-08-04 11:06:24,328 INFO Pushing 11 poll event(s) to Odoo device 2
+2026-08-04 11:06:24,706 INFO Odoo ingest stats: {'fetched': 11, 'stored': 0, 'ignored': 0, 'duplicates': 11, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:06:31,585 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:06:34,369 INFO Fetched 11 attendance row(s) from device
+2026-08-04 11:06:35,110 INFO Pushing 11 poll event(s) to Odoo device 2
+2026-08-04 11:06:35,492 INFO Odoo ingest stats: {'fetched': 11, 'stored': 0, 'ignored': 0, 'duplicates': 11, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:06:54,714 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:06:57,702 INFO Fetched 11 attendance row(s) from device
+2026-08-04 11:06:58,367 INFO Pushing 11 poll event(s) to Odoo device 2
+2026-08-04 11:06:58,728 INFO Odoo ingest stats: {'fetched': 11, 'stored': 0, 'ignored': 0, 'duplicates': 11, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:07:05,503 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:07:07,992 INFO Fetched 13 attendance row(s) from device
+2026-08-04 11:07:08,685 INFO Pushing 13 poll event(s) to Odoo device 2
+2026-08-04 11:07:09,195 INFO Odoo ingest stats: {'fetched': 13, 'stored': 2, 'ignored': 0, 'duplicates': 11, 'unmapped': 2, 'skipped': 0}
+2026-08-04 11:07:28,731 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:07:31,360 INFO Fetched 13 attendance row(s) from device
+2026-08-04 11:07:32,018 INFO Pushing 13 poll event(s) to Odoo device 2
+2026-08-04 11:07:32,376 INFO Odoo ingest stats: {'fetched': 13, 'stored': 0, 'ignored': 0, 'duplicates': 13, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:07:39,208 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:07:42,066 INFO Fetched 13 attendance row(s) from device
+2026-08-04 11:07:42,764 INFO Pushing 13 poll event(s) to Odoo device 2
+2026-08-04 11:07:43,154 INFO Odoo ingest stats: {'fetched': 13, 'stored': 0, 'ignored': 0, 'duplicates': 13, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:08:02,379 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:08:03,978 INFO Fetched 13 attendance row(s) from device
+2026-08-04 11:08:04,588 INFO Pushing 13 poll event(s) to Odoo device 2
+2026-08-04 11:08:04,977 INFO Odoo ingest stats: {'fetched': 13, 'stored': 0, 'ignored': 0, 'duplicates': 13, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:08:13,169 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:08:16,399 INFO Fetched 13 attendance row(s) from device
+2026-08-04 11:08:17,058 INFO Pushing 13 poll event(s) to Odoo device 2
+2026-08-04 11:08:17,459 INFO Odoo ingest stats: {'fetched': 13, 'stored': 0, 'ignored': 0, 'duplicates': 13, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:08:34,980 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:08:36,748 INFO Fetched 14 attendance row(s) from device
+2026-08-04 11:08:37,458 INFO Pushing 14 poll event(s) to Odoo device 2
+2026-08-04 11:08:37,898 INFO Odoo ingest stats: {'fetched': 14, 'stored': 1, 'ignored': 0, 'duplicates': 13, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:08:47,463 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:08:48,982 INFO Fetched 14 attendance row(s) from device
+2026-08-04 11:08:49,625 INFO Pushing 14 poll event(s) to Odoo device 2
+2026-08-04 11:08:50,026 INFO Odoo ingest stats: {'fetched': 14, 'stored': 0, 'ignored': 0, 'duplicates': 14, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:09:07,902 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:09:09,855 INFO Fetched 14 attendance row(s) from device
+2026-08-04 11:09:10,481 INFO Pushing 14 poll event(s) to Odoo device 2
+2026-08-04 11:09:10,936 INFO Odoo ingest stats: {'fetched': 14, 'stored': 0, 'ignored': 0, 'duplicates': 14, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:09:20,028 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:09:22,892 INFO Fetched 14 attendance row(s) from device
+2026-08-04 11:09:23,536 INFO Pushing 14 poll event(s) to Odoo device 2
+2026-08-04 11:09:23,959 INFO Odoo ingest stats: {'fetched': 14, 'stored': 0, 'ignored': 0, 'duplicates': 14, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:09:40,941 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:09:42,700 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:09:43,313 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:09:43,756 INFO Odoo ingest stats: {'fetched': 16, 'stored': 2, 'ignored': 0, 'duplicates': 14, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:09:53,964 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:09:56,681 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:09:57,403 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:09:57,853 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:10:13,760 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:10:15,373 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:10:16,002 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:10:16,396 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:10:27,860 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:10:30,234 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:10:30,836 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:10:31,275 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:10:46,400 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:10:49,390 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:10:50,000 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:10:50,397 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:11:01,278 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:11:03,140 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:11:03,750 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:11:04,147 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:11:20,399 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:11:22,044 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:11:22,703 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:11:23,104 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:11:34,154 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:11:36,196 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:11:36,806 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:11:37,277 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:11:53,109 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:11:55,571 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:11:56,247 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:11:56,698 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:12:07,281 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:12:08,944 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:12:09,564 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:12:09,945 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:12:26,702 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:12:29,007 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:12:29,596 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:12:30,040 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:12:39,949 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:12:41,310 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:12:41,976 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:12:42,419 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:13:00,050 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:13:01,446 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:13:02,056 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:13:02,458 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:13:12,423 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:13:14,400 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:13:15,010 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:13:15,398 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:13:32,463 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:13:34,288 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:13:34,905 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:13:35,300 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:13:45,402 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:13:47,719 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:13:48,412 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:13:48,800 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:14:05,305 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:14:07,960 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:14:08,563 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:14:08,999 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:14:18,804 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:14:20,997 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:14:21,619 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:14:22,022 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:14:39,005 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:14:40,733 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:14:41,334 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:14:41,764 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:14:52,026 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:14:53,568 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:14:54,178 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:14:54,565 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:15:11,773 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:15:13,448 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:15:14,050 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:15:14,446 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:15:24,571 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:15:27,122 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:15:27,766 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:15:28,261 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:15:44,452 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:15:46,136 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:15:46,732 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:15:47,106 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:15:58,265 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:16:01,209 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:16:01,830 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:16:02,221 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:16:17,111 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:16:18,479 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:16:19,202 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:16:19,601 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:16:32,228 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:16:33,773 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:16:34,377 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:16:34,758 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:16:49,609 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:16:52,497 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:16:53,101 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:16:53,475 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:17:04,763 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:17:07,273 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:17:07,910 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:17:08,353 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:17:23,483 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:17:25,449 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:17:26,052 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:17:26,448 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:17:38,360 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:17:39,788 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:17:40,398 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:17:40,814 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:17:56,451 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:17:58,983 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:17:59,615 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:18:00,015 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:18:10,817 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:18:12,532 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:18:13,143 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:18:13,531 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:18:30,025 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:18:31,949 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:18:32,552 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:18:33,023 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:18:43,535 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:18:44,923 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:18:45,554 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:18:45,963 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:19:03,034 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:19:05,566 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:19:06,169 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:19:06,563 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:19:15,966 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:19:18,567 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:19:19,213 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:19:19,600 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:19:36,567 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:19:38,026 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:19:38,670 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:19:39,093 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:19:49,604 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:19:51,644 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:19:52,254 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:19:52,725 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:20:09,101 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:20:12,148 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:20:12,815 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:20:13,202 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:20:22,733 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:20:25,081 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:20:25,699 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:20:26,237 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:20:43,204 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:20:44,851 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:20:45,454 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:20:45,855 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:20:56,241 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:20:58,593 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:20:59,357 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:20:59,792 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:21:15,859 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:21:18,419 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:21:19,023 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:21:19,404 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:21:29,831 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:21:32,599 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:21:33,257 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:21:33,659 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:21:49,414 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:21:51,884 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:21:52,529 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:21:52,930 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:22:03,663 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:22:07,539 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:22:08,252 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:22:08,655 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:22:22,932 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:22:25,701 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:22:26,340 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:22:26,741 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:22:38,659 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:22:42,001 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:22:42,638 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:22:43,095 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:22:56,746 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:22:59,353 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:22:59,970 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:23:00,350 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:23:13,104 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:23:14,592 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:23:15,297 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:23:15,701 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:23:30,355 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:23:31,869 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:23:32,493 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:23:32,886 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:23:45,706 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:23:47,406 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:23:48,034 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:23:48,418 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:24:02,890 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:24:05,534 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:24:06,158 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:24:06,545 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:24:18,423 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:24:20,821 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:24:21,445 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:24:21,826 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:24:36,550 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:24:37,966 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:24:38,571 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:24:38,957 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:24:51,830 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:24:54,169 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:24:54,793 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:24:55,193 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:25:08,960 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:25:11,167 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:25:11,757 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:25:12,145 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:25:25,196 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:25:27,716 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:25:28,360 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:25:28,748 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:25:42,153 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:25:43,835 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:25:44,445 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:25:44,868 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:25:58,757 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:26:00,086 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:26:00,737 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:26:01,162 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:26:14,871 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:26:17,342 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:26:17,958 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:26:18,360 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:26:31,169 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:26:32,637 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:26:33,265 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:26:33,668 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:26:48,363 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:26:51,048 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:26:51,678 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:26:52,055 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:27:03,676 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:27:05,322 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:27:05,969 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:27:06,371 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:27:22,059 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:27:23,758 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:27:24,416 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:27:24,811 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:27:36,380 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:27:38,992 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:27:39,607 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:27:40,057 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:27:54,817 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:27:56,204 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:27:56,821 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:27:57,292 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:28:10,065 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:28:12,482 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:28:13,141 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:28:13,584 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:28:27,296 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:28:28,678 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:28:29,281 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:28:29,668 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:28:43,588 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:28:45,621 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:28:46,244 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:28:46,641 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:28:59,672 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:29:01,671 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:29:02,322 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:29:02,703 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:29:16,647 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:29:18,475 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:29:19,093 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:29:19,481 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:29:32,706 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:29:35,121 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:29:35,711 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:29:36,154 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:29:49,488 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:29:51,005 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:29:51,871 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:29:52,294 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:30:06,157 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:30:07,852 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:30:08,517 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:30:08,912 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:30:22,320 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:30:24,006 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:30:24,623 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:30:24,997 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:30:38,916 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:30:41,115 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:30:41,727 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:30:42,140 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:30:55,004 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:30:57,283 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:30:57,888 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:30:58,281 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:31:12,145 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:31:13,582 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:31:14,201 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:31:14,574 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:31:28,291 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:31:29,635 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:31:30,255 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:31:30,644 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:31:44,579 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:31:47,832 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:31:48,480 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:31:48,870 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:32:00,650 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:32:02,404 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:32:03,043 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:32:03,444 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:32:18,888 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:32:20,956 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:32:21,609 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:32:21,994 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:32:33,458 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:32:35,994 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:32:36,638 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:32:37,047 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:32:52,010 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:32:53,498 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:32:54,130 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:32:54,516 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:33:07,050 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:33:09,333 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:33:09,965 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:33:10,365 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:33:24,523 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:33:27,510 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:33:28,182 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:33:28,570 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:33:40,373 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:33:44,093 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:33:44,710 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:33:45,108 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:33:58,575 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:34:00,518 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:34:01,122 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:34:01,535 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:34:15,112 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:34:16,764 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:34:17,385 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:34:17,786 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:34:31,543 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:34:33,669 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:34:34,273 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:34:34,654 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:34:47,794 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:34:50,455 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:34:51,077 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:34:51,472 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:35:04,663 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:35:06,109 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:35:06,722 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:35:07,149 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:35:21,480 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:35:24,195 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:35:24,799 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:35:25,207 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:35:37,157 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:35:38,895 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:35:39,504 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:35:39,899 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:35:55,212 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:35:57,349 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:35:57,978 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:35:58,401 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:36:09,903 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:36:11,313 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:36:11,944 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:36:12,346 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:36:28,404 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:36:31,027 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:36:32,323 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:36:33,784 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:36:42,354 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:36:44,334 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:36:44,972 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:36:45,416 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:37:03,791 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:37:06,168 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:37:06,806 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:37:07,287 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:37:15,423 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:37:18,144 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:37:18,762 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:37:19,233 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:37:37,293 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:37:38,649 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:37:39,349 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:37:39,747 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:37:49,237 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:37:50,930 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:37:51,556 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:37:51,963 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:38:09,754 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:38:11,912 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:38:12,537 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:38:12,945 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:38:21,966 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:38:24,976 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:38:25,587 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:38:25,981 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:38:42,948 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:38:46,056 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:38:46,689 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:38:47,081 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:38:55,985 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:38:57,967 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:38:58,617 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:38:59,037 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:39:17,084 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:39:18,509 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:39:19,154 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:39:19,589 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:39:29,043 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:39:31,643 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:39:32,239 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:39:32,620 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:39:49,593 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:39:51,198 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:39:51,849 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:39:52,245 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:40:02,627 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:40:05,239 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:40:05,856 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:40:06,278 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:40:22,253 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:40:23,906 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:40:24,592 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:40:25,006 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:40:36,287 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:40:37,615 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:40:38,310 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:40:38,697 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:40:55,009 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:40:57,752 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:40:58,496 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:40:58,889 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:41:08,702 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:41:10,505 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:41:11,122 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:41:11,552 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:41:28,895 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:41:30,579 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:41:31,307 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:41:31,723 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:41:41,557 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:41:43,561 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:41:44,199 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:41:44,683 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:42:01,730 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:42:04,182 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:42:04,792 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:42:05,591 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:42:14,692 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:42:16,547 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:42:17,191 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:42:17,621 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:42:35,594 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:42:38,236 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:42:38,840 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:42:39,268 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:42:47,630 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:42:49,263 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:42:49,914 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:42:50,329 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:43:09,277 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:43:10,724 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:43:11,355 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:43:11,756 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:43:20,334 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:43:21,959 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:43:22,577 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:43:22,977 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:43:41,760 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:43:45,757 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:43:46,373 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:43:46,772 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:43:52,980 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:43:54,537 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:43:55,154 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:43:55,561 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:44:16,778 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:44:18,579 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:44:19,194 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:44:19,579 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:44:25,565 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:44:28,167 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:44:28,784 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:44:29,158 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:44:49,585 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:44:52,412 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:44:53,049 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:44:53,444 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:44:59,169 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:45:01,825 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:45:02,457 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:45:02,847 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:45:23,448 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:45:25,359 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:45:26,003 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:45:26,451 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:45:32,863 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:45:35,519 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:45:36,137 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:45:36,621 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:45:56,457 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:45:58,156 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:45:58,809 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:45:59,209 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:46:06,625 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:46:09,600 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:46:10,203 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:46:10,599 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:46:29,215 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:46:31,677 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:46:32,294 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:46:32,691 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:46:40,603 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:46:41,998 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:46:42,608 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:46:43,009 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:47:02,697 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:47:04,386 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:47:05,010 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:47:05,418 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:47:13,018 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:47:14,673 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:47:15,282 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:47:15,692 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:47:35,421 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:47:38,128 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:47:38,759 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:47:39,160 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:47:45,695 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:47:47,015 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:47:47,619 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:47:48,026 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:48:09,163 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:48:10,736 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:48:11,366 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:48:11,772 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:48:18,030 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:48:19,572 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:48:20,196 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:48:20,619 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:48:41,779 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:48:43,560 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:48:44,191 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:48:44,599 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:48:50,622 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:48:53,397 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:48:53,992 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:48:54,394 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:49:14,607 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:49:16,221 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:49:16,852 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:49:17,254 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:49:24,399 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:49:27,749 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:49:28,389 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:49:28,801 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:49:47,258 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:49:50,027 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:49:50,636 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:49:51,036 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:49:58,804 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:50:00,374 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:50:01,008 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:50:01,414 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:50:21,041 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:50:22,694 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:50:23,388 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:50:23,796 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:50:31,417 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:50:33,646 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:50:34,701 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:50:35,149 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:50:53,805 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:50:55,513 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:50:56,164 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:50:56,605 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:51:05,154 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:51:06,734 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:51:07,393 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:51:07,816 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:51:26,610 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:51:29,319 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:51:29,996 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:51:30,402 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:51:37,828 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:51:39,278 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:51:39,923 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:51:40,346 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:52:00,406 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:52:02,289 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:52:03,045 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:52:03,444 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:52:10,355 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:52:12,915 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:52:13,545 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:52:13,945 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:52:33,447 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:52:36,128 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:52:36,797 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:52:37,209 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:52:43,961 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:52:46,366 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:52:46,985 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:52:47,434 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:53:07,214 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:53:10,084 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:53:10,695 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:53:11,075 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:53:17,437 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:53:19,671 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:53:20,289 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:53:20,676 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:53:41,080 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:53:44,332 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:53:44,955 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:53:45,379 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:53:50,682 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:53:53,462 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:53:54,092 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:53:54,473 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:54:15,383 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:54:17,894 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:54:18,572 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:54:18,967 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:54:24,478 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:54:26,179 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:54:26,844 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:54:27,238 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:54:48,971 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:54:51,344 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:54:52,048 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:54:52,507 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:54:57,247 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:54:58,604 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:54:59,214 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:54:59,594 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:55:22,512 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:55:25,044 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:55:25,681 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:55:26,068 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:55:29,601 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:55:31,271 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:55:31,881 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:55:32,269 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:55:56,072 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:55:58,286 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:55:58,897 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:55:59,285 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:56:02,273 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:56:03,662 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:56:04,294 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:56:04,667 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:56:29,293 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:56:31,550 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:56:32,229 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:56:32,638 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:56:34,672 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:56:36,441 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:56:37,092 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:56:37,542 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:57:02,643 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:57:05,721 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:57:06,463 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:57:06,878 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:57:07,547 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:57:09,150 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:57:09,850 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:57:10,239 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:57:36,884 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:57:39,768 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:57:40,241 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:57:40,405 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:57:40,813 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:57:42,303 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:57:42,933 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:57:43,321 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:58:10,819 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:58:12,747 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:58:13,325 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:58:13,364 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:58:13,806 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:58:15,393 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:58:16,045 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:58:16,440 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:58:43,809 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:58:46,350 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:58:46,443 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:58:47,029 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:58:47,424 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:58:49,046 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:58:49,683 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:58:50,141 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:59:17,428 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:59:20,015 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:59:20,144 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:59:20,687 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:59:21,110 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:59:21,527 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:59:22,226 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:59:22,642 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:59:51,113 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:59:52,621 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:59:52,645 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:59:53,265 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:59:53,653 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:59:55,246 INFO Fetched 16 attendance row(s) from device
+2026-08-04 11:59:55,884 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 11:59:56,286 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:00:23,658 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:00:25,517 INFO Fetched 16 attendance row(s) from device
+2026-08-04 12:00:26,134 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 12:00:26,291 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:00:26,516 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:00:28,600 INFO Fetched 16 attendance row(s) from device
+2026-08-04 12:00:29,205 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 12:00:29,584 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:00:56,519 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:00:57,929 INFO Fetched 16 attendance row(s) from device
+2026-08-04 12:00:58,615 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 12:00:59,093 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:00:59,587 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:01:02,445 INFO Fetched 16 attendance row(s) from device
+2026-08-04 12:01:03,035 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 12:01:03,484 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:01:29,097 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:01:30,590 INFO Fetched 16 attendance row(s) from device
+2026-08-04 12:01:31,221 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 12:01:31,637 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:01:33,487 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:01:34,906 INFO Fetched 16 attendance row(s) from device
+2026-08-04 12:01:35,522 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 12:01:35,931 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:02:01,641 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:02:04,200 INFO Fetched 16 attendance row(s) from device
+2026-08-04 12:02:04,817 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 12:02:05,218 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:02:05,935 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:02:07,407 INFO Fetched 16 attendance row(s) from device
+2026-08-04 12:02:08,032 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 12:02:08,425 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:02:35,224 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:02:37,768 INFO Fetched 16 attendance row(s) from device
+2026-08-04 12:02:38,385 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 12:02:38,432 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:02:39,181 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:02:40,331 INFO Fetched 16 attendance row(s) from device
+2026-08-04 12:02:40,935 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 12:02:41,329 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:03:09,186 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:03:10,914 INFO Fetched 16 attendance row(s) from device
+2026-08-04 12:03:11,339 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:03:11,637 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 12:03:12,042 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:03:13,482 INFO Fetched 16 attendance row(s) from device
+2026-08-04 12:03:14,108 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 12:03:14,491 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:03:42,044 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:03:44,497 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:03:44,905 INFO Fetched 16 attendance row(s) from device
+2026-08-04 12:03:45,556 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 12:03:46,179 INFO Fetched 16 attendance row(s) from device
+2026-08-04 12:03:46,313 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:03:46,803 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 12:03:47,198 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:04:16,322 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:04:17,208 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:04:19,471 INFO Fetched 16 attendance row(s) from device
+2026-08-04 12:04:20,102 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 12:04:20,518 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:04:20,676 INFO Fetched 16 attendance row(s) from device
+2026-08-04 12:04:21,279 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 12:04:21,763 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:04:50,519 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:04:51,768 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:04:52,360 INFO Fetched 16 attendance row(s) from device
+2026-08-04 12:04:53,048 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 12:04:53,468 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:04:53,545 INFO Fetched 16 attendance row(s) from device
+2026-08-04 12:04:54,162 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 12:04:54,543 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:05:23,477 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:05:24,548 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:05:26,025 INFO Fetched 16 attendance row(s) from device
+2026-08-04 12:05:26,670 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 12:05:27,085 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:05:27,290 INFO Fetched 16 attendance row(s) from device
+2026-08-04 12:05:27,903 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 12:05:28,325 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:05:57,090 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:05:58,333 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:05:59,338 INFO Fetched 16 attendance row(s) from device
+2026-08-04 12:06:00,031 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 12:06:00,446 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:06:00,543 INFO Fetched 16 attendance row(s) from device
+2026-08-04 12:06:01,188 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 12:06:01,619 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:06:30,449 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:06:31,626 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:06:34,222 INFO Fetched 16 attendance row(s) from device
+2026-08-04 12:06:34,832 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 12:06:35,241 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:06:36,129 INFO Fetched 16 attendance row(s) from device
+2026-08-04 12:06:36,744 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 12:06:37,146 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:07:05,243 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:07:07,161 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:07:08,020 INFO Fetched 16 attendance row(s) from device
+2026-08-04 12:07:08,677 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 12:07:09,093 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:07:10,360 INFO Fetched 16 attendance row(s) from device
+2026-08-04 12:07:11,019 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 12:07:11,414 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:07:39,099 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:07:41,401 INFO Fetched 16 attendance row(s) from device
+2026-08-04 12:07:41,419 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:07:42,046 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 12:07:42,447 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:07:44,296 INFO Fetched 16 attendance row(s) from device
+2026-08-04 12:07:44,892 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 12:07:45,286 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:08:12,452 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:08:14,152 INFO Fetched 16 attendance row(s) from device
+2026-08-04 12:08:14,817 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 12:08:15,240 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:08:15,289 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:08:17,414 INFO Fetched 16 attendance row(s) from device
+2026-08-04 12:08:18,079 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 12:08:18,482 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:08:45,248 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:08:46,902 INFO Fetched 16 attendance row(s) from device
+2026-08-04 12:08:47,540 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 12:08:47,942 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:08:48,487 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:08:50,941 INFO Fetched 16 attendance row(s) from device
+2026-08-04 12:08:51,555 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 12:08:51,938 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:09:17,946 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:09:20,381 INFO Fetched 16 attendance row(s) from device
+2026-08-04 12:09:21,025 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 12:09:21,421 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:09:21,943 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:09:24,399 INFO Fetched 16 attendance row(s) from device
+2026-08-04 12:09:24,988 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 12:09:25,368 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:09:51,424 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:09:53,090 INFO Fetched 16 attendance row(s) from device
+2026-08-04 12:09:53,721 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 12:09:54,116 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:09:55,373 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:09:57,039 INFO Fetched 16 attendance row(s) from device
+2026-08-04 12:09:57,634 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 12:09:58,016 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:10:24,126 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:10:26,652 INFO Fetched 16 attendance row(s) from device
+2026-08-04 12:10:27,317 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 12:10:27,706 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:10:28,018 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:10:29,720 INFO Fetched 16 attendance row(s) from device
+2026-08-04 12:10:30,371 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 12:10:30,768 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:10:57,713 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:11:00,036 INFO Fetched 16 attendance row(s) from device
+2026-08-04 12:11:00,772 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:11:00,816 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 12:11:01,260 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:11:02,586 INFO Fetched 16 attendance row(s) from device
+2026-08-04 12:11:03,288 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 12:11:03,698 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:11:31,277 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:11:33,130 INFO Fetched 16 attendance row(s) from device
+2026-08-04 12:11:33,701 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:11:33,810 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 12:11:34,219 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:11:35,935 INFO Fetched 16 attendance row(s) from device
+2026-08-04 12:11:36,539 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 12:11:36,927 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:12:04,220 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:12:06,935 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:12:07,415 INFO Fetched 16 attendance row(s) from device
+2026-08-04 12:12:08,090 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 12:12:08,490 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:12:09,556 INFO Fetched 16 attendance row(s) from device
+2026-08-04 12:12:10,217 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 12:12:10,609 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:12:38,493 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:12:40,163 INFO Fetched 16 attendance row(s) from device
+2026-08-04 12:12:40,620 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:12:40,794 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 12:12:41,230 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:12:42,707 INFO Fetched 16 attendance row(s) from device
+2026-08-04 12:12:43,365 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 12:12:43,758 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:13:11,233 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:13:13,761 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:13:14,286 INFO Fetched 16 attendance row(s) from device
+2026-08-04 12:13:15,010 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 12:13:15,435 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:13:15,533 INFO Fetched 16 attendance row(s) from device
+2026-08-04 12:13:16,157 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 12:13:16,649 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:13:45,443 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:13:46,652 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:13:51,560 INFO Fetched 16 attendance row(s) from device
+2026-08-04 12:13:51,594 INFO Fetched 16 attendance row(s) from device
+2026-08-04 12:13:52,219 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 12:13:52,379 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 12:13:52,624 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:13:52,853 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:14:22,627 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:14:22,878 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:14:25,546 INFO Fetched 16 attendance row(s) from device
+2026-08-04 12:14:26,168 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 12:14:26,562 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:14:27,478 INFO Fetched 16 attendance row(s) from device
+2026-08-04 12:14:28,073 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 12:14:28,481 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:14:56,564 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:14:58,486 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:15:00,628 INFO Fetched 16 attendance row(s) from device
+2026-08-04 12:15:01,240 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 12:15:01,628 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:15:02,894 INFO Fetched 16 attendance row(s) from device
+2026-08-04 12:15:03,545 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 12:15:03,955 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:15:31,631 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:15:33,957 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:15:34,176 INFO Fetched 16 attendance row(s) from device
+2026-08-04 12:15:34,843 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 12:15:35,306 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:15:35,562 INFO Fetched 16 attendance row(s) from device
+2026-08-04 12:15:36,153 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 12:15:36,565 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:16:05,315 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:16:06,575 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:16:07,517 INFO Fetched 16 attendance row(s) from device
+2026-08-04 12:16:08,161 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 12:16:08,543 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:16:09,561 INFO Fetched 16 attendance row(s) from device
+2026-08-04 12:16:10,239 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 12:16:10,647 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:16:38,548 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:16:40,651 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:16:40,933 INFO Fetched 16 attendance row(s) from device
+2026-08-04 12:16:41,564 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 12:16:41,971 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:16:42,208 INFO Fetched 16 attendance row(s) from device
+2026-08-04 12:16:42,838 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 12:16:43,313 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:17:11,980 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:17:13,344 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:17:14,702 INFO Fetched 16 attendance row(s) from device
+2026-08-04 12:17:15,326 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 12:17:15,714 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:17:16,122 INFO Fetched 16 attendance row(s) from device
+2026-08-04 12:17:16,717 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 12:17:17,114 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:17:45,718 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:17:47,117 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:17:48,507 INFO Fetched 16 attendance row(s) from device
+2026-08-04 12:17:49,186 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 12:17:49,574 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:17:50,681 INFO Fetched 16 attendance row(s) from device
+2026-08-04 12:17:51,299 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 12:17:51,721 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:18:19,578 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:18:20,887 INFO Fetched 16 attendance row(s) from device
+2026-08-04 12:18:21,488 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 12:18:21,726 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:18:21,942 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:18:23,543 INFO Fetched 16 attendance row(s) from device
+2026-08-04 12:18:24,146 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 12:18:24,616 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:18:51,952 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:18:54,047 INFO Fetched 16 attendance row(s) from device
+2026-08-04 12:18:54,627 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:18:54,721 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 12:18:55,124 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:18:57,208 INFO Fetched 16 attendance row(s) from device
+2026-08-04 12:18:57,797 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 12:18:58,181 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:19:25,128 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:19:27,583 INFO Fetched 16 attendance row(s) from device
+2026-08-04 12:19:28,185 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:19:28,187 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 12:19:28,601 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:19:31,491 INFO Fetched 16 attendance row(s) from device
+2026-08-04 12:19:32,149 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 12:19:32,550 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:19:58,604 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:20:01,796 INFO Fetched 16 attendance row(s) from device
+2026-08-04 12:20:02,405 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 12:20:02,552 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:20:02,814 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:20:05,339 INFO Fetched 16 attendance row(s) from device
+2026-08-04 12:20:05,947 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 12:20:06,347 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:20:32,826 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:20:34,581 INFO Fetched 16 attendance row(s) from device
+2026-08-04 12:20:35,241 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 12:20:35,634 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:20:36,353 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:20:38,474 INFO Fetched 16 attendance row(s) from device
+2026-08-04 12:20:39,112 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 12:20:39,529 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:21:05,639 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:21:08,309 INFO Fetched 16 attendance row(s) from device
+2026-08-04 12:21:09,002 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 12:21:09,425 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:21:09,550 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:21:12,569 INFO Fetched 16 attendance row(s) from device
+2026-08-04 12:21:13,222 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 12:21:13,617 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:21:39,433 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:21:41,226 INFO Fetched 16 attendance row(s) from device
+2026-08-04 12:21:41,864 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 12:21:42,273 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:21:43,621 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:21:46,387 INFO Fetched 16 attendance row(s) from device
+2026-08-04 12:21:47,059 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 12:21:47,458 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:22:12,283 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:22:14,067 INFO Fetched 16 attendance row(s) from device
+2026-08-04 12:22:14,705 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 12:22:15,093 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:22:17,464 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:22:18,861 INFO Fetched 16 attendance row(s) from device
+2026-08-04 12:22:19,502 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 12:22:19,900 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:22:45,098 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:22:47,871 INFO Fetched 16 attendance row(s) from device
+2026-08-04 12:22:48,530 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 12:22:49,003 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:22:49,908 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:22:52,276 INFO Fetched 16 attendance row(s) from device
+2026-08-04 12:22:52,886 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 12:22:53,281 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:23:19,007 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:23:21,890 INFO Fetched 16 attendance row(s) from device
+2026-08-04 12:23:22,520 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 12:23:22,915 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:23:23,285 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:23:25,180 INFO Fetched 16 attendance row(s) from device
+2026-08-04 12:23:25,825 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 12:23:26,221 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:23:52,925 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:23:55,964 INFO Fetched 16 attendance row(s) from device
+2026-08-04 12:23:56,228 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:23:56,603 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 12:23:57,003 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:23:58,545 INFO Fetched 16 attendance row(s) from device
+2026-08-04 12:23:59,222 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 12:23:59,636 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:24:27,009 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:24:28,729 INFO Fetched 16 attendance row(s) from device
+2026-08-04 12:24:29,324 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 12:24:29,641 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:24:29,726 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:24:32,227 INFO Fetched 16 attendance row(s) from device
+2026-08-04 12:24:32,878 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 12:24:33,328 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:24:59,730 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:25:02,387 INFO Fetched 16 attendance row(s) from device
+2026-08-04 12:25:03,032 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 12:25:03,330 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:25:03,464 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:25:05,345 INFO Fetched 16 attendance row(s) from device
+2026-08-04 12:25:06,003 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 12:25:06,405 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:25:33,467 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:25:35,588 INFO Fetched 16 attendance row(s) from device
+2026-08-04 12:25:36,206 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 12:25:36,407 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:25:36,670 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:25:38,159 INFO Fetched 16 attendance row(s) from device
+2026-08-04 12:25:38,782 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 12:25:39,170 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:26:06,675 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:26:08,395 INFO Fetched 16 attendance row(s) from device
+2026-08-04 12:26:08,997 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 12:26:09,176 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:26:09,399 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:26:10,944 INFO Fetched 16 attendance row(s) from device
+2026-08-04 12:26:11,577 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 12:26:12,019 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:26:39,402 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:26:41,430 INFO Fetched 16 attendance row(s) from device
+2026-08-04 12:26:42,025 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:26:42,137 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 12:26:42,561 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:26:44,214 INFO Fetched 16 attendance row(s) from device
+2026-08-04 12:26:44,831 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 12:26:45,253 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:27:12,565 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:27:15,255 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:27:15,310 INFO Fetched 16 attendance row(s) from device
+2026-08-04 12:27:16,042 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 12:27:16,557 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:27:16,688 INFO Fetched 16 attendance row(s) from device
+2026-08-04 12:27:17,319 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 12:27:17,714 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:27:46,567 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:27:47,720 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:27:48,345 INFO Fetched 16 attendance row(s) from device
+2026-08-04 12:27:48,987 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 12:27:49,425 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:27:49,481 INFO Fetched 16 attendance row(s) from device
+2026-08-04 12:27:50,147 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 12:27:50,664 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:28:19,429 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:28:20,667 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:28:23,575 INFO Fetched 16 attendance row(s) from device
+2026-08-04 12:28:24,221 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 12:28:24,615 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:28:25,190 INFO Fetched 16 attendance row(s) from device
+2026-08-04 12:28:25,833 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 12:28:26,416 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:28:54,617 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:28:56,422 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:28:58,806 INFO Fetched 16 attendance row(s) from device
+2026-08-04 12:28:59,444 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 12:28:59,818 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:29:01,169 INFO Fetched 16 attendance row(s) from device
+2026-08-04 12:29:01,773 INFO Pushing 16 poll event(s) to Odoo device 2
+2026-08-04 12:29:02,165 INFO Odoo ingest stats: {'fetched': 16, 'stored': 0, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:29:29,825 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:29:32,168 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:29:32,334 INFO Fetched 18 attendance row(s) from device
+2026-08-04 12:29:32,950 INFO Pushing 18 poll event(s) to Odoo device 2
+2026-08-04 12:29:33,740 INFO Odoo ingest stats: {'fetched': 18, 'stored': 2, 'ignored': 0, 'duplicates': 16, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:29:35,956 INFO Fetched 18 attendance row(s) from device
+2026-08-04 12:29:36,580 INFO Pushing 18 poll event(s) to Odoo device 2
+2026-08-04 12:29:37,030 INFO Odoo ingest stats: {'fetched': 18, 'stored': 0, 'ignored': 0, 'duplicates': 18, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:30:03,744 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:30:07,037 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:30:07,197 INFO Fetched 18 attendance row(s) from device
+2026-08-04 12:30:07,821 INFO Pushing 18 poll event(s) to Odoo device 2
+2026-08-04 12:30:08,309 INFO Odoo ingest stats: {'fetched': 18, 'stored': 0, 'ignored': 0, 'duplicates': 18, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:30:09,490 INFO Fetched 18 attendance row(s) from device
+2026-08-04 12:30:10,141 INFO Pushing 18 poll event(s) to Odoo device 2
+2026-08-04 12:30:10,557 INFO Odoo ingest stats: {'fetched': 18, 'stored': 0, 'ignored': 0, 'duplicates': 18, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:30:38,348 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:30:39,941 INFO Fetched 18 attendance row(s) from device
+2026-08-04 12:30:40,564 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:30:40,628 INFO Pushing 18 poll event(s) to Odoo device 2
+2026-08-04 12:30:41,056 INFO Odoo ingest stats: {'fetched': 18, 'stored': 0, 'ignored': 0, 'duplicates': 18, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:30:43,543 INFO Fetched 18 attendance row(s) from device
+2026-08-04 12:30:44,188 INFO Pushing 18 poll event(s) to Odoo device 2
+2026-08-04 12:30:44,589 INFO Odoo ingest stats: {'fetched': 18, 'stored': 0, 'ignored': 0, 'duplicates': 18, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:31:11,058 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:31:12,471 INFO Fetched 18 attendance row(s) from device
+2026-08-04 12:31:13,171 INFO Pushing 18 poll event(s) to Odoo device 2
+2026-08-04 12:31:13,600 INFO Odoo ingest stats: {'fetched': 18, 'stored': 0, 'ignored': 0, 'duplicates': 18, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:31:14,599 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:31:16,068 INFO Fetched 18 attendance row(s) from device
+2026-08-04 12:31:16,683 INFO Pushing 18 poll event(s) to Odoo device 2
+2026-08-04 12:31:17,077 INFO Odoo ingest stats: {'fetched': 18, 'stored': 0, 'ignored': 0, 'duplicates': 18, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:31:43,603 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:31:46,284 INFO Fetched 18 attendance row(s) from device
+2026-08-04 12:31:46,877 INFO Pushing 18 poll event(s) to Odoo device 2
+2026-08-04 12:31:47,084 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:31:47,306 INFO Odoo ingest stats: {'fetched': 18, 'stored': 0, 'ignored': 0, 'duplicates': 18, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:31:50,203 INFO Fetched 18 attendance row(s) from device
+2026-08-04 12:31:50,855 INFO Pushing 18 poll event(s) to Odoo device 2
+2026-08-04 12:31:51,283 INFO Odoo ingest stats: {'fetched': 18, 'stored': 0, 'ignored': 0, 'duplicates': 18, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:32:17,314 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:32:18,908 INFO Fetched 18 attendance row(s) from device
+2026-08-04 12:32:19,510 INFO Pushing 18 poll event(s) to Odoo device 2
+2026-08-04 12:32:19,907 INFO Odoo ingest stats: {'fetched': 18, 'stored': 0, 'ignored': 0, 'duplicates': 18, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:32:21,288 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:32:23,729 INFO Fetched 18 attendance row(s) from device
+2026-08-04 12:32:24,352 INFO Pushing 18 poll event(s) to Odoo device 2
+2026-08-04 12:32:24,762 INFO Odoo ingest stats: {'fetched': 18, 'stored': 0, 'ignored': 0, 'duplicates': 18, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:32:49,914 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:32:52,379 INFO Fetched 18 attendance row(s) from device
+2026-08-04 12:32:52,975 INFO Pushing 18 poll event(s) to Odoo device 2
+2026-08-04 12:32:53,425 INFO Odoo ingest stats: {'fetched': 18, 'stored': 0, 'ignored': 0, 'duplicates': 18, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:32:54,764 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:32:57,027 INFO Fetched 18 attendance row(s) from device
+2026-08-04 12:32:57,678 INFO Pushing 18 poll event(s) to Odoo device 2
+2026-08-04 12:32:58,066 INFO Odoo ingest stats: {'fetched': 18, 'stored': 0, 'ignored': 0, 'duplicates': 18, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:33:23,433 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:33:25,005 INFO Fetched 18 attendance row(s) from device
+2026-08-04 12:33:25,616 INFO Pushing 18 poll event(s) to Odoo device 2
+2026-08-04 12:33:26,026 INFO Odoo ingest stats: {'fetched': 18, 'stored': 0, 'ignored': 0, 'duplicates': 18, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:33:28,073 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:33:29,778 INFO Fetched 18 attendance row(s) from device
+2026-08-04 12:33:30,400 INFO Pushing 18 poll event(s) to Odoo device 2
+2026-08-04 12:33:30,817 INFO Odoo ingest stats: {'fetched': 18, 'stored': 0, 'ignored': 0, 'duplicates': 18, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:33:56,029 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:33:58,788 INFO Fetched 18 attendance row(s) from device
+2026-08-04 12:33:59,440 INFO Pushing 18 poll event(s) to Odoo device 2
+2026-08-04 12:33:59,849 INFO Odoo ingest stats: {'fetched': 18, 'stored': 0, 'ignored': 0, 'duplicates': 18, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:34:00,821 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:34:03,076 INFO Fetched 18 attendance row(s) from device
+2026-08-04 12:34:03,679 INFO Pushing 18 poll event(s) to Odoo device 2
+2026-08-04 12:34:04,142 INFO Odoo ingest stats: {'fetched': 18, 'stored': 0, 'ignored': 0, 'duplicates': 18, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:34:29,852 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:34:31,387 INFO Fetched 18 attendance row(s) from device
+2026-08-04 12:34:31,997 INFO Pushing 18 poll event(s) to Odoo device 2
+2026-08-04 12:34:32,479 INFO Odoo ingest stats: {'fetched': 18, 'stored': 0, 'ignored': 0, 'duplicates': 18, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:34:34,146 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:34:37,032 INFO Fetched 18 attendance row(s) from device
+2026-08-04 12:34:37,642 INFO Pushing 18 poll event(s) to Odoo device 2
+2026-08-04 12:34:38,023 INFO Odoo ingest stats: {'fetched': 18, 'stored': 0, 'ignored': 0, 'duplicates': 18, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:35:02,484 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:35:04,589 INFO Fetched 18 attendance row(s) from device
+2026-08-04 12:35:05,195 INFO Pushing 18 poll event(s) to Odoo device 2
+2026-08-04 12:35:05,580 INFO Odoo ingest stats: {'fetched': 18, 'stored': 0, 'ignored': 0, 'duplicates': 18, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:35:08,038 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:35:09,690 INFO Fetched 18 attendance row(s) from device
+2026-08-04 12:35:10,297 INFO Pushing 18 poll event(s) to Odoo device 2
+2026-08-04 12:35:10,681 INFO Odoo ingest stats: {'fetched': 18, 'stored': 0, 'ignored': 0, 'duplicates': 18, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:35:35,583 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:35:37,111 INFO Fetched 18 attendance row(s) from device
+2026-08-04 12:35:37,721 INFO Pushing 18 poll event(s) to Odoo device 2
+2026-08-04 12:35:38,146 INFO Odoo ingest stats: {'fetched': 18, 'stored': 0, 'ignored': 0, 'duplicates': 18, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:35:40,686 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:35:42,687 INFO Fetched 18 attendance row(s) from device
+2026-08-04 12:35:43,310 INFO Pushing 18 poll event(s) to Odoo device 2
+2026-08-04 12:35:43,773 INFO Odoo ingest stats: {'fetched': 18, 'stored': 0, 'ignored': 0, 'duplicates': 18, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:36:08,150 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:36:09,737 INFO Fetched 18 attendance row(s) from device
+2026-08-04 12:36:10,348 INFO Pushing 18 poll event(s) to Odoo device 2
+2026-08-04 12:36:10,991 INFO Odoo ingest stats: {'fetched': 18, 'stored': 0, 'ignored': 0, 'duplicates': 18, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:36:13,787 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:36:15,132 INFO Fetched 18 attendance row(s) from device
+2026-08-04 12:36:15,744 INFO Pushing 18 poll event(s) to Odoo device 2
+2026-08-04 12:36:16,234 INFO Odoo ingest stats: {'fetched': 18, 'stored': 0, 'ignored': 0, 'duplicates': 18, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:36:40,994 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:36:42,740 INFO Fetched 18 attendance row(s) from device
+2026-08-04 12:36:43,377 INFO Pushing 18 poll event(s) to Odoo device 2
+2026-08-04 12:36:43,821 INFO Odoo ingest stats: {'fetched': 18, 'stored': 0, 'ignored': 0, 'duplicates': 18, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:36:46,239 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:36:48,211 INFO Fetched 18 attendance row(s) from device
+2026-08-04 12:36:48,844 INFO Pushing 18 poll event(s) to Odoo device 2
+2026-08-04 12:36:49,251 INFO Odoo ingest stats: {'fetched': 18, 'stored': 0, 'ignored': 0, 'duplicates': 18, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:37:13,823 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:37:15,573 INFO Fetched 18 attendance row(s) from device
+2026-08-04 12:37:16,197 INFO Pushing 18 poll event(s) to Odoo device 2
+2026-08-04 12:37:16,644 INFO Odoo ingest stats: {'fetched': 18, 'stored': 0, 'ignored': 0, 'duplicates': 18, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:37:19,257 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:37:21,930 INFO Fetched 18 attendance row(s) from device
+2026-08-04 12:37:22,568 INFO Pushing 18 poll event(s) to Odoo device 2
+2026-08-04 12:37:23,013 INFO Odoo ingest stats: {'fetched': 18, 'stored': 0, 'ignored': 0, 'duplicates': 18, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:37:46,646 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:37:49,244 INFO Fetched 18 attendance row(s) from device
+2026-08-04 12:37:49,958 INFO Pushing 18 poll event(s) to Odoo device 2
+2026-08-04 12:37:50,402 INFO Odoo ingest stats: {'fetched': 18, 'stored': 0, 'ignored': 0, 'duplicates': 18, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:37:53,017 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:37:56,144 INFO Fetched 18 attendance row(s) from device
+2026-08-04 12:37:56,781 INFO Pushing 18 poll event(s) to Odoo device 2
+2026-08-04 12:37:57,218 INFO Odoo ingest stats: {'fetched': 18, 'stored': 0, 'ignored': 0, 'duplicates': 18, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:38:20,404 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:38:22,114 INFO Fetched 18 attendance row(s) from device
+2026-08-04 12:38:22,737 INFO Pushing 18 poll event(s) to Odoo device 2
+2026-08-04 12:38:23,124 INFO Odoo ingest stats: {'fetched': 18, 'stored': 0, 'ignored': 0, 'duplicates': 18, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:38:27,222 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:38:28,949 INFO Fetched 18 attendance row(s) from device
+2026-08-04 12:38:29,597 INFO Pushing 18 poll event(s) to Odoo device 2
+2026-08-04 12:38:30,038 INFO Odoo ingest stats: {'fetched': 18, 'stored': 0, 'ignored': 0, 'duplicates': 18, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:38:53,135 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:38:56,519 INFO Fetched 18 attendance row(s) from device
+2026-08-04 12:38:57,150 INFO Pushing 18 poll event(s) to Odoo device 2
+2026-08-04 12:38:57,552 INFO Odoo ingest stats: {'fetched': 18, 'stored': 0, 'ignored': 0, 'duplicates': 18, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:39:00,043 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:39:02,401 INFO Fetched 18 attendance row(s) from device
+2026-08-04 12:39:03,024 INFO Pushing 18 poll event(s) to Odoo device 2
+2026-08-04 12:39:03,442 INFO Odoo ingest stats: {'fetched': 18, 'stored': 0, 'ignored': 0, 'duplicates': 18, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:39:27,556 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:39:32,836 INFO Fetched 18 attendance row(s) from device
+2026-08-04 12:39:33,445 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:39:33,518 INFO Pushing 18 poll event(s) to Odoo device 2
+2026-08-04 12:39:34,000 INFO Odoo ingest stats: {'fetched': 18, 'stored': 0, 'ignored': 0, 'duplicates': 18, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:39:35,608 INFO Fetched 18 attendance row(s) from device
+2026-08-04 12:39:36,200 INFO Pushing 18 poll event(s) to Odoo device 2
+2026-08-04 12:39:36,558 INFO Odoo ingest stats: {'fetched': 18, 'stored': 0, 'ignored': 0, 'duplicates': 18, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:40:04,005 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:40:06,561 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:40:06,877 INFO Fetched 18 attendance row(s) from device
+2026-08-04 12:40:09,157 INFO Fetched 18 attendance row(s) from device
+2026-08-04 12:40:09,432 INFO Pushing 18 poll event(s) to Odoo device 2
+2026-08-04 12:40:09,781 INFO Pushing 18 poll event(s) to Odoo device 2
+2026-08-04 12:40:10,209 INFO Odoo ingest stats: {'fetched': 18, 'stored': 0, 'ignored': 0, 'duplicates': 18, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:40:10,870 INFO Odoo ingest stats: {'fetched': 18, 'stored': 0, 'ignored': 0, 'duplicates': 18, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:40:40,216 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:40:40,873 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:40:42,012 INFO Fetched 18 attendance row(s) from device
+2026-08-04 12:40:42,614 INFO Pushing 18 poll event(s) to Odoo device 2
+2026-08-04 12:40:43,037 INFO Odoo ingest stats: {'fetched': 18, 'stored': 0, 'ignored': 0, 'duplicates': 18, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:40:43,224 INFO Fetched 18 attendance row(s) from device
+2026-08-04 12:40:43,853 INFO Pushing 18 poll event(s) to Odoo device 2
+2026-08-04 12:40:44,276 INFO Odoo ingest stats: {'fetched': 18, 'stored': 0, 'ignored': 0, 'duplicates': 18, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:41:13,044 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:41:14,316 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:41:15,902 INFO Fetched 18 attendance row(s) from device
+2026-08-04 12:41:16,584 INFO Pushing 18 poll event(s) to Odoo device 2
+2026-08-04 12:41:16,986 INFO Odoo ingest stats: {'fetched': 18, 'stored': 0, 'ignored': 0, 'duplicates': 18, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:41:18,392 INFO Fetched 18 attendance row(s) from device
+2026-08-04 12:41:19,018 INFO Pushing 18 poll event(s) to Odoo device 2
+2026-08-04 12:41:19,410 INFO Odoo ingest stats: {'fetched': 18, 'stored': 0, 'ignored': 0, 'duplicates': 18, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:41:46,995 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:41:49,085 INFO Fetched 18 attendance row(s) from device
+2026-08-04 12:41:49,413 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:41:49,740 INFO Pushing 18 poll event(s) to Odoo device 2
+2026-08-04 12:41:50,138 INFO Odoo ingest stats: {'fetched': 18, 'stored': 0, 'ignored': 0, 'duplicates': 18, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:41:52,659 INFO Fetched 18 attendance row(s) from device
+2026-08-04 12:41:53,274 INFO Pushing 18 poll event(s) to Odoo device 2
+2026-08-04 12:41:53,664 INFO Odoo ingest stats: {'fetched': 18, 'stored': 0, 'ignored': 0, 'duplicates': 18, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:42:20,140 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:42:23,126 INFO Fetched 18 attendance row(s) from device
+2026-08-04 12:42:23,667 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:42:23,755 INFO Pushing 18 poll event(s) to Odoo device 2
+2026-08-04 12:42:24,153 INFO Odoo ingest stats: {'fetched': 18, 'stored': 0, 'ignored': 0, 'duplicates': 18, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:42:26,810 INFO Fetched 18 attendance row(s) from device
+2026-08-04 12:42:27,419 INFO Pushing 18 poll event(s) to Odoo device 2
+2026-08-04 12:42:27,822 INFO Odoo ingest stats: {'fetched': 18, 'stored': 0, 'ignored': 0, 'duplicates': 18, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:42:54,156 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:42:55,832 INFO Fetched 18 attendance row(s) from device
+2026-08-04 12:42:56,452 INFO Pushing 18 poll event(s) to Odoo device 2
+2026-08-04 12:42:56,848 INFO Odoo ingest stats: {'fetched': 18, 'stored': 0, 'ignored': 0, 'duplicates': 18, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:42:57,829 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:43:00,240 INFO Fetched 18 attendance row(s) from device
+2026-08-04 12:43:00,879 INFO Pushing 18 poll event(s) to Odoo device 2
+2026-08-04 12:43:01,339 INFO Odoo ingest stats: {'fetched': 18, 'stored': 0, 'ignored': 0, 'duplicates': 18, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:43:31,346 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:43:33,898 INFO Fetched 18 attendance row(s) from device
+2026-08-04 12:43:34,509 INFO Pushing 18 poll event(s) to Odoo device 2
+2026-08-04 12:43:34,933 INFO Odoo ingest stats: {'fetched': 18, 'stored': 0, 'ignored': 0, 'duplicates': 18, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:44:04,939 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:44:07,455 INFO Fetched 18 attendance row(s) from device
+2026-08-04 12:44:08,063 INFO Pushing 18 poll event(s) to Odoo device 2
+2026-08-04 12:44:08,470 INFO Odoo ingest stats: {'fetched': 18, 'stored': 0, 'ignored': 0, 'duplicates': 18, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:44:38,475 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:44:41,202 INFO Fetched 18 attendance row(s) from device
+2026-08-04 12:44:41,818 INFO Pushing 18 poll event(s) to Odoo device 2
+2026-08-04 12:44:42,242 INFO Odoo ingest stats: {'fetched': 18, 'stored': 0, 'ignored': 0, 'duplicates': 18, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:45:12,245 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:45:13,776 INFO Fetched 18 attendance row(s) from device
+2026-08-04 12:45:14,403 INFO Pushing 18 poll event(s) to Odoo device 2
+2026-08-04 12:45:14,824 INFO Odoo ingest stats: {'fetched': 18, 'stored': 0, 'ignored': 0, 'duplicates': 18, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:45:44,829 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:45:47,298 INFO Fetched 18 attendance row(s) from device
+2026-08-04 12:45:47,953 INFO Pushing 18 poll event(s) to Odoo device 2
+2026-08-04 12:45:48,380 INFO Odoo ingest stats: {'fetched': 18, 'stored': 0, 'ignored': 0, 'duplicates': 18, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:46:18,385 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:46:20,741 INFO Fetched 18 attendance row(s) from device
+2026-08-04 12:46:21,408 INFO Pushing 18 poll event(s) to Odoo device 2
+2026-08-04 12:46:21,818 INFO Odoo ingest stats: {'fetched': 18, 'stored': 0, 'ignored': 0, 'duplicates': 18, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:46:51,822 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:46:54,234 INFO Fetched 18 attendance row(s) from device
+2026-08-04 12:46:55,190 INFO Pushing 18 poll event(s) to Odoo device 2
+2026-08-04 12:46:55,637 INFO Odoo ingest stats: {'fetched': 18, 'stored': 0, 'ignored': 0, 'duplicates': 18, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:47:25,640 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:47:27,187 INFO Fetched 18 attendance row(s) from device
+2026-08-04 12:47:27,817 INFO Pushing 18 poll event(s) to Odoo device 2
+2026-08-04 12:47:28,211 INFO Odoo ingest stats: {'fetched': 18, 'stored': 0, 'ignored': 0, 'duplicates': 18, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:47:58,214 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:48:00,090 INFO Fetched 18 attendance row(s) from device
+2026-08-04 12:48:00,695 INFO Pushing 18 poll event(s) to Odoo device 2
+2026-08-04 12:48:01,101 INFO Odoo ingest stats: {'fetched': 18, 'stored': 0, 'ignored': 0, 'duplicates': 18, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:48:31,106 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:48:32,446 INFO Fetched 18 attendance row(s) from device
+2026-08-04 12:48:32,682 ERROR ZK poll error: <ProtocolError for shamsieh.odoo.com/xmlrpc/2/common: 503 SERVICE UNAVAILABLE> — close Attendance Management if it is Connected
+2026-08-04 12:49:02,690 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:49:05,190 INFO Fetched 18 attendance row(s) from device
+2026-08-04 12:49:05,842 INFO Pushing 18 poll event(s) to Odoo device 2
+2026-08-04 12:49:06,639 INFO Odoo ingest stats: {'fetched': 18, 'stored': 0, 'ignored': 0, 'duplicates': 18, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:49:36,644 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:49:38,087 INFO Fetched 18 attendance row(s) from device
+2026-08-04 12:49:38,766 INFO Pushing 18 poll event(s) to Odoo device 2
+2026-08-04 12:49:39,177 INFO Odoo ingest stats: {'fetched': 18, 'stored': 0, 'ignored': 0, 'duplicates': 18, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:50:09,179 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:50:12,175 INFO Fetched 18 attendance row(s) from device
+2026-08-04 12:50:12,805 INFO Pushing 18 poll event(s) to Odoo device 2
+2026-08-04 12:50:13,227 INFO Odoo ingest stats: {'fetched': 18, 'stored': 0, 'ignored': 0, 'duplicates': 18, 'unmapped': 0, 'skipped': 0}
+2026-08-04 12:50:43,232 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 12:50:45,048 INFO Fetched 18 attendance row(s) from device
+2026-08-04 12:50:45,691 INFO Pushing 18 poll event(s) to Odoo device 2

@@ -1,38 +1,30 @@
-# ZKTeco → Odoo poll bridge (F28)
+# ZKTeco → Odoo real-time punch API
 
-Your F28 talks on port **4370** (same as Attendance Management). This service
-downloads punches every 30 seconds and sends them to Odoo.
+No Sync Now. The bridge keeps a live connection to the F28 and POSTs each punch
+immediately to Odoo:
 
-**Close / Disconnect Attendance Management** while the bridge runs — only one
-program can use the device at a time.
+`POST /zkteco/punch/<token>`  
+JSON: `{ "device_user_id": "2", "punch_type": "check_in", "event_time": "..." }`
 
-## One-time setup
+Allowed `punch_type`: `check_in`, `check_out`, `break_out`, `break_in`.
+
+## Setup
+
+1. Upgrade `hr_attendance_custom_ext` on Odoo.sh.
+2. Open the ZKTeco device → copy **Punch API URL**.
+3. Put it in `.env` as `ZKTECO_PUNCH_URL=...`
+4. **Disconnect Attendance Management**.
+5. Run:
 
 ```powershell
-cd C:\Users\ASUS\Desktop\odoo\scripts\zkteco_attendance_service
-python -m venv .venv
+cd scripts\zkteco_attendance_service
 .\.venv\Scripts\activate
-pip install -r requirements.txt
-# .env already configured for this office
-powershell -ExecutionPolicy Bypass -File .\install_windows_startup.ps1
-Start-ScheduledTask -TaskName ZKTecoOdooPollBridge
+python -m app.main
 ```
 
-## Manual start
-
-```powershell
-.\start_zkteco_poll.bat
-```
-
-## Logs
-
-`logs\zkteco_poll.log`
-
-Task Scheduler task: run `install_scheduled_task.ps1` as admin (optional).
-
-Default install uses the **Startup folder** shortcut (no admin):
-`install_windows_startup.ps1`
+Or use `start_zkteco_poll.bat` (same entrypoint; now live mode).
+Windows Startup shortcut still works.
 
 ## Hikvision
 
-Unchanged — separate service under `scripts/hikvision_attendance_service`.
+Unchanged.
