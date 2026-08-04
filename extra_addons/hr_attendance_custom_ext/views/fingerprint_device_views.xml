@@ -6,7 +6,9 @@
         <field name="arch" type="xml">
             <list>
                 <field name="name"/>
+                <field name="location_label" optional="show"/>
                 <field name="device_ip"/>
+                <field name="device_port" optional="hide"/>
                 <field name="api_type"/>
                 <field name="sync_status"/>
                 <field name="last_sync_at"/>
@@ -22,6 +24,14 @@
         <field name="arch" type="xml">
             <form>
                 <header>
+                    <button name="action_test_connection" type="object" string="Test Connection"
+                            class="btn-secondary"
+                            groups="hr_attendance_custom_ext.group_fingerprint_device_manager"
+                            invisible="api_type not in ('hikvision', 'zkteco')"/>
+                    <button name="action_sync_now" type="object" string="Sync Now"
+                            class="btn-primary"
+                            groups="hr_attendance_custom_ext.group_fingerprint_device_manager"
+                            invisible="api_type not in ('hikvision', 'zkteco', 'file_import')"/>
                     <field name="sync_status" widget="statusbar" statusbar_visible="idle,running,success,error"/>
                 </header>
                 <sheet>
@@ -34,22 +44,29 @@
                     <group>
                         <group>
                             <field name="name"/>
+                            <field name="location_label" placeholder="e.g. Branch B / Warehouse"/>
                             <field name="company_id" groups="base.group_multi_company"/>
                             <field name="policy_id"/>
                             <field name="api_type"/>
                             <field name="active"/>
-                            <field name="sync_lookback_hours" invisible="api_type != 'hikvision'"/>
-                            <field name="device_timezone" invisible="api_type != 'hikvision'"
+                            <field name="sync_lookback_hours"
+                                   invisible="api_type not in ('hikvision', 'zkteco')"/>
+                            <field name="device_timezone"
+                                   invisible="api_type not in ('hikvision', 'zkteco')"
                                    placeholder="e.g. Asia/Amman"/>
-                            <field name="connection_timeout" invisible="api_type != 'hikvision'"/>
-                            <field name="sync_retry_count" invisible="api_type != 'hikvision'"/>
+                            <field name="connection_timeout"
+                                   invisible="api_type not in ('hikvision', 'zkteco')"/>
+                            <field name="sync_retry_count"
+                                   invisible="api_type not in ('hikvision', 'zkteco')"/>
                             <field name="store_ignored_events" invisible="api_type != 'hikvision'"/>
                         </group>
                         <group>
                             <field name="device_ip"/>
                             <field name="device_port"/>
-                            <field name="username"/>
-                            <field name="password" password="True"/>
+                            <field name="username" invisible="api_type == 'zkteco'"/>
+                            <field name="password" password="True"
+                                   string="Password / Comm Key"/>
+                            <field name="zkteco_force_udp" invisible="api_type != 'zkteco'"/>
                             <field name="api_key" password="True" invisible="api_type != 'custom_api'"/>
                         </group>
                     </group>
@@ -58,11 +75,17 @@
                         <field name="import_file_data" filename="import_file_name"/>
                     </group>
                     <group string="Automatic Sync">
-                        <div class="text-muted" colspan="2">
-                            With HTTP Listening enabled (recommended), scans appear in Odoo within
-                            seconds via device push. Turn off Auto Sync when Odoo runs in the cloud
-                            and cannot reach the device LAN IP (Odoo.sh). Polling is only needed as
-                            a fallback on the same local network.
+                        <div class="text-muted" colspan="2" invisible="api_type == 'zkteco'">
+                            With HTTP Listening enabled (recommended for Hikvision), scans appear in
+                            Odoo within seconds via device push. Turn off Auto Sync when Odoo runs
+                            in the cloud and cannot reach the device LAN IP (Odoo.sh). Polling is
+                            only needed as a fallback on the same local network.
+                        </div>
+                        <div class="text-muted" colspan="2" invisible="api_type != 'zkteco'">
+                            ZKTeco uses TCP/UDP pull on port 4370 (pyzk). Odoo.sh cannot reach
+                            private LAN IPs — run the local bridge
+                            (scripts/zkteco_attendance_service) on the office network, or enable
+                            Auto Sync only when Odoo can route to the device.
                         </div>
                         <field name="auto_sync"/>
                         <field name="sync_interval_minutes"
