@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--
+        Client action that hosts the assistant. It is available to every internal
+        user (base.group_user); what each of them can actually see through the
+        agent is decided by Odoo when the RPC runs as them, not by this menu.
+    -->
+    <record id="action_botify_assistant" model="ir.actions.client">
+        <field name="name">Assistant</field>
+        <field name="tag">botify_agent.assistant</field>
+    </record>
+
+    <menuitem id="menu_botify_root"
+              name="Assistant"
+              web_icon="botify_agent,static/description/icon.png"
+              groups="base.group_user"
+              sequence="95"/>
+
+    <menuitem id="menu_botify_assistant"
+              name="Assistant"
+              parent="menu_botify_root"
+              action="action_botify_assistant"
+              groups="base.group_user"
+              sequence="10"/>
+</odoo>

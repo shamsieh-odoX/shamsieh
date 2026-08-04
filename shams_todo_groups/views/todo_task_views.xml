@@ -90,6 +90,8 @@
                         </group>
                         <group string="Schedule">
                             <field name="due_date"/>
+                            <field name="my_day_date"/>
+                            <field name="is_important"/>
                             <field name="completed_date" invisible="not is_done"/>
                             <field name="is_overdue" invisible="1"/>
                             <field name="status" invisible="1"/>
@@ -227,6 +229,10 @@
                 <separator/>
                 <filter string="High Priority" name="high_priority"
                     domain="[('priority', 'in', ['2', '3'])]"/>
+                <filter string="My Day" name="my_day"
+                    domain="[('my_day_date', '=', context_today)]"/>
+                <filter string="Important" name="important"
+                    domain="[('is_important', '=', True)]"/>
                 <filter string="Archived" name="inactive" domain="[('active', '=', False)]"/>
                 <group>
                     <filter string="Group" name="group_by_group" context="{'group_by': 'group_id'}"/>

@@ -1,57 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
+    <!-- Default app entry: MS To Do board -->
+    <record id="project_todo.menu_todo_todos" model="ir.ui.menu">
+        <field name="action" ref="shams_todo_app_action"/>
+    </record>
+
+    <!-- Keep native Odoo personal tasks visible in the app header -->
     <menuitem id="menu_shams_todo_personal_tasks"
         name="Personal Tasks"
         parent="project_todo.menu_todo_todos"
         action="project_todo.project_task_action_todo"
         sequence="10"/>
 
-    <menuitem id="menu_shams_todo_my_assigned_tasks"
-        name="My Assigned Tasks"
-        parent="project_todo.menu_todo_todos"
-        action="shams_todo_task_action_my_tasks"
-        sequence="12"
-        groups="shams_todo_groups.group_todo_user"/>
-
-    <menuitem id="menu_shams_todo_dashboard"
-        name="Group Dashboard"
-        parent="project_todo.menu_todo_todos"
-        action="shams_todo_dashboard_action"
-        sequence="15"
-        groups="shams_todo_groups.group_todo_user"/>
-
-    <menuitem id="menu_shams_todo_my_groups"
-        name="My Groups"
-        parent="project_todo.menu_todo_todos"
-        action="shams_todo_group_action_my_groups"
-        sequence="25"
-        groups="shams_todo_groups.group_todo_user"/>
-
-    <menuitem id="menu_shams_todo_group_tasks"
-        name="Group Tasks"
-        parent="project_todo.menu_todo_todos"
-        action="shams_todo_task_action_group_tasks"
-        sequence="30"
-        groups="shams_todo_groups.group_todo_user"/>
-
-    <menuitem id="menu_shams_todo_all_tasks"
-        name="All Group Tasks"
-        parent="project_todo.menu_todo_todos"
-        action="shams_todo_task_action_all_tasks"
-        sequence="35"
-        groups="shams_todo_groups.group_todo_management"/>
-
+    <!-- Settings (admins only) -->
     <menuitem id="menu_shams_todo_configuration"
-        name="Group Configuration"
+        name="Settings"
         parent="project_todo.menu_todo_todos"
         sequence="90"
         groups="shams_todo_groups.group_todo_management"/>
 
     <menuitem id="menu_shams_todo_groups_configuration"
-        name="To-Do Groups"
+        name="Lists &amp; Members"
         parent="menu_shams_todo_configuration"
         action="shams_todo_group_action_configuration"
         sequence="10"/>
+
+    <menuitem id="menu_shams_todo_all_tasks"
+        name="All Group Tasks"
+        parent="menu_shams_todo_configuration"
+        action="shams_todo_task_action_all_tasks"
+        sequence="20"
+        groups="shams_todo_groups.group_todo_management"/>
+
+    <!-- Hide legacy top-level entries from previous versions (safe if recreated) -->
+    <record id="menu_shams_todo_app" model="ir.ui.menu">
+        <field name="name">To Do (legacy)</field>
+        <field name="parent_id" ref="project_todo.menu_todo_todos"/>
+        <field name="action" ref="shams_todo_app_action"/>
+        <field name="sequence">1</field>
+        <field name="active" eval="False"/>
+    </record>
+    <record id="menu_shams_todo_my_assigned_tasks" model="ir.ui.menu">
+        <field name="name">My Assigned Tasks (legacy)</field>
+        <field name="parent_id" ref="menu_shams_todo_configuration"/>
+        <field name="action" ref="shams_todo_task_action_my_tasks"/>
+        <field name="sequence">40</field>
+        <field name="active" eval="False"/>
+    </record>
+    <record id="menu_shams_todo_dashboard" model="ir.ui.menu">
+        <field name="name">Group Dashboard (legacy)</field>
+        <field name="parent_id" ref="menu_shams_todo_configuration"/>
+        <field name="action" ref="shams_todo_dashboard_action"/>
+        <field name="sequence">50</field>
+        <field name="active" eval="False"/>
+    </record>
+    <record id="menu_shams_todo_my_groups" model="ir.ui.menu">
+        <field name="name">My Groups (legacy)</field>
+        <field name="parent_id" ref="menu_shams_todo_configuration"/>
+        <field name="action" ref="shams_todo_group_action_my_groups"/>
+        <field name="sequence">60</field>
+        <field name="active" eval="False"/>
+    </record>
+    <record id="menu_shams_todo_group_tasks" model="ir.ui.menu">
+        <field name="name">Group Tasks (legacy)</field>
+        <field name="parent_id" ref="menu_shams_todo_configuration"/>
+        <field name="action" ref="shams_todo_task_action_group_tasks"/>
+        <field name="sequence">70</field>
+        <field name="active" eval="False"/>
+    </record>
 
 </odoo>

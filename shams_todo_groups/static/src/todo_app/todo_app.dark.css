@@ -1,0 +1,48 @@
+/* Dark mode for Shams To Do board (plain CSS for web.assets_web_dark) */
+
+.o_shams_todo_app {
+  --todo-blue: #6cb8f6;
+  --todo-blue-soft: rgba(108, 184, 246, 0.16);
+  --todo-sidebar: #1b1a19;
+  --todo-border: #3b3a39;
+  --todo-text: #f3f2f1;
+  --todo-muted: #a19f9d;
+  --todo-danger: #f1707b;
+  --todo-star: #fce100;
+  --todo-surface: #252423;
+  --todo-main-bg: linear-gradient(180deg, rgba(108, 184, 246, 0.12), transparent 180px), #201f1e;
+  --todo-detail-bg: #292827;
+  --todo-check-border: #8a8886;
+  --todo-star-idle: #605e5c;
+  background: var(--todo-surface);
+  color: var(--todo-text);
+}
+
+.o_shams_todo_task_row:hover,
+.o_shams_todo_task_row.is-selected {
+  border-color: #4a90c8;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.35);
+}
+
+.o_shams_todo_new_list_btn:hover {
+  background: rgba(108, 184, 246, 0.12);
+}
+
+.o_shams_todo_share_add select,
+.o_shams_todo_detail_field input,
+.o_shams_todo_detail_field select,
+.o_shams_todo_detail_field textarea,
+.o_shams_todo_new_list_input {
+  background: #323130;
+  color: var(--todo-text);
+  border-color: var(--todo-border);
+}
+
+.o_shams_todo_add_input {
+  background: transparent !important;
+  color: var(--todo-text) !important;
+}
+
+.o_shams_todo_detail_title {
+  color: var(--todo-text) !important;
+}
