@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates xml:space="preserve">
+
+<t t-name="hr_attendance_custom_ext.attendance_menu" t-inherit="hr_attendance.attendance_menu" t-inherit-mode="extension">
+    <xpath expr="//div[hasclass('o_att_menu_container')]" position="replace">
+        <div class="o_att_menu_container d-flex flex-column gap-4">
+            <div class="d-flex flex-column gap-3">
+                <div t-if="this.state.checkedIn" class="d-flex flex-wrap gap-3">
+                    <div t-if="!this.isFirstAttendance" class="att_container flex-grow-1 flex-shrink-0">
+                        <small class="d-block text-muted"><t t-esc="this.labelBefore"/> <t t-esc="this.lastCheckIn"/></small>
+                        <div t-esc="this.hoursPreviouslyToday" class="fs-3 text-info text-end"/>
+                    </div>
+                    <div class="att_container flex-grow-1 flex-shrink-0">
+                        <small class="d-block text-muted"><t t-esc="this.labelSince"/> <t t-esc="this.lastCheckIn"/></small>
+                        <div t-esc="this.lastAttendanceWorkedHours" t-attf-class="fs-3 text-info {{ !this.isFirstAttendance ? 'text-end' : '' }}"/>
+                    </div>
+                </div>
+                <div t-if="!this.isFirstAttendance"
+                    class="att_container d-flex flex-column"
+                    t-att-class="this.state.checkedIn ? 'p-3 bg-100 rounded' : ''">
+                    <div class="d-flex" t-att-class="this.state.checkedIn ? 'align-items-center justify-content-between' : 'flex-column'">
+                        <small class="text-muted" t-esc="this.labelTotalToday"/>
+                        <h2 t-esc="this.hoursToday" class="mb-0 fs-2"/>
+                    </div>
+                    <t t-call="hr_attendance_custom_ext.AttendancePunchButtons"/>
+                </div>
+            </div>
+            <t t-if="this.isFirstAttendance" t-call="hr_attendance_custom_ext.AttendancePunchButtons"/>
+        </div>
+    </xpath>
+</t>
+
+<t t-name="hr_attendance_custom_ext.AttendancePunchButtons">
+    <div class="d-flex flex-column gap-2 mt-3">
+        <div t-if="this.employee?.manual_attendance_allowed === false" class="alert alert-info mb-0 py-2 px-3">
+            <small t-esc="this.labelOfficeDayHint"/>
+            <t t-if="this.breakPunchAllowed">
+                <br/><small t-esc="this.labelAdminBreakHint"/>
+            </t>
+        </div>
+        <div t-if="this.state.onBreak" class="text-center">
+            <span class="badge text-bg-warning fs-6" t-esc="this.labelOnBreak"/>
+        </div>
+        <div t-elif="this.state.checkedIn" class="text-center">
+            <span class="badge text-bg-success fs-6" t-esc="this.labelWorking"/>
+        </div>
+        <t t-if="this.employee?.manual_attendance_allowed !== false">
+            <button t-if="!this.state.checkedIn"
+                    t-on-click="() => this.punch('check_in')"
+                    class="btn btn-success w-100">
+                <i class="fa fa-sign-in me-1"/> <t t-esc="this.labelCheckIn"/>
+            </button>
+        </t>
+        <t t-if="this.breakPunchAllowed">
+            <!-- Break Out = start break; Break In = end break -->
+            <button t-if="this.state.checkedIn and !this.state.onBreak"
+                    t-on-click="() => this.punch('break_out')"
+                    class="btn btn-warning w-100">
+                <i class="fa fa-coffee me-1"/> <t t-esc="this.labelBreakOut"/>
+            </button>
+            <button t-if="this.state.onBreak"
+                    t-on-click="() => this.punch('break_in')"
+                    class="btn btn-info w-100">
+                <i class="fa fa-briefcase me-1"/> <t t-esc="this.labelBreakIn"/>
+            </button>
+        </t>
+        <t t-if="this.employee?.manual_attendance_allowed !== false">
+            <button t-if="this.state.checkedIn and !this.state.onBreak"
+                    t-on-click="() => this._confirmCheckOut()"
+                    class="btn btn-danger w-100">
+                <i class="fa fa-sign-out me-1"/> <t t-esc="this.labelCheckOut"/>
+            </button>
+        </t>
+    </div>
+</t>
+
+</templates>

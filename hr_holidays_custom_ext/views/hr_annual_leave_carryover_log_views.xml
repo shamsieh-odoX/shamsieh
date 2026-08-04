@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="hr_annual_leave_carryover_log_view_list" model="ir.ui.view">
+        <field name="name">hr.annual.leave.carryover.log.list</field>
+        <field name="model">hr.annual.leave.carryover.log</field>
+        <field name="arch" type="xml">
+            <list create="false" edit="false" delete="false">
+                <field name="run_date"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+                <field name="target_year"/>
+                <field name="trigger"/>
+                <field name="employees_processed"/>
+                <field name="grants_created"/>
+                <field name="grants_skipped"/>
+                <field name="carryovers_created"/>
+                <field name="carryovers_skipped"/>
+                <field name="carryover_days_forfeited"/>
+                <field name="carryover_days_capped" optional="show"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="hr_annual_leave_carryover_log_view_form" model="ir.ui.view">
+        <field name="name">hr.annual.leave.carryover.log.form</field>
+        <field name="model">hr.annual.leave.carryover.log</field>
+        <field name="arch" type="xml">
+            <form create="false" edit="false" delete="false">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="run_date"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                            <field name="target_year"/>
+                            <field name="trigger"/>
+                        </group>
+                        <group>
+                            <field name="employees_processed"/>
+                            <field name="grants_created"/>
+                            <field name="grants_skipped"/>
+                            <field name="carryovers_created"/>
+                            <field name="carryovers_skipped"/>
+                            <field name="carryover_days_forfeited"/>
+                            <field name="carryover_days_capped"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="summary" nolabel="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_hr_annual_leave_carryover_log" model="ir.actions.act_window">
+        <field name="name">Annual Leave Carryover Log</field>
+        <field name="res_model">hr.annual.leave.carryover.log</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+</odoo>

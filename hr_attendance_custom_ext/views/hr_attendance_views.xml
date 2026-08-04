@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_attendance_tree_custom" model="ir.ui.view">
+        <field name="name">hr.attendance.list.custom</field>
+        <field name="model">hr.attendance</field>
+        <field name="inherit_id" ref="hr_attendance.view_attendance_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//list" position="attributes">
+                <attribute name="create">false</attribute>
+                <attribute name="edit">false</attribute>
+                <attribute name="delete">false</attribute>
+            </xpath>
+            <xpath expr="//field[@name='in_mode']" position="replace"/>
+            <xpath expr="//field[@name='out_mode']" position="replace"/>
+            <xpath expr="//field[@name='in_latitude']" position="replace"/>
+            <xpath expr="//field[@name='in_longitude']" position="replace"/>
+            <xpath expr="//field[@name='in_location']" position="replace"/>
+            <xpath expr="//field[@name='out_latitude']" position="replace"/>
+            <xpath expr="//field[@name='out_longitude']" position="replace"/>
+            <xpath expr="//field[@name='out_location']" position="replace"/>
+            <xpath expr="//field[@name='worked_hours']" position="after">
+                <field name="hikvision_presence_status" optional="show" widget="badge"
+                       decoration-success="hikvision_presence_status == 'working'"
+                       decoration-warning="hikvision_presence_status == 'on_break'"
+                       decoration-muted="hikvision_presence_status == 'checked_out'"/>
+                <field name="hikvision_punch_type" optional="show" widget="badge"
+                       decoration-success="hikvision_punch_type in ('check_in', 'break_in')"
+                       decoration-warning="hikvision_punch_type == 'break_out'"
+                       decoration-danger="hikvision_punch_type == 'check_out'"/>
+                <field name="attendance_source" optional="show"/>
+                <field name="attendance_status" optional="show" widget="badge"/>
+                <field name="is_on_approved_leave" optional="hide"/>
+                <field name="is_public_holiday" optional="hide"/>
+                <field name="late_minutes" optional="show"/>
+                <field name="early_checkout_minutes" optional="show"/>
+                <field name="missing_checkout" optional="show"/>
+                <field name="face_verified" optional="hide"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="hr_attendance_view_form_custom" model="ir.ui.view">
+        <field name="name">hr.attendance.form.custom</field>
+        <field name="model">hr.attendance</field>
+        <field name="inherit_id" ref="hr_attendance.hr_attendance_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='worked_hours']" position="before">
+                <field name="hikvision_presence_status" readonly="1" widget="badge"
+                       decoration-success="hikvision_presence_status == 'working'"
+                       decoration-warning="hikvision_presence_status == 'on_break'"
+                       decoration-muted="hikvision_presence_status == 'checked_out'"/>
+                <field name="hikvision_punch_type" readonly="1" widget="badge"
+                       decoration-success="hikvision_punch_type in ('check_in', 'break_in')"
+                       decoration-warning="hikvision_punch_type == 'break_out'"
+                       decoration-danger="hikvision_punch_type == 'check_out'"/>
+                <field name="attendance_source" readonly="1"/>
+                <field name="attendance_status" readonly="1"/>
+                <field name="is_on_approved_leave" readonly="1"/>
+                <field name="is_public_holiday" readonly="1"/>
+                <field name="late_minutes" readonly="1"/>
+                <field name="early_checkout_minutes" readonly="1"/>
+                <field name="missing_checkout" readonly="1"/>
+                <field name="face_verified" readonly="1"/>
+                <field name="device_id" readonly="1"/>
+                <field name="device_user_id" readonly="1"/>
+                <field name="external_log_id" readonly="1"/>
+            </xpath>
+            <xpath expr="//field[@name='check_in']" position="attributes">
+                <attribute name="readonly">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='check_out']" position="attributes">
+                <attribute name="readonly">1</attribute>
+                <attribute name="placeholder">Currently Working</attribute>
+            </xpath>
+            <xpath expr="//field[@name='employee_id']" position="attributes">
+                <attribute name="readonly">1</attribute>
+            </xpath>
+            <xpath expr="//separator[@name='check_out_separator']" position="before">
+                <separator string="Punch History"/>
+                <field name="punch_log_ids" readonly="1" nolabel="1">
+                    <list create="false" edit="false" delete="false">
+                        <field name="punch_time"/>
+                        <field name="punch_type" widget="badge"
+                               decoration-success="punch_type in ('check_in', 'break_in')"
+                               decoration-warning="punch_type == 'break_out'"
+                               decoration-danger="punch_type == 'check_out'"/>
+                        <field name="attendance_source" optional="show"/>
+                        <field name="device_user_id" optional="hide"/>
+                        <field name="external_log_id" optional="hide"/>
+                    </list>
+                </field>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="hr_attendance_view_filter_custom" model="ir.ui.view">
+        <field name="name">hr.attendance.search.custom</field>
+        <field name="model">hr.attendance</field>
+        <field name="inherit_id" ref="hr_attendance.hr_attendance_view_filter"/>
+        <field name="arch" type="xml">
+            <xpath expr="//filter[@name='nocheckout']" position="after">
+                <filter string="Late" name="filter_late" domain="[('attendance_status', '=', 'late')]"/>
+                <filter string="On Leave" name="filter_on_leave" domain="[('attendance_status', '=', 'on_leave')]"/>
+                <filter string="Public Holiday" name="filter_on_holiday" domain="[('attendance_status', '=', 'on_holiday')]"/>
+                <filter string="On Approved Leave" name="filter_is_on_leave" domain="[('is_on_approved_leave', '=', True)]"/>
+                <filter string="Is Public Holiday" name="filter_is_holiday" domain="[('is_public_holiday', '=', True)]"/>
+                <filter string="Early Checkout" name="filter_early" domain="[('attendance_status', '=', 'early_leave')]"/>
+                <filter string="Missing Checkout" name="filter_missing_checkout" domain="[('missing_checkout', '=', True)]"/>
+                <separator/>
+                <filter string="Check In" name="filter_punch_check_in" domain="[('hikvision_punch_type', '=', 'check_in')]"/>
+                <filter string="Break In" name="filter_punch_break_in" domain="[('hikvision_punch_type', '=', 'break_in')]"/>
+                <filter string="Break Out" name="filter_punch_break_out" domain="[('hikvision_punch_type', '=', 'break_out')]"/>
+                <filter string="Check Out" name="filter_punch_check_out" domain="[('hikvision_punch_type', '=', 'check_out')]"/>
+                <filter string="Fingerprint" name="filter_source_fingerprint" domain="[('attendance_source', '=', 'fingerprint')]"/>
+                <filter string="Face" name="filter_source_face" domain="[('attendance_source', '=', 'face')]"/>
+                <filter string="Manual" name="filter_source_manual" domain="[('attendance_source', '=', 'manual')]"/>
+            </xpath>
+            <xpath expr="//filter[@name='groupby_mode_in']" position="after">
+                <filter string="Attendance Source" name="groupby_attendance_source" context="{'group_by': 'attendance_source'}"/>
+                <filter string="Attendance Status" name="groupby_attendance_status" context="{'group_by': 'attendance_status'}"/>
+                <filter string="Punch Type" name="groupby_hikvision_punch_type" context="{'group_by': 'hikvision_punch_type'}"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="hr_annual_leave_carryover_wizard_view_form" model="ir.ui.view">
+        <field name="name">hr.annual.leave.carryover.wizard.form</field>
+        <field name="model">hr.annual.leave.carryover.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Run Annual Leave Carryover">
+                <group>
+                    <field name="company_id" groups="base.group_multi_company"/>
+                    <field name="target_year"/>
+                </group>
+                <footer>
+                    <button name="action_run_carryover" string="Run Carryover" type="object" class="btn-primary"/>
+                    <button string="Cancel" special="cancel" class="btn-secondary"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+</odoo>
