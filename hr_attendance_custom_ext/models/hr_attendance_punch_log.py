@@ -22,13 +22,13 @@ class HrAttendancePunchLog(models.Model):
     punch_type = fields.Selection(
         selection=[
             ('check_in', 'Check In'),
-            ('break_out', 'Break Out (Started)'),
-            ('break_in', 'Break In (Ended)'),
+            ('break_out', 'Break Out'),  # start break
+            ('break_in', 'Break In'),    # end break
             ('check_out', 'Check Out'),
         ],
         required=True,
         index=True,
-        help='Break Out = break started; Break In = break ended.',
+        help='Break Out starts a break; Break In ends a break.',
     )
     punch_time = fields.Datetime(required=True, index=True)
     attendance_source = fields.Selection(

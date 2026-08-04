@@ -2,19 +2,11 @@
 
 from datetime import timedelta
 
-from odoo import _, api, fields, models
-from odoo.exceptions import UserError
+from odoo import api, fields, models
 
 
 class HrAttendance(models.Model):
     _inherit = 'hr.attendance'
-
-    # Fields that must not be manually changed after a punch is recorded.
-    _ATTENDANCE_LOCKED_FIELDS = frozenset({
-        'check_in',
-        'check_out',
-        'employee_id',
-    })
 
     attendance_source = fields.Selection(
         selection=[
@@ -90,22 +82,20 @@ class HrAttendance(models.Model):
     hikvision_punch_type = fields.Selection(
         selection=[
             ('check_in', 'Check In'),
-            ('break_out', 'Break Out (Started)'),
-            ('break_in', 'Break In (Ended)'),
+            ('break_out', 'Break Out'),  # start break
+            ('break_in', 'Break In'),    # end break
             ('check_out', 'Check Out'),
         ],
         string='Punch Type',
         tracking=True,
         index=True,
         help='Last punch recorded for this attendance day. '
-             'Break Out = break started; Break In = break ended.',
+             'Break Out starts a break; Break In ends a break.',
     )
     hikvision_presence_status = fields.Selection(
         related='employee_id.hikvision_presence_status',
         string='Work State',
         readonly=True,
-        related_sudo=True,
-        groups='base.group_user',
     )
     punch_log_ids = fields.One2many(
         'hr.attendance.punch.log',
@@ -150,56 +140,25 @@ class HrAttendance(models.Model):
 
     @api.model_create_multi
     def create(self, vals_list):
-        if not (
-            self.env.su
-            or self.env.context.get('attendance_punch_update')
-            or self.env.context.get('attendance_allow_manual_edit')
-            or self.env.user.has_group('hr_attendance.group_hr_attendance_manager')
-        ):
-            raise UserError(_(
-                'You cannot create attendance records manually. '
-                'Use the fingerprint device or the attendance check-in button.'
-            ))
         records = super().create(vals_list)
         records._refresh_daily_status()
         return records
 
-    def _attendance_time_edit_allowed(self):
-        """Technical punch flows (device/systray) may update times; UI users may not."""
-        return bool(
-            self.env.su
-            or self.env.context.get('attendance_punch_update')
-            or self.env.context.get('attendance_allow_manual_edit')
-        )
-
-    def _raise_if_locked_attendance_edit(self, vals):
-        locked = self._ATTENDANCE_LOCKED_FIELDS & set(vals)
-        if not locked or self._attendance_time_edit_allowed():
-            return
-        raise UserError(_(
-            'Check-in and check-out times cannot be edited after they are recorded. '
-            'Use the fingerprint device or attendance punches only.'
-        ))
-
     def write(self, vals):
-        self._raise_if_locked_attendance_edit(vals)
         res = super().write(vals)
         if {'check_in', 'check_out', 'employee_id'} & set(vals):
             self._refresh_daily_status()
         return res
 
-    def unlink(self):
-        if not self._attendance_time_edit_allowed() and not self.env.user.has_group(
-            'hr_attendance.group_hr_attendance_manager',
-        ):
-            raise UserError(_(
-                'You cannot delete attendance records. '
-                'Contact an Attendance Manager if a correction is required.'
-            ))
-        return super().unlink()
-
     def _defer_penalties_until_checkout(self):
-        """Deprecated: late minutes are computed immediately on check-in."""
+        """Keep one open day record; compute late/early only after final checkout."""
+        self.ensure_one()
+        if self.check_out:
+            return False
+        if self.employee_id.hikvision_presence_status in ('working', 'on_break'):
+            return True
+        if self.punch_log_ids:
+            return True
         return False
 
     @api.depends(
@@ -233,6 +192,9 @@ class HrAttendance(models.Model):
                 attendance.attendance_status = employee._excused_attendance_status(work_date)
                 continue
 
+            if attendance._defer_penalties_until_checkout():
+                continue
+
             policy = attendance._get_attendance_policy()
             scheduled_start, scheduled_end = employee._get_work_day_bounds(work_date)
 
@@ -242,8 +204,6 @@ class HrAttendance(models.Model):
                     attendance.attendance_status = 'incomplete'
                 continue
 
-            # Late minutes are counted as soon as check-in is recorded
-            # (e.g. start 08:00 + 15 grace => late after 08:15).
             check_in_local = employee._datetime_to_employee_local(attendance.check_in)
             sched_start_local = employee._datetime_to_employee_local(scheduled_start)
             if check_in_local and sched_start_local and check_in_local > sched_start_local:
@@ -269,16 +229,14 @@ class HrAttendance(models.Model):
                 if now > cutoff:
                     attendance.missing_checkout = True
 
-            if attendance.missing_checkout:
+            if attendance.missing_checkout or not attendance.check_out:
                 attendance.attendance_status = 'incomplete'
-            elif attendance.check_out and attendance.late_minutes > 0 and attendance.early_checkout_minutes > 0:
+            elif attendance.late_minutes > 0 and attendance.early_checkout_minutes > 0:
                 attendance.attendance_status = 'early_leave'
             elif attendance.late_minutes > 0:
                 attendance.attendance_status = 'late'
             elif attendance.early_checkout_minutes > 0:
                 attendance.attendance_status = 'early_leave'
-            elif not attendance.check_out:
-                attendance.attendance_status = 'present'
             else:
                 attendance.attendance_status = 'present'
 

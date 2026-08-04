@@ -51,8 +51,8 @@ class HrEmployee(models.Model):
         string='Hikvision Presence',
         default='checked_out',
         index=True,
-        help='Live work state from Hikvision / Odoo punches. '
-             'Break Out starts a break; Break In ends a break.',
+        groups='hr_attendance.group_hr_attendance_officer',
+        help='Live work state from the Hikvision fingerprint bridge.',
     )
     face_reference_id = fields.Char(
         string='Face Reference ID',
@@ -409,15 +409,11 @@ class HrEmployee(models.Model):
         return self._get_attendance_scheduled_location(check_datetime) == 'home'
 
     def _is_attendance_administrator(self):
-        """Attendance and Settings administrators may punch breaks on office days."""
-        user = self.env.user
-        return (
-            user.has_group('hr_attendance.group_hr_attendance_manager')
-            or user.has_group('base.group_system')
-        )
+        """Settings administrators may punch breaks from Odoo on any schedule day."""
+        return self.env.user.has_group('base.group_system')
 
     def _systray_break_punch_allowed(self, check_datetime=None):
-        """Allow Odoo breaks at home, plus office-day breaks for administrators."""
+        """Break In/Out from Odoo: home days for everyone, always for administrators."""
         self.ensure_one()
         return (
             self._manual_attendance_allowed(check_datetime)
@@ -488,56 +484,6 @@ class HrEmployee(models.Model):
             ('date', '=', today),
         ]))
 
-    def _get_tz(self):
-        """Prefer a real local timezone over UTC for attendance lateness.
-
-        Working hours (e.g. 08:00-16:00) are business-local. If the calendar is
-        still set to UTC, fall back to the employee/user/company Asia/Amman zone.
-        """
-        self.ensure_one()
-        candidates = [
-            self.tz,
-            self.resource_id.tz if self.resource_id else False,
-            self.resource_calendar_id.tz if self.resource_calendar_id else False,
-            self.company_id.resource_calendar_id.tz if self.company_id.resource_calendar_id else False,
-            self.env.user.tz,
-            'Asia/Amman',
-        ]
-        for tz_name in candidates:
-            if tz_name and tz_name != 'UTC':
-                return tz_name
-        return 'Asia/Amman'
-
-    def _sync_hikvision_presence_from_last_punch(self):
-        """Align work state with the latest punch (Break Out=on break, Break In=working)."""
-        PunchLog = self.env['hr.attendance.punch.log'].sudo()
-        Attendance = self.env['hr.attendance'].sudo()
-        for employee in self:
-            open_attendance = Attendance.search([
-                ('employee_id', '=', employee.id),
-                ('check_out', '=', False),
-            ], order='check_in desc', limit=1)
-            if not open_attendance:
-                if employee.hikvision_presence_status != 'checked_out':
-                    employee.sudo().hikvision_presence_status = 'checked_out'
-                continue
-            last_punch = PunchLog.search([
-                ('attendance_id', '=', open_attendance.id),
-            ], order='punch_time desc, id desc', limit=1)
-            punch_type = last_punch.punch_type if last_punch else open_attendance.hikvision_punch_type
-            if punch_type == 'break_out':
-                status = 'on_break'
-            elif punch_type in ('check_in', 'break_in'):
-                status = 'working'
-            elif punch_type == 'check_out':
-                status = 'checked_out'
-            else:
-                status = 'working'
-            if employee.hikvision_presence_status != status:
-                employee.sudo().hikvision_presence_status = status
-            if punch_type and open_attendance.hikvision_punch_type != punch_type:
-                open_attendance.hikvision_punch_type = punch_type
-
     def hikvision_process_punch(
         self,
         punch_type,
@@ -587,7 +533,7 @@ class HrEmployee(models.Model):
                     'attendance_id': today_attendance.id if today_attendance else False,
                     'reason': 'already_checked_in_today',
                 }
-            attendance = Attendance.with_context(attendance_punch_update=True).create({
+            attendance = Attendance.create({
                 'employee_id': self.id,
                 'check_in': punch_time,
                 'hikvision_punch_type': punch_type,
@@ -608,7 +554,7 @@ class HrEmployee(models.Model):
         if punch_type == 'check_out':
             if not open_attendance:
                 return {'status': 'no_open_attendance'}
-            open_attendance.with_context(attendance_punch_update=True).write({
+            open_attendance.write({
                 'check_out': punch_time,
                 'hikvision_punch_type': punch_type,
                 'out_mode': 'technical',
@@ -632,9 +578,7 @@ class HrEmployee(models.Model):
             if self.hikvision_presence_status == 'on_break':
                 return {'status': 'duplicate', 'attendance_id': open_attendance.id}
             self.sudo().hikvision_presence_status = 'on_break'
-            open_attendance.with_context(attendance_punch_update=True).write({
-                'hikvision_punch_type': punch_type,
-            })
+            open_attendance.write({'hikvision_punch_type': punch_type})
             PunchLog.create({
                 'attendance_id': open_attendance.id,
                 'punch_type': punch_type,
@@ -657,9 +601,7 @@ class HrEmployee(models.Model):
                 if not last_punch or last_punch.punch_type != 'break_out':
                     return {'status': 'not_on_break', 'attendance_id': open_attendance.id}
             self.sudo().hikvision_presence_status = 'working'
-            open_attendance.with_context(attendance_punch_update=True).write({
-                'hikvision_punch_type': punch_type,
-            })
+            open_attendance.write({'hikvision_punch_type': punch_type})
             PunchLog.create({
                 'attendance_id': open_attendance.id,
                 'punch_type': punch_type,
@@ -794,7 +736,6 @@ class HrEmployee(models.Model):
                 via_home_pin=self.env.context.get('attendance_via_home_pin'),
                 device_location=self.env.context.get('attendance_device_location'),
             )
-        self = self.with_context(attendance_punch_update=True)
         attendance = super()._attendance_action_change(geo_information=geo_information)
         if attendance and not attendance.attendance_source:
             mode_map = {
@@ -805,7 +746,5 @@ class HrEmployee(models.Model):
                 source = mode_map.get(attendance.in_mode, 'manual')
             else:
                 source = mode_map.get(attendance.out_mode, 'manual')
-            attendance.with_context(attendance_punch_update=True).write({
-                'attendance_source': source,
-            })
+            attendance.attendance_source = source
         return attendance

@@ -29,12 +29,7 @@ class FingerprintAttendancePolicy(models.Model):
         required=True,
     )
     ignore_middle_scans = fields.Boolean(default=True)
-    late_grace_minutes = fields.Integer(
-        default=15,
-        help='Minutes after scheduled start before lateness is counted. '
-             'Example: start 08:00 with 15 minutes grace => late after 08:15. '
-             'Check-in at 08:20 is 5 late minutes.',
-    )
+    late_grace_minutes = fields.Integer(default=0)
     early_checkout_grace_minutes = fields.Integer(default=0)
     missing_checkout_tolerance_minutes = fields.Integer(default=60)
     raw_payload_retention_days = fields.Integer(
@@ -70,7 +65,7 @@ class FingerprintAttendancePolicy(models.Model):
             'allow_multiple_attendances_per_day': False,
             'allow_overnight_shift': False,
             'ignore_middle_scans': True,
-            'late_grace_minutes': 15,
+            'late_grace_minutes': 0,
             'early_checkout_grace_minutes': 0,
             'missing_checkout_tolerance_minutes': 60,
         }
