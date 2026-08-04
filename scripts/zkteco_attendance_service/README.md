@@ -1,41 +1,38 @@
-# ZKTeco Attendance Bridge (ADMS push — like Hikvision)
+# ZKTeco → Odoo poll bridge (F28)
 
-Runs on a PC on the same LAN as the ZKTeco terminal. The device pushes punches
-over **HTTP** to `/iclock/...`; this bridge forwards them into Odoo (Odoo.sh).
+Your F28 talks on port **4370** (same as Attendance Management). This service
+downloads punches every 30 seconds and sends them to Odoo.
 
-Do **not** use Odoo **Sync Now** / **Test Connection** for ZKTeco on the cloud
-(those need `pyzk` + direct LAN access, which Odoo.sh does not have).
+**Close / Disconnect Attendance Management** while the bridge runs — only one
+program can use the device at a time.
 
-## Setup
+## One-time setup
 
-1. In Odoo → **Attendances → Configuration → Fingerprint Devices** (ZKTeco device):
-   - **API Type**: ZKTeco
-   - **ADMS / Cloud Push**: on
-   - **ZKTeco Serial Number (SN)**: from the terminal (e.g. `SRN5244400238`)
-   - **Auto Sync**: off
-2. On a PC that can reach the terminal:
-
-```bash
-cd scripts/zkteco_attendance_service
+```powershell
+cd C:\Users\ASUS\Desktop\odoo\scripts\zkteco_attendance_service
 python -m venv .venv
-.venv\Scripts\activate
+.\.venv\Scripts\activate
 pip install -r requirements.txt
-copy .env.example .env
-# edit .env (API key, device id, serial)
-python -m app.main
+# .env already configured for this office
+powershell -ExecutionPolicy Bypass -File .\install_windows_startup.ps1
+Start-ScheduledTask -TaskName ZKTecoOdooPollBridge
 ```
 
-3. On the ZKTeco device (or Attendance Management → Cloud / ADMS settings):
-   - Server URL: `http://<PC-LAN-IP>:8088/iclock/`
-   - Serial must match the Odoo field
+## Manual start
 
-4. Punch once — Odoo should show a new sync log / attendance within seconds.
-   **Last ADMS Push** on the device form updates when the terminal talks to the bridge.
+```powershell
+.\start_zkteco_poll.bat
+```
 
-Employee mapping uses the same fields as Hikvision (`biometric_device_user_id`,
-Badge ID, PIN, etc.).
+## Logs
 
-## Note on HTTPS
+`logs\zkteco_poll.log`
 
-Many ZK terminals only speak **HTTP** ADMS. Point them at this local bridge, not
-directly at `https://….odoo.com/iclock/` unless your model supports HTTPS cloud.
+Task Scheduler task: run `install_scheduled_task.ps1` as admin (optional).
+
+Default install uses the **Startup folder** shortcut (no admin):
+`install_windows_startup.ps1`
+
+## Hikvision
+
+Unchanged — separate service under `scripts/hikvision_attendance_service`.

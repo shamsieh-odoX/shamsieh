@@ -1,0 +1,19 @@
+2026-08-04 10:58:40,322 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 10:59:48,539 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 10:59:50,315 INFO Fetched 10 attendance row(s) from device
+2026-08-04 10:59:54,450 INFO Pushing 10 poll event(s) to Odoo device 2
+2026-08-04 10:59:55,272 INFO Odoo ingest stats: {'fetched': 10, 'stored': 10, 'ignored': 0, 'duplicates': 0, 'unmapped': 1, 'skipped': 0}
+2026-08-04 11:00:14,674 INFO ZKTeco POLL mode — device 192.168.1.40:4370 → Odoo every 30s. Close Attendance Management while this runs.
+2026-08-04 11:00:14,680 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:00:17,979 INFO Fetched 10 attendance row(s) from device
+2026-08-04 11:00:18,576 INFO Pushing 10 poll event(s) to Odoo device 2
+2026-08-04 11:00:18,845 INFO Odoo ingest stats: {'fetched': 10, 'stored': 0, 'ignored': 0, 'duplicates': 10, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:00:48,849 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:00:50,163 INFO Fetched 10 attendance row(s) from device
+2026-08-04 11:00:50,744 INFO Pushing 10 poll event(s) to Odoo device 2
+2026-08-04 11:00:51,207 INFO Odoo ingest stats: {'fetched': 10, 'stored': 0, 'ignored': 0, 'duplicates': 10, 'unmapped': 0, 'skipped': 0}
+2026-08-04 11:00:57,683 INFO ZKTeco POLL mode — device 192.168.1.40:4370 → Odoo every 30s. Close Attendance Management while this runs.
+2026-08-04 11:00:57,683 INFO Polling ZK 192.168.1.40:4370 (lookback 24.0h)...
+2026-08-04 11:00:59,089 INFO Fetched 10 attendance row(s) from device
+2026-08-04 11:00:59,681 INFO Pushing 10 poll event(s) to Odoo device 2
+2026-08-04 11:00:59,950 INFO Odoo ingest stats: {'fetched': 10, 'stored': 0, 'ignored': 0, 'duplicates': 10, 'unmapped': 0, 'skipped': 0}
