@@ -196,7 +196,7 @@ class AttendanceProcessor:
 
     def _upsert_attendance(self, employee, device, local_date, check_in, check_out,
                            external_log_id, device_user_id, logs):
-        Attendance = self.env['hr.attendance'].with_context(attendance_punch_update=True)
+        Attendance = self.env['hr.attendance']
         attendance = Attendance.search([
             ('employee_id', '=', employee.id),
             ('date', '=', local_date),
@@ -218,7 +218,7 @@ class AttendanceProcessor:
                 }
                 if check_out:
                     write_vals['out_mode'] = 'technical'
-                attendance.with_context(attendance_punch_update=True).write(write_vals)
+                attendance.write(write_vals)
             else:
                 attendance = Attendance.create(vals)
         except (ValidationError, UserError) as exc:
@@ -229,9 +229,7 @@ class AttendanceProcessor:
 
     def _create_checkin(self, employee, device, log):
         try:
-            return self.env['hr.attendance'].with_context(
-                attendance_punch_update=True,
-            ).create(
+            return self.env['hr.attendance'].create(
                 log._prepare_attendance_vals(
                     employee, device, log.event_time, False,
                     log.external_id, log.device_user_id,
@@ -248,7 +246,7 @@ class AttendanceProcessor:
             if check_out - attendance.check_in > max_delta:
                 check_out = attendance.check_in + max_delta
         try:
-            attendance.with_context(attendance_punch_update=True).write({
+            attendance.write({
                 'check_out': check_out,
                 'attendance_source': 'fingerprint',
                 'device_id': log.device_id.id,

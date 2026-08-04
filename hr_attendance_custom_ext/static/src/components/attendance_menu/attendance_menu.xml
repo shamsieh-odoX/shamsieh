@@ -35,7 +35,7 @@
         <div t-if="this.employee?.manual_attendance_allowed === false" class="alert alert-info mb-0 py-2 px-3">
             <small t-esc="this.labelOfficeDayHint"/>
             <t t-if="this.breakPunchAllowed">
-                <br/><small t-esc="this.labelAdminBreakHint"/>
+                <br/><small t-esc="this.labelBreakHint"/>
             </t>
         </div>
         <div t-if="this.state.onBreak" class="text-center">

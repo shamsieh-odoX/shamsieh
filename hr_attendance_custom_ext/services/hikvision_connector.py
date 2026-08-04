@@ -263,7 +263,11 @@ class HikvisionConnector:
         if self.device.api_type == 'hikvision':
             return self._fetch_hikvision_events(date_from, date_to)
         if self.device.api_type == 'zkteco':
-            raise UserError(_('ZKTeco integration is not implemented yet.'))
+            # Dispatched via get_device_connector() → ZktecoConnector.
+            raise UserError(_(
+                'ZKTeco fetch was routed to the Hikvision connector. '
+                'Use get_device_connector(device) instead.'
+            ))
         raise UserError(_('Unsupported API type: %s', self.device.api_type))
 
     def _device_timezone(self):

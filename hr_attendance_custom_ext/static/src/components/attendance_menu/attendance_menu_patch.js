@@ -36,8 +36,8 @@ patch(ActivityMenu.prototype, {
     get labelOfficeDayHint() {
         return _t("Office day — use the fingerprint device to check in and out.");
     },
-    get labelAdminBreakHint() {
-        return _t("Administrators can record Break Out / Break In from Odoo.");
+    get labelBreakHint() {
+        return _t("You can record Break Out / Break In from Odoo.");
     },
     get labelBefore() {
         return _t("Before");
@@ -53,7 +53,7 @@ patch(ActivityMenu.prototype, {
         if (this.employee?.break_punch_allowed !== undefined) {
             return this.employee.break_punch_allowed !== false;
         }
-        return this.employee?.manual_attendance_allowed !== false;
+        return true;
     },
 
     _searchReadEmployeeFill() {

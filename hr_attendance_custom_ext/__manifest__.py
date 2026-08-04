@@ -1,8 +1,8 @@
 {
     'name': 'HR Attendance Custom Extensions',
-    'version': '19.0.1.3.36',
+    'version': '19.0.1.3.38',
     'category': 'Human Resources/Attendances',
-    'summary': 'Shamsieh attendance, fingerprint sync, and face attendance (§2, §8, §9)',
+    'summary': 'Shamsieh attendance, fingerprint sync (Hikvision + ZKTeco), and face attendance',
     'author': 'Custom',
     'depends': ['hr', 'hr_attendance', 'hr_holidays', 'base_geolocalize', 'resource', 'mail'],
     'data': [
@@ -14,6 +14,7 @@
         'views/res_config_settings_views.xml',
         'views/resource_calendar_views.xml',
         'views/hr_employee_views.xml',
+        'views/hr_employee_live_status_views.xml',
         'views/hr_attendance_views.xml',
         'views/fingerprint_attendance_policy_views.xml',
         'views/fingerprint_device_log_views.xml',

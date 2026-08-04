@@ -10,7 +10,7 @@ from psycopg2 import errorcodes
 from odoo import _, api, fields, models
 from odoo.exceptions import UserError, ValidationError
 
-from ..services.hikvision_connector import HikvisionConnector
+from ..services.zkteco_connector import get_device_connector
 
 _logger = logging.getLogger(__name__)
 
@@ -46,8 +46,22 @@ class FingerprintDevice(models.Model):
         required=True,
     )
     username = fields.Char(groups='hr_attendance_custom_ext.group_fingerprint_device_manager')
-    password = fields.Char(groups='hr_attendance_custom_ext.group_fingerprint_device_manager')
+    password = fields.Char(
+        groups='hr_attendance_custom_ext.group_fingerprint_device_manager',
+        help='Hikvision password, or ZKTeco numeric communication password (Comm Key).',
+    )
     api_key = fields.Char(groups='hr_attendance_custom_ext.group_fingerprint_device_manager')
+    zkteco_force_udp = fields.Boolean(
+        string='ZKTeco Force UDP',
+        default=False,
+        help='Some ZKTeco terminals require UDP instead of TCP. Enable if TCP connect fails.',
+        groups='hr_attendance_custom_ext.group_fingerprint_device_manager',
+    )
+    location_label = fields.Char(
+        string='Office / Branch Label',
+        help='Optional label for this device location (e.g. Branch B, Warehouse). '
+             'Devices are scoped by company; use separate devices per physical office.',
+    )
     sync_lookback_hours = fields.Float(
         string='Sync Lookback (hours)',
         default=24.0,
@@ -235,6 +249,10 @@ class FingerprintDevice(models.Model):
     @api.model_create_multi
     def create(self, vals_list):
         for vals in vals_list:
+            if vals.get('api_type') == 'zkteco':
+                vals.setdefault('device_port', 4370)
+                vals.setdefault('http_listening_enabled', False)
+                vals.setdefault('auto_sync', True)
             if vals.get('http_listening_enabled'):
                 if 'auto_sync' not in vals:
                     vals['auto_sync'] = False
@@ -367,11 +385,110 @@ class FingerprintDevice(models.Model):
                       count=len(unmapped), device=self.name),
                 )
 
+    @api.onchange('api_type')
+    def _onchange_api_type_defaults(self):
+        if self.api_type == 'zkteco':
+            if not self.device_port or self.device_port in (80, 443):
+                self.device_port = 4370
+            # ZK pull needs LAN reachability; disable HTTP listening defaults.
+            self.http_listening_enabled = False
+            self.auto_sync = True
+        elif self.api_type == 'hikvision':
+            if not self.device_port or self.device_port == 4370:
+                self.device_port = 80
+
+    def _get_device_connector(self):
+        self.ensure_one()
+        return get_device_connector(self)
+
+    def action_test_connection(self):
+        self.ensure_one()
+        connector = self._get_device_connector()
+        result = connector.test_connection()
+        detail = ''
+        if isinstance(result, dict) and result:
+            detail = ' — ' + ', '.join(f'{key}={value}' for key, value in result.items())
+        return {
+            'type': 'ir.actions.client',
+            'tag': 'display_notification',
+            'params': {
+                'title': _('Connection OK'),
+                'message': _('Connected to %(device)s%(detail)s', device=self.name, detail=detail),
+                'type': 'success',
+                'sticky': False,
+            },
+        }
+
+    def action_sync_now(self):
+        self.ensure_one()
+        self._auto_sync_device()
+        return {
+            'type': 'ir.actions.client',
+            'tag': 'display_notification',
+            'params': {
+                'title': _('Sync finished'),
+                'message': self.last_sync_message or _('Device sync completed.'),
+                'type': 'success' if self.sync_status == 'success' else 'warning',
+                'sticky': False,
+            },
+        }
+
+    def ingest_external_attendance_events(self, events):
+        """XML-RPC / bridge entry: ingest already-normalized ZK/Hikvision events.
+
+        ``events`` is a list of dicts with keys compatible with
+        ``HikvisionClient.normalize_access_event`` /
+        ``ZktecoClient.normalize_attendance_row``.
+        """
+        self.ensure_one()
+        connector = self._get_device_connector()
+        created = self.env['fingerprint.device.log']
+        stats = {
+            'fetched': len(events or []),
+            'stored': 0,
+            'ignored': 0,
+            'duplicates': 0,
+            'unmapped': 0,
+            'skipped': 0,
+        }
+        for raw_event in events or []:
+            event = dict(raw_event or {})
+            event_time = event.get('event_time')
+            if isinstance(event_time, str) and event_time:
+                event['event_time'] = fields.Datetime.to_datetime(event_time)
+            log, action, _reason = connector._ingest_normalized_event(
+                event, process_immediately=False,
+            )
+            if action == 'stored' and log:
+                created |= log
+                stats['stored'] += 1
+                if not log.employee_id:
+                    stats['unmapped'] += 1
+            elif action == 'ignored':
+                stats['ignored'] += 1
+            elif action == 'duplicate':
+                stats['duplicates'] += 1
+            else:
+                stats['skipped'] += 1
+        if created:
+            created._process_pending_logs()
+        self.write({
+            'last_sync_at': fields.Datetime.now(),
+            'last_sync_message': _(
+                'Bridge ingest: fetched %(fetched)s | stored %(stored)s | '
+                'ignored %(ignored)s | duplicates %(duplicates)s | '
+                'unmapped %(unmapped)s | skipped %(skipped)s',
+                **stats,
+            ),
+            'sync_status': 'success',
+        })
+        return stats
+
     def _sync_device(self):
         self.ensure_one()
         self.sync_status = 'running'
         try:
-            connector = HikvisionConnector(self)
+            connector = self._get_device_connector()
             logs, stats = connector.sync_device_logs()
             self.write({
                 'sync_status': 'success',

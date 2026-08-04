@@ -1,0 +1,4 @@
+# Optional dependency for ZKTeco fingerprint devices (api_type=zkteco).
+# Install on the Odoo Python environment that can reach the device LAN,
+# or on the local bridge host (scripts/zkteco_attendance_service).
+pyzk>=0.9

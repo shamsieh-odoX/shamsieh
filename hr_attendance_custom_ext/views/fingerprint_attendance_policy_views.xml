@@ -36,8 +36,7 @@
                     </group>
                     <group string="Grace and Tolerance">
                         <group>
-                            <field name="late_grace_minutes"
-                                     help="Minutes after shift start before lateness counts. Start 08:00 + 15 = late after 08:15."/>
+                            <field name="late_grace_minutes"/>
                             <field name="early_checkout_grace_minutes"/>
                             <field name="missing_checkout_tolerance_minutes"/>
                         </group>
