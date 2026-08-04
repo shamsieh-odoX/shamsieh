@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Use field-based xpaths only (string= breaks if the parent form was customized). -->
+    <record id="crm_lead_view_form_website_lead" model="ir.ui.view">
+        <field name="name">crm.lead.form.website.lead.api</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="crm_custom_ext.crm_lead_view_form_custom"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='interest_level']" position="after">
+                <field name="service_interest"/>
+                <field name="preferred_contact_method"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="crm_case_tree_view_leads_website_lead" model="ir.ui.view">
+        <field name="name">crm.lead.list.lead.website.lead.api</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="crm_custom_ext.crm_case_tree_view_leads_custom"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='interest_level']" position="after">
+                <field name="service_interest" optional="show"/>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>
