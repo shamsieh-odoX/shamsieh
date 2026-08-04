@@ -1718,3 +1718,51 @@ msgstr "مثال: Asia/Amman"
 #: model_terms:ir.ui.view,arch_db:hr_attendance_custom_ext.res_config_settings_view_form_attendance_custom
 msgid "meters"
 msgstr "أمتار"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.actions.act_window,name:hr_attendance_custom_ext.action_hr_employee_live_status
+#: model:ir.ui.menu,name:hr_attendance_custom_ext.menu_hr_employee_live_status
+#: model_terms:ir.ui.view,arch_db:hr_attendance_custom_ext.view_hr_employee_live_status_list
+#: model_terms:ir.ui.view,arch_db:hr_attendance_custom_ext.view_hr_employee_live_status_search
+msgid "Live Status"
+msgstr "الحالة المباشرة"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_hr_employee__live_check_in
+msgid "Checked In At"
+msgstr "وقت تسجيل الحضور"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_hr_employee__current_break_start
+msgid "Break Started"
+msgstr "بدء الاستراحة"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_hr_employee__current_break_hours
+msgid "Break Duration"
+msgstr "مدة الاستراحة"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields,help:hr_attendance_custom_ext.field_hr_employee__live_check_in
+msgid "Check-in time of the current open attendance."
+msgstr "وقت تسجيل الحضور للحضور المفتوح الحالي."
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields,help:hr_attendance_custom_ext.field_hr_employee__current_break_start
+msgid "Start time of the current break (when status is On Break)."
+msgstr "وقت بدء الاستراحة الحالية (عندما تكون الحالة في استراحة)."
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields,help:hr_attendance_custom_ext.field_hr_employee__current_break_hours
+msgid "Elapsed hours of the current break."
+msgstr "الساعات المنقضية من الاستراحة الحالية."
+
+#. module: hr_attendance_custom_ext
+#: model_terms:ir.actions.act_window,help:hr_attendance_custom_ext.action_hr_employee_live_status
+msgid "No employees are currently working or on break."
+msgstr "لا يوجد موظفون يعملون أو في استراحة حالياً."
+
+#. module: hr_attendance_custom_ext
+#: model_terms:ir.actions.act_window,help:hr_attendance_custom_ext.action_hr_employee_live_status
+msgid "Clear the Present filter to also see checked-out employees."
+msgstr "أزل فلتر الحاضر لعرض الموظفين المسجّل انصرافهم أيضاً."

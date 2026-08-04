@@ -54,6 +54,21 @@ class HrEmployee(models.Model):
         groups='hr_attendance.group_hr_attendance_officer',
         help='Live work state from the Hikvision fingerprint bridge.',
     )
+    live_check_in = fields.Datetime(
+        string='Checked In At',
+        compute='_compute_live_break_info',
+        help='Check-in time of the current open attendance.',
+    )
+    current_break_start = fields.Datetime(
+        string='Break Started',
+        compute='_compute_live_break_info',
+        help='Start time of the current break (when status is On Break).',
+    )
+    current_break_hours = fields.Float(
+        string='Break Duration',
+        compute='_compute_live_break_info',
+        help='Elapsed hours of the current break.',
+    )
     face_reference_id = fields.Char(
         string='Face Reference ID',
         groups='hr_attendance.group_hr_attendance_officer',
@@ -152,6 +167,63 @@ class HrEmployee(models.Model):
         readonly=True,
         groups='hr_attendance.group_hr_attendance_officer',
     )
+
+    @api.depends('hikvision_presence_status')
+    def _compute_live_break_info(self):
+        """Live board helpers: open check-in plus current break start/duration."""
+        Attendance = self.env['hr.attendance'].sudo()
+        PunchLog = self.env['hr.attendance.punch.log'].sudo()
+        now = fields.Datetime.now()
+
+        for employee in self:
+            employee.live_check_in = False
+            employee.current_break_start = False
+            employee.current_break_hours = 0.0
+
+        if not self:
+            return
+
+        open_attendances = Attendance.search([
+            ('employee_id', 'in', self.ids),
+            ('check_out', '=', False),
+        ], order='check_in desc')
+        open_by_employee = {}
+        for attendance in open_attendances:
+            if attendance.employee_id.id not in open_by_employee:
+                open_by_employee[attendance.employee_id.id] = attendance
+
+        for employee in self:
+            attendance = open_by_employee.get(employee.id)
+            if attendance:
+                employee.live_check_in = attendance.check_in
+
+        on_break = self.filtered(lambda emp: emp.hikvision_presence_status == 'on_break')
+        attendance_ids = [
+            open_by_employee[emp.id].id
+            for emp in on_break
+            if emp.id in open_by_employee
+        ]
+        if not attendance_ids:
+            return
+
+        break_outs = PunchLog.search([
+            ('attendance_id', 'in', attendance_ids),
+            ('punch_type', '=', 'break_out'),
+        ], order='punch_time desc, id desc')
+        break_start_by_attendance = {}
+        for punch in break_outs:
+            if punch.attendance_id.id not in break_start_by_attendance:
+                break_start_by_attendance[punch.attendance_id.id] = punch.punch_time
+
+        for employee in on_break:
+            attendance = open_by_employee.get(employee.id)
+            if not attendance:
+                continue
+            start = break_start_by_attendance.get(attendance.id)
+            if not start:
+                continue
+            employee.current_break_start = start
+            employee.current_break_hours = (now - start).total_seconds() / 3600.0
 
     @api.depends('company_id')
     def _compute_face_provider_available(self):
@@ -408,17 +480,10 @@ class HrEmployee(models.Model):
         self.ensure_one()
         return self._get_attendance_scheduled_location(check_datetime) == 'home'
 
-    def _is_attendance_administrator(self):
-        """Settings administrators may punch breaks from Odoo on any schedule day."""
-        return self.env.user.has_group('base.group_system')
-
     def _systray_break_punch_allowed(self, check_datetime=None):
-        """Break In/Out from Odoo: home days for everyone, always for administrators."""
+        """Allow Break Out / Break In from Odoo for all employees (office and home)."""
         self.ensure_one()
-        return (
-            self._manual_attendance_allowed(check_datetime)
-            or self._is_attendance_administrator()
-        )
+        return True
 
     def _raise_if_manual_attendance_blocked(self, check_datetime=None):
         self.ensure_one()
@@ -432,8 +497,7 @@ class HrEmployee(models.Model):
         self.ensure_one()
         if not self._systray_break_punch_allowed(check_datetime):
             raise UserError(_(
-                'Break punches from Odoo are only allowed on home schedule days, '
-                'or for administrators.'
+                'Break punches from Odoo are currently not allowed.'
             ))
 
     def _get_effective_work_location_type(self):

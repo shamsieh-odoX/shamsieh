@@ -14,6 +14,7 @@
         'views/res_config_settings_views.xml',
         'views/resource_calendar_views.xml',
         'views/hr_employee_views.xml',
+        'views/hr_employee_live_status_views.xml',
         'views/hr_attendance_views.xml',
         'views/fingerprint_attendance_policy_views.xml',
         'views/fingerprint_device_log_views.xml',
