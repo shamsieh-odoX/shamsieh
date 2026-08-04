@@ -77,6 +77,22 @@ class FingerprintDevice(models.Model):
         help='Set this as Cloud Server / ADMS URL on the device (must end with /iclock/). '
              'If the terminal only supports HTTP, run the local ADMS bridge and use its URL.',
     )
+    zkteco_punch_enabled = fields.Boolean(
+        string='Real-time Punch API',
+        default=True,
+        help='Accept live punches via POST /zkteco/punch/<token> '
+             '(check_in, check_out, break_out, break_in). No Sync Now required.',
+    )
+    zkteco_punch_token = fields.Char(
+        string='Punch API Token',
+        copy=False,
+        groups='hr_attendance_custom_ext.group_fingerprint_device_manager',
+    )
+    zkteco_punch_url = fields.Char(
+        string='Punch API URL',
+        compute='_compute_zkteco_punch_url',
+        help='POST JSON here when someone punches. Used by the local live-capture bridge.',
+    )
     location_label = fields.Char(
         string='Office / Branch Label',
         help='Optional label for this device location (e.g. Branch B, Warehouse). '
@@ -198,6 +214,17 @@ class FingerprintDevice(models.Model):
             else:
                 device.zkteco_adms_url = False
 
+    @api.depends('zkteco_punch_token', 'api_type')
+    def _compute_zkteco_punch_url(self):
+        base_url = self.env['ir.config_parameter'].sudo().get_param(
+            'web.base.url', '',
+        ).rstrip('/')
+        for device in self:
+            if device.api_type == 'zkteco' and device.zkteco_punch_token and base_url:
+                device.zkteco_punch_url = f'{base_url}/zkteco/punch/{device.zkteco_punch_token}'
+            else:
+                device.zkteco_punch_url = False
+
     @api.model
     def _generate_http_listening_token(self):
         return secrets.token_urlsafe(32)
@@ -299,6 +326,23 @@ class FingerprintDevice(models.Model):
             lambda d: (d.zkteco_serial_number or '').strip().upper() == serial_upper
         )[:1]
 
+    @api.model
+    def _find_zkteco_punch_device(self, token):
+        token = (token or '').strip()
+        if not token:
+            return self.browse()
+        return self.sudo().search([
+            ('api_type', '=', 'zkteco'),
+            ('zkteco_punch_enabled', '=', True),
+            ('zkteco_punch_token', '=', token),
+            ('active', '=', True),
+        ], limit=1)
+
+    def action_regenerate_zkteco_punch_token(self):
+        self.ensure_one()
+        self.write({'zkteco_punch_token': self._generate_http_listening_token()})
+        return True
+
     def action_regenerate_http_listening_token(self):
         self.ensure_one()
         self.write({'http_listening_token': self._generate_http_listening_token()})
@@ -311,7 +355,10 @@ class FingerprintDevice(models.Model):
                 vals.setdefault('device_port', 4370)
                 vals.setdefault('http_listening_enabled', False)
                 vals.setdefault('auto_sync', False)
-                vals.setdefault('zkteco_adms_enabled', True)
+                vals.setdefault('zkteco_adms_enabled', False)
+                vals.setdefault('zkteco_punch_enabled', True)
+                if not vals.get('zkteco_punch_token'):
+                    vals['zkteco_punch_token'] = self._generate_http_listening_token()
             if vals.get('http_listening_enabled'):
                 if 'auto_sync' not in vals:
                     vals['auto_sync'] = False
@@ -339,6 +386,16 @@ class FingerprintDevice(models.Model):
                     patch['http_listening_allowed_ips'] = device.device_ip
                 if patch:
                     super(FingerprintDevice, device).write(patch)
+        # Ensure ZK punch token exists when enabling real-time API.
+        punch_targets = self.filtered(
+            lambda d: d.api_type == 'zkteco' and d.zkteco_punch_enabled and not d.zkteco_punch_token
+        )
+        if vals.get('zkteco_punch_enabled') or punch_targets:
+            for device in self.filtered(lambda d: d.api_type == 'zkteco' and d.zkteco_punch_enabled):
+                if not device.zkteco_punch_token:
+                    super(FingerprintDevice, device).write({
+                        'zkteco_punch_token': device._generate_http_listening_token(),
+                    })
         return res
 
     @api.constrains('http_listening_token')

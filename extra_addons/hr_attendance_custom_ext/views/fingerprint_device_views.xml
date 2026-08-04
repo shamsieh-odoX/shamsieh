@@ -75,20 +75,27 @@
                         <field name="import_file_name" invisible="1"/>
                         <field name="import_file_data" filename="import_file_name"/>
                     </group>
-                    <group string="Live ADMS Push (like Hikvision)" invisible="api_type != 'zkteco'">
+                    <group string="Real-time Punch API (like Hikvision)" invisible="api_type != 'zkteco'">
                         <div class="text-muted" colspan="2">
-                            When someone punches the ZKTeco device, it pushes attendance to Odoo
-                            automatically (no Sync Now). Set Serial Number, enable ADMS, then point
-                            the device Cloud Server URL to the ADMS Server URL below.
-                            If the terminal only supports HTTP (not HTTPS), run the local ADMS
-                            bridge on the office PC and use that HTTP URL instead.
+                            No Sync Now. The local live-capture bridge (or any client) POSTs each
+                            punch to this URL the moment it happens:
+                            check_in, check_out, break_out, break_in.
                         </div>
-                        <field name="zkteco_adms_enabled"/>
+                        <field name="zkteco_punch_enabled"/>
+                        <field name="zkteco_punch_url" readonly="1" widget="CopyClipboardChar"/>
+                        <button name="action_regenerate_zkteco_punch_token"
+                                type="object"
+                                string="Regenerate Punch Token"
+                                class="btn-secondary"
+                                groups="hr_attendance_custom_ext.group_fingerprint_device_manager"
+                                invisible="not zkteco_punch_enabled"/>
                         <field name="zkteco_serial_number" placeholder="e.g. SRN5244400238"/>
-                        <field name="zkteco_adms_url" readonly="1" widget="CopyClipboardChar"/>
-                        <field name="http_listening_last_at" string="Last ADMS Push" readonly="1"/>
-                        <field name="last_sync_at" readonly="1"/>
-                        <field name="last_sync_message" readonly="1"/>
+                        <field name="http_listening_last_at" string="Last Punch At" readonly="1"/>
+                        <field name="last_sync_message" string="Last Punch Message" readonly="1"/>
+                    </group>
+                    <group string="Live ADMS Push (optional)" invisible="1">
+                        <field name="zkteco_adms_enabled"/>
+                        <field name="zkteco_adms_url" readonly="1"/>
                     </group>
                     <group string="Automatic Sync" invisible="api_type == 'zkteco'">
                         <div class="text-muted" colspan="2">
