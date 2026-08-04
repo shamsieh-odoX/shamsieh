@@ -1,21 +1,19 @@
-# ZKTeco Attendance Bridge
+# ZKTeco Attendance Bridge (ADMS push — like Hikvision)
 
-Local poller for ZKTeco terminals (TCP/UDP port **4370**) when Odoo runs in the
-cloud (Odoo.sh) and cannot open a socket to a private LAN IP.
+Runs on a PC on the same LAN as the ZKTeco terminal. The device pushes punches
+over **HTTP** to `/iclock/...`; this bridge forwards them into Odoo (Odoo.sh).
+
+Do **not** use Odoo **Sync Now** / **Test Connection** for ZKTeco on the cloud
+(those need `pyzk` + direct LAN access, which Odoo.sh does not have).
 
 ## Setup
 
-1. In Odoo → **Attendances → Configuration → Fingerprint Devices**, create a device:
-   - **Name**: e.g. `ZKTeco Branch Device`
+1. In Odoo → **Attendances → Configuration → Fingerprint Devices** (ZKTeco device):
    - **API Type**: ZKTeco
-   - **Office / Branch Label**: e.g. second office name
-   - **Company**: `SHAMSIEH TECHNOLOGY SERVICES CO` (same company as Hikvision; employees are shared)
-   - **Device IP / Port**: `192.178.1.40` / `4370`
-   - **Password / Comm Key**: device communication password (usually `0`)
-   - **Device Timezone**: `Asia/Amman`
-   - **Auto Sync**: off on Odoo.sh (bridge pushes instead)
-2. Note the device database **ID**.
-3. On a PC on the same LAN as the terminal:
+   - **ADMS / Cloud Push**: on
+   - **ZKTeco Serial Number (SN)**: from the terminal (e.g. `SRN5244400238`)
+   - **Auto Sync**: off
+2. On a PC that can reach the terminal:
 
 ```bash
 cd scripts/zkteco_attendance_service
@@ -23,10 +21,21 @@ python -m venv .venv
 .venv\Scripts\activate
 pip install -r requirements.txt
 copy .env.example .env
-# edit .env
+# edit .env (API key, device id, serial)
 python -m app.main
 ```
 
+3. On the ZKTeco device (or Attendance Management → Cloud / ADMS settings):
+   - Server URL: `http://<PC-LAN-IP>:8088/iclock/`
+   - Serial must match the Odoo field
+
+4. Punch once — Odoo should show a new sync log / attendance within seconds.
+   **Last ADMS Push** on the device form updates when the terminal talks to the bridge.
+
 Employee mapping uses the same fields as Hikvision (`biometric_device_user_id`,
-`barcode` / Badge ID, `pin`, etc.). Set each employee’s device user ID to match
-the ZKTeco user number.
+Badge ID, PIN, etc.).
+
+## Note on HTTPS
+
+Many ZK terminals only speak **HTTP** ADMS. Point them at this local bridge, not
+directly at `https://….odoo.com/iclock/` unless your model supports HTTPS cloud.

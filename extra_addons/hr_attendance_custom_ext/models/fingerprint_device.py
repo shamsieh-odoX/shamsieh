@@ -57,6 +57,26 @@ class FingerprintDevice(models.Model):
         help='Some ZKTeco terminals require UDP instead of TCP. Enable if TCP connect fails.',
         groups='hr_attendance_custom_ext.group_fingerprint_device_manager',
     )
+    zkteco_serial_number = fields.Char(
+        string='ZKTeco Serial Number (SN)',
+        copy=False,
+        index=True,
+        help='Device serial from the terminal / Attendance Management (e.g. SRN5244400238). '
+             'Required for ADMS push matching.',
+        groups='hr_attendance_custom_ext.group_fingerprint_device_manager',
+    )
+    zkteco_adms_enabled = fields.Boolean(
+        string='ADMS / Cloud Push',
+        default=True,
+        help='Accept live attendance pushes from the ZKTeco device (iclock/ADMS), '
+             'same idea as Hikvision HTTP Listening. Prefer this over Sync Now on Odoo.sh.',
+    )
+    zkteco_adms_url = fields.Char(
+        string='ADMS Server URL',
+        compute='_compute_zkteco_adms_url',
+        help='Set this as Cloud Server / ADMS URL on the device (must end with /iclock/). '
+             'If the terminal only supports HTTP, run the local ADMS bridge and use its URL.',
+    )
     location_label = fields.Char(
         string='Office / Branch Label',
         help='Optional label for this device location (e.g. Branch B, Warehouse). '
@@ -167,6 +187,17 @@ class FingerprintDevice(models.Model):
             else:
                 device.http_listening_url = False
 
+    @api.depends('api_type')
+    def _compute_zkteco_adms_url(self):
+        base_url = self.env['ir.config_parameter'].sudo().get_param(
+            'web.base.url', '',
+        ).rstrip('/')
+        for device in self:
+            if device.api_type == 'zkteco' and base_url:
+                device.zkteco_adms_url = f'{base_url}/iclock/'
+            else:
+                device.zkteco_adms_url = False
+
     @api.model
     def _generate_http_listening_token(self):
         return secrets.token_urlsafe(32)
@@ -241,6 +272,33 @@ class FingerprintDevice(models.Model):
             ('api_type', '=', 'hikvision'),
         ], limit=1)
 
+    @api.model
+    def _find_zkteco_adms_device(self, serial):
+        """Match an active ZKTeco device by ADMS serial number (SN)."""
+        serial = (serial or '').strip()
+        if not serial:
+            return self.browse()
+        Device = self.sudo()
+        device = Device.search([
+            ('api_type', '=', 'zkteco'),
+            ('zkteco_adms_enabled', '=', True),
+            ('active', '=', True),
+            ('zkteco_serial_number', '=', serial),
+        ], limit=1)
+        if device:
+            return device
+        # Case-insensitive fallback (devices sometimes vary SN casing).
+        candidates = Device.search([
+            ('api_type', '=', 'zkteco'),
+            ('zkteco_adms_enabled', '=', True),
+            ('active', '=', True),
+            ('zkteco_serial_number', '!=', False),
+        ])
+        serial_upper = serial.upper()
+        return candidates.filtered(
+            lambda d: (d.zkteco_serial_number or '').strip().upper() == serial_upper
+        )[:1]
+
     def action_regenerate_http_listening_token(self):
         self.ensure_one()
         self.write({'http_listening_token': self._generate_http_listening_token()})
@@ -252,7 +310,8 @@ class FingerprintDevice(models.Model):
             if vals.get('api_type') == 'zkteco':
                 vals.setdefault('device_port', 4370)
                 vals.setdefault('http_listening_enabled', False)
-                vals.setdefault('auto_sync', True)
+                vals.setdefault('auto_sync', False)
+                vals.setdefault('zkteco_adms_enabled', True)
             if vals.get('http_listening_enabled'):
                 if 'auto_sync' not in vals:
                     vals['auto_sync'] = False
@@ -260,10 +319,15 @@ class FingerprintDevice(models.Model):
                     vals['http_listening_token'] = self._generate_http_listening_token()
                 if not vals.get('http_listening_allowed_ips') and vals.get('device_ip'):
                     vals['http_listening_allowed_ips'] = vals['device_ip']
+            if vals.get('zkteco_adms_enabled') and vals.get('api_type', 'zkteco') == 'zkteco':
+                if 'auto_sync' not in vals:
+                    vals['auto_sync'] = False
         return super().create(vals_list)
 
     def write(self, vals):
         if vals.get('http_listening_enabled') and 'auto_sync' not in vals:
+            vals = dict(vals, auto_sync=False)
+        if vals.get('zkteco_adms_enabled') and 'auto_sync' not in vals:
             vals = dict(vals, auto_sync=False)
         res = super().write(vals)
         if vals.get('http_listening_enabled'):
@@ -314,11 +378,16 @@ class FingerprintDevice(models.Model):
         self.log_ids.filtered(lambda log: log.state == 'draft')._process_pending_logs()
 
     def _http_listening_is_live(self, now=None):
-        """Return True when recent HTTP pushes indicate live sync is healthy."""
+        """Return True when recent HTTP / ADMS pushes indicate live sync is healthy."""
         self.ensure_one()
-        if not self.http_listening_enabled or not self.http_listening_last_at:
-            return False
         now = now or fields.Datetime.now()
+        push_enabled = False
+        if self.api_type == 'hikvision' and self.http_listening_enabled:
+            push_enabled = True
+        elif self.api_type == 'zkteco' and self.zkteco_adms_enabled:
+            push_enabled = True
+        if not push_enabled or not self.http_listening_last_at:
+            return False
         fallback = timedelta(minutes=self.sync_interval_minutes or 15.0)
         return (now - self.http_listening_last_at) < fallback
 
@@ -390,9 +459,9 @@ class FingerprintDevice(models.Model):
         if self.api_type == 'zkteco':
             if not self.device_port or self.device_port in (80, 443):
                 self.device_port = 4370
-            # ZK pull needs LAN reachability; disable HTTP listening defaults.
             self.http_listening_enabled = False
-            self.auto_sync = True
+            self.auto_sync = False
+            self.zkteco_adms_enabled = True
         elif self.api_type == 'hikvision':
             if not self.device_port or self.device_port == 4370:
                 self.device_port = 80
@@ -403,6 +472,23 @@ class FingerprintDevice(models.Model):
 
     def action_test_connection(self):
         self.ensure_one()
+        if self.api_type == 'zkteco':
+            return {
+                'type': 'ir.actions.client',
+                'tag': 'display_notification',
+                'params': {
+                    'title': _('ZKTeco uses ADMS push'),
+                    'message': _(
+                        'Do not use Test Connection / Sync on Odoo.sh (needs pyzk + LAN). '
+                        'Set the device Cloud/ADMS URL to %(url)s and Serial Number %(sn)s, '
+                        'or run the local ADMS bridge (scripts/zkteco_attendance_service).',
+                        url=self.zkteco_adms_url or '/iclock/',
+                        sn=self.zkteco_serial_number or _('(set SN on this device)'),
+                    ),
+                    'type': 'info',
+                    'sticky': True,
+                },
+            }
         connector = self._get_device_connector()
         result = connector.test_connection()
         detail = ''
@@ -421,6 +507,23 @@ class FingerprintDevice(models.Model):
 
     def action_sync_now(self):
         self.ensure_one()
+        if self.api_type == 'zkteco':
+            return {
+                'type': 'ir.actions.client',
+                'tag': 'display_notification',
+                'params': {
+                    'title': _('Use ADMS push (like Hikvision)'),
+                    'message': _(
+                        'ZKTeco attendance should arrive automatically when someone punches. '
+                        'Configure the device ADMS URL (%(url)s) and Serial %(sn)s. '
+                        'Sync Now is only for on-LAN pyzk pull, which Odoo.sh cannot do.',
+                        url=self.zkteco_adms_url or '/iclock/',
+                        sn=self.zkteco_serial_number or _('(missing)'),
+                    ),
+                    'type': 'warning',
+                    'sticky': True,
+                },
+            }
         self._auto_sync_device()
         return {
             'type': 'ir.actions.client',
