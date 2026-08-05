@@ -1,6 +1,0 @@
-2026-08-04 12:51:05,025 INFO LIVE capture 192.168.1.40:4370 → Odoo punch API (close Attendance Management)
-2026-08-04 12:51:05,586 INFO Connected — waiting for real-time punches...
-2026-08-04 12:51:25,383 INFO LIVE capture 192.168.1.40:4370 → Odoo punch API (close Attendance Management)
-2026-08-04 12:51:26,322 INFO Connected — waiting for real-time punches...
-2026-08-04 12:52:58,050 INFO Punch: {'device_user_id': '22', 'punch_type': 'check_out', 'event_time': '2026-08-04 12:51:50', 'external_id': 'zk-live-22-2026-08-04125150-22-check_out'}
-2026-08-04 12:52:58,466 INFO Odoo: {'status': 'closed', 'punch_type': 'check_out', 'attendance_id': 94, 'employee_id': 13, 'device_user_id': '22', 'event_time': '2026-08-04 09:51:50'}

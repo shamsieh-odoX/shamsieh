@@ -1,8 +1,0 @@
-id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_crm_team_target_crm_create,crm.team.target.crm.create,model_crm_team_target,crm_custom_ext.group_crm_create,1,0,0,0
-access_crm_lead_sector_user,crm.lead.sector.user,model_crm_lead_sector,sales_team.group_sale_salesman,1,0,0,0
-access_crm_lead_sector_crm_create,crm.lead.sector.crm.create,model_crm_lead_sector,crm_custom_ext.group_crm_create,1,0,0,0
-access_crm_lead_sector_manager,crm.lead.sector.manager,model_crm_lead_sector,sales_team.group_sale_manager,1,1,1,1
-access_crm_lead_channel_user,crm.lead.channel.user,model_crm_lead_channel,sales_team.group_sale_salesman,1,1,1,0
-access_crm_lead_channel_crm_create,crm.lead.channel.crm.create,model_crm_lead_channel,crm_custom_ext.group_crm_create,1,1,1,0
-access_crm_lead_channel_manager,crm.lead.channel.manager,model_crm_lead_channel,sales_team.group_sale_manager,1,1,1,1

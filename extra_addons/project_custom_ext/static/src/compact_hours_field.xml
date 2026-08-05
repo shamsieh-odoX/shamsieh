@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<templates xml:space="preserve">
-
-    <t t-name="project_custom_ext.CompactHoursField">
-        <span class="o_field_compact_hours" t-esc="formattedValue"/>
-    </t>
-
-</templates>
