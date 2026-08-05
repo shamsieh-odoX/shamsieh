@@ -23,6 +23,50 @@ SERVICE_INTEREST_EXTRA_ALIASES = {
     'cloud hosting': 'other',
 }
 
+SITE_EXTRA_ALIASES = {
+    'shamsieh.com': 'shamsieh',
+    'www.shamsieh.com': 'shamsieh',
+    'aiodyx.com': 'aiodyx',
+    'www.aiodyx.com': 'aiodyx',
+}
+
+FORM_TYPE_EXTRA_ALIASES = {
+    'contact us': 'contact',
+    'general contact': 'contact',
+    'demo': 'product_demo',
+    'request demo': 'product_demo',
+    'request a demo': 'product_demo',
+    'product demo': 'product_demo',
+    'book a consultation': 'consultation',
+    'free consultation': 'consultation',
+}
+
+PRODUCT_EXTRA_ALIASES = {
+    'botify': 'botify_ai',
+    'botify ai': 'botify_ai',
+    'safa': 'safa_ai',
+    'safa ai': 'safa_ai',
+    'safa ai assistant': 'safa_ai',
+    'mawid': 'mawid',
+    'shamsieh education': 'shamsieh_education',
+    'aiodyx': 'aiodyx_erp',
+    'aiodyx erp': 'aiodyx_erp',
+}
+
+# Default service interest when product is known but service was omitted.
+PRODUCT_SERVICE_DEFAULTS = {
+    'botify_ai': 'ai',
+    'safa_ai': 'ai',
+    'aiodyx_erp': 'implementation',
+    'mawid': 'other',
+    'shamsieh_education': 'other',
+}
+
+SITE_SOURCE_XMLIDS = {
+    'shamsieh': 'crm_custom_ext.utm_source_website_shamsieh',
+    'aiodyx': 'website_lead_api.utm_source_website_aiodyx',
+}
+
 
 class WebsiteLeadController(http.Controller):
 
@@ -99,42 +143,140 @@ class WebsiteLeadController(http.Controller):
             aliases.update(extra)
         return aliases
 
-    def _resolve_service_interest(self, service_value):
-        raw = (service_value or '').strip()
+    def _resolve_selection(self, field_name, value, extra=None):
+        raw = (value or '').strip()
         if not raw:
             return False
-        aliases = self._selection_aliases('service_interest', SERVICE_INTEREST_EXTRA_ALIASES)
+        aliases = self._selection_aliases(field_name, extra)
         return aliases.get(raw.lower(), False)
 
+    def _resolve_service_interest(self, service_value):
+        return self._resolve_selection(
+            'service_interest',
+            service_value,
+            SERVICE_INTEREST_EXTRA_ALIASES,
+        )
+
     def _resolve_preferred_contact_method(self, method_value):
-        raw = (method_value or '').strip()
-        if not raw:
+        return self._resolve_selection('preferred_contact_method', method_value)
+
+    def _resolve_website_site(self, site_value):
+        return self._resolve_selection('website_site', site_value, SITE_EXTRA_ALIASES)
+
+    def _resolve_website_form_type(self, form_type_value):
+        return self._resolve_selection(
+            'website_form_type',
+            form_type_value,
+            FORM_TYPE_EXTRA_ALIASES,
+        )
+
+    def _resolve_website_product(self, product_value):
+        return self._resolve_selection(
+            'website_product',
+            product_value,
+            PRODUCT_EXTRA_ALIASES,
+        )
+
+    def _infer_product_from_text(self, *parts):
+        text = ' '.join(part for part in parts if part).lower()
+        if not text:
             return False
-        aliases = self._selection_aliases('preferred_contact_method')
-        return aliases.get(raw.lower(), False)
+        # Longer aliases first to avoid partial mismatches.
+        ordered = sorted(PRODUCT_EXTRA_ALIASES.items(), key=lambda item: len(item[0]), reverse=True)
+        for alias, key in ordered:
+            if alias in text:
+                return key
+        aliases = self._selection_aliases('website_product')
+        for alias, key in sorted(aliases.items(), key=lambda item: len(item[0]), reverse=True):
+            if alias in text:
+                return key
+        return False
+
+    def _infer_form_type(self, explicit, product, subject):
+        form_type = self._resolve_website_form_type(explicit)
+        if form_type:
+            return form_type
+        if product:
+            return 'product_demo'
+        subject_l = (subject or '').lower()
+        if 'demo' in subject_l:
+            return 'product_demo'
+        if 'consult' in subject_l:
+            return 'consultation'
+        if subject:
+            return 'contact'
+        return False
+
+    def _product_label(self, product_key):
+        if not product_key:
+            return ''
+        selection = dict(request.env['crm.lead']._fields['website_product'].selection)
+        return selection.get(product_key, product_key)
+
+    def _build_lead_name(self, data, product_key):
+        subject = (data.get('subject') or data.get('_subject') or '').strip()
+        if subject:
+            return subject
+        product_label = self._product_label(product_key)
+        if product_label:
+            return f'Demo request: {product_label}'
+        company = (data.get('company') or '').strip()
+        name = data.get('name', '').strip()
+        return f'Website Inquiry — {company or name}'
+
+    def _resolve_utm_source(self, site_key):
+        xmlid = SITE_SOURCE_XMLIDS.get(site_key) or SITE_SOURCE_XMLIDS['shamsieh']
+        return request.env.ref(xmlid, raise_if_not_found=False)
 
     def _build_lead_vals(self, data):
         name = data.get('name', '').strip()
         email = data.get('email', '').strip()
         company = (data.get('company') or '').strip()
         phone = (data.get('phone') or '').strip()
+        subject = (data.get('subject') or data.get('_subject') or '').strip()
+        message = (data.get('message') or '').strip()
+
+        site = self._resolve_website_site(data.get('site') or data.get('website_site'))
+        product = self._resolve_website_product(
+            data.get('product') or data.get('website_product')
+        )
+        if not product:
+            product = self._infer_product_from_text(subject, message)
+
+        form_type = self._infer_form_type(
+            data.get('form_type') or data.get('website_form_type'),
+            product,
+            subject,
+        )
+
         service_interest = self._resolve_service_interest(data.get('service'))
+        if not service_interest and product:
+            service_interest = PRODUCT_SERVICE_DEFAULTS.get(product, False)
+
         preferred_contact_method = self._resolve_preferred_contact_method(
             data.get('contact_method')
         )
         country_id = self._resolve_country_id(data.get('country'))
 
         channel = request.env.ref('crm_custom_ext.channel_website', raise_if_not_found=False)
-        utm_source = request.env.ref('crm_custom_ext.utm_source_website_shamsieh', raise_if_not_found=False)
+        utm_source = self._resolve_utm_source(site)
 
         vals = {
-            'name': f"Website Inquiry — {company or name}",
+            'name': self._build_lead_name(data, product),
             'contact_name': name,
             'email_from': email,
             'phone': phone,
             'partner_name': company,
             'type': 'lead',
         }
+        if subject:
+            vals['website_subject'] = subject
+        if site:
+            vals['website_site'] = site
+        if form_type:
+            vals['website_form_type'] = form_type
+        if product:
+            vals['website_product'] = product
         if country_id:
             vals['country_id'] = country_id
         if service_interest:
@@ -169,6 +311,7 @@ class WebsiteLeadController(http.Controller):
             if parse_error:
                 return self._json_response({'success': False, 'error': parse_error}, status=400)
 
+            # Honeypot: real browsers leave this empty. Do not confuse with `site`.
             honeypot = (data.get('website') or '').strip()
             if honeypot:
                 return self._json_response({'success': True})

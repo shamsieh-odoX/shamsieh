@@ -10,6 +10,10 @@
             <xpath expr="//field[@name='interest_level']" position="after">
                 <field name="service_interest"/>
                 <field name="preferred_contact_method"/>
+                <field name="website_site"/>
+                <field name="website_form_type"/>
+                <field name="website_product"/>
+                <field name="website_subject"/>
             </xpath>
         </field>
     </record>
@@ -21,6 +25,37 @@
         <field name="arch" type="xml">
             <xpath expr="//field[@name='interest_level']" position="after">
                 <field name="service_interest" optional="show"/>
+                <field name="website_site" optional="show"/>
+                <field name="website_form_type" optional="hide"/>
+                <field name="website_product" optional="show"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_crm_case_leads_filter_website_lead" model="ir.ui.view">
+        <field name="name">crm.lead.search.lead.website.lead.api</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="crm_custom_ext.view_crm_case_leads_filter_custom"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='interest_level']" position="after">
+                <field name="service_interest"/>
+                <field name="website_site"/>
+                <field name="website_form_type"/>
+                <field name="website_product"/>
+                <field name="website_subject"/>
+            </xpath>
+            <xpath expr="//filter[@name='filter_interest_not_interested']" position="after">
+                <separator string="Website"/>
+                <filter string="Shamsieh Website" name="filter_website_shamsieh" domain="[('website_site', '=', 'shamsieh')]"/>
+                <filter string="AIODYX Website" name="filter_website_aiodyx" domain="[('website_site', '=', 'aiodyx')]"/>
+                <filter string="Product Demos" name="filter_website_product_demo" domain="[('website_form_type', '=', 'product_demo')]"/>
+                <filter string="Contact Forms" name="filter_website_contact" domain="[('website_form_type', '=', 'contact')]"/>
+            </xpath>
+            <xpath expr="//filter[@name='group_interest_level']" position="after">
+                <filter string="Website" name="group_website_site" context="{'group_by': 'website_site'}"/>
+                <filter string="Website Form" name="group_website_form_type" context="{'group_by': 'website_form_type'}"/>
+                <filter string="Website Product" name="group_website_product" context="{'group_by': 'website_product'}"/>
+                <filter string="Service Interest" name="group_service_interest" context="{'group_by': 'service_interest'}"/>
             </xpath>
         </field>
     </record>
