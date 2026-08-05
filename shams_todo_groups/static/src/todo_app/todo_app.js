@@ -1,6 +1,6 @@
 /** @odoo-module **/
 
-import { Component, onWillStart, useState, useRef } from "@odoo/owl";
+import { Component, onMounted, onWillStart, onWillUnmount, useState, useRef } from "@odoo/owl";
 import { registry } from "@web/core/registry";
 import { useService } from "@web/core/utils/hooks";
 import { _t } from "@web/core/l10n/translation";
@@ -22,6 +22,7 @@ export class ShamsTodoApp extends Component {
         this.notification = useService("notification");
         this.addInput = useRef("addInput");
         this.newListInput = useRef("newListInput");
+        this._onDocumentClick = this._onDocumentClick.bind(this);
 
         this.state = useState({
             loading: true,
@@ -39,6 +40,9 @@ export class ShamsTodoApp extends Component {
             newTaskName: "",
             newListName: "",
             showNewList: false,
+            listMenuGroupId: false,
+            renamingGroupId: false,
+            renameListName: "",
             showShare: false,
             shareMembers: [],
             shareCandidates: [],
@@ -60,6 +64,22 @@ export class ShamsTodoApp extends Component {
         onWillStart(async () => {
             await this.loadBoard("my_day");
         });
+        onMounted(() => {
+            document.addEventListener("click", this._onDocumentClick);
+        });
+        onWillUnmount(() => {
+            document.removeEventListener("click", this._onDocumentClick);
+        });
+    }
+
+    _onDocumentClick(ev) {
+        if (!this.state.listMenuGroupId) {
+            return;
+        }
+        if (ev.target.closest?.(".o_shams_todo_list_menu")) {
+            return;
+        }
+        this.state.listMenuGroupId = false;
     }
 
     iconClass(icon) {
@@ -111,6 +131,7 @@ export class ShamsTodoApp extends Component {
         this.state.canShareList = !!data.can_share_list;
         this.state.shareMembers = data.share_members || [];
         this.state.shareCandidates = data.share_candidates || [];
+        this.state.listMenuGroupId = false;
         if (this.state.listKey !== "group") {
             this.state.showShare = false;
         }
@@ -186,11 +207,95 @@ export class ShamsTodoApp extends Component {
     }
 
     async selectSmartList(listKey) {
+        this.state.listMenuGroupId = false;
+        this.state.renamingGroupId = false;
         await this.loadBoard(listKey, false);
     }
 
     async selectGroup(groupId) {
+        this.state.listMenuGroupId = false;
+        this.state.renamingGroupId = false;
         await this.loadBoard("group", groupId);
+    }
+
+    toggleListMenu(groupId, ev) {
+        ev.stopPropagation();
+        this.state.listMenuGroupId = this.state.listMenuGroupId === groupId ? false : groupId;
+    }
+
+    startRenameList(group, ev) {
+        ev.stopPropagation();
+        this.state.listMenuGroupId = false;
+        this.state.renamingGroupId = group.id;
+        this.state.renameListName = group.name || "";
+        setTimeout(() => {
+            const input = document.querySelector(
+                `.o_shams_todo_rename_list_form input[data-rename-id="${group.id}"]`
+            );
+            input?.focus();
+            input?.select();
+        }, 0);
+    }
+
+    cancelRenameList() {
+        this.state.renamingGroupId = false;
+        this.state.renameListName = "";
+    }
+
+    onRenameKeydown(ev) {
+        if (ev.key === "Escape") {
+            ev.preventDefault();
+            this.cancelRenameList();
+        }
+    }
+
+    async onRenameList(ev, groupId) {
+        ev.preventDefault();
+        const name = (this.state.renameListName || "").trim();
+        if (!name) {
+            return;
+        }
+        try {
+            await this.orm.call("shams.todo.group", "rename_list_from_board", [[groupId], name]);
+            this.state.renamingGroupId = false;
+            this.state.renameListName = "";
+            await this.loadBoard(
+                this.state.listKey,
+                this.state.groupId || false,
+                this.state.selectedTask?.id || null
+            );
+        } catch (error) {
+            this.notification.add(error.data?.message || error.message || _t("Could not rename list."), {
+                type: "danger",
+            });
+        }
+    }
+
+    async onDeleteList(group, ev) {
+        ev.stopPropagation();
+        this.state.listMenuGroupId = false;
+        const name = group.name || _t("this list");
+        if (!window.confirm(`Delete "${name}"? Tasks in this list will no longer appear under it.`)) {
+            return;
+        }
+        try {
+            await this.orm.call("shams.todo.group", "delete_list_from_board", [[group.id]]);
+            const wasActive = this.state.listKey === "group" && this.state.groupId === group.id;
+            if (wasActive) {
+                await this.loadBoard("my_day");
+            } else {
+                await this.loadBoard(
+                    this.state.listKey,
+                    this.state.groupId || false,
+                    this.state.selectedTask?.id || null
+                );
+            }
+            this.notification.add(_t("List deleted."), { type: "success" });
+        } catch (error) {
+            this.notification.add(error.data?.message || error.message || _t("Could not delete list."), {
+                type: "danger",
+            });
+        }
     }
 
     async selectTask(task) {

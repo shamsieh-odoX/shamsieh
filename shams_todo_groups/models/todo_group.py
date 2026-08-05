@@ -126,6 +126,15 @@ class ShamsTodoGroup(models.Model):
             'manager_ids': [(6, 0, [user.id])],
         })
 
+    def _ensure_can_manage_list(self):
+        """Raise if the current user cannot rename/delete/share this list."""
+        self.ensure_one()
+        user = self.env.user
+        if user.id not in self.manager_ids.ids and not user.has_group(
+            'shams_todo_groups.group_todo_management'
+        ):
+            raise ValidationError(_('Only list managers can update this list.'))
+
     @api.model
     def create_list_from_board(self, name):
         """Create a new sidebar list (group) from the To-Do board."""
@@ -138,16 +147,33 @@ class ShamsTodoGroup(models.Model):
             'name': group.name,
             'count': 0,
             'color': group.color,
+            'can_manage': True,
         }
+
+    def rename_list_from_board(self, name):
+        """Rename a sidebar list from the To-Do board."""
+        self.ensure_one()
+        self._ensure_can_manage_list()
+        name = (name or '').strip()
+        if not name:
+            raise ValidationError(_('List name is required.'))
+        self.write({'name': name})
+        return {
+            'id': self.id,
+            'name': self.name,
+        }
+
+    def delete_list_from_board(self):
+        """Archive (delete) a sidebar list from the To-Do board."""
+        self.ensure_one()
+        self._ensure_can_manage_list()
+        self.write({'active': False})
+        return True
 
     def add_member_from_board(self, user_id):
         """Share a list with another user so tasks can be assigned to them."""
         self.ensure_one()
-        user = self.env.user
-        if user.id not in self.manager_ids.ids and not user.has_group(
-            'shams_todo_groups.group_todo_management'
-        ):
-            raise ValidationError(_('Only list managers can share this list.'))
+        self._ensure_can_manage_list()
         partner_user = self.env['res.users'].browse(int(user_id)).exists()
         if not partner_user or partner_user.share:
             raise ValidationError(_('Select a valid internal user to share with.'))
@@ -157,23 +183,17 @@ class ShamsTodoGroup(models.Model):
     def remove_member_from_board(self, user_id):
         """Remove a member from a shared list."""
         self.ensure_one()
-        user = self.env.user
-        if user.id not in self.manager_ids.ids and not user.has_group(
-            'shams_todo_groups.group_todo_management'
-        ):
-            raise ValidationError(_('Only list managers can change list members.'))
+        self._ensure_can_manage_list()
         member_id = int(user_id)
         if member_id in self.manager_ids.ids and len(self.manager_ids) <= 1:
             raise ValidationError(_('Keep at least one manager on the list.'))
-        commands = [(3, member_id)]
         if member_id in self.manager_ids.ids:
-            commands = [(3, member_id)]  # member remove
             self.write({
                 'manager_ids': [(3, member_id)],
                 'member_ids': [(3, member_id)],
             })
         else:
-            self.write({'member_ids': commands})
+            self.write({'member_ids': [(3, member_id)]})
         return True
 
     @api.constrains('manager_ids', 'member_ids')

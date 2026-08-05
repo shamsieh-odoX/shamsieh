@@ -1,6 +1,6 @@
 {
     'name': 'Shams To-Do Groups',
-    'version': '19.0.1.1.5',
+    'version': '19.0.1.1.6',
     'category': 'Productivity/To-Do',
     'summary': 'Microsoft To Do–style shared lists with dark mode, due dates, and completed section',
     'author': 'Custom',

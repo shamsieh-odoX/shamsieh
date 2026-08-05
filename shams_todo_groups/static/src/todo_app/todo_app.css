@@ -104,6 +104,120 @@
   font-size: 0.85rem;
 }
 
+.o_shams_todo_group_row {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: stretch;
+  border-radius: 0.35rem;
+}
+
+.o_shams_todo_group_row > .o_shams_todo_nav_item {
+  padding-inline-end: 0.35rem;
+}
+
+.o_shams_todo_group_row.is-active,
+.o_shams_todo_group_row.has-menu-open {
+  background: var(--todo-blue-soft);
+}
+
+.o_shams_todo_group_row.is-active > .o_shams_todo_nav_item {
+  box-shadow: inset 3px 0 0 var(--todo-blue);
+  background: transparent;
+}
+
+.o_shams_todo_list_menu {
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding-inline-end: 0.2rem;
+}
+
+.o_shams_todo_list_menu_btn {
+  border: 0;
+  background: transparent;
+  color: var(--todo-muted);
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 0.3rem;
+  cursor: pointer;
+  opacity: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.o_shams_todo_group_row:hover .o_shams_todo_list_menu_btn,
+.o_shams_todo_group_row.has-menu-open .o_shams_todo_list_menu_btn,
+.o_shams_todo_group_row.is-active .o_shams_todo_list_menu_btn {
+  opacity: 1;
+}
+
+@media (hover: none) {
+  .o_shams_todo_list_menu_btn {
+    opacity: 1;
+  }
+}
+
+.o_shams_todo_list_menu_btn:hover {
+  background: rgba(37, 100, 207, 0.12);
+  color: var(--todo-text);
+}
+
+.o_shams_todo_list_menu_dropdown {
+  position: absolute;
+  top: calc(100% - 0.15rem);
+  inset-inline-end: 0;
+  z-index: 20;
+  min-width: 8.5rem;
+  padding: 0.25rem;
+  border: 1px solid var(--todo-border);
+  border-radius: 0.4rem;
+  background: var(--todo-surface);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+}
+
+.o_shams_todo_list_menu_item {
+  display: block;
+  width: 100%;
+  border: 0;
+  background: transparent;
+  text-align: start;
+  padding: 0.45rem 0.65rem;
+  border-radius: 0.3rem;
+  color: var(--todo-text);
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.o_shams_todo_list_menu_item:hover {
+  background: rgba(37, 100, 207, 0.1);
+}
+
+.o_shams_todo_list_menu_item.is-danger {
+  color: var(--todo-danger);
+}
+
+.o_shams_todo_list_menu_item.is-danger:hover {
+  background: rgba(164, 38, 44, 0.08);
+}
+
+.o_shams_todo_rename_list_form {
+  display: flex;
+  gap: 0.35rem;
+  align-items: center;
+  padding: 0.25rem 0.35rem;
+}
+
+.o_shams_todo_rename_cancel {
+  border: 0;
+  background: transparent;
+  color: var(--todo-muted);
+  cursor: pointer;
+  font-size: 0.85rem;
+  padding: 0.35rem 0.4rem;
+}
+
 .o_shams_todo_sidebar_divider {
   height: 1px;
   background: var(--todo-border);

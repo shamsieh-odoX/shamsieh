@@ -142,14 +142,15 @@ class ShamsTodoTask(models.Model):
             status_domain = [('status', '=', 'done')]
         else:
             status_domain = [('status', 'not in', ('done', 'cancelled'))]
+        mine = [('assigned_user_id', '=', user.id)]
         if list_key == 'my_day':
-            return status_domain + [('my_day_date', '=', today)]
+            return status_domain + mine + [('my_day_date', '=', today)]
         if list_key == 'important':
-            return status_domain + [('is_important', '=', True)]
+            return status_domain + mine + [('is_important', '=', True)]
         if list_key == 'planned':
-            return status_domain + [('due_date', '!=', False)]
+            return status_domain + mine + [('due_date', '!=', False)]
         if list_key == 'assigned':
-            return status_domain + [('assigned_user_id', '=', user.id)]
+            return status_domain + mine
         if list_key == 'group' and group_id:
             return status_domain + [('group_id', '=', group_id)]
         return status_domain
@@ -251,6 +252,10 @@ class ShamsTodoTask(models.Model):
                 'name': g.name,
                 'count': self.search_count(self._smart_list_domain('group', group_id=g.id)),
                 'color': g.color,
+                'can_manage': bool(
+                    user.id in g.manager_ids.ids
+                    or user.has_group('shams_todo_groups.group_todo_management')
+                ),
             } for g in groups],
             'tasks': [_task_row(t) for t in tasks],
             'completed_tasks': [_task_row(t) for t in completed_tasks],

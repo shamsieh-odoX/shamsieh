@@ -23,14 +23,50 @@
                 <div class="o_shams_todo_lists_header">Lists</div>
                 <nav class="o_shams_todo_group_lists">
                     <t t-foreach="state.groups" t-as="group" t-key="group.id">
-                        <button type="button"
-                            class="o_shams_todo_nav_item"
-                            t-att-class="{ 'is-active': isGroupActive(group.id) }"
-                            t-on-click="() => this.selectGroup(group.id)">
-                            <i class="fa fa-list-ul"/>
-                            <span class="o_shams_todo_nav_label" t-esc="group.name"/>
-                            <span class="o_shams_todo_nav_count" t-if="group.count" t-esc="group.count"/>
-                        </button>
+                        <t t-if="state.renamingGroupId === group.id">
+                            <form class="o_shams_todo_rename_list_form" t-on-submit="(ev) => this.onRenameList(ev, group.id)">
+                                <input type="text"
+                                    class="o_shams_todo_new_list_input"
+                                    t-att-data-rename-id="group.id"
+                                    t-model="state.renameListName"
+                                    t-on-keydown="(ev) => this.onRenameKeydown(ev, group.id)"/>
+                                <button type="submit" class="o_shams_todo_new_list_submit">Save</button>
+                                <button type="button" class="o_shams_todo_rename_cancel" t-on-click="cancelRenameList">Cancel</button>
+                            </form>
+                        </t>
+                        <t t-else="">
+                            <div class="o_shams_todo_group_row"
+                                t-att-class="{ 'is-active': isGroupActive(group.id), 'has-menu-open': state.listMenuGroupId === group.id }">
+                                <button type="button"
+                                    class="o_shams_todo_nav_item"
+                                    t-att-class="{ 'is-active': isGroupActive(group.id) }"
+                                    t-on-click="() => this.selectGroup(group.id)">
+                                    <i class="fa fa-list-ul"/>
+                                    <span class="o_shams_todo_nav_label" t-esc="group.name"/>
+                                    <span class="o_shams_todo_nav_count" t-if="group.count" t-esc="group.count"/>
+                                </button>
+                                <div class="o_shams_todo_list_menu" t-if="group.can_manage">
+                                    <button type="button"
+                                        class="o_shams_todo_list_menu_btn"
+                                        title="List options"
+                                        t-on-click="(ev) => this.toggleListMenu(group.id, ev)">
+                                        <i class="fa fa-ellipsis-h"/>
+                                    </button>
+                                    <div class="o_shams_todo_list_menu_dropdown" t-if="state.listMenuGroupId === group.id">
+                                        <button type="button"
+                                            class="o_shams_todo_list_menu_item"
+                                            t-on-click="(ev) => this.startRenameList(group, ev)">
+                                            Update
+                                        </button>
+                                        <button type="button"
+                                            class="o_shams_todo_list_menu_item is-danger"
+                                            t-on-click="(ev) => this.onDeleteList(group, ev)">
+                                            Delete
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
                     </t>
                 </nav>
 

@@ -230,9 +230,9 @@
                 <filter string="High Priority" name="high_priority"
                     domain="[('priority', 'in', ['2', '3'])]"/>
                 <filter string="My Day" name="my_day"
-                    domain="[('my_day_date', '=', context_today)]"/>
+                    domain="[('assigned_user_id', '=', uid), ('my_day_date', '=', context_today)]"/>
                 <filter string="Important" name="important"
-                    domain="[('is_important', '=', True)]"/>
+                    domain="[('assigned_user_id', '=', uid), ('is_important', '=', True)]"/>
                 <filter string="Archived" name="inactive" domain="[('active', '=', False)]"/>
                 <group>
                     <filter string="Group" name="group_by_group" context="{'group_by': 'group_id'}"/>
