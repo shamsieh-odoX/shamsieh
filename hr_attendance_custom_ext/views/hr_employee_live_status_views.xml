@@ -21,8 +21,9 @@
                        decoration-warning="hikvision_presence_status == 'on_break'"
                        decoration-muted="hikvision_presence_status == 'checked_out'"/>
                 <field name="live_check_in" optional="show"/>
-                <field name="current_break_start"/>
-                <field name="current_break_hours" widget="float_time"/>
+                <field name="current_break_start" string="Break Started"/>
+                <field name="current_break_hours" string="Total Break Time" widget="float_time"/>
+                <field name="break_count" string="Breaks"/>
                 <field name="company_id" groups="base.group_multi_company" optional="hide"/>
             </list>
         </field>

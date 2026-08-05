@@ -62,12 +62,18 @@ class HrEmployee(models.Model):
     current_break_start = fields.Datetime(
         string='Break Started',
         compute='_compute_live_break_info',
-        help='Start time of the current break (when status is On Break).',
+        help='Start of the current open break, or the most recent break start.',
     )
     current_break_hours = fields.Float(
-        string='Break Duration',
+        string='Total Break Time',
         compute='_compute_live_break_info',
-        help='Elapsed hours of the current break.',
+        help='Total time on break for the current open attendance. '
+             'Completed breaks are summed; an open break keeps counting.',
+    )
+    break_count = fields.Integer(
+        string='Breaks',
+        compute='_compute_live_break_info',
+        help='How many times the employee started a break on the current open attendance.',
     )
     face_reference_id = fields.Char(
         string='Face Reference ID',
@@ -170,7 +176,7 @@ class HrEmployee(models.Model):
 
     @api.depends('hikvision_presence_status')
     def _compute_live_break_info(self):
-        """Live board helpers: open check-in plus current break start/duration."""
+        """Live board: open check-in, break start, total break time, and break count."""
         Attendance = self.env['hr.attendance'].sudo()
         PunchLog = self.env['hr.attendance.punch.log'].sudo()
         now = fields.Datetime.now()
@@ -179,6 +185,7 @@ class HrEmployee(models.Model):
             employee.live_check_in = False
             employee.current_break_start = False
             employee.current_break_hours = 0.0
+            employee.break_count = 0
 
         if not self:
             return
@@ -192,38 +199,46 @@ class HrEmployee(models.Model):
             if attendance.employee_id.id not in open_by_employee:
                 open_by_employee[attendance.employee_id.id] = attendance
 
+        attendance_ids = [att.id for att in open_by_employee.values()]
+        punches_by_attendance = {att_id: [] for att_id in attendance_ids}
+        if attendance_ids:
+            punches = PunchLog.search([
+                ('attendance_id', 'in', attendance_ids),
+                ('punch_type', 'in', ('break_out', 'break_in')),
+            ], order='punch_time asc, id asc')
+            for punch in punches:
+                punches_by_attendance.setdefault(punch.attendance_id.id, []).append(punch)
+
         for employee in self:
-            attendance = open_by_employee.get(employee.id)
-            if attendance:
-                employee.live_check_in = attendance.check_in
-
-        on_break = self.filtered(lambda emp: emp.hikvision_presence_status == 'on_break')
-        attendance_ids = [
-            open_by_employee[emp.id].id
-            for emp in on_break
-            if emp.id in open_by_employee
-        ]
-        if not attendance_ids:
-            return
-
-        break_outs = PunchLog.search([
-            ('attendance_id', 'in', attendance_ids),
-            ('punch_type', '=', 'break_out'),
-        ], order='punch_time desc, id desc')
-        break_start_by_attendance = {}
-        for punch in break_outs:
-            if punch.attendance_id.id not in break_start_by_attendance:
-                break_start_by_attendance[punch.attendance_id.id] = punch.punch_time
-
-        for employee in on_break:
             attendance = open_by_employee.get(employee.id)
             if not attendance:
                 continue
-            start = break_start_by_attendance.get(attendance.id)
-            if not start:
-                continue
-            employee.current_break_start = start
-            employee.current_break_hours = (now - start).total_seconds() / 3600.0
+            employee.live_check_in = attendance.check_in
+
+            open_start = None
+            last_start = None
+            total_seconds = 0.0
+            break_count = 0
+            for punch in punches_by_attendance.get(attendance.id, []):
+                if punch.punch_type == 'break_out':
+                    if open_start:
+                        # Consecutive Break Out: close the previous open break here.
+                        total_seconds += (punch.punch_time - open_start).total_seconds()
+                    open_start = punch.punch_time
+                    last_start = punch.punch_time
+                    break_count += 1
+                elif punch.punch_type == 'break_in' and open_start:
+                    total_seconds += (punch.punch_time - open_start).total_seconds()
+                    open_start = None
+
+            if open_start:
+                total_seconds += (now - open_start).total_seconds()
+                employee.current_break_start = open_start
+            else:
+                employee.current_break_start = last_start
+
+            employee.current_break_hours = max(total_seconds, 0.0) / 3600.0
+            employee.break_count = break_count
 
     @api.depends('company_id')
     def _compute_face_provider_available(self):
