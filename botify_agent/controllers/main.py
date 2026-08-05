@@ -94,6 +94,20 @@ def _check_access(records, operation):
     records.check_access_rule(operation)
 
 
+def _user_all_groups(user):
+    """A user's groups + implied groups, across Odoo versions.
+
+    Odoo 19 split ``res.users.groups_id`` into ``group_ids`` (direct) and
+    ``all_group_ids`` (direct + implied); 18 and earlier only have
+    ``groups_id``, which already includes implied groups. Missing this broke
+    every call to /botify_agent/identity on Odoo 19 with an AttributeError —
+    verified live.
+    """
+    if "all_group_ids" in user._fields:
+        return user.all_group_ids
+    return user.groups_id
+
+
 def _config(env):
     """Read addon settings.
 
@@ -110,40 +124,6 @@ def _config(env):
         "secret": (params.get_param("botify_agent.shared_secret") or "").strip(),
         "ttl": int(params.get_param("botify_agent.assertion_ttl") or 120),
         "allowed_group_id": params.get_param("botify_agent.allowed_group_id"),
-    }
-
-
-def _api_base(base_url):
-    """Normalize settings URL to the Botify HTTP API root (…/api)."""
-    cleaned = (base_url or "").strip().rstrip("/")
-    if not cleaned:
-        return ""
-    if cleaned.endswith("/api"):
-        return cleaned
-    return cleaned + "/api"
-
-
-def _widget_script_url(base_url):
-    """Derive the hosted widget IIFE URL from the API base / origin."""
-    api = _api_base(base_url)
-    if not api:
-        return ""
-    origin = api[: -len("/api")] if api.endswith("/api") else api
-    return "%s/widget/widget.iife.js" % origin
-
-
-def _public_widget_payload(config):
-    return {
-        "enabled": bool(config["enabled"]),
-        "agent_id": config["agent_id"],
-        "api_url": _api_base(config["base_url"]),
-        "widget_script_url": _widget_script_url(config["base_url"]),
-        "identity_ready": bool(
-            config["enabled"]
-            and config["secret"]
-            and config["agent_id"]
-            and config["installation_id"]
-        ),
     }
 
 
@@ -164,26 +144,6 @@ def _error(message, status=400, name=None):
 
 class BotifyIdentityController(http.Controller):
     """Mints identity assertions for the logged-in Odoo user."""
-
-    @http.route(
-        "/botify_agent/widget_config",
-        type="jsonrpc",
-        auth="user",
-        methods=["POST"],
-        csrf=False,
-    )
-    def widget_config(self, **kwargs):
-        """Return the public widget embed settings for the current database.
-
-        No secret leaves the server. Enough for the backend to load
-        ``widget.iife.js``; identity is a separate step.
-        """
-        config = _config(request.env)
-        if not config["enabled"]:
-            return {"error": "Botify agent is disabled on this database."}
-        if not (config["agent_id"] and config["base_url"]):
-            return {"error": "Botify agent is not fully configured."}
-        return _public_widget_payload(config)
 
     @http.route(
         "/botify_agent/identity",
@@ -217,11 +177,11 @@ class BotifyIdentityController(http.Controller):
 
         group_id = config["allowed_group_id"]
         if group_id:
-            # res.users.groups_id already contains implied groups, so a plain
+            # _user_all_groups() already contains implied groups, so a plain
             # membership test covers inheritance without resolving xml ids
             # (groups created in the UI generally have none).
             try:
-                allowed = int(group_id) in user.groups_id.ids
+                allowed = int(group_id) in _user_all_groups(user).ids
             except (TypeError, ValueError):
                 allowed = False
             if not allowed:
@@ -247,19 +207,16 @@ class BotifyIdentityController(http.Controller):
             # Audit/personalisation only. Botify explicitly does not use these
             # for authorization — permissions are re-evaluated here on every
             # call, so a stale group list cannot widen anything.
-            "groups": user.groups_id.mapped("full_name")[:64],
+            "groups": _user_all_groups(user).mapped("full_name")[:64],
         }
 
         _logger.info(
             "botify_agent: issued identity assertion for uid=%s (%s)", user.id, user.login
         )
-        public = _public_widget_payload(config)
         return {
             "assertion": botify_security.sign_jwt(payload, config["secret"]),
             "expires_in": config["ttl"],
             "base_url": config["base_url"],
-            "api_url": public["api_url"],
-            "widget_script_url": public["widget_script_url"],
             "agent_id": config["agent_id"],
             "platform": "odoo",
             "user": {"id": user.id, "name": user.name},

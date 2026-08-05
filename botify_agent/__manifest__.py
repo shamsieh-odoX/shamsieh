@@ -19,7 +19,7 @@ Two endpoints do the work:
   applies that user's access rights, record rules and allowed companies to every
   read and write. No permission is copied into Botify, so none can go stale.
 """,
-    "version": "19.0.1.1.1",
+    "version": "19.0.1.2.0",
     "category": "Productivity/Discuss",
     "license": "LGPL-3",
     "author": "Botify",
@@ -27,14 +27,13 @@ Two endpoints do the work:
     "depends": ["base", "base_setup", "web"],
     "data": [
         "security/ir.model.access.csv",
-        "data/ir_config_parameter.xml",
         "views/res_config_settings_views.xml",
         "views/botify_menus.xml",
     ],
     "assets": {
         "web.assets_backend": [
-            "botify_agent/static/src/js/botify_widget_loader.js",
             "botify_agent/static/src/js/botify_client_action.js",
+            "botify_agent/static/src/js/botify_widget.js",
             "botify_agent/static/src/xml/botify_client_action.xml",
         ],
     },

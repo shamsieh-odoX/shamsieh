@@ -20,7 +20,7 @@
                             <field name="botify_enabled"/>
                         </setting>
                         <setting string="Botify API base URL">
-                            <field name="botify_base_url" placeholder="https://botifyarabia.ai/api"/>
+                            <field name="botify_base_url" placeholder="https://api.botifyarabia.ai"/>
                         </setting>
                         <setting string="Botify agent ID">
                             <field name="botify_agent_id" placeholder="UUID of the agent"/>

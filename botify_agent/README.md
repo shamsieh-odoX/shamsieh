@@ -138,7 +138,8 @@ Covers:
 ## Odoo version support
 
 Targeted at Odoo 19 (manifest `19.0.*`); the ORM calls used are stable across
-17–19. The identity route uses `type="jsonrpc"` (Odoo 19); the one other
-version-sensitive call, `check_access` (18+) vs `check_access_rights` +
-`check_access_rule` (17 and earlier), goes through a shim in
-`controllers/main.py::_check_access`.
+17–19. The identity route uses `type="jsonrpc"` (Odoo 19). Group membership goes
+through `_user_all_groups` because Odoo 19 split `groups_id` into `group_ids` /
+`all_group_ids`. The other version-sensitive call, `check_access` (18+) vs
+`check_access_rights` + `check_access_rule` (17 and earlier), goes through a
+shim in `controllers/main.py::_check_access`.

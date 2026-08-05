@@ -14,8 +14,7 @@ class ResConfigSettings(models.TransientModel):
     botify_base_url = fields.Char(
         string="Botify API base URL",
         config_parameter="botify_agent.base_url",
-        default="https://botifyarabia.ai/api",
-        help="e.g. https://botifyarabia.ai/api",
+        help="e.g. https://api.botifyarabia.ai",
     )
     botify_agent_id = fields.Char(
         string="Botify agent ID",
@@ -51,7 +50,7 @@ class ResConfigSettings(models.TransientModel):
     botify_enabled = fields.Boolean(
         string="Enable Botify agent",
         config_parameter="botify_agent.enabled",
-        default=True,
+        default=False,
     )
 
     @api.constrains("botify_assertion_ttl")
