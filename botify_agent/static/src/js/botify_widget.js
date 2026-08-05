@@ -6,9 +6,10 @@
  * Kept as its own asset so the Assistant client action and the embed stay
  * independent — either can change without the other.
  *
- * The remote IIFE only auto-boots when it can read document.currentScript
- * (inline <script src=… data-agent-id=…>). Dynamically injected scripts leave
- * currentScript null, so we mount ChatWidget ourselves after load.
+ * Do NOT set data-agent-id / data-api-url on the injected script. The remote
+ * IIFE auto-boots when it can read those attrs from document.currentScript
+ * (which Chrome sets even for dynamically appended scripts). We mount
+ * ChatWidget ourselves after load so we can pass the Odoo identity token.
  *
  * Odoo's command palette / home-menu search listens on window and only treats
  * light-DOM inputs as editable. Botify's composer lives in Shadow DOM, so
@@ -106,12 +107,18 @@ function installOdooKeyGuard(host) {
     );
 }
 
-function guardMountedWidget(widget) {
-    const host =
+function getWidgetHost(widget) {
+    return (
         widget?.shadow?.host ||
         widget?.el ||
         widget?.root ||
-        document.querySelector("[data-botify-widget-host], #botify-widget, .botify-widget");
+        document.getElementById("chatagent-widget") ||
+        document.querySelector("[data-botify-widget-host], #botify-widget, .botify-widget")
+    );
+}
+
+function guardMountedWidget(widget) {
+    const host = getWidgetHost(widget);
     if (host) {
         installOdooKeyGuard(host);
         return;
@@ -119,7 +126,7 @@ function guardMountedWidget(widget) {
     // Host may appear a tick after mount().
     const observer = new MutationObserver(() => {
         const shamsi = window.Shamsi;
-        const lateHost = shamsi?.shadow?.host;
+        const lateHost = getWidgetHost(shamsi);
         if (lateHost) {
             installOdooKeyGuard(lateHost);
             observer.disconnect();
@@ -185,46 +192,67 @@ function scheduleIdentityRefresh(widget, session) {
     const delay = Math.max(session.expiresAt - Date.now() - 30_000, 5_000);
     identityRefreshTimer = setTimeout(async () => {
         const next = await mintIdentityToken();
-        widget.setIdentityToken(next?.token || null);
+        widget.setIdentityToken?.(next?.token || null);
         scheduleIdentityRefresh(widget, next);
     }, delay);
 }
 
-// Set synchronously, before the first `await` below. mountBotifyWidget can be
-// invoked more than once (Odoo re-executing web.assets_backend scripts on
-// backend navigation is routine) — window.Shamsi alone isn't a safe guard
-// here because it's only assigned after `mintIdentityToken()` resolves. Any
-// second invocation landing in that async gap would see window.Shamsi still
-// unset and mount a duplicate, orphaned widget instance (reproduced live:
-// two #chatagent-widget hosts, window.Shamsi pointing at the empty one while
-// the real, visible instance — and its conversation, attachments — went
-// unreferenced).
-let mounting = false;
+async function attachIdentity(widget) {
+    const session = await mintIdentityToken();
+    if (session?.token && typeof widget.setIdentityToken === "function") {
+        widget.setIdentityToken(session.token);
+    }
+    scheduleIdentityRefresh(widget, session);
+    return session;
+}
 
+/**
+ * Singleton mount. Use window-level locks (not module locals) because Odoo can
+ * re-evaluate this asset on backend navigation, which resets module state while
+ * a previous mount is still awaiting identity minting.
+ */
 async function mountBotifyWidget() {
     const Widget = window.BotifyWidget?.ChatWidget;
-    if (!Widget || window.Shamsi || mounting) {
-        if (window.Shamsi) {
-            guardMountedWidget(window.Shamsi);
-        }
+    if (!Widget) {
         return;
     }
-    mounting = true;
+    if (window.Shamsi) {
+        guardMountedWidget(window.Shamsi);
+        return;
+    }
+    if (document.getElementById("chatagent-widget")) {
+        return;
+    }
+    if (window.__botifyMounting) {
+        return;
+    }
+    window.__botifyMounting = true;
     try {
-        const session = await mintIdentityToken();
-        if (window.Shamsi) {
-            // Lost the race after all (e.g. a synchronous-path caller beat us
-            // between the check above and here) — don't double-mount.
-            guardMountedWidget(window.Shamsi);
+        if (window.Shamsi || document.getElementById("chatagent-widget")) {
+            if (window.Shamsi) {
+                guardMountedWidget(window.Shamsi);
+            }
             return;
         }
-        const widget = new Widget({ agentId: AGENT_ID, apiUrl: API_URL, identityToken: session?.token });
+        const session = await mintIdentityToken();
+        if (window.Shamsi || document.getElementById("chatagent-widget")) {
+            if (window.Shamsi) {
+                guardMountedWidget(window.Shamsi);
+                await attachIdentity(window.Shamsi);
+            }
+            return;
+        }
+        const widget = new Widget({
+            agentId: AGENT_ID,
+            apiUrl: API_URL,
+            identityToken: session?.token,
+        });
         await widget.mount();
         window.Shamsi = widget;
         guardMountedWidget(widget);
         scheduleIdentityRefresh(widget, session);
     } finally {
-        mounting = false;
+        window.__botifyMounting = false;
     }
 }
 
@@ -235,8 +263,8 @@ function injectBotifyWidget() {
     }
     const script = document.createElement("script");
     script.src = WIDGET_SRC;
-    script.dataset.agentId = AGENT_ID;
-    script.dataset.apiUrl = API_URL;
+    // Loader marker only — do not set data-agent-id / data-api-url or the IIFE
+    // auto-boots a second bubble alongside our manual mount.
     script.dataset.botifyWidget = "1";
     script.onload = () => void mountBotifyWidget();
     document.head.appendChild(script);
