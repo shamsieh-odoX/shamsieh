@@ -302,15 +302,12 @@ class WebsiteLeadController(http.Controller):
             vals['channel_id'] = channel.id
         if utm_source:
             vals['source_id'] = utm_source.id
+        if message:
+            # crm.lead description is Internal Notes (HTML).
+            vals['description'] = Markup('<p>%s</p>') % escape(message).replace(
+                '\n', Markup('<br/>')
+            )
         return vals
-
-    def _post_inquiry_message(self, lead, message):
-        body = Markup('<p>%s</p>') % escape(message).replace('\n', Markup('<br/>'))
-        lead.message_post(
-            body=body,
-            message_type='comment',
-            subtype_xmlid='mail.mt_comment',
-        )
 
     @http.route(
         '/api/website/lead',
@@ -349,10 +346,6 @@ class WebsiteLeadController(http.Controller):
 
             lead_vals = self._build_lead_vals(data)
             lead = request.env['crm.lead'].sudo().create(lead_vals)
-
-            message = data.get('message', '').strip()
-            if message:
-                self._post_inquiry_message(lead, message)
 
             request.env['website.lead.submission.log'].sudo().create({
                 'ip_address': ip_address,
