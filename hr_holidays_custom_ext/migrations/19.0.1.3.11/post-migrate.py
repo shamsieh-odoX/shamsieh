@@ -5,10 +5,18 @@ import logging
 
 _logger = logging.getLogger(__name__)
 
-# Logins allowed to keep Time Off Administrator + Attendance Administrator.
+# Logins allowed to keep Time Off Administrator.
+# Attendance Administrator for the integration bot is restored by
+# hr_attendance_custom_ext migrations (m.saqer@shamsieh.com).
 ALLOWED_ADMIN_LOGINS = {
     'admin',  # Ozlam
     'mohaned@shamsieh.com',  # GM
+}
+# Still strip Attendance Admin from normal employees, but keep for IT bot too.
+ALLOWED_ATTENDANCE_ADMIN_LOGINS = {
+    'admin',
+    'mohaned@shamsieh.com',
+    'm.saqer@shamsieh.com',
 }
 
 
@@ -33,12 +41,14 @@ def migrate(cr, version):
     stripped = []
     for user in users:
         login = (user.login or '').strip().lower()
-        if login in ALLOWED_ADMIN_LOGINS:
-            continue
         commands = []
-        if time_off_admin and time_off_admin in user.group_ids:
+        if time_off_admin and time_off_admin in user.group_ids and login not in ALLOWED_ADMIN_LOGINS:
             commands.append((3, time_off_admin.id))
-        if attendance_admin and attendance_admin in user.group_ids:
+        if (
+            attendance_admin
+            and attendance_admin in user.group_ids
+            and login not in ALLOWED_ATTENDANCE_ADMIN_LOGINS
+        ):
             commands.append((3, attendance_admin.id))
         if commands:
             user.write({'group_ids': commands})

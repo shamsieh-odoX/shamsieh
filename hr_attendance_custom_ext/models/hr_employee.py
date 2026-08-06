@@ -748,6 +748,27 @@ class HrEmployee(models.Model):
         return {'status': 'ignored', 'punch_type': punch_type}
 
     @api.model
+    def hikvision_find_by_device_user(self, device_user_id):
+        """Resolve employee for the local Hikvision bridge (sudo; barcode or device id)."""
+        device_user_id = str(device_user_id or '').strip()
+        if not device_user_id:
+            return False
+        Employee = self.sudo()
+        employee = Employee.search([
+            ('biometric_device_user_id', '=', device_user_id),
+        ], limit=1)
+        if not employee:
+            employee = Employee.search([('barcode', '=', device_user_id)], limit=1)
+        if not employee:
+            return False
+        return {
+            'id': employee.id,
+            'name': employee.name,
+            'company_id': employee.company_id.id if employee.company_id else False,
+            'user_id': employee.user_id.id if employee.user_id else False,
+        }
+
+    @api.model
     def hikvision_bridge_punch(
         self,
         employee_id,
@@ -759,9 +780,13 @@ class HrEmployee(models.Model):
     ):
         """XML-RPC entry point for the local Hikvision bridge."""
         employee = self.browse(int(employee_id)).exists()
+        if not employee and device_user_id:
+            found = self.hikvision_find_by_device_user(device_user_id)
+            if found:
+                employee = self.browse(found['id'])
         if not employee:
             return {'status': 'employee_not_found', 'employee_id': employee_id}
-        return employee.hikvision_process_punch(
+        return employee.sudo().hikvision_process_punch(
             punch_type=punch_type,
             punch_time=punch_time,
             external_log_id=external_log_id,

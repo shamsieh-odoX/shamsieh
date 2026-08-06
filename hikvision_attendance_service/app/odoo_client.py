@@ -57,6 +57,25 @@ class OdooClient:
         return {"version": version.get("server_version"), "installed_modules": modules_count}
 
     def find_employee_by_barcode(self, employee_no: str) -> dict | None:
+        employee_no = str(employee_no or "").strip()
+        if not employee_no:
+            return None
+        # Prefer server-side sudo resolver (barcode OR biometric_device_user_id).
+        try:
+            found = self._execute(
+                "hr.employee",
+                "hikvision_find_by_device_user",
+                employee_no,
+            )
+            if found:
+                return {
+                    "id": found["id"],
+                    "name": found.get("name"),
+                    "company_id": [found["company_id"], ""] if found.get("company_id") else False,
+                    "user_id": [found["user_id"], ""] if found.get("user_id") else False,
+                }
+        except OdooError:
+            pass
         records = self._execute(
             "hr.employee",
             "search_read",
