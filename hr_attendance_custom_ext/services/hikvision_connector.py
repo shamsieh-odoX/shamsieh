@@ -312,7 +312,11 @@ class HikvisionConnector:
 
         device_user_id = (event.get('employee_id') or '').strip()
         event_type = event.get('event_type') or 'unknown'
-        punch_type = event_type if event_type in ('check_in', 'check_out') else 'unknown'
+        raw_status = raw.get('attendanceStatus') or raw.get('byAttendanceStatus') or event_type
+        from .hikvision_http_push import _map_status_token
+        punch_type = _map_status_token(raw_status) or (
+            event_type if event_type in ('check_in', 'check_out', 'break_in', 'break_out') else 'unknown'
+        )
         vals = {
             'device_id': self.device.id,
             'external_id': str(event.get('external_id')),

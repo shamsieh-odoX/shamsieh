@@ -131,19 +131,71 @@ def _connect_odoo() -> OdooClient | None:
         return None
 
 
-def _normalize_punch_type(attendance_status: str) -> str | None:
-    status = attendance_status.strip().lower()
-    mapping = {
-        "checkin": "check_in",
-        "check_in": "check_in",
-        "checkout": "check_out",
-        "check_out": "check_out",
-        "breakin": "break_in",
-        "break_in": "break_in",
-        "breakout": "break_out",
-        "break_out": "break_out",
-    }
-    return mapping.get(status)
+PUNCH_TYPE_MAP = {
+    "checkin": "check_in",
+    "check_in": "check_in",
+    "checkout": "check_out",
+    "check_out": "check_out",
+    "breakin": "break_in",
+    "break_in": "break_in",
+    "breakend": "break_in",
+    "endbreak": "break_in",
+    "breakout": "break_out",
+    "break_out": "break_out",
+    "breakstart": "break_out",
+    "startbreak": "break_out",
+    "上班": "check_in",
+    "下班": "check_out",
+    "开始休息": "break_out",
+    "结束休息": "break_in",
+}
+
+# 0 undefined, 1 check-in, 2 check-out, 3 start break, 4 end break, 5 OT in, 6 OT out
+NUMERIC_ATTENDANCE_STATUS_MAP = {
+    "1": "check_in",
+    "2": "check_out",
+    "3": "break_out",
+    "4": "break_in",
+    "5": "check_in",
+    "6": "check_out",
+}
+
+
+def _map_status_token(value) -> str | None:
+    if value is None:
+        return None
+    status = str(value).strip()
+    if not status or status.lower() in ("undefined", "none", "null", "0"):
+        return None
+    compact = status.lower().replace(" ", "").replace("-", "").replace("_", "")
+    mapped = (
+        PUNCH_TYPE_MAP.get(compact)
+        or PUNCH_TYPE_MAP.get(status.lower())
+        or PUNCH_TYPE_MAP.get(status)
+    )
+    if mapped:
+        return mapped
+    return NUMERIC_ATTENDANCE_STATUS_MAP.get(status) or NUMERIC_ATTENDANCE_STATUS_MAP.get(compact)
+
+
+def _normalize_punch_type_from_fields(raw_fields: dict) -> str | None:
+    for key in (
+        "attendanceStatus",
+        "AttendanceStatus",
+        "byAttendanceStatus",
+        "label",
+        "attendanceLabel",
+    ):
+        mapped = _map_status_token(raw_fields.get(key))
+        if mapped:
+            return mapped
+    # statusValue is often auth success (0/1). Only treat 3/4 as break codes.
+    status = str(raw_fields.get("attendanceStatus") or "").strip().lower()
+    if not status or status == "undefined":
+        status_value = str(raw_fields.get("statusValue") or "").strip()
+        if status_value in ("3", "4"):
+            return NUMERIC_ATTENDANCE_STATUS_MAP[status_value]
+    return None
 
 
 def process_event(event: AttendanceEvent, *, from_retry: bool = False) -> str:
@@ -165,11 +217,16 @@ def process_event(event: AttendanceEvent, *, from_retry: bool = False) -> str:
         store.mark_processed(event.device_serial, event.event_id, event.employee_no, event.event_time.isoformat())
         return "employee-not-found"
 
-    attendance_status = str(event.raw_fields.get("attendanceStatus") or "").strip().lower()
-    punch_type = _normalize_punch_type(attendance_status)
+    punch_type = _normalize_punch_type_from_fields(event.raw_fields)
     if not punch_type:
+        attendance_status = event.raw_fields.get("attendanceStatus")
         store.mark_processed(event.device_serial, event.event_id, event.employee_no, event.event_time.isoformat())
-        logger.info("Ignored attendance status=%s employee=%s", attendance_status, employee["id"])
+        logger.info(
+            "Ignored attendance status=%r statusValue=%r employee=%s",
+            attendance_status,
+            event.raw_fields.get("statusValue"),
+            employee["id"],
+        )
         return "ignored-status"
 
     result = odoo.process_hikvision_punch(

@@ -39,6 +39,52 @@ class TestHikvisionHttpPush(TransactionCase):
         self.assertEqual(action, 'process')
         self.assertEqual(reason, 'break_in')
 
+    def test_classify_numeric_break_out(self):
+        action, reason = classify_http_push({
+            'employeeNoString': '5',
+            'attendanceStatus': 3,
+            'dateTime': '2026-07-13T08:00:00+03:00',
+            'serialNo': 1005,
+            'subEventType': 38,
+        })
+        self.assertEqual(action, 'process')
+        self.assertEqual(reason, 'break_out')
+
+    def test_classify_numeric_break_in(self):
+        action, reason = classify_http_push({
+            'employeeNoString': '5',
+            'attendanceStatus': '4',
+            'dateTime': '2026-07-13T08:00:00+03:00',
+            'serialNo': 1006,
+            'subEventType': 38,
+        })
+        self.assertEqual(action, 'process')
+        self.assertEqual(reason, 'break_in')
+
+    def test_classify_status_value_break_when_undefined(self):
+        action, reason = classify_http_push({
+            'employeeNoString': '5',
+            'attendanceStatus': 'undefined',
+            'statusValue': 3,
+            'dateTime': '2026-07-13T08:00:00+03:00',
+            'serialNo': 1007,
+            'subEventType': 38,
+        })
+        self.assertEqual(action, 'process')
+        self.assertEqual(reason, 'break_out')
+
+    def test_classify_auth_status_value_not_treated_as_check_in(self):
+        action, reason = classify_http_push({
+            'employeeNoString': '5',
+            'attendanceStatus': 'undefined',
+            'statusValue': 1,
+            'dateTime': '2026-07-13T08:00:00+03:00',
+            'serialNo': 1008,
+            'subEventType': 38,
+        })
+        self.assertEqual(action, 'ignored')
+        self.assertEqual(reason, 'unknown attendance status')
+
     def test_classify_door_event_ignored(self):
         action, reason = classify_http_push({
             'subEventType': 21,
@@ -69,7 +115,7 @@ class TestHikvisionHttpPush(TransactionCase):
         })
         result = process_http_push(self.device, {
             'employeeNoString': '5',
-            'attendanceStatus': 'breakIn',
+            'attendanceStatus': 'breakOut',
             'dateTime': '2026-07-13T10:00:00+03:00',
             'serialNo': 1004,
             'subEventType': 38,

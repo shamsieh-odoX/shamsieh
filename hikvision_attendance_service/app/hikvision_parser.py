@@ -55,6 +55,15 @@ def _unwrap_event_dict(data: dict[str, Any]) -> dict[str, Any]:
             ):
                 if wrapper_key in data and wrapper_key not in merged:
                     merged[wrapper_key] = data[wrapper_key]
+            for attendance_key in (
+                "attendanceStatus",
+                "AttendanceStatus",
+                "byAttendanceStatus",
+                "statusValue",
+                "label",
+            ):
+                if attendance_key in data and attendance_key not in merged:
+                    merged[attendance_key] = data[attendance_key]
             return merged
     if ACS_FIELD_MARKERS.intersection(data):
         return data

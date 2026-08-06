@@ -20,8 +20,30 @@ PUNCH_TYPE_MAP = {
     'check_out': 'check_out',
     'breakin': 'break_in',
     'break_in': 'break_in',
+    'breakend': 'break_in',
+    'endbreak': 'break_in',
     'breakout': 'break_out',
     'break_out': 'break_out',
+    'breakstart': 'break_out',
+    'startbreak': 'break_out',
+    # Hikvision device labels / Chinese status text
+    '上班': 'check_in',
+    '下班': 'check_out',
+    '开始休息': 'break_out',
+    '结束休息': 'break_in',
+    '加班开始': 'check_in',
+    '加班结束': 'check_out',
+}
+
+# Hikvision byAttendanceStatus / numeric attendanceStatus:
+# 0 undefined, 1 check-in, 2 check-out, 3 start break, 4 end break, 5 OT in, 6 OT out
+NUMERIC_ATTENDANCE_STATUS_MAP = {
+    '1': 'check_in',
+    '2': 'check_out',
+    '3': 'break_out',
+    '4': 'break_in',
+    '5': 'check_in',
+    '6': 'check_out',
 }
 
 DOOR_SYSTEM_SUB_EVENT_TYPES = frozenset({21, 22, 23, 24, '21', '22', '23', '24'})
@@ -40,13 +62,38 @@ def _employee_no(raw: dict[str, Any]) -> str:
     return ''
 
 
+def _map_status_token(value: Any) -> str | None:
+    if value is None:
+        return None
+    status = str(value).strip()
+    if not status or status.lower() in ('undefined', 'none', 'null', '0'):
+        return None
+    compact = status.lower().replace(' ', '').replace('-', '').replace('_', '')
+    mapped = PUNCH_TYPE_MAP.get(compact) or PUNCH_TYPE_MAP.get(status.lower()) or PUNCH_TYPE_MAP.get(status)
+    if mapped:
+        return mapped
+    return NUMERIC_ATTENDANCE_STATUS_MAP.get(status) or NUMERIC_ATTENDANCE_STATUS_MAP.get(compact)
+
+
 def _normalize_punch_type(raw: dict[str, Any]) -> str | None:
-    status = str(raw.get('attendanceStatus') or '').strip().lower()
-    if status and status != 'undefined':
-        compact = status.replace(' ', '').replace('-', '')
-        mapped = PUNCH_TYPE_MAP.get(compact) or PUNCH_TYPE_MAP.get(status)
+    """Map Hikvision attendanceStatus (string or numeric) to punch type."""
+    for key in (
+        'attendanceStatus',
+        'AttendanceStatus',
+        'byAttendanceStatus',
+        'label',
+        'attendanceLabel',
+    ):
+        mapped = _map_status_token(raw.get(key))
         if mapped:
             return mapped
+    # statusValue is often auth success (0/1), not attendance. Only use it for
+    # break codes 3/4 when attendanceStatus is missing/undefined.
+    status = str(raw.get('attendanceStatus') or '').strip().lower()
+    if not status or status == 'undefined':
+        status_value = str(raw.get('statusValue') or '').strip()
+        if status_value in ('3', '4'):
+            return NUMERIC_ATTENDANCE_STATUS_MAP[status_value]
     return None
 
 
@@ -101,12 +148,20 @@ def process_http_push(device, raw_fields: dict[str, Any]) -> dict[str, Any]:
     action, reason = classify_http_push(raw_fields)
     if action == 'ignored':
         _logger.info(
-            'Hikvision HTTP push ignored for %s: %s (serialNo=%s)',
+            'Hikvision HTTP push ignored for %s: %s '
+            '(serialNo=%s attendanceStatus=%r statusValue=%r)',
             device.name,
             reason,
             raw_fields.get('serialNo'),
+            raw_fields.get('attendanceStatus'),
+            raw_fields.get('statusValue'),
         )
-        return {'status': 'ignored', 'reason': reason}
+        return {
+            'status': 'ignored',
+            'reason': reason,
+            'attendanceStatus': raw_fields.get('attendanceStatus'),
+            'statusValue': raw_fields.get('statusValue'),
+        }
 
     if action == 'error':
         _logger.warning(
