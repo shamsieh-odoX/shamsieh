@@ -54,6 +54,10 @@ class HrHourlyDepartureAllocationWizard(models.TransientModel):
                 },
             }
         log = logs[0]
+        next_action = self.env['ir.actions.act_window']._for_xml_id(
+            'hr_holidays_custom_ext.action_hr_hourly_departure_allocation_log'
+        )
+        next_action['domain'] = [('id', 'in', logs.ids)]
         return {
             'type': 'ir.actions.client',
             'tag': 'display_notification',
@@ -62,12 +66,6 @@ class HrHourlyDepartureAllocationWizard(models.TransientModel):
                 'message': log.summary,
                 'type': 'success',
                 'sticky': False,
-                'next': {
-                    'type': 'ir.actions.act_window',
-                    'res_model': 'hr.hourly.departure.allocation.log',
-                    'view_mode': 'list,form',
-                    'domain': [('id', 'in', logs.ids)],
-                    'target': 'current',
-                },
+                'next': next_action,
             },
         }
