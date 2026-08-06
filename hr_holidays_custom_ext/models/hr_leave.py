@@ -15,6 +15,10 @@ class HrLeave(models.Model):
     )
     approval_trail_count = fields.Integer(compute='_compute_approval_trail_count')
     refuse_reason = fields.Text(string='Refusal Reason', copy=False, readonly=True)
+    can_second_approve = fields.Boolean(
+        compute='_compute_can_second_approve',
+        export_string_translation=False,
+    )
 
     @api.depends('approval_trail_ids')
     def _compute_approval_trail_count(self):
@@ -122,35 +126,65 @@ class HrLeave(models.Model):
         employee = self.env.user.employee_id
         return bool(employee and self.first_approver_id and self.first_approver_id == employee)
 
+    @api.depends('state', 'employee_id', 'department_id', 'first_approver_id', 'holiday_status_id')
+    @api.depends_context('uid')
+    def _compute_can_second_approve(self):
+        for holiday in self:
+            holiday.can_second_approve = bool(
+                holiday.validation_type == 'both'
+                and holiday.state == 'validate1'
+                and holiday._is_second_approver_for_leave()
+            )
+
     @api.depends('state', 'employee_id', 'department_id', 'first_approver_id')
+    @api.depends_context('uid')
+    def _compute_can_approve(self):
+        super()._compute_can_approve()
+        for holiday in self:
+            if holiday._is_leave_requesting_user():
+                holiday.can_approve = False
+                continue
+            if holiday.validation_type == 'both':
+                # Only the employee's Time Off Approver may do first approval.
+                if holiday.state == 'confirm':
+                    holiday.can_approve = holiday._is_leave_manager()
+                else:
+                    holiday.can_approve = False
+
+    @api.depends('state', 'employee_id', 'department_id', 'first_approver_id', 'holiday_status_id')
     @api.depends_context('uid')
     def _compute_can_validate(self):
         super()._compute_can_validate()
         for holiday in self:
-            if holiday.can_validate:
+            # Never allow self-approval, even if the employee is Time Off Admin.
+            if holiday._is_leave_requesting_user():
+                holiday.can_validate = False
                 continue
-            if (
-                holiday.validation_type == 'both'
-                and holiday.state == 'validate1'
-                and holiday._is_second_approver_for_leave()
-            ):
-                holiday.can_validate = True
+            if holiday.validation_type != 'both':
+                continue
+            if holiday.state == 'validate1':
+                # First approver cannot also validate; only GM / Notify HR.
+                holiday.can_validate = holiday._is_second_approver_for_leave()
+            elif holiday.state == 'confirm':
+                # Block officers from skipping straight to validate.
+                holiday.can_validate = False
 
-    @api.depends('state', 'employee_id', 'department_id', 'first_approver_id')
+    @api.depends('state', 'employee_id', 'department_id', 'first_approver_id', 'holiday_status_id')
     @api.depends_context('uid')
     def _compute_can_refuse(self):
         super()._compute_can_refuse()
         for holiday in self:
-            if holiday.can_refuse:
-                continue
             if holiday._is_leave_requesting_user():
+                holiday.can_refuse = False
                 continue
             if holiday.validation_type != 'both':
                 continue
-            if holiday.state == 'confirm' and holiday._is_leave_manager():
-                holiday.can_refuse = True
-            elif holiday.state == 'validate1' and holiday._is_second_approver_for_leave():
-                holiday.can_refuse = True
+            if holiday.state == 'confirm':
+                holiday.can_refuse = holiday._is_leave_manager()
+            elif holiday.state == 'validate1':
+                holiday.can_refuse = holiday._is_second_approver_for_leave()
+            else:
+                holiday.can_refuse = False
 
     def _get_next_states_by_state(self):
         """Employees may only cancel; two-step leaves follow manager then officer/GM."""

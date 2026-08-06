@@ -1,6 +1,6 @@
 {
     'name': 'HR Attendance Custom Extensions',
-    'version': '19.0.1.3.46',
+    'version': '19.0.1.3.47',
     'category': 'Human Resources/Attendances',
     'summary': 'Shamsieh attendance, fingerprint sync (Hikvision + ZKTeco), and face attendance',
     'author': 'Custom',

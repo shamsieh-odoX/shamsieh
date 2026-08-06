@@ -2,7 +2,8 @@
 
 from datetime import timedelta
 
-from odoo import api, fields, models
+from odoo import _, api, fields, models
+from odoo.exceptions import AccessError
 
 
 class HrAttendance(models.Model):
@@ -138,17 +139,56 @@ class HrAttendance(models.Model):
                 seen.add(key)
                 Status._generate_for_employee_date(attendance.employee_id.sudo(), attendance.date)
 
+    def _user_can_manage_attendance(self):
+        """Officers/managers may edit attendance; normal employees may not."""
+        user = self.env.user
+        return (
+            self.env.su
+            or user.has_group('hr_attendance.group_hr_attendance_officer')
+            or user.has_group('hr_attendance.group_hr_attendance_manager')
+        )
+
+    def _check_manual_attendance_edit(self):
+        if self._user_can_manage_attendance():
+            return
+        raise AccessError(_(
+            'You cannot create or edit attendance records. '
+            'Use the fingerprint device or the attendance check-in menu. '
+            'Only Attendance Officers / Administrators can change attendance manually.'
+        ))
+
     @api.model_create_multi
     def create(self, vals_list):
+        # Technical / device punches use sudo or officer context; block plain employees.
+        if not self.env.context.get('attendance_technical_punch') and not self._user_can_manage_attendance():
+            # Allow systray/home check-in helpers that run as the employee with explicit flag.
+            if not self.env.context.get('attendance_employee_self_punch'):
+                self._check_manual_attendance_edit()
         records = super().create(vals_list)
         records._refresh_daily_status()
         return records
 
     def write(self, vals):
+        protected = {
+            'check_in', 'check_out', 'employee_id', 'in_mode', 'out_mode',
+            'attendance_source', 'hikvision_punch_type',
+        }
+        if protected & set(vals) and not self.env.context.get('attendance_technical_punch'):
+            if not self._user_can_manage_attendance() and not self.env.context.get('attendance_employee_self_punch'):
+                self._check_manual_attendance_edit()
         res = super().write(vals)
         if {'check_in', 'check_out', 'employee_id'} & set(vals):
             self._refresh_daily_status()
         return res
+
+    def unlink(self):
+        if not self.env.context.get('attendance_technical_punch'):
+            if not self._user_can_manage_attendance():
+                raise AccessError(_(
+                    'You cannot delete attendance records. '
+                    'Contact an Attendance Officer / Administrator.'
+                ))
+        return super().unlink()
 
     def _defer_penalties_until_checkout(self):
         """Keep one open day record; compute late/early only after final checkout."""

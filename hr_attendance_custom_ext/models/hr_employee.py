@@ -775,7 +775,7 @@ class HrEmployee(models.Model):
             self._raise_if_systray_break_blocked()
         else:
             self._raise_if_manual_attendance_blocked()
-        return self.hikvision_process_punch(
+        return self.with_context(attendance_employee_self_punch=True).hikvision_process_punch(
             punch_type=punch_type,
             punch_time=fields.Datetime.now(),
             attendance_source='systray',
@@ -869,7 +869,9 @@ class HrEmployee(models.Model):
                 via_home_pin=self.env.context.get('attendance_via_home_pin'),
                 device_location=self.env.context.get('attendance_device_location'),
             )
-        attendance = super()._attendance_action_change(geo_information=geo_information)
+        attendance = super(
+            type(self), self.with_context(attendance_employee_self_punch=True)
+        )._attendance_action_change(geo_information=geo_information)
         if attendance and not attendance.attendance_source:
             mode_map = {
                 'kiosk': 'kiosk',
@@ -879,5 +881,5 @@ class HrEmployee(models.Model):
                 source = mode_map.get(attendance.in_mode, 'manual')
             else:
                 source = mode_map.get(attendance.out_mode, 'manual')
-            attendance.attendance_source = source
+            attendance.with_context(attendance_employee_self_punch=True).attendance_source = source
         return attendance
