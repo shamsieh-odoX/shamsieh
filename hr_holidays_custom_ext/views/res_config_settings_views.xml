@@ -57,6 +57,36 @@
                                 groups="hr_holidays.group_hr_holidays_manager"/>
                     </setting>
                 </block>
+                <block title="Hourly Departures (Article 11)" name="hourly_departure_setting_container">
+                    <setting string="Hourly Departure Type" company_dependent="1"
+                             help="Time off type used for short hourly departures under Article 11.">
+                        <field name="hourly_departure_type_id"/>
+                    </setting>
+                    <setting string="Max Hours Per Day" company_dependent="1"
+                             help="Maximum departure hours allowed per employee per calendar day.">
+                        <field name="hourly_departure_max_hours_day" class="text-center" style="width: 5ch;"/>
+                        <span class="ms-2">Hours</span>
+                    </setting>
+                    <setting string="Max Hours Per Month" company_dependent="1"
+                             help="Monthly allocation size and hard cap for hourly departures.">
+                        <field name="hourly_departure_max_hours_month" class="text-center" style="width: 5ch;"/>
+                        <span class="ms-2">Hours</span>
+                    </setting>
+                    <setting string="Last Monthly Allocation" company_dependent="1">
+                        <field name="hourly_departure_last_allocation_date" readonly="1"/>
+                        <div invisible="not hourly_departure_last_allocation_summary">
+                            <field name="hourly_departure_last_allocation_summary" readonly="1" nolabel="1"/>
+                        </div>
+                    </setting>
+                    <setting string="Manual Monthly Allocation" company_dependent="1"
+                             help="Create monthly hourly departure allocations for a selected month if they are missing.">
+                        <button name="action_run_hourly_departure_allocation"
+                                type="object"
+                                string="Run Allocation Now"
+                                class="btn-primary"
+                                groups="hr_holidays.group_hr_holidays_manager"/>
+                    </setting>
+                </block>
             </xpath>
         </field>
     </record>

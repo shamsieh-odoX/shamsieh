@@ -38,6 +38,26 @@ class ResConfigSettings(models.TransientModel):
         string='Last Carryover Summary',
         compute='_compute_annual_leave_last_carryover',
     )
+    hourly_departure_type_id = fields.Many2one(
+        related='company_id.hourly_departure_type_id',
+        readonly=False,
+    )
+    hourly_departure_max_hours_day = fields.Float(
+        related='company_id.hourly_departure_max_hours_day',
+        readonly=False,
+    )
+    hourly_departure_max_hours_month = fields.Float(
+        related='company_id.hourly_departure_max_hours_month',
+        readonly=False,
+    )
+    hourly_departure_last_allocation_date = fields.Datetime(
+        string='Last Hourly Departure Allocation',
+        compute='_compute_hourly_departure_last_allocation',
+    )
+    hourly_departure_last_allocation_summary = fields.Char(
+        string='Last Hourly Departure Summary',
+        compute='_compute_hourly_departure_last_allocation',
+    )
 
     @api.depends('company_id')
     def _compute_sick_leave_last_renewal(self):
@@ -59,6 +79,16 @@ class ResConfigSettings(models.TransientModel):
             settings.annual_leave_last_carryover_date = log.run_date if log else False
             settings.annual_leave_last_carryover_summary = log.summary if log else False
 
+    @api.depends('company_id')
+    def _compute_hourly_departure_last_allocation(self):
+        Log = self.env['hr.hourly.departure.allocation.log']
+        for settings in self:
+            log = Log.search([
+                ('company_id', '=', settings.company_id.id),
+            ], order='run_date desc, id desc', limit=1)
+            settings.hourly_departure_last_allocation_date = log.run_date if log else False
+            settings.hourly_departure_last_allocation_summary = log.summary if log else False
+
     def action_run_annual_leave_carryover(self):
         self.ensure_one()
         return {
@@ -78,6 +108,19 @@ class ResConfigSettings(models.TransientModel):
             'name': _('Sick Leave Renewal'),
             'type': 'ir.actions.act_window',
             'res_model': 'hr.sick.leave.renewal.wizard',
+            'view_mode': 'form',
+            'target': 'new',
+            'context': {
+                'default_company_id': self.company_id.id,
+            },
+        }
+
+    def action_run_hourly_departure_allocation(self):
+        self.ensure_one()
+        return {
+            'name': _('Hourly Departure Allocation'),
+            'type': 'ir.actions.act_window',
+            'res_model': 'hr.hourly.departure.allocation.wizard',
             'view_mode': 'form',
             'target': 'new',
             'context': {

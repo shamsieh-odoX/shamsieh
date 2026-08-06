@@ -20,4 +20,20 @@
         <field name="country_id" eval="False"/>
         <field name="sequence">2</field>
     </record>
+
+    <record id="leave_type_hourly_departure" model="hr.leave.type">
+        <field name="name">Hourly Departure</field>
+        <field name="requires_allocation" eval="True"/>
+        <field name="allocation_validation_type">no_validation</field>
+        <field name="leave_validation_type">manager</field>
+        <field name="request_unit">hour</field>
+        <field name="is_hourly_departure" eval="True"/>
+        <field name="leave_notif_subtype_id" ref="hr_holidays.mt_leave"/>
+        <field name="allocation_notif_subtype_id" ref="hr_holidays.mt_leave_allocation"/>
+        <field name="responsible_ids" eval="[(4, ref('base.user_admin'))]"/>
+        <field name="company_id" eval="False"/>
+        <field name="country_id" eval="False"/>
+        <field name="sequence">15</field>
+        <field name="color">4</field>
+    </record>
 </odoo>

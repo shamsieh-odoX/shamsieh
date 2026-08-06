@@ -3,10 +3,14 @@ from . import hr_exceptional_holiday
 from . import hr_employee
 from . import hr_leave_allocation
 from . import hr_leave_approval_trail
+from . import hr_leave_type
 from . import hr_leave
 from . import hr_leave_balance_summary
 from . import hr_annual_leave_carryover_log
 from . import hr_sick_leave_renewal_log
+from . import hr_hourly_departure_balance
+from . import hr_hourly_departure_conversion
+from . import hr_hourly_departure_allocation_log
 from . import res_company
 from . import res_config_settings
 from . import resource_calendar_leaves

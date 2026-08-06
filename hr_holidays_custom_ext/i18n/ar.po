@@ -1007,3 +1007,217 @@ msgstr "ترحيل سنوي"
 #: code:addons/hr_holidays_custom_ext/wizard/hr_exceptional_holiday_refuse_wizard.py:0
 msgid "You are not allowed to refuse this request."
 msgstr "غير مسموح لك برفض هذا الطلب."
+
+#. module: hr_holidays_custom_ext
+#: model:ir.model.fields,field_description:hr_holidays_custom_ext.field_hr_leave__departure_reason
+msgid "Departure Reason"
+msgstr "سبب المغادرة"
+
+#. module: hr_holidays_custom_ext
+#: model:ir.model.fields,help:hr_holidays_custom_ext.field_hr_leave__departure_reason
+msgid "Special reason for the Article 11 hourly departure."
+msgstr "سبب خاص لمغادرة الساعات وفق المادة 11."
+
+#. module: hr_holidays_custom_ext
+#: model:ir.model.fields,field_description:hr_holidays_custom_ext.field_hr_leave_type__is_hourly_departure
+msgid "Hourly Departure (Article 11)"
+msgstr "مغادرة بالساعة (المادة 11)"
+
+#. module: hr_holidays_custom_ext
+#: model:ir.model.fields,help:hr_holidays_custom_ext.field_hr_leave_type__is_hourly_departure
+msgid "Enforce Article 11 hourly departure caps and annual leave conversion."
+msgstr "تطبيق حدود مغادرة الساعات وفق المادة 11 وتحويلها إلى إجازة سنوية."
+
+#. module: hr_holidays_custom_ext
+#: model:hr.leave.type,name:hr_holidays_custom_ext.leave_type_hourly_departure
+msgid "Hourly Departure"
+msgstr "مغادرة بالساعة"
+
+#. module: hr_holidays_custom_ext
+#: model:ir.model.fields,field_description:hr_holidays_custom_ext.field_res_company__hourly_departure_type_id
+#: model:ir.model.fields,field_description:hr_holidays_custom_ext.field_res_config_settings__hourly_departure_type_id
+msgid "Hourly Departure Leave Type"
+msgstr "نوع إجازة المغادرة بالساعة"
+
+#. module: hr_holidays_custom_ext
+#: model:ir.model.fields,field_description:hr_holidays_custom_ext.field_res_company__hourly_departure_max_hours_day
+#: model:ir.model.fields,field_description:hr_holidays_custom_ext.field_res_config_settings__hourly_departure_max_hours_day
+msgid "Max Departure Hours Per Day"
+msgstr "الحد الأقصى لساعات المغادرة يومياً"
+
+#. module: hr_holidays_custom_ext
+#: model:ir.model.fields,field_description:hr_holidays_custom_ext.field_res_company__hourly_departure_max_hours_month
+#: model:ir.model.fields,field_description:hr_holidays_custom_ext.field_res_config_settings__hourly_departure_max_hours_month
+msgid "Max Departure Hours Per Month"
+msgstr "الحد الأقصى لساعات المغادرة شهرياً"
+
+#. module: hr_holidays_custom_ext
+#: model:ir.model.fields.selection,name:hr_holidays_custom_ext.selection__hr_leave_allocation__allocation_origin__hourly_departure_monthly
+msgid "Hourly Departure Monthly"
+msgstr "مغادرة بالساعة (شهري)"
+
+#. module: hr_holidays_custom_ext
+#: model:ir.model.fields,field_description:hr_holidays_custom_ext.field_hr_leave_allocation__origin_month
+msgid "Origin Month"
+msgstr "شهر المصدر"
+
+#. module: hr_holidays_custom_ext
+#: model:ir.model.fields,field_description:hr_holidays_custom_ext.field_hr_hourly_departure_balance__accumulated_hours
+msgid "Accumulated Hours"
+msgstr "الساعات المتراكمة"
+
+#. module: hr_holidays_custom_ext
+#: model:ir.actions.act_window,name:hr_holidays_custom_ext.action_hr_hourly_departure_allocation_log
+#: model:ir.ui.menu,name:hr_holidays_custom_ext.menu_hr_hourly_departure_allocation_log
+msgid "Hourly Departure Allocation Log"
+msgstr "سجل تخصيص مغادرة الساعات"
+
+#. module: hr_holidays_custom_ext
+#: model_terms:ir.ui.view,arch_db:hr_holidays_custom_ext.res_config_settings_view_form_sick_leave_renewal
+msgid "Hourly Departures (Article 11)"
+msgstr "المغادرات بالساعة (المادة 11)"
+
+#. module: hr_holidays_custom_ext
+#: model_terms:ir.ui.view,arch_db:hr_holidays_custom_ext.res_config_settings_view_form_sick_leave_renewal
+msgid "Hourly Departure Type"
+msgstr "نوع المغادرة بالساعة"
+
+#. module: hr_holidays_custom_ext
+#: model_terms:ir.ui.view,arch_db:hr_holidays_custom_ext.res_config_settings_view_form_sick_leave_renewal
+msgid "Max Hours Per Day"
+msgstr "الحد الأقصى للساعات يومياً"
+
+#. module: hr_holidays_custom_ext
+#: model_terms:ir.ui.view,arch_db:hr_holidays_custom_ext.res_config_settings_view_form_sick_leave_renewal
+msgid "Max Hours Per Month"
+msgstr "الحد الأقصى للساعات شهرياً"
+
+#. module: hr_holidays_custom_ext
+#: model_terms:ir.ui.view,arch_db:hr_holidays_custom_ext.res_config_settings_view_form_sick_leave_renewal
+msgid "Last Monthly Allocation"
+msgstr "آخر تخصيص شهري"
+
+#. module: hr_holidays_custom_ext
+#: model_terms:ir.ui.view,arch_db:hr_holidays_custom_ext.res_config_settings_view_form_sick_leave_renewal
+msgid "Manual Monthly Allocation"
+msgstr "تخصيص شهري يدوي"
+
+#. module: hr_holidays_custom_ext
+#: model_terms:ir.ui.view,arch_db:hr_holidays_custom_ext.res_config_settings_view_form_sick_leave_renewal
+msgid "Run Allocation Now"
+msgstr "تشغيل التخصيص الآن"
+
+#. module: hr_holidays_custom_ext
+#. odoo-python
+#: code:addons/hr_holidays_custom_ext/models/hr_leave.py:0
+msgid "A departure reason is required for hourly departures (Article 11)."
+msgstr "سبب المغادرة مطلوب للمغادرات بالساعة (المادة 11)."
+
+#. module: hr_holidays_custom_ext
+#. odoo-python
+#: code:addons/hr_holidays_custom_ext/models/hr_leave.py:0
+msgid "Hourly departure cannot exceed %(cap)s hours in a single day (requested: %(hours).2f)."
+msgstr "لا يجوز أن تتجاوز المغادرة بالساعة %(cap)s ساعات في اليوم الواحد (المطلوب: %(hours).2f)."
+
+#. module: hr_holidays_custom_ext
+#. odoo-python
+#: code:addons/hr_holidays_custom_ext/models/hr_leave.py:0
+msgid "Hourly departure for %(employee)s on %(day)s would total %(total).2f hours, exceeding the daily limit of %(cap)s hours."
+msgstr "مغادرة %(employee)s في %(day)s ستصبح %(total).2f ساعة، متجاوزة الحد اليومي البالغ %(cap)s ساعات."
+
+#. module: hr_holidays_custom_ext
+#. odoo-python
+#: code:addons/hr_holidays_custom_ext/models/hr_leave.py:0
+msgid "Hourly departure for %(employee)s in %(month)02d/%(year)s would total %(total).2f hours, exceeding the monthly limit of %(cap)s hours."
+msgstr "مغادرة %(employee)s في %(month)02d/%(year)s ستصبح %(total).2f ساعة، متجاوزة الحد الشهري البالغ %(cap)s ساعات."
+
+#. module: hr_holidays_custom_ext
+#. odoo-python
+#: code:addons/hr_holidays_custom_ext/models/hr_leave.py:0
+msgid "Hourly departure conversion (Article 11)"
+msgstr "تحويل مغادرة الساعات (المادة 11)"
+
+#. module: hr_holidays_custom_ext
+#. odoo-python
+#: code:addons/hr_holidays_custom_ext/models/hr_leave.py:0
+msgid "Reversed hourly departure conversion (Article 11)"
+msgstr "عكس تحويل مغادرة الساعات (المادة 11)"
+
+#. module: hr_holidays_custom_ext
+#. odoo-python
+#: code:addons/hr_holidays_custom_ext/models/hr_leave.py:0
+msgid "Configure an annual leave type before converting hourly departures."
+msgstr "يجب ضبط نوع الإجازة السنوية قبل تحويل مغادرة الساعات."
+
+#. module: hr_holidays_custom_ext
+#. odoo-python
+#: code:addons/hr_holidays_custom_ext/models/hr_leave.py:0
+msgid "Could not find an available day to deduct annual leave for %(employee)s after accumulating one work day of hourly departures."
+msgstr "تعذّر إيجاد يوم متاح لخصم الإجازة السنوية للموظف %(employee)s بعد تجميع ما يعادل يوم عمل من المغادرات."
+
+#. module: hr_holidays_custom_ext
+#. odoo-python
+#: code:addons/hr_holidays_custom_ext/models/hr_leave.py:0
+msgid "Could not auto-validate annual leave conversion for %(employee)s."
+msgstr "تعذّر الاعتماد التلقائي لتحويل الإجازة السنوية للموظف %(employee)s."
+
+#. module: hr_holidays_custom_ext
+#. odoo-python
+#: code:addons/hr_holidays_custom_ext/models/hr_leave.py:0
+msgid "Cannot reverse hourly departure for %(employee)s: accumulated hours would become negative and no conversion remains to undo."
+msgstr "لا يمكن التراجع عن مغادرة الساعات للموظف %(employee)s: ستصبح الساعات المتراكمة سالبة ولا يتبقى تحويل يمكن التراجع عنه."
+
+#. module: hr_holidays_custom_ext
+#. odoo-python
+#: code:addons/hr_holidays_custom_ext/models/hr_leave.py:0
+msgid "Cannot cancel this hourly departure because the linked annual leave conversion (%(leave)s) can no longer be reversed."
+msgstr "لا يمكن إلغاء هذه المغادرة لأن تحويل الإجازة السنوية المرتبط (%(leave)s) لم يعد قابلاً للتراجع."
+
+#. module: hr_holidays_custom_ext
+#. odoo-python
+#: code:addons/hr_holidays_custom_ext/models/hr_hourly_departure_allocation_log.py:0
+msgid "Hourly Departure %(month)02d/%(year)s"
+msgstr "مغادرة بالساعة %(month)02d/%(year)s"
+
+#. module: hr_holidays_custom_ext
+#. odoo-python
+#: code:addons/hr_holidays_custom_ext/models/hr_hourly_departure_allocation_log.py:0
+msgid "Hourly departure allocation for %(company)s (%(month)02d/%(year)s): %(processed)s employees processed, %(created)s allocations created, %(skipped)s skipped."
+msgstr "تخصيص مغادرة الساعات لـ %(company)s (%(month)02d/%(year)s): تمت معالجة %(processed)s موظفاً، وإنشاء %(created)s تخصيصاً، وتخطي %(skipped)s."
+
+#. module: hr_holidays_custom_ext
+#. odoo-python
+#: code:addons/hr_holidays_custom_ext/models/res_config_settings.py:0
+#: code:addons/hr_holidays_custom_ext/wizard/hr_hourly_departure_allocation_wizard.py:0
+msgid "Hourly Departure Allocation"
+msgstr "تخصيص مغادرة الساعات"
+
+#. module: hr_holidays_custom_ext
+#. odoo-python
+#: code:addons/hr_holidays_custom_ext/wizard/hr_hourly_departure_allocation_wizard.py:0
+msgid "Hourly Departure Allocation Complete"
+msgstr "اكتمل تخصيص مغادرة الساعات"
+
+#. module: hr_holidays_custom_ext
+#. odoo-python
+#: code:addons/hr_holidays_custom_ext/wizard/hr_hourly_departure_allocation_wizard.py:0
+msgid "No allocations were created or updated."
+msgstr "لم يتم إنشاء أو تحديث أي تخصيصات."
+
+#. module: hr_holidays_custom_ext
+#. odoo-python
+#: code:addons/hr_holidays_custom_ext/wizard/hr_hourly_departure_allocation_wizard.py:0
+msgid "Year must be between 2000 and 2100."
+msgstr "يجب أن تكون السنة بين 2000 و 2100."
+
+#. module: hr_holidays_custom_ext
+#. odoo-python
+#: code:addons/hr_holidays_custom_ext/wizard/hr_hourly_departure_allocation_wizard.py:0
+msgid "Month must be between 1 and 12."
+msgstr "يجب أن يكون الشهر بين 1 و 12."
+
+#. module: hr_holidays_custom_ext
+#: model:ir.actions.server,name:hr_holidays_custom_ext.ir_cron_allocate_hourly_departure_ir_actions_server
+#: model:ir.cron,cron_name:hr_holidays_custom_ext.ir_cron_allocate_hourly_departure
+msgid "Time Off: Allocate Monthly Hourly Departure (1st)"
+msgstr "الإجازات: تخصيص مغادرة الساعات الشهري (اليوم الأول)"

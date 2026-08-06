@@ -41,4 +41,12 @@
         groups="hr_holidays.group_hr_holidays_user"
         sequence="15"/>
 
+    <menuitem
+        id="menu_hr_hourly_departure_allocation_log"
+        name="Hourly Departure Allocation Log"
+        parent="hr_holidays.menu_hr_holidays_report"
+        action="action_hr_hourly_departure_allocation_log"
+        groups="hr_holidays.group_hr_holidays_user"
+        sequence="20"/>
+
 </odoo>

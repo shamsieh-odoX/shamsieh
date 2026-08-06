@@ -12,6 +12,7 @@ class HrLeaveAllocation(models.Model):
             ('annual_grant', 'Annual Grant'),
             ('year_carryover', 'Year Carryover'),
             ('sick_renewal', 'Sick Leave Renewal'),
+            ('hourly_departure_monthly', 'Hourly Departure Monthly'),
         ],
         string='Allocation Origin',
         default='manual',
@@ -21,4 +22,9 @@ class HrLeaveAllocation(models.Model):
         string='Origin Year',
         index=True,
         help='Calendar year this automated allocation belongs to.',
+    )
+    origin_month = fields.Integer(
+        string='Origin Month',
+        index=True,
+        help='Calendar month (1-12) this automated monthly allocation belongs to.',
     )

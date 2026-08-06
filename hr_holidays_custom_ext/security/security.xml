@@ -25,4 +25,22 @@
         <field name="domain_force">[('company_id', 'in', company_ids)]</field>
     </record>
 
+    <record id="hr_hourly_departure_balance_rule_company" model="ir.rule">
+        <field name="name">Hourly Departure Balance: multi-company</field>
+        <field name="model_id" ref="model_hr_hourly_departure_balance"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+
+    <record id="hr_hourly_departure_conversion_rule_company" model="ir.rule">
+        <field name="name">Hourly Departure Conversion: multi-company</field>
+        <field name="model_id" ref="model_hr_hourly_departure_conversion"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+
+    <record id="hr_hourly_departure_allocation_log_rule_company" model="ir.rule">
+        <field name="name">Hourly Departure Allocation Log: multi-company</field>
+        <field name="model_id" ref="model_hr_hourly_departure_allocation_log"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+
 </odoo>

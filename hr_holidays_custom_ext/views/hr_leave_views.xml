@@ -9,6 +9,26 @@
             <xpath expr="//header" position="inside">
                 <field name="can_second_approve" invisible="1"/>
             </xpath>
+            <xpath expr="//field[@name='name']" position="after">
+                <field name="is_hourly_departure_type" invisible="1"/>
+                <field name="departure_reason"
+                         invisible="not is_hourly_departure_type"
+                         required="is_hourly_departure_type"
+                         placeholder="Special reason for this departure"/>
+                <field name="is_hourly_departure_conversion" invisible="1"/>
+                <field name="hourly_departure_hours_applied" invisible="1"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="hr_leave_type_view_form_hourly_departure" model="ir.ui.view">
+        <field name="name">hr.leave.type.form.hourly.departure</field>
+        <field name="model">hr.leave.type</field>
+        <field name="inherit_id" ref="hr_holidays.edit_holiday_status_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='request_unit']" position="after">
+                <field name="is_hourly_departure"/>
+            </xpath>
         </field>
     </record>
 </odoo>

@@ -28,9 +28,34 @@ class ResCompany(models.Model):
         help='Maximum unused annual leave days carried into the new year per employee. '
              'Set to 0 for no limit.',
     )
+    hourly_departure_type_id = fields.Many2one(
+        'hr.leave.type',
+        string='Hourly Departure Leave Type',
+        domain="['|', ('company_id', '=', False), ('company_id', '=', id)]",
+        help='Time off type used for Article 11 hourly departures.',
+    )
+    hourly_departure_max_hours_day = fields.Float(
+        string='Max Departure Hours Per Day',
+        default=3.0,
+        help='Maximum hourly departure hours allowed per employee per calendar day.',
+    )
+    hourly_departure_max_hours_month = fields.Float(
+        string='Max Departure Hours Per Month',
+        default=6.0,
+        help='Maximum hourly departure hours allocated and allowed per employee per month.',
+    )
 
     def _get_annual_leave_type(self):
         self.ensure_one()
         if self.annual_leave_type_id:
             return self.annual_leave_type_id
         return self.env.ref('hr_holidays.leave_type_paid_time_off', raise_if_not_found=False)
+
+    def _get_hourly_departure_type(self):
+        self.ensure_one()
+        if self.hourly_departure_type_id:
+            return self.hourly_departure_type_id
+        return self.env.ref(
+            'hr_holidays_custom_ext.leave_type_hourly_departure',
+            raise_if_not_found=False,
+        )
