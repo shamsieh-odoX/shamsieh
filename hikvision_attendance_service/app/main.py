@@ -164,9 +164,16 @@ NUMERIC_ATTENDANCE_STATUS_MAP = {
 def _map_status_token(value) -> str | None:
     if value is None:
         return None
+    if isinstance(value, float) and value == int(value):
+        value = int(value)
     status = str(value).strip()
     if not status or status.lower() in ("undefined", "none", "null", "0"):
         return None
+    if status.replace(".", "", 1).isdigit():
+        try:
+            status = str(int(float(status)))
+        except (TypeError, ValueError):
+            pass
     compact = status.lower().replace(" ", "").replace("-", "").replace("_", "")
     mapped = (
         PUNCH_TYPE_MAP.get(compact)

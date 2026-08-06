@@ -1,6 +1,6 @@
 {
     'name': 'HR Holidays Custom Extensions',
-    'version': '19.0.1.3.9',
+    'version': '19.0.1.3.10',
     'category': 'Human Resources/Time Off',
     'summary': 'Exceptional holidays, leave balance summary, annual sick leave renewal, and annual leave carryover',
     'author': 'Custom',
@@ -18,6 +18,7 @@
         'data/ir_cron_data.xml',
         'data/ir_cron_annual_leave_carryover.xml',
         'views/hr_exceptional_holiday_views.xml',
+        'views/hr_leave_views.xml',
         'views/hr_leave_approval_report_views.xml',
         'views/hr_leave_balance_summary_views.xml',
         'views/hr_sick_leave_renewal_log_views.xml',

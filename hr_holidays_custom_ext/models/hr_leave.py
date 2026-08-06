@@ -97,7 +97,60 @@ class HrLeave(models.Model):
         )
 
     def _is_time_off_officer(self):
-        return self.env.user.has_group('hr_holidays.group_hr_holidays_user')
+        user = self.env.user
+        return (
+            user.has_group('hr_holidays.group_hr_holidays_user')
+            or user.has_group('hr_holidays.group_hr_holidays_manager')
+        )
+
+    def _is_notify_hr_responsible(self):
+        """True when current user is on the leave type Notify HR list."""
+        self.ensure_one()
+        return self.env.user in self.holiday_status_id.responsible_ids
+
+    def _is_second_approver_for_leave(self):
+        """GM / Time Off Officer / Notify HR — can do second approval."""
+        self.ensure_one()
+        if self._is_leave_requesting_user():
+            return False
+        if self._is_first_approver_user():
+            return False
+        return self._is_time_off_officer() or self._is_notify_hr_responsible()
+
+    def _is_first_approver_user(self):
+        self.ensure_one()
+        employee = self.env.user.employee_id
+        return bool(employee and self.first_approver_id and self.first_approver_id == employee)
+
+    @api.depends('state', 'employee_id', 'department_id', 'first_approver_id')
+    @api.depends_context('uid')
+    def _compute_can_validate(self):
+        super()._compute_can_validate()
+        for holiday in self:
+            if holiday.can_validate:
+                continue
+            if (
+                holiday.validation_type == 'both'
+                and holiday.state == 'validate1'
+                and holiday._is_second_approver_for_leave()
+            ):
+                holiday.can_validate = True
+
+    @api.depends('state', 'employee_id', 'department_id', 'first_approver_id')
+    @api.depends_context('uid')
+    def _compute_can_refuse(self):
+        super()._compute_can_refuse()
+        for holiday in self:
+            if holiday.can_refuse:
+                continue
+            if holiday._is_leave_requesting_user():
+                continue
+            if holiday.validation_type != 'both':
+                continue
+            if holiday.state == 'confirm' and holiday._is_leave_manager():
+                holiday.can_refuse = True
+            elif holiday.state == 'validate1' and holiday._is_second_approver_for_leave():
+                holiday.can_refuse = True
 
     def _get_next_states_by_state(self):
         """Employees may only cancel; two-step leaves follow manager then officer/GM."""
@@ -110,16 +163,15 @@ class HrLeave(models.Model):
             state_result['refuse'].add('cancel')
             return state_result
 
-        # Strict two-step: Approver = first only; Officer/GM = second only.
-        # Prevents Time Off Admins who are also the manager from skipping GM approval.
+        # Strict two-step: Approver = first only; Officer/GM/Notify HR = second only.
         if self.validation_type == 'both' and not self.env.is_superuser():
             is_manager = self._is_leave_manager()
-            is_officer = self._is_time_off_officer()
+            is_second = self._is_second_approver_for_leave()
             for source in list(state_result):
                 state_result[source] -= {'validate', 'validate1', 'refuse'}
             if is_manager:
                 state_result['confirm'].update({'validate1', 'refuse'})
-            if is_officer and not is_manager:
+            if is_second:
                 state_result['validate1'].update({'validate', 'refuse'})
                 state_result['validate'].add('refuse')
                 state_result['refuse'].add('validate')
@@ -137,7 +189,7 @@ class HrLeave(models.Model):
                     return False
                 if holiday.validation_type == 'both':
                     is_manager = holiday._is_leave_manager()
-                    is_officer = holiday._is_time_off_officer()
+                    is_second = holiday._is_second_approver_for_leave()
                     if state == 'validate1' and not is_manager:
                         if raise_if_not_possible:
                             raise UserError(_(
@@ -152,17 +204,23 @@ class HrLeave(models.Model):
                                 'The manager must approve first, then the General Manager / Time Off Officer.'
                             ))
                         return False
-                    if state == 'validate' and holiday.state == 'validate1' and is_manager:
+                    if state == 'validate' and holiday.state == 'validate1' and holiday._is_first_approver_user():
                         if raise_if_not_possible:
                             raise UserError(_(
                                 'You already did the first approval. '
                                 'The General Manager / Time Off Officer must do the second approval.'
                             ))
                         return False
-                    if state == 'validate' and holiday.state == 'validate1' and not is_officer:
+                    if state == 'validate' and holiday.state == 'validate1' and not is_second:
                         if raise_if_not_possible:
                             raise UserError(_(
                                 'Only a Time Off Officer / General Manager can give the second approval.'
+                            ))
+                        return False
+                    if state == 'refuse' and holiday.state == 'validate1' and not is_second and not is_manager:
+                        if raise_if_not_possible:
+                            raise UserError(_(
+                                'Only the Time Off Approver or General Manager can refuse this request.'
                             ))
                         return False
         return super()._check_approval_update(state, raise_if_not_possible=raise_if_not_possible)
@@ -192,9 +250,21 @@ class HrLeave(models.Model):
                 both_confirm.activity_update()
         result = True
         if other:
-            result = super(HrLeave, other).action_approve(check_state=check_state)
+            # Second approver at validate1: always validate even if UI flags are stale.
+            to_second = other.filtered(
+                lambda leave: leave.validation_type == 'both'
+                and leave.state == 'validate1'
+                and leave._is_second_approver_for_leave()
+            )
+            remaining = other - to_second
+            if to_second:
+                to_second._action_validate(check_state=False)
+                if not self.env.context.get('leave_fast_create'):
+                    to_second.activity_update()
+            if remaining:
+                result = super(HrLeave, remaining).action_approve(check_state=check_state)
             current_employee = self.env.user.employee_id
-            for leave in other:
+            for leave in remaining:
                 if pre_states[leave.id] == 'confirm' and leave.state == 'validate1':
                     leave._create_approval_trail(
                         'first_approval',
@@ -206,7 +276,22 @@ class HrLeave(models.Model):
     def _action_validate(self, check_state=True):
         self._assert_not_self_approval(_('validate'))
         pre_states = {leave.id: leave.state for leave in self}
-        result = super()._action_validate(check_state=check_state)
+        # Second approvers must be able to validate even when can_validate was False
+        # on a stale form cache / restricted view.
+        if check_state:
+            blocked = self.filtered(
+                lambda leave: not leave.can_validate
+                and not (
+                    leave.validation_type == 'both'
+                    and leave.state == 'validate1'
+                    and leave._is_second_approver_for_leave()
+                )
+            )
+            if blocked:
+                raise UserError(_('You cannot validate this leave.'))
+            result = super(HrLeave, self)._action_validate(check_state=False)
+        else:
+            result = super()._action_validate(check_state=False)
         current_employee = self.env.user.employee_id
         for leave in self:
             if leave.state != 'validate':

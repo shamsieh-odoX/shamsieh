@@ -98,9 +98,22 @@ class TestLeaveApprovalTrail(TransactionCase):
         self.assertTrue(leave.approval_trail_ids.filtered(lambda line: line.stage == 'first_approval'))
         # Manager who also has officer rights must not skip to fully approved.
         self.assertFalse(leave.with_user(self.manager_user).can_validate)
+        # Second approver (GM / Time Off Admin) must see Validate / Approve.
+        self.assertTrue(leave.with_user(self.second_approver_user).can_validate)
         leave.with_user(self.second_approver_user).action_approve()
         self.assertEqual(leave.state, 'validate')
         self.assertTrue(leave.approval_trail_ids.filtered(lambda line: line.stage == 'second_approval'))
+
+    def test_notify_hr_responsible_can_second_approve(self):
+        self.leave_type_both.responsible_ids = [(6, 0, [self.second_approver_user.id])]
+        # Responsible without Time Off groups still second-approves via Notify HR.
+        self.second_approver_user.group_ids = [(6, 0, [self.env.ref('base.group_user').id])]
+        leave = self._create_leave(self.leave_type_both)
+        leave.with_user(self.manager_user).action_approve()
+        self.assertEqual(leave.state, 'validate1')
+        self.assertTrue(leave.with_user(self.second_approver_user).can_validate)
+        leave.with_user(self.second_approver_user).action_approve()
+        self.assertEqual(leave.state, 'validate')
 
     def test_manager_with_officer_rights_cannot_skip_second_approval(self):
         """Deputy GM who is Time Off Admin must still stop at first approval."""

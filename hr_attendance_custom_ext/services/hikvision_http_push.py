@@ -65,9 +65,17 @@ def _employee_no(raw: dict[str, Any]) -> str:
 def _map_status_token(value: Any) -> str | None:
     if value is None:
         return None
+    if isinstance(value, float) and value == int(value):
+        value = int(value)
     status = str(value).strip()
     if not status or status.lower() in ('undefined', 'none', 'null', '0'):
         return None
+    # "03" / "3.0" style codes from some firmwares
+    if status.replace('.', '', 1).isdigit():
+        try:
+            status = str(int(float(status)))
+        except (TypeError, ValueError):
+            pass
     compact = status.lower().replace(' ', '').replace('-', '').replace('_', '')
     mapped = PUNCH_TYPE_MAP.get(compact) or PUNCH_TYPE_MAP.get(status.lower()) or PUNCH_TYPE_MAP.get(status)
     if mapped:
