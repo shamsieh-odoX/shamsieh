@@ -142,6 +142,47 @@ class TestEndUserExecution(common.TransactionCase):
 
 
 @tagged("post_install", "-at_install", "botify_agent")
+class TestMissingConfigFields(common.TransactionCase):
+    """The identity endpoint should name exactly which setting is empty —
+    all three (secret, agent_id, installation_id) live on one Settings
+    screen, so a vague "not configured" forces a guess-and-check loop.
+
+    Pure logic, no DB writes needed; TransactionCase only for consistency
+    with the rest of this test module's discovery/tagging.
+    """
+
+    def _config(self, **overrides):
+        base = {"secret": "s", "agent_id": "a", "installation_id": "i"}
+        base.update(overrides)
+        return base
+
+    def test_all_present_reports_nothing_missing(self):
+        self.assertEqual(botify_main._missing_config_fields(self._config()), [])
+
+    def test_reports_each_field_by_name(self):
+        self.assertEqual(
+            botify_main._missing_config_fields(self._config(secret="")),
+            ["Shared secret"],
+        )
+        self.assertEqual(
+            botify_main._missing_config_fields(self._config(agent_id="")),
+            ["Botify agent ID"],
+        )
+        self.assertEqual(
+            botify_main._missing_config_fields(self._config(installation_id="")),
+            ["Botify connection ID"],
+        )
+
+    def test_reports_all_missing_together_in_a_stable_order(self):
+        self.assertEqual(
+            botify_main._missing_config_fields(
+                self._config(secret="", agent_id="", installation_id="")
+            ),
+            ["Shared secret", "Botify agent ID", "Botify connection ID"],
+        )
+
+
+@tagged("post_install", "-at_install", "botify_agent")
 class TestWriteFieldGuard(common.TransactionCase):
     """Field-level defense in depth — mirrors the TypeScript-side guard so
     this holds even if a caller talks to /botify_agent/rpc directly.

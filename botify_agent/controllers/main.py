@@ -188,6 +188,23 @@ def _config(env):
     }
 
 
+def _missing_config_fields(config):
+    """Which of the three /rpc-blocking config fields are still empty, named.
+
+    Pulled out of identity() so it is testable as plain data-in/data-out —
+    no HTTP request or DB needed.
+    """
+    return [
+        label
+        for key, label in (
+            ("secret", "Shared secret"),
+            ("agent_id", "Botify agent ID"),
+            ("installation_id", "Botify connection ID"),
+        )
+        if not config[key]
+    ]
+
+
 def _json_response(payload, status=200):
     return request.make_response(
         json.dumps(payload),
@@ -223,8 +240,15 @@ class BotifyIdentityController(http.Controller):
         config = _config(request.env)
         if not config["enabled"]:
             return {"error": "Botify agent is disabled on this database."}
-        if not (config["secret"] and config["agent_id"] and config["installation_id"]):
-            return {"error": "Botify agent is not fully configured."}
+        missing = _missing_config_fields(config)
+        if missing:
+            # Naming exactly which field(s) are still empty turns this from a
+            # "why doesn't it work" support thread into a one-look fix — all
+            # three live on the same Settings > Botify Agent screen.
+            return {
+                "error": "Botify agent is not fully configured. Missing: %s."
+                % ", ".join(missing)
+            }
 
         user = request.env.user
 
