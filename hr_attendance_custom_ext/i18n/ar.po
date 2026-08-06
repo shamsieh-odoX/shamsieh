@@ -1219,6 +1219,12 @@ msgid "Office day — use the fingerprint device to check in and out."
 msgstr "يوم عمل في المكتب — استخدم جهاز البصمة لتسجيل الحضور والانصراف."
 
 #. module: hr_attendance_custom_ext
+#. odoo-javascript
+#: code:addons/hr_attendance_custom_ext/static/src/components/attendance_menu/attendance_menu_patch.js:0
+msgid "Break Out / Break In: use Odoo or the fingerprint device."
+msgstr "خروج/دخول الاستراحة: من أودو أو من جهاز البصمة."
+
+#. module: hr_attendance_custom_ext
 #. odoo-python
 #: code:addons/hr_attendance_custom_ext/models/hr_employee.py:0
 msgid "Office geolocation is not configured. Please contact HR."

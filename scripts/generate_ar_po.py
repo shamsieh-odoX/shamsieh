@@ -113,6 +113,8 @@ TRANSLATIONS: dict[str, str] = {
     "Attendance punch could not be recorded.": "تعذر تسجيل الحضور.",
     "Connection lost. Attendance punch could not be recorded.": "انقطع الاتصال. تعذر تسجيل الحضور.",
     "Office day — use the fingerprint device to check in and out.": "يوم عمل في المكتب — استخدم جهاز البصمة لتسجيل الحضور والانصراف.",
+    "Break Out / Break In: use Odoo or the fingerprint device.": "خروج/دخول الاستراحة: من أودو أو من جهاز البصمة.",
+    "You can record Break Out / Break In from Odoo.": "خروج/دخول الاستراحة: من أودو أو من جهاز البصمة.",
     "Stay checked in": "البقاء مسجلاً للحضور",
     "Are you sure you want to check out now? You will not be able to check in again today.": "هل أنت متأكد من تسجيل الانصراف الآن؟ لن تتمكن من تسجيل الحضور مرة أخرى اليوم.",
     "Your device location is required to check in from the office.": "مطلوب موقع جهازك لتسجيل الحضور من المكتب.",

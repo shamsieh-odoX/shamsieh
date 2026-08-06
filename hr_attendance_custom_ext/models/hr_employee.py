@@ -496,7 +496,11 @@ class HrEmployee(models.Model):
         return self._get_attendance_scheduled_location(check_datetime) == 'home'
 
     def _systray_break_punch_allowed(self, check_datetime=None):
-        """Allow Break Out / Break In from Odoo for all employees (office and home)."""
+        """Allow Break Out / Break In from Odoo for all employees (office and home).
+
+        Fingerprint/Hikvision break punches are always accepted separately when the
+        device sends attendanceStatus breakOut/breakIn.
+        """
         self.ensure_one()
         return True
 

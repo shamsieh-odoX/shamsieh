@@ -37,7 +37,7 @@ patch(ActivityMenu.prototype, {
         return _t("Office day — use the fingerprint device to check in and out.");
     },
     get labelBreakHint() {
-        return _t("You can record Break Out / Break In from Odoo.");
+        return _t("Break Out / Break In: use Odoo or the fingerprint device.");
     },
     get labelBefore() {
         return _t("Before");
