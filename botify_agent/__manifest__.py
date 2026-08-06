@@ -19,7 +19,7 @@ Two endpoints do the work:
   applies that user's access rights, record rules and allowed companies to every
   read and write. No permission is copied into Botify, so none can go stale.
 """,
-    "version": "19.0.1.2.0",
+    "version": "19.0.1.2.1",  # adds server-side field guard (credential + workflow-state fields) defense in depth on /botify_agent/rpc
     "category": "Productivity/Discuss",
     "license": "LGPL-3",
     "author": "Botify",

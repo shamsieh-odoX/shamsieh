@@ -11,6 +11,7 @@ or write.
 
 import json
 import logging
+import re
 import time
 
 from odoo import http
@@ -75,6 +76,66 @@ ALLOWED_METHODS = READ_METHODS | WRITE_METHODS | ACTION_METHODS
 FORBIDDEN_METHODS = {"unlink", "sudo", "with_user", "with_env", "browse", "_"}
 
 MAX_LIMIT = 200
+
+# Mirrors FORBIDDEN_WRITE_FIELD_RE / WORKFLOW_FIELD_RE in
+# packages/api/src/services/odoo/odooTools.ts — keep the two in step.
+#
+# Botify already refuses these before a request is ever sent. This is the SAME
+# check repeated at the one endpoint that actually performs the write, so it
+# holds even if a Botify bug skips it, an older Botify build talks to a newer
+# addon, or something else entirely calls this endpoint with a valid HMAC. An
+# auth="none" endpoint has to be safe on its own terms, not on the caller's.
+FORBIDDEN_WRITE_FIELD_RE = re.compile(
+    r"password|secret|token|api_key|oauth|totp|signup|groups_id", re.IGNORECASE
+)
+# state/stage_id drive document workflow on nearly every business model; a
+# bare write() skips the side effects the matching action_* method runs for
+# that same transition (stock reservation, sequence numbers, validation).
+# Force those through the ACTION_METHODS allowlist above instead of a raw
+# field write.
+WORKFLOW_FIELD_RE = re.compile(r"^(state|stage_id)$", re.IGNORECASE)
+
+
+class ForbiddenFieldError(ValueError):
+    """A write/create tried to touch a field this endpoint refuses outright."""
+
+
+def _assert_write_fields_allowed(method, kwargs_in):
+    """Field-level guard for write/create, independent of Odoo's own ACLs.
+
+    Odoo's access rights/record rules answer "is this user allowed to touch
+    this field on this record", which is necessary but not what this checks.
+    This answers "should the ASSISTANT ever be allowed to set this field, for
+    any user" — credentials and workflow-integrity fields are refused
+    regardless of who is asking, exactly like the TypeScript side.
+    """
+    if method == "write":
+        vals = kwargs_in.get("vals")
+        if isinstance(vals, dict):
+            for field in vals:
+                if not isinstance(field, str):
+                    continue
+                if field.startswith("_") or FORBIDDEN_WRITE_FIELD_RE.search(field):
+                    raise ForbiddenFieldError(
+                        "Field %r cannot be modified through the assistant." % field
+                    )
+                if WORKFLOW_FIELD_RE.match(field):
+                    raise ForbiddenFieldError(
+                        "Field %r cannot be set directly — use the matching lifecycle "
+                        "action method instead." % field
+                    )
+    elif method == "create":
+        vals_list = kwargs_in.get("vals_list")
+        for vals in vals_list if isinstance(vals_list, list) else []:
+            if not isinstance(vals, dict):
+                continue
+            for field in vals:
+                if not isinstance(field, str):
+                    continue
+                if field.startswith("_") or FORBIDDEN_WRITE_FIELD_RE.search(field):
+                    raise ForbiddenFieldError(
+                        "Field %r cannot be set through the assistant." % field
+                    )
 
 
 def _check_access(records, operation):
@@ -343,6 +404,11 @@ class BotifyRpcController(http.Controller):
             )
         except KeyError:
             return _error("Unknown model %r." % model_name, status=404)
+
+        try:
+            _assert_write_fields_allowed(method, kwargs_in)
+        except ForbiddenFieldError as exc:
+            return _error(str(exc), status=403)
 
         try:
             if ids:

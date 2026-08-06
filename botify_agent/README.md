@@ -111,9 +111,16 @@ as the API key you already store (which acts as one fixed user), but broader, so
   `active_test=False` or re-widen the company scope).
 - Requests older than 300 seconds, or whose HMAC does not match. The timestamp
   is inside the MAC, so a captured request cannot be re-stamped.
+- `write()` calls that touch a credential-ish field (`password`, `api_key`,
+  `oauth_*`, `groups_id`, …) or a workflow field (`state`, `stage_id`) directly
+  — the latter because a bare field write skips the side effects Odoo's own
+  `action_confirm` / `action_post` / etc. run for that same transition
+  (stock reservations, sequence numbers, validation). `create()` calls that set
+  a credential-ish field.
 
 These are duplicated on the Botify side on purpose. An `auth="none"` endpoint
-has to be safe on its own terms.
+has to be safe on its own terms, independent of whatever the caller claims to
+have already checked.
 
 ## Tests
 

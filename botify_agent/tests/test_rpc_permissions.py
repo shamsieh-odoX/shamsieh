@@ -142,6 +142,53 @@ class TestEndUserExecution(common.TransactionCase):
 
 
 @tagged("post_install", "-at_install", "botify_agent")
+class TestWriteFieldGuard(common.TransactionCase):
+    """Field-level defense in depth — mirrors the TypeScript-side guard so
+    this holds even if a caller talks to /botify_agent/rpc directly.
+
+    Pure logic, no DB writes needed; TransactionCase only for consistency with
+    the rest of this test module's discovery/tagging.
+    """
+
+    def test_write_blocks_credential_fields(self):
+        for field in ("password", "api_key", "oauth_token", "groups_id"):
+            with self.assertRaises(botify_main.ForbiddenFieldError):
+                botify_main._assert_write_fields_allowed("write", {"vals": {field: "x"}})
+
+    def test_write_blocks_state_and_stage_id(self):
+        with self.assertRaises(botify_main.ForbiddenFieldError):
+            botify_main._assert_write_fields_allowed("write", {"vals": {"state": "sale"}})
+        with self.assertRaises(botify_main.ForbiddenFieldError):
+            botify_main._assert_write_fields_allowed("write", {"vals": {"stage_id": 3}})
+
+    def test_write_blocks_state_case_insensitively(self):
+        with self.assertRaises(botify_main.ForbiddenFieldError):
+            botify_main._assert_write_fields_allowed("write", {"vals": {"State": "cancel"}})
+
+    def test_write_allows_ordinary_fields(self):
+        # Must not raise.
+        botify_main._assert_write_fields_allowed(
+            "write", {"vals": {"name": "New name", "phone": "0501234567"}}
+        )
+
+    def test_create_blocks_credential_fields_but_allows_state(self):
+        # Setting an initial state ON CREATE is normal (that is how records
+        # start out) — only WRITE on an existing record skips the workflow
+        # side effects, so create() is not subject to WORKFLOW_FIELD_RE.
+        with self.assertRaises(botify_main.ForbiddenFieldError):
+            botify_main._assert_write_fields_allowed(
+                "create", {"vals_list": [{"name": "x", "password": "y"}]}
+            )
+        botify_main._assert_write_fields_allowed(
+            "create", {"vals_list": [{"name": "x", "state": "draft"}]}
+        )
+
+    def test_other_methods_are_not_field_checked(self):
+        # search_read etc. carry no vals/vals_list to inspect — must be a no-op.
+        botify_main._assert_write_fields_allowed("search_read", {"domain": []})
+
+
+@tagged("post_install", "-at_install", "botify_agent")
 class TestRequestSigning(common.TransactionCase):
     """Signature, freshness and replay properties of the Botify -> Odoo hop."""
 
