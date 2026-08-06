@@ -89,16 +89,40 @@ class HrLeave(models.Model):
         leaves._log_submitted_trail()
         return leaves
 
+    def _is_leave_manager(self):
+        self.ensure_one()
+        return bool(
+            self.employee_id.leave_manager_id
+            and self.employee_id.leave_manager_id == self.env.user
+        )
+
+    def _is_time_off_officer(self):
+        return self.env.user.has_group('hr_holidays.group_hr_holidays_user')
+
     def _get_next_states_by_state(self):
-        """Employees may only cancel; they cannot approve/refuse their own request."""
+        """Employees may only cancel; two-step leaves follow manager then officer/GM."""
         state_result = super()._get_next_states_by_state()
         if self._is_leave_requesting_user():
-            # Keep cancel for own approved/refused leaves; strip all approval transitions.
             for source in list(state_result):
                 state_result[source] -= {'validate', 'validate1', 'refuse', 'confirm'}
             state_result['validate1'].add('cancel')
             state_result['validate'].add('cancel')
             state_result['refuse'].add('cancel')
+            return state_result
+
+        # Strict two-step: Approver = first only; Officer/GM = second only.
+        # Prevents Time Off Admins who are also the manager from skipping GM approval.
+        if self.validation_type == 'both' and not self.env.is_superuser():
+            is_manager = self._is_leave_manager()
+            is_officer = self._is_time_off_officer()
+            for source in list(state_result):
+                state_result[source] -= {'validate', 'validate1', 'refuse'}
+            if is_manager:
+                state_result['confirm'].update({'validate1', 'refuse'})
+            if is_officer and not is_manager:
+                state_result['validate1'].update({'validate', 'refuse'})
+                state_result['validate'].add('refuse')
+                state_result['refuse'].add('validate')
         return state_result
 
     def _check_approval_update(self, state, raise_if_not_possible=True):
@@ -111,20 +135,72 @@ class HrLeave(models.Model):
                             'Wait for your manager / general manager.'
                         ))
                     return False
+                if holiday.validation_type == 'both':
+                    is_manager = holiday._is_leave_manager()
+                    is_officer = holiday._is_time_off_officer()
+                    if state == 'validate1' and not is_manager:
+                        if raise_if_not_possible:
+                            raise UserError(_(
+                                'Only the employee\'s Time Off Approver (manager) '
+                                'can give the first approval.'
+                            ))
+                        return False
+                    if state == 'validate' and holiday.state == 'confirm':
+                        if raise_if_not_possible:
+                            raise UserError(_(
+                                'This time off type needs two approvals. '
+                                'The manager must approve first, then the General Manager / Time Off Officer.'
+                            ))
+                        return False
+                    if state == 'validate' and holiday.state == 'validate1' and is_manager:
+                        if raise_if_not_possible:
+                            raise UserError(_(
+                                'You already did the first approval. '
+                                'The General Manager / Time Off Officer must do the second approval.'
+                            ))
+                        return False
+                    if state == 'validate' and holiday.state == 'validate1' and not is_officer:
+                        if raise_if_not_possible:
+                            raise UserError(_(
+                                'Only a Time Off Officer / General Manager can give the second approval.'
+                            ))
+                        return False
         return super()._check_approval_update(state, raise_if_not_possible=raise_if_not_possible)
 
     def action_approve(self, check_state=True):
         self._assert_not_self_approval(_('approve'))
+        # Force first-step-only when the Time Off Approver also has officer rights.
+        both_confirm = self.filtered(
+            lambda leave: leave.validation_type == 'both'
+            and leave.state == 'confirm'
+            and leave._is_leave_manager()
+        )
+        other = self - both_confirm
         pre_states = {leave.id: leave.state for leave in self}
-        result = super().action_approve(check_state=check_state)
-        current_employee = self.env.user.employee_id
-        for leave in self:
-            if pre_states[leave.id] == 'confirm' and leave.state == 'validate1':
+        if both_confirm:
+            both_confirm.write({
+                'state': 'validate1',
+                'first_approver_id': self.env.user.employee_id.id,
+            })
+            for leave in both_confirm:
                 leave._create_approval_trail(
                     'first_approval',
-                    approver=current_employee,
+                    approver=self.env.user.employee_id,
                     trail_state='approved',
                 )
+            if not self.env.context.get('leave_fast_create'):
+                both_confirm.activity_update()
+        result = True
+        if other:
+            result = super(HrLeave, other).action_approve(check_state=check_state)
+            current_employee = self.env.user.employee_id
+            for leave in other:
+                if pre_states[leave.id] == 'confirm' and leave.state == 'validate1':
+                    leave._create_approval_trail(
+                        'first_approval',
+                        approver=current_employee,
+                        trail_state='approved',
+                    )
         return result
 
     def _action_validate(self, check_state=True):

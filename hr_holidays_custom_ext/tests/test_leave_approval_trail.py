@@ -96,9 +96,21 @@ class TestLeaveApprovalTrail(TransactionCase):
         leave.with_user(self.manager_user).action_approve()
         self.assertEqual(leave.state, 'validate1')
         self.assertTrue(leave.approval_trail_ids.filtered(lambda line: line.stage == 'first_approval'))
+        # Manager who also has officer rights must not skip to fully approved.
+        self.assertFalse(leave.with_user(self.manager_user).can_validate)
         leave.with_user(self.second_approver_user).action_approve()
         self.assertEqual(leave.state, 'validate')
         self.assertTrue(leave.approval_trail_ids.filtered(lambda line: line.stage == 'second_approval'))
+
+    def test_manager_with_officer_rights_cannot_skip_second_approval(self):
+        """Deputy GM who is Time Off Admin must still stop at first approval."""
+        self.manager_user.group_ids = [(4, self.env.ref('hr_holidays.group_hr_holidays_manager').id)]
+        leave = self._create_leave(self.leave_type_both)
+        leave.with_user(self.manager_user).action_approve()
+        self.assertEqual(leave.state, 'validate1')
+        with self.assertRaises(Exception):
+            leave.with_user(self.manager_user).action_approve()
+        self.assertEqual(leave.state, 'validate1')
 
     def test_refuse_wizard_stores_reason_and_trail(self):
         leave = self._create_leave(self.leave_type_manager)
