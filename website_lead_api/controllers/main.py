@@ -16,11 +16,22 @@ RATE_LIMIT_MAX = 5
 RATE_LIMIT_WINDOW_SECONDS = 3600
 EMAIL_RE = re.compile(r'^[^@\s]+@[^@\s]+\.[^@\s]+$')
 
-# Extra label aliases for older website payloads.
+# Extra label aliases for older website payloads / partner sites.
 SERVICE_INTEREST_EXTRA_ALIASES = {
     'odoo implementation': 'implementation',
     'support & maintenance': 'support',
     'cloud hosting': 'other',
+    # Umbrella Prime contact form labels
+    'enterprise software development': 'customization',
+    'erp solutions': 'implementation',
+    'it infrastructure and cloud services': 'other',
+    'technology consulting': 'other',
+    'business process automation': 'ai',
+    'customer experience solutions': 'other',
+    'managed it services': 'support',
+    'technical support and maintenance': 'support',
+    'it resource outsourcing': 'other',
+    'other / not sure yet': 'other',
 }
 
 SITE_EXTRA_ALIASES = {
@@ -28,6 +39,9 @@ SITE_EXTRA_ALIASES = {
     'www.shamsieh.com': 'shamsieh',
     'aiodyx.com': 'aiodyx',
     'www.aiodyx.com': 'aiodyx',
+    'umbrellaprime.sa': 'umbrellaprime',
+    'www.umbrellaprime.sa': 'umbrellaprime',
+    'umbrella prime': 'umbrellaprime',
 }
 
 FORM_TYPE_EXTRA_ALIASES = {
@@ -65,6 +79,7 @@ PRODUCT_SERVICE_DEFAULTS = {
 SITE_SOURCE_XMLIDS = {
     'shamsieh': 'crm_custom_ext.utm_source_website_shamsieh',
     'aiodyx': 'website_lead_api.utm_source_website_aiodyx',
+    'umbrellaprime': 'website_lead_api.utm_source_website_umbrellaprime',
 }
 
 

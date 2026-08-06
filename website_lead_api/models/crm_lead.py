@@ -22,6 +22,7 @@ PREFERRED_CONTACT_METHOD_SELECTION = [
 WEBSITE_SITE_SELECTION = [
     ('shamsieh', 'Shamsieh'),
     ('aiodyx', 'AIODYX'),
+    ('umbrellaprime', 'Umbrella Prime'),
 ]
 
 WEBSITE_FORM_TYPE_SELECTION = [

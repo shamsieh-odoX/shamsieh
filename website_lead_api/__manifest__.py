@@ -1,6 +1,6 @@
 {
     'name': 'Website Lead API',
-    'version': '19.0.1.2.0',
+    'version': '19.0.1.3.0',
     'category': 'Sales/CRM',
     'summary': 'Public API endpoint for external website contact form submissions',
     'author': 'Custom',

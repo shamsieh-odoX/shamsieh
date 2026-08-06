@@ -48,6 +48,7 @@
                 <separator string="Website"/>
                 <filter string="Shamsieh Website" name="filter_website_shamsieh" domain="[('website_site', '=', 'shamsieh')]"/>
                 <filter string="AIODYX Website" name="filter_website_aiodyx" domain="[('website_site', '=', 'aiodyx')]"/>
+                <filter string="Umbrella Prime Website" name="filter_website_umbrellaprime" domain="[('website_site', '=', 'umbrellaprime')]"/>
                 <filter string="Product Demos" name="filter_website_product_demo" domain="[('website_form_type', '=', 'product_demo')]"/>
                 <filter string="Contact Forms" name="filter_website_contact" domain="[('website_form_type', '=', 'contact')]"/>
             </xpath>

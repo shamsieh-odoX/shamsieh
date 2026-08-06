@@ -3,4 +3,7 @@
     <record model="utm.source" id="utm_source_website_aiodyx">
         <field name="name">Website - AIODYX</field>
     </record>
+    <record model="utm.source" id="utm_source_website_umbrellaprime">
+        <field name="name">Website - Umbrella Prime</field>
+    </record>
 </odoo>
