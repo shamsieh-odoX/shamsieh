@@ -30,7 +30,6 @@ class TestLeaveApprovalTrail(TransactionCase):
             'login': 'leave_emp_test',
             'email': 'leave_emp_test@test.com',
             'group_ids': [(6, 0, [
-                cls.env.ref('hr_holidays.group_hr_holidays_user').id,
                 cls.env.ref('base.group_user').id,
             ])],
         })
@@ -122,3 +121,18 @@ class TestLeaveApprovalTrail(TransactionCase):
             action['report_name'],
             'hr_holidays_custom_ext.report_hr_leave_approval',
         )
+
+    def test_employee_cannot_approve_own_leave(self):
+        leave = self._create_leave(self.leave_type_manager)
+        with self.assertRaises(Exception):
+            leave.with_user(self.employee_user).action_approve()
+        self.assertEqual(leave.state, 'confirm')
+        self.assertFalse(leave.with_user(self.employee_user).can_approve)
+        self.assertFalse(leave.with_user(self.employee_user).can_validate)
+        self.assertFalse(leave.with_user(self.employee_user).can_refuse)
+
+    def test_employee_cannot_refuse_own_leave(self):
+        leave = self._create_leave(self.leave_type_manager)
+        with self.assertRaises(Exception):
+            leave.with_user(self.employee_user).action_refuse()
+        self.assertEqual(leave.state, 'confirm')

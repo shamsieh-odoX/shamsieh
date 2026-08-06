@@ -57,7 +57,7 @@ class HrLeaveBalanceSummary(models.Model):
         year_leaves = self.env['hr.leave'].sudo().search([
             ('employee_id', '=', employee.id),
             ('holiday_status_id', '=', leave_type.id),
-            ('state', 'in', ('validate', 'validate1')),
+            ('state', '=', 'validate'),
             ('date_from', '>=', fields.Datetime.to_datetime(year_start)),
             ('date_from', '<=', fields.Datetime.to_datetime(as_of_date)),
         ])

@@ -1,5 +1,6 @@
 from . import hr_exceptional_holiday_approval_line
 from . import hr_exceptional_holiday
+from . import hr_employee
 from . import hr_leave_allocation
 from . import hr_leave_approval_trail
 from . import hr_leave

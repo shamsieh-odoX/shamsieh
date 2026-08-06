@@ -21,6 +21,27 @@ class HrLeave(models.Model):
         for leave in self:
             leave.approval_trail_count = len(leave.approval_trail_ids)
 
+    def _is_leave_requesting_user(self):
+        """True when the current user is the employee who requested this leave."""
+        self.ensure_one()
+        user = self.env.user
+        if self.user_id and self.user_id == user:
+            return True
+        if self.employee_id and self.employee_id.user_id == user:
+            return True
+        if self.employee_id and self.employee_id in user.employee_ids:
+            return True
+        return False
+
+    def _assert_not_self_approval(self, action_label):
+        for leave in self:
+            if leave._is_leave_requesting_user():
+                raise UserError(_(
+                    'You cannot %(action)s your own time off request. '
+                    'Only your manager / general manager can approve or refuse it.',
+                    action=action_label,
+                ))
+
     def _trail_sequence(self, stage):
         order = {
             'submitted': 10,
@@ -68,7 +89,32 @@ class HrLeave(models.Model):
         leaves._log_submitted_trail()
         return leaves
 
+    def _get_next_states_by_state(self):
+        """Employees may only cancel; they cannot approve/refuse their own request."""
+        state_result = super()._get_next_states_by_state()
+        if self._is_leave_requesting_user():
+            # Keep cancel for own approved/refused leaves; strip all approval transitions.
+            for source in list(state_result):
+                state_result[source] -= {'validate', 'validate1', 'refuse', 'confirm'}
+            state_result['validate1'].add('cancel')
+            state_result['validate'].add('cancel')
+            state_result['refuse'].add('cancel')
+        return state_result
+
+    def _check_approval_update(self, state, raise_if_not_possible=True):
+        if state in ('validate', 'validate1', 'refuse') and not self.env.is_superuser():
+            for holiday in self:
+                if holiday._is_leave_requesting_user():
+                    if raise_if_not_possible:
+                        raise UserError(_(
+                            'You cannot approve or refuse your own time off request. '
+                            'Wait for your manager / general manager.'
+                        ))
+                    return False
+        return super()._check_approval_update(state, raise_if_not_possible=raise_if_not_possible)
+
     def action_approve(self, check_state=True):
+        self._assert_not_self_approval(_('approve'))
         pre_states = {leave.id: leave.state for leave in self}
         result = super().action_approve(check_state=check_state)
         current_employee = self.env.user.employee_id
@@ -82,6 +128,7 @@ class HrLeave(models.Model):
         return result
 
     def _action_validate(self, check_state=True):
+        self._assert_not_self_approval(_('validate'))
         pre_states = {leave.id: leave.state for leave in self}
         result = super()._action_validate(check_state=check_state)
         current_employee = self.env.user.employee_id
@@ -104,8 +151,10 @@ class HrLeave(models.Model):
 
     def action_refuse(self):
         if self.env.context.get('leave_skip_refuse_wizard'):
+            self._assert_not_self_approval(_('refuse'))
             return super().action_refuse()
         self.ensure_one()
+        self._assert_not_self_approval(_('refuse'))
         if any(holiday.state not in ['confirm', 'validate', 'validate1'] for holiday in self):
             raise UserError(_('Time off request must be confirmed or validated in order to refuse it.'))
         if len(self) > 1:
@@ -123,6 +172,7 @@ class HrLeave(models.Model):
 
     def action_process_refusal(self, reason):
         self.ensure_one()
+        self._assert_not_self_approval(_('refuse'))
         if not reason or not reason.strip():
             raise UserError(_('A refusal reason is required.'))
         reason = reason.strip()
