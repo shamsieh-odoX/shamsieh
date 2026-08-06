@@ -117,11 +117,10 @@
         <field name="model">hr.leave</field>
         <field name="inherit_id" ref="hr_holidays.hr_leave_view_form"/>
         <field name="arch" type="xml">
-                    <xpath expr="//header" position="inside">
+            <xpath expr="//header" position="inside">
                 <button name="action_print_approval_report" string="Print Approval Log" type="object"
                     invisible="not id"/>
             </xpath>
-            <!-- Own requests: Approve/Refuse stay hidden via can_approve/can_refuse/can_validate. -->
             <xpath expr="//sheet/div[hasclass('o_hr_leave_content')]" position="after">
                 <field name="approval_trail_count" invisible="1"/>
                 <notebook invisible="approval_trail_count == 0">
