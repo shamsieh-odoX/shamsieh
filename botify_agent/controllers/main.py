@@ -121,6 +121,11 @@ class BotifyIdentityController(http.Controller):
             "company_id": user.company_id.id,
             "allowed_company_ids": allowed_company_ids,
             "share": user.share,
+            # This user's Odoo timezone, so the assistant can resolve "today"
+            # and "in three days" against the clock the user actually works in
+            # rather than UTC. Personalisation only — never an authorization
+            # input. Falls back to UTC Botify-side when unset.
+            "tz": user.tz or "",
             # Audit/personalisation only \u2014 Botify does not use these for
             # authorization; permissions are re-evaluated on every grant.
             "groups": _shared.user_all_groups(user).mapped("full_name")[:64],
