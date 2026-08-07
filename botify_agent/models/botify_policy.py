@@ -18,7 +18,7 @@ import re
 _DATA_PATH = os.path.join(os.path.dirname(__file__), "..", "data", "policy_manifest.json")
 
 # Update in the SAME commit as any manifest edit.
-MANIFEST_SHA256 = "68454492437d03e4c9f244f73363e4ae00c295d5d2f6d643b5ae4636cb7dd99d"
+MANIFEST_SHA256 = "1b86729fa3cabdae3b18644b4fd44317db0a556102958faeecbf04316d749a9f"
 
 RISK_BY_OP_CLASS = {
     "read": "low",

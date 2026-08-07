@@ -47,6 +47,7 @@
     "action_set_won_rainbowman": { "opClass": "lifecycle_action" },
     "toggle_active": { "opClass": "lifecycle_action" },
     "action_approve": { "opClass": "lifecycle_action" },
+    "action_refuse": { "opClass": "lifecycle_action" },
     "action_validate": { "opClass": "lifecycle_action" },
     "action_done_task": { "opClass": "lifecycle_action" },
     "action_create_payments": { "opClass": "financial_write" }
