@@ -167,7 +167,23 @@ async function mintIdentityToken() {
         const response = await fetch(`${baseUrl}/api/chat/${identity.agent_id}/identity/exchange`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ platform: identity.platform, assertion: identity.assertion }),
+            body: JSON.stringify({
+                platform: identity.platform,
+                assertion: identity.assertion,
+                // Protocol v2 (odoo-enterprise-rebuild): forwarded so Botify can
+                // later prove possession of this delegation when requesting a
+                // per-operation grant, without ever re-sending the raw identity
+                // assertion. Botify stores the key AES-encrypted and this browser
+                // never sees it again after this call. Without these three
+                // fields the exchange still succeeds (they are optional on the
+                // backend for addons without delegation support) but every
+                // Odoo tool call then fails closed with "no live delegation" —
+                // found live on this exact widget after upgrading the addon to
+                // protocol v2 without also updating this file.
+                delegationId: identity.delegation_id,
+                delegationKey: identity.delegation_key,
+                delegationExpiresIn: identity.delegation_expires_in,
+            }),
         });
         if (!response.ok) {
             return null;
