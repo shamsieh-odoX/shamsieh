@@ -103,10 +103,12 @@ class TestIdentityController(common.HttpCase):
         params.set_param("botify_agent.shared_secret", "test-secret-value-do-not-use")
         params.set_param("botify_agent.assertion_ttl", "120")
 
+        from ._helpers import user_group_field
+
         self.employee = self.env["res.users"].create({
             "name": "Assertion Employee",
             "login": "botify.assertion@example.com",
-            "groups_id": [(6, 0, [self.env.ref("base.group_user").id])],
+            user_group_field(self.env): [(6, 0, [self.env.ref("base.group_user").id])],
         })
 
     def test_assertion_subject_is_the_session_user(self):

@@ -1,3 +1,5 @@
+import time
+
 from odoo import api, fields, models
 from odoo.exceptions import ValidationError
 
@@ -52,6 +54,25 @@ class ResConfigSettings(models.TransientModel):
         config_parameter="botify_agent.enabled",
         default=False,
     )
+    botify_grant_ttl = fields.Integer(
+        string="Grant lifetime (seconds)",
+        config_parameter="botify_agent.grant_ttl",
+        default=90,
+        help="How long a per-operation grant stays valid. Freshly minted per tool "
+             "call — keep it short, it only has to survive one round trip.",
+    )
+    botify_secret_previous = fields.Char(
+        string="Previous shared secret (rotation grace window)",
+        config_parameter="botify_agent.shared_secret_previous",
+        readonly=True,
+        help="Set automatically when you rotate the shared secret. Accepted "
+             "alongside the current secret until the grace window elapses.",
+    )
+    botify_secret_grace_hours = fields.Integer(
+        string="Secret rotation grace window (hours)",
+        config_parameter="botify_agent.secret_grace_hours",
+        default=24,
+    )
 
     @api.constrains("botify_assertion_ttl")
     def _check_assertion_ttl(self):
@@ -65,18 +86,28 @@ class ResConfigSettings(models.TransientModel):
                 )
 
     def action_botify_generate_secret(self):
-        """Mint a fresh shared secret.
+        """Rotate the shared secret with a grace window (AC-25).
 
-        Rotation procedure: generate here, paste into Botify, save. Sessions
-        already issued keep working (Botify holds its own session tokens); only
-        assertions minted with the old secret stop verifying, which is a window
-        of seconds.
+        Rotation procedure: the CURRENT secret moves to "previous" (with a
+        timestamp), a fresh secret becomes current, and the operator pastes
+        the new one into Botify. Until the grace window
+        (botify_agent.secret_grace_hours, default 24h) elapses,
+        /botify_agent/grant and /botify_agent/rpc accept EITHER secret—so an
+        in-flight Botify replica that hasn't picked up the new value yet does
+        not start failing every call the instant you rotate. This is
+        operator-triggered and left in Odoo's own "Settings changed" trail via
+        the normal ir.config_parameter write; a dedicated Botify-side audit
+        entry is also recorded for the connection when Botify's rotation
+        endpoint is used (see docs/odoo/runbook.md \"Key rotation\").
         """
         self.ensure_one()
+        params = self.env["ir.config_parameter"].sudo()
+        current = params.get_param("botify_agent.shared_secret") or ""
+        if current:
+            params.set_param("botify_agent.shared_secret_previous", current)
+            params.set_param("botify_agent.secret_rotated_at", str(int(time.time())))
         secret = botify_security.new_nonce() + botify_security.new_nonce()
-        self.env["ir.config_parameter"].sudo().set_param(
-            "botify_agent.shared_secret", secret
-        )
+        params.set_param("botify_agent.shared_secret", secret)
         return {
             "type": "ir.actions.client",
             "tag": "reload",

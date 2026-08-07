@@ -103,3 +103,48 @@ def verify_request(secret: str, timestamp: str, raw_body: bytes, provided: str,
 
 def new_nonce() -> str:
     return secrets.token_urlsafe(18)
+
+
+def new_secret() -> str:
+    """A fresh, high-entropy key for delegation credentials and grant-signing keys."""
+    return secrets.token_urlsafe(32)
+
+
+def sign_grant(claims: dict, grant_key: str) -> str:
+    """Mint the per-operation grant JWS. Same HS256 primitive as sign_jwt —
+    kept as a distinct name because the KEY is different (a grant-signing key
+    that never leaves Odoo, generated on first use and stored in
+    ir.config_parameter, separate from the installation shared secret) and
+    because grant claims are shaped differently (sub=uid, oph=operation hash,
+    much shorter exp)."""
+    return sign_jwt(claims, grant_key)
+
+
+def verify_grant(token: str, grant_key: str) -> dict:
+    """Verify a grant JWS and return its claims. Raises ValueError on any fault."""
+    return verify_jwt(token, grant_key)
+
+
+def hmac_hex(key: str, message: str) -> str:
+    return hmac.new(key.encode("utf-8"), message.encode("utf-8"), hashlib.sha256).hexdigest()
+
+
+def verify_delegation_proof(delegation_key: str, timestamp: str, raw_body: bytes, provided: str,
+                             max_skew_seconds: int = 60) -> None:
+    """Verify Botify's proof of possession of a delegation key on a grant
+    request. Deliberately a SHORTER skew window than verify_request's 300s:
+    a grant request is minted fresh per tool call, not held and reused, so a
+    tight window meaningfully shrinks the replay-capture surface even before
+    the jti-based defence at execution time."""
+    if not timestamp or not provided:
+        raise ValueError("missing delegation proof headers")
+    try:
+        sent_at = int(timestamp)
+    except (TypeError, ValueError):
+        raise ValueError("bad timestamp")
+    if abs(int(time.time()) - sent_at) > max_skew_seconds:
+        raise ValueError("stale delegation proof")
+    expected = hmac_hex(delegation_key, "{}.{}".format(timestamp, raw_body.decode("utf-8")))
+    supplied = provided[len("sha256="):] if provided.startswith("sha256=") else provided
+    if not hmac.compare_digest(expected, supplied):
+        raise ValueError("bad delegation proof")

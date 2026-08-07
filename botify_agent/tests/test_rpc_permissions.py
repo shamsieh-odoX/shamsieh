@@ -16,8 +16,9 @@ import time
 from odoo.exceptions import AccessError
 from odoo.tests import common, tagged
 
+from ..controllers import _shared as botify_shared
 from ..controllers import main as botify_main
-from ..models import botify_security
+from ..models import botify_policy, botify_security
 
 
 @tagged("post_install", "-at_install", "botify_agent")
@@ -28,7 +29,10 @@ class TestEndUserExecution(common.TransactionCase):
         cls.company_a = cls.env["res.company"].create({"name": "Botify Test A"})
         cls.company_b = cls.env["res.company"].create({"name": "Botify Test B"})
 
+        from ._helpers import user_group_field
+
         group_user = cls.env.ref("base.group_user")
+        gfield = user_group_field(cls.env)
 
         # A plain employee in company A only.
         cls.employee = cls.env["res.users"].create({
@@ -36,7 +40,7 @@ class TestEndUserExecution(common.TransactionCase):
             "login": "botify.employee.one@example.com",
             "company_id": cls.company_a.id,
             "company_ids": [(6, 0, [cls.company_a.id])],
-            "groups_id": [(6, 0, [group_user.id])],
+            gfield: [(6, 0, [group_user.id])],
         })
         # A second employee, same company — used for cross-user isolation.
         cls.other_employee = cls.env["res.users"].create({
@@ -44,7 +48,7 @@ class TestEndUserExecution(common.TransactionCase):
             "login": "botify.employee.two@example.com",
             "company_id": cls.company_a.id,
             "company_ids": [(6, 0, [cls.company_a.id])],
-            "groups_id": [(6, 0, [group_user.id])],
+            gfield: [(6, 0, [group_user.id])],
         })
         # Partner records owned by each company.
         cls.partner_a = cls.env["res.partner"].create({
@@ -117,28 +121,30 @@ class TestEndUserExecution(common.TransactionCase):
     # -- controller-level guards -------------------------------------------
 
     def test_method_allowlist_rejects_unlink(self):
-        self.assertNotIn("unlink", botify_main.ALLOWED_METHODS)
         self.assertIn("unlink", botify_main.FORBIDDEN_METHODS)
+        self.assertNotIn("unlink", botify_policy.get_policy_manifest()["methods"])
 
     def test_method_allowlist_rejects_private_methods(self):
+        manifest = botify_policy.get_policy_manifest()
         for method in ("_write", "__init__", "_read_group_raw"):
             self.assertTrue(
                 method.startswith("_"),
                 "private methods are filtered by the startswith('_') guard",
             )
-            self.assertNotIn(method, botify_main.ALLOWED_METHODS)
+            self.assertNotIn(method, manifest["methods"])
 
     def test_method_allowlist_rejects_env_escapes(self):
         """sudo/with_user must never be reachable as a forwarded method."""
+        manifest = botify_policy.get_policy_manifest()
         for method in ("sudo", "with_user", "with_env"):
             self.assertIn(method, botify_main.FORBIDDEN_METHODS)
-            self.assertNotIn(method, botify_main.ALLOWED_METHODS)
+            self.assertNotIn(method, manifest["methods"])
 
     def test_check_access_shim_matches_this_odoo_version(self):
         """The version shim must resolve to something callable here."""
         records = self.env["res.partner"].with_user(self.employee).browse(self.partner_a.id)
         # Must not raise AttributeError on any supported version.
-        botify_main._check_access(records, "read")
+        botify_shared.check_access(records, "read")
 
 
 @tagged("post_install", "-at_install", "botify_agent")
@@ -157,25 +163,25 @@ class TestMissingConfigFields(common.TransactionCase):
         return base
 
     def test_all_present_reports_nothing_missing(self):
-        self.assertEqual(botify_main._missing_config_fields(self._config()), [])
+        self.assertEqual(botify_shared.missing_config_fields(self._config()), [])
 
     def test_reports_each_field_by_name(self):
         self.assertEqual(
-            botify_main._missing_config_fields(self._config(secret="")),
+            botify_shared.missing_config_fields(self._config(secret="")),
             ["Shared secret"],
         )
         self.assertEqual(
-            botify_main._missing_config_fields(self._config(agent_id="")),
+            botify_shared.missing_config_fields(self._config(agent_id="")),
             ["Botify agent ID"],
         )
         self.assertEqual(
-            botify_main._missing_config_fields(self._config(installation_id="")),
+            botify_shared.missing_config_fields(self._config(installation_id="")),
             ["Botify connection ID"],
         )
 
     def test_reports_all_missing_together_in_a_stable_order(self):
         self.assertEqual(
-            botify_main._missing_config_fields(
+            botify_shared.missing_config_fields(
                 self._config(secret="", agent_id="", installation_id="")
             ),
             ["Shared secret", "Botify agent ID", "Botify connection ID"],
@@ -184,49 +190,53 @@ class TestMissingConfigFields(common.TransactionCase):
 
 @tagged("post_install", "-at_install", "botify_agent")
 class TestWriteFieldGuard(common.TransactionCase):
-    """Field-level defense in depth — mirrors the TypeScript-side guard so
-    this holds even if a caller talks to /botify_agent/rpc directly.
-
-    Pure logic, no DB writes needed; TransactionCase only for consistency with
-    the rest of this test module's discovery/tagging.
+    """Field-level defense in depth, now driven by the shared policy manifest
+    (botify_policy.evaluate) instead of a locally duplicated regex — see
+    docs/odoo/policy.md. Pure logic, no DB writes needed; TransactionCase
+    only for consistency with the rest of this test module's discovery/tagging.
     """
+
+    GRANT = {"read", "capture_write", "normal_write", "financial_write", "lifecycle_action", "batch_action"}
 
     def test_write_blocks_credential_fields(self):
         for field in ("password", "api_key", "oauth_token", "groups_id"):
-            with self.assertRaises(botify_main.ForbiddenFieldError):
-                botify_main._assert_write_fields_allowed("write", {"vals": {field: "x"}})
+            with self.assertRaises(botify_policy.PolicyDenied) as ctx:
+                botify_policy.evaluate(
+                    "res.partner", "write", fields=[field], granted_op_classes=self.GRANT
+                )
+            self.assertEqual(ctx.exception.reason, "field_denied")
 
     def test_write_blocks_state_and_stage_id(self):
-        with self.assertRaises(botify_main.ForbiddenFieldError):
-            botify_main._assert_write_fields_allowed("write", {"vals": {"state": "sale"}})
-        with self.assertRaises(botify_main.ForbiddenFieldError):
-            botify_main._assert_write_fields_allowed("write", {"vals": {"stage_id": 3}})
-
-    def test_write_blocks_state_case_insensitively(self):
-        with self.assertRaises(botify_main.ForbiddenFieldError):
-            botify_main._assert_write_fields_allowed("write", {"vals": {"State": "cancel"}})
+        for field in ("state", "stage_id", "State"):
+            with self.assertRaises(botify_policy.PolicyDenied) as ctx:
+                botify_policy.evaluate(
+                    "sale.order", "write", fields=[field], granted_op_classes=self.GRANT
+                )
+            self.assertEqual(ctx.exception.reason, "field_denied")
 
     def test_write_allows_ordinary_fields(self):
-        # Must not raise.
-        botify_main._assert_write_fields_allowed(
-            "write", {"vals": {"name": "New name", "phone": "0501234567"}}
+        result = botify_policy.evaluate(
+            "res.partner", "write", fields=["name", "phone"], granted_op_classes=self.GRANT
         )
+        self.assertEqual(result["opClass"], "normal_write")
 
     def test_create_blocks_credential_fields_but_allows_state(self):
         # Setting an initial state ON CREATE is normal (that is how records
-        # start out) — only WRITE on an existing record skips the workflow
-        # side effects, so create() is not subject to WORKFLOW_FIELD_RE.
-        with self.assertRaises(botify_main.ForbiddenFieldError):
-            botify_main._assert_write_fields_allowed(
-                "create", {"vals_list": [{"name": "x", "password": "y"}]}
+        # start out) — the workflow-field guard only applies to write().
+        with self.assertRaises(botify_policy.PolicyDenied) as ctx:
+            botify_policy.evaluate(
+                "crm.lead", "create", fields=["name", "password"], granted_op_classes=self.GRANT
             )
-        botify_main._assert_write_fields_allowed(
-            "create", {"vals_list": [{"name": "x", "state": "draft"}]}
+        self.assertEqual(ctx.exception.reason, "field_denied")
+        result = botify_policy.evaluate(
+            "crm.lead", "create", fields=["name", "state"], granted_op_classes=self.GRANT
         )
+        self.assertEqual(result["opClass"], "capture_write")
 
     def test_other_methods_are_not_field_checked(self):
-        # search_read etc. carry no vals/vals_list to inspect — must be a no-op.
-        botify_main._assert_write_fields_allowed("search_read", {"domain": []})
+        # search_read etc. carry no vals/vals_list — extract_write_fields()
+        # (controllers/_shared.py) returns [] for them, so no field is checked.
+        self.assertEqual(botify_shared.extract_write_fields("search_read", {"domain": []}), [])
 
 
 @tagged("post_install", "-at_install", "botify_agent")

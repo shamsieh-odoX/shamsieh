@@ -118,9 +118,10 @@ as the API key you already store (which acts as one fixed user), but broader, so
   (stock reservations, sequence numbers, validation). `create()` calls that set
   a credential-ish field.
 
-These are duplicated on the Botify side on purpose. An `auth="none"` endpoint
-has to be safe on its own terms, independent of whatever the caller claims to
-have already checked.
+These are duplicated on the Botify side on purpose (see `FORBIDDEN_WRITE_FIELD_RE`
+/ `WORKFLOW_FIELD_RE` in `packages/api/src/services/odoo/odooTools.ts`). An
+`auth="none"` endpoint has to be safe on its own terms, independent of whatever
+the caller claims to have already checked.
 
 ## Tests
 
@@ -144,9 +145,7 @@ Covers:
 
 ## Odoo version support
 
-Targeted at Odoo 19 (manifest `19.0.*`); the ORM calls used are stable across
-17–19. The identity route uses `type="jsonrpc"` (Odoo 19). Group membership goes
-through `_user_all_groups` because Odoo 19 split `groups_id` into `group_ids` /
-`all_group_ids`. The other version-sensitive call, `check_access` (18+) vs
-`check_access_rights` + `check_access_rule` (17 and earlier), goes through a
-shim in `controllers/main.py::_check_access`.
+Developed against Odoo 18; the ORM calls used are stable across 17–19. The one
+version-sensitive call, `check_access` (18+) vs `check_access_rights` +
+`check_access_rule` (17 and earlier), goes through a shim in
+`controllers/main.py::_check_access`.

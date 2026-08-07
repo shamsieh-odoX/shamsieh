@@ -1,7 +1,6 @@
 /** @odoo-module **/
 
 import { registry } from "@web/core/registry";
-import { rpc } from "@web/core/network/rpc";
 import { useService } from "@web/core/utils/hooks";
 import { Component, onWillStart, onWillUnmount, useState } from "@odoo/owl";
 
@@ -23,9 +22,10 @@ import { Component, onWillStart, onWillUnmount, useState } from "@odoo/owl";
  */
 class BotifyAssistant extends Component {
     static template = "botify_agent.Assistant";
-    static props = { "*": true };
+    static props = {};
 
     setup() {
+        this.rpc = useService("rpc");
         this.notification = useService("notification");
         this.state = useState({
             ready: false,
@@ -51,7 +51,7 @@ class BotifyAssistant extends Component {
     async connect() {
         let identity;
         try {
-            identity = await rpc("/botify_agent/identity", {});
+            identity = await this.rpc("/botify_agent/identity", {});
         } catch {
             this.state.error = "Could not reach Odoo to establish your identity.";
             return;
@@ -61,9 +61,7 @@ class BotifyAssistant extends Component {
             return;
         }
 
-        // Settings may store either the API origin (https://api…) or a root
-        // that already ends in /api — normalise so we never double /api.
-        this.baseUrl = identity.base_url.replace(/\/+$/, "").replace(/\/api$/, "");
+        this.baseUrl = identity.base_url.replace(/\/+$/, "");
         this.agentId = identity.agent_id;
         this.state.userName = identity.user?.name || "";
 
@@ -76,6 +74,14 @@ class BotifyAssistant extends Component {
                     body: JSON.stringify({
                         platform: identity.platform,
                         assertion: identity.assertion,
+                        // odoo-enterprise-rebuild: forwarded so Botify can later
+                        // prove possession of this delegation when requesting a
+                        // per-operation grant, without ever re-sending the raw
+                        // identity assertion. Botify stores the key AES-encrypted
+                        // and this browser never sees it again after this call.
+                        delegationId: identity.delegation_id,
+                        delegationKey: identity.delegation_key,
+                        delegationExpiresIn: identity.delegation_expires_in,
                     }),
                 }
             );

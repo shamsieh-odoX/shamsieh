@@ -45,6 +45,18 @@
                                  help="Optional. Only members of this group may start an agent session. This narrows who can use the agent; it never grants any data access.">
                             <field name="botify_allowed_group_id"/>
                         </setting>
+                        <setting string="Grant lifetime (seconds)"
+                                 help="How long a per-operation grant stays valid. Minted fresh per tool call; keep it short.">
+                            <field name="botify_grant_ttl"/>
+                        </setting>
+                        <setting string="Secret rotation grace window (hours)"
+                                 help="After clicking Generate new secret, both the old and new secret are accepted for this many hours so in-flight Botify replicas do not fail instantly.">
+                            <field name="botify_secret_grace_hours"/>
+                        </setting>
+                        <setting string="Previous shared secret"
+                                 help="Read-only. Set automatically on rotation; cleared once the grace window elapses.">
+                            <field name="botify_secret_previous" password="True" readonly="1"/>
+                        </setting>
                     </block>
                 </app>
             </xpath>
