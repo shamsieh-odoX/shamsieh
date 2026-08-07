@@ -93,6 +93,22 @@ class BotifyAssistant extends Component {
             this.session = {
                 token: issued.identityToken,
                 expiresAt: new Date(issued.expiresAt).getTime(),
+                // The delegation credential (identity.delegation_expires_in,
+                // default 900s / 15min) is DELIBERATELY shorter-lived than the
+                // identity session itself (identity.expires_in / issued.expiresAt,
+                // default 1h) — see DELEGATION_TTL_SECONDS's comment in
+                // controllers/main.py. Found live: ensureSession() used to check
+                // ONLY session.expiresAt, so a conversation running past ~15
+                // minutes kept the identity session "valid" while every Odoo
+                // tool call silently failed server-side with "no live
+                // delegation" for the rest of the hour — confusing for the user,
+                // and NOT a security feature (nothing benefits from the tool
+                // call failing instead of a transparent re-mint). Tracking the
+                // earlier of the two expiries here restores the intended
+                // behaviour: short-lived delegation, invisibly refreshed.
+                delegationExpiresAt: identity.delegation_expires_in
+                    ? Date.now() + identity.delegation_expires_in * 1000
+                    : new Date(issued.expiresAt).getTime(),
             };
             this.state.ready = true;
         } catch (err) {
@@ -107,7 +123,10 @@ class BotifyAssistant extends Component {
      * within one session lifetime rather than indefinitely.
      */
     async ensureSession() {
-        if (this.session && Date.now() < this.session.expiresAt - 30_000) {
+        const soonestExpiry = this.session
+            ? Math.min(this.session.expiresAt, this.session.delegationExpiresAt ?? Infinity)
+            : 0;
+        if (this.session && Date.now() < soonestExpiry - 30_000) {
             return true;
         }
         this.state.ready = false;

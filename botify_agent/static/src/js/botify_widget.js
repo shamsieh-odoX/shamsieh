@@ -189,7 +189,23 @@ async function mintIdentityToken() {
             return null;
         }
         const issued = await response.json();
-        return { token: issued.identityToken, expiresAt: new Date(issued.expiresAt).getTime() };
+        // The delegation credential (identity.delegation_expires_in, default
+        // 900s/15min) is DELIBERATELY shorter-lived than the identity session
+        // itself (issued.expiresAt, default 1h) — see DELEGATION_TTL_SECONDS's
+        // comment in controllers/main.py. Found live: this used to return only
+        // the identity's (longer) expiry, so scheduleIdentityRefresh below kept
+        // scheduling refreshes ~1h apart while the delegation silently expired
+        // after 15min — every Odoo tool call then failed with "no live
+        // delegation" for the remaining ~45min of every hour, invisible to this
+        // refresh logic. Returning the EARLIER of the two expiries restores the
+        // intended behaviour: short-lived delegation, invisibly refreshed.
+        const delegationExpiresAt = identity.delegation_expires_in
+            ? Date.now() + identity.delegation_expires_in * 1000
+            : new Date(issued.expiresAt).getTime();
+        return {
+            token: issued.identityToken,
+            expiresAt: Math.min(new Date(issued.expiresAt).getTime(), delegationExpiresAt),
+        };
     } catch {
         return null;
     }
