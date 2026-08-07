@@ -45,6 +45,10 @@
                                  help="Optional. Only members of this group may start an agent session. This narrows who can use the agent; it never grants any data access.">
                             <field name="botify_allowed_group_id"/>
                         </setting>
+                        <setting string="Allow assistant writes to custom models"
+                                 help="Off by default. The shared policy manifest covers standard Odoo models only, so writes to this database's own custom or Studio models are refused unless you enable this AND classify the specific models in Botify. Enabling it grants nothing by itself: your own access rights and record rules still decide every operation.">
+                            <field name="botify_allow_custom_models"/>
+                        </setting>
                         <setting string="Grant lifetime (seconds)"
                                  help="How long a per-operation grant stays valid. Minted fresh per tool call; keep it short.">
                             <field name="botify_grant_ttl"/>

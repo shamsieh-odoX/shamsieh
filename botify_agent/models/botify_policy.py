@@ -15,6 +15,35 @@ import json
 import os
 import re
 
+# Mirrors packages/api/src/services/odoo/policy/tenantModels.ts. Odoo model
+# names come in two shapes and BOTH must be accepted, or Studio models become
+# permanently unclassifiable: dotted developer-module models
+# (``shams.todo.task``) and dot-less Studio models (``x_membership``).
+_TENANT_MODEL_NAME_RE = re.compile(r"^(x_[a-z0-9_]+|[a-z][a-z0-9_]*(\.[a-z0-9_]+)+)$")
+_TENANT_MAX_MODEL_NAME_LENGTH = 64
+
+# Same regex blacklist as odooDiscovery.ts:SENSITIVE_MODEL_RE. A tenant entry
+# naming any of these is refused outright, so the overlay can never be used to
+# reach Odoo's infrastructure, auth or messaging models.
+_TENANT_RESERVED_RE = re.compile(
+    r"^(ir\.|base\.|base_|bus\.|res\.users|res\.groups|res\.config|res\.lang|res\.company\."
+    r"|auth[._]|mail\.|sms\.|fetchmail\.|iap[._]|payment\.(token|provider|method)|account\.online"
+    r"|auth_totp|change\.password|web[._]|website\.visitor|digest\.)"
+)
+
+VALID_OP_CLASSES = frozenset(
+    [
+        "read",
+        "capture_write",
+        "normal_write",
+        "financial_write",
+        "lifecycle_action",
+        "batch_action",
+    ]
+)
+
+_VALID_WRITE_OP_CLASSES = frozenset(["capture_write", "normal_write", "financial_write"])
+
 _DATA_PATH = os.path.join(os.path.dirname(__file__), "..", "data", "policy_manifest.json")
 
 # Update in the SAME commit as any manifest edit.
@@ -54,6 +83,59 @@ def get_policy_manifest(path=_DATA_PATH):
     return manifest
 
 
+def sanitize_tenant_model(entry, model, manifest=None):
+    """Validate a Botify-supplied classification for ONE custom model.
+
+    Mirrors tenantModels.ts:buildTenantModelMap. Returns a manifest-shaped model
+    entry, or None if the entry is absent/malformed/not permissible.
+
+    This is the addon's independent check on data that arrived from Botify. It
+    is deliberately not "trust the caller": the global manifest is re-consulted
+    here, so a standard model can never be reclassified through this path even
+    by a fully compromised Botify. The blast radius is bounded to models Odoo
+    itself considers custom, and Odoo's own ACLs/record rules still gate the
+    operation afterwards via with_user().
+    """
+    if not isinstance(entry, dict):
+        return None
+    if entry.get("model") != model:
+        return None
+    if not isinstance(model, str) or len(model) > _TENANT_MAX_MODEL_NAME_LENGTH:
+        return None
+    if not _TENANT_MODEL_NAME_RE.match(model):
+        return None
+    if _TENANT_RESERVED_RE.match(model):
+        return None
+
+    manifest = manifest or get_policy_manifest()
+    # Global manifest supremacy, enforced independently of the Botify side.
+    if manifest["models"].get(model):
+        return None
+
+    op_classes_raw = entry.get("opClasses")
+    if not isinstance(op_classes_raw, list):
+        return None
+    op_classes = [oc for oc in op_classes_raw if isinstance(oc, str) and oc in VALID_OP_CLASSES]
+    if not op_classes:
+        return None
+
+    write_op_class = entry.get("writeOpClass")
+    if not isinstance(write_op_class, str) or write_op_class not in _VALID_WRITE_OP_CLASSES:
+        write_op_class = "normal_write"
+    create_op_class = entry.get("createOpClass")
+    if not isinstance(create_op_class, str) or create_op_class not in _VALID_WRITE_OP_CLASSES:
+        create_op_class = write_op_class
+
+    return {
+        "dataClass": "tenant_custom",
+        "sensitive": entry.get("sensitive") is True,
+        "createOpClass": create_op_class,
+        "writeOpClass": write_op_class,
+        "opClasses": op_classes,
+        "sensitiveFields": [],
+    }
+
+
 class PolicyDenied(Exception):
     def __init__(self, reason, message, op_class=None):
         super().__init__(message)
@@ -64,14 +146,24 @@ class PolicyDenied(Exception):
 
 
 def evaluate(model, method, fields=None, ids=None, batch_size=None, op_class_override=None,
-             granted_op_classes=None, manifest=None):
+             granted_op_classes=None, manifest=None, tenant_model=None):
     """Deny-by-default evaluation. Raises PolicyDenied, or returns
-    {"opClass": ..., "riskLevel": ...} on success. Mirrors decision.ts:evaluate.
+    {"opClass": ..., "riskLevel": ..., "classificationSource": ...} on success.
+    Mirrors decision.ts:evaluate.
+
+    ``tenant_model`` is an already-sanitized entry (see sanitize_tenant_model)
+    for one of this tenant's own custom models. It is consulted ONLY when the
+    global manifest has no entry for the model, which is what makes global
+    manifest supremacy structural here rather than merely validated.
     """
     manifest = manifest or get_policy_manifest()
     granted_op_classes = granted_op_classes if granted_op_classes is not None else set()
 
     model_entry = manifest["models"].get(model)
+    classification_source = "global"
+    if not model_entry and tenant_model:
+        model_entry = tenant_model
+        classification_source = "tenant"
     if not model_entry:
         raise PolicyDenied("model_unclassified", 'Model "%s" is not classified in the policy manifest.' % model)
 
@@ -136,4 +228,8 @@ def evaluate(model, method, fields=None, ids=None, batch_size=None, op_class_ove
             "too_many_ids", "%d ids exceeds the maximum of %d." % (len(ids), limits["maxIds"]), op_class
         )
 
-    return {"opClass": op_class, "riskLevel": RISK_BY_OP_CLASS[op_class]}
+    return {
+        "opClass": op_class,
+        "riskLevel": RISK_BY_OP_CLASS[op_class],
+        "classificationSource": classification_source,
+    }

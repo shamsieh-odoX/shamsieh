@@ -112,3 +112,152 @@ class TestEvaluate(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class TestTenantModelOverlay(unittest.TestCase):
+    """Per-tenant custom-model classification (see
+    packages/api/src/services/odoo/policy/tenantModels.ts and
+    docs/odoo/tenant-models.md).
+
+    This addon is the AUTHORITATIVE enforcement point for end-user-mode
+    execution, so the overlay has to work here or the feature does not work at
+    all — and, more importantly, its limits have to hold here even if the
+    Botify side were fully compromised.
+    """
+
+    TODO = {
+        "model": "shams.todo.task",
+        "opClasses": ["read", "normal_write"],
+        "createOpClass": "normal_write",
+        "writeOpClass": "normal_write",
+        "sensitive": False,
+    }
+
+    def _sanitized(self, entry=None, model="shams.todo.task"):
+        return bp.sanitize_tenant_model(entry or self.TODO, model)
+
+    def test_sanitizes_a_valid_dotted_custom_model(self):
+        got = self._sanitized()
+        self.assertIsNotNone(got)
+        self.assertEqual(got["opClasses"], ["read", "normal_write"])
+        self.assertEqual(got["writeOpClass"], "normal_write")
+        self.assertEqual(got["dataClass"], "tenant_custom")
+
+    def test_sanitizes_a_dot_less_studio_model(self):
+        # Odoo Studio models are x_-prefixed with no dot; a dotted-only pattern
+        # would make every Studio model permanently unclassifiable.
+        entry = dict(self.TODO, model="x_membership")
+        self.assertIsNotNone(bp.sanitize_tenant_model(entry, "x_membership"))
+
+    def test_rejects_entry_for_a_different_model_than_the_operation(self):
+        # The overlay must describe the model actually being operated on;
+        # otherwise a grant for model A could carry a classification for B.
+        self.assertIsNone(bp.sanitize_tenant_model(self.TODO, "shams.other.model"))
+
+    def test_rejects_globally_classified_models(self):
+        # Global manifest supremacy, asserted independently of the Botify side.
+        for model in ("res.partner", "account.move", "sale.order", "hr.payslip"):
+            entry = dict(self.TODO, model=model)
+            self.assertIsNone(bp.sanitize_tenant_model(entry, model), model)
+
+    def test_rejects_reserved_namespaces(self):
+        for model in ("res.users", "res.groups", "ir.cron", "mail.message", "ir.config_parameter"):
+            entry = dict(self.TODO, model=model)
+            self.assertIsNone(bp.sanitize_tenant_model(entry, model), model)
+
+    def test_rejects_malformed_names_and_shapes(self):
+        for model in ("Bad.Name", "todo", "_x", "shams..todo", "shams.todo.", "x_" + "a" * 70):
+            entry = dict(self.TODO, model=model)
+            self.assertIsNone(bp.sanitize_tenant_model(entry, model), model)
+        self.assertIsNone(bp.sanitize_tenant_model(None, "shams.todo.task"))
+        self.assertIsNone(bp.sanitize_tenant_model("nope", "shams.todo.task"))
+        self.assertIsNone(
+            bp.sanitize_tenant_model(dict(self.TODO, opClasses=[]), "shams.todo.task")
+        )
+        self.assertIsNone(
+            bp.sanitize_tenant_model(dict(self.TODO, opClasses=["sudo"]), "shams.todo.task")
+        )
+
+    def test_falls_back_to_normal_write_for_a_bogus_write_class(self):
+        got = bp.sanitize_tenant_model(
+            dict(self.TODO, writeOpClass="read", createOpClass="batch_action"),
+            "shams.todo.task",
+        )
+        self.assertEqual(got["writeOpClass"], "normal_write")
+        self.assertEqual(got["createOpClass"], "normal_write")
+
+    def test_evaluate_allows_create_on_a_classified_custom_model(self):
+        decision = bp.evaluate(
+            "shams.todo.task",
+            "create",
+            fields=["name"],
+            granted_op_classes=FULL_GRANT,
+            tenant_model=self._sanitized(),
+        )
+        self.assertEqual(decision["opClass"], "normal_write")
+        self.assertEqual(decision["classificationSource"], "tenant")
+
+    def test_evaluate_still_denies_without_an_overlay(self):
+        with self.assertRaises(bp.PolicyDenied) as ctx:
+            bp.evaluate(
+                "shams.todo.task", "create", fields=["name"], granted_op_classes=FULL_GRANT
+            )
+        self.assertEqual(ctx.exception.reason, "model_unclassified")
+
+    def test_overlay_never_overrides_the_global_manifest(self):
+        # Even if a sanitize step were bypassed, evaluate() consults the global
+        # manifest first, so a hostile entry for a standard model is inert.
+        hostile = {
+            "dataClass": "tenant_custom",
+            "sensitive": False,
+            "createOpClass": "capture_write",
+            "writeOpClass": "capture_write",
+            "opClasses": ["read", "capture_write", "normal_write"],
+            "sensitiveFields": [],
+        }
+        decision = bp.evaluate(
+            "res.partner", "create", fields=["name"],
+            granted_op_classes=FULL_GRANT, tenant_model=hostile,
+        )
+        self.assertEqual(decision["classificationSource"], "global")
+
+    def test_overlay_is_still_subject_to_granted_scopes(self):
+        with self.assertRaises(bp.PolicyDenied) as ctx:
+            bp.evaluate(
+                "shams.todo.task", "create", fields=["name"],
+                granted_op_classes={"read"}, tenant_model=self._sanitized(),
+            )
+        self.assertEqual(ctx.exception.reason, "scope_not_granted")
+
+    def test_overlay_is_still_subject_to_its_own_op_class_list(self):
+        read_only = bp.sanitize_tenant_model(
+            dict(self.TODO, opClasses=["read"]), "shams.todo.task"
+        )
+        with self.assertRaises(bp.PolicyDenied) as ctx:
+            bp.evaluate(
+                "shams.todo.task", "create", fields=["name"],
+                granted_op_classes=FULL_GRANT, tenant_model=read_only,
+            )
+        self.assertEqual(ctx.exception.reason, "op_class_not_permitted_for_model")
+
+    def test_overlay_does_not_bypass_field_and_method_rules(self):
+        with self.assertRaises(bp.PolicyDenied) as ctx:
+            bp.evaluate(
+                "shams.todo.task", "unlink",
+                granted_op_classes=FULL_GRANT, tenant_model=self._sanitized(),
+            )
+        self.assertEqual(ctx.exception.reason, "method_forbidden")
+
+        with self.assertRaises(bp.PolicyDenied) as ctx:
+            bp.evaluate(
+                "shams.todo.task", "write", fields=["password"],
+                granted_op_classes=FULL_GRANT, tenant_model=self._sanitized(),
+            )
+        self.assertEqual(ctx.exception.reason, "field_denied")
+
+        with self.assertRaises(bp.PolicyDenied) as ctx:
+            bp.evaluate(
+                "shams.todo.task", "write", fields=["state"],
+                granted_op_classes=FULL_GRANT, tenant_model=self._sanitized(),
+            )
+        self.assertEqual(ctx.exception.reason, "field_denied")

@@ -211,3 +211,163 @@ class TestGrantAndRpcFlow(common.HttpCase):
 
 if __name__ == "__main__":
     common.unittest.main()
+
+
+
+@tagged("post_install", "-at_install", "botify_agent")
+class TestCustomModelPolicyGate(common.HttpCase):
+    """The Odoo-side half of the custom-model decision.
+
+    Botify classifies which of a tenant's own custom models the assistant may
+    write to, and sends the classification for the targeted model with the
+    signed grant request. This database still has to consent via
+    `botify_agent.allow_custom_models`, which cannot be set from Botify — so a
+    compromised Botify cannot unlock custom-model writes on its own.
+
+    `x_botify_test_note` is a real Studio-style manual model, so this exercises
+    the genuine dot-less `x_` shape end to end rather than asserting against a
+    name that does not exist. It is created in setUpClass, not setUp: creating
+    a manual model performs DDL and reflection that a per-test rollback does
+    not fully undo, so a per-test create collides on ir_model_fields' unique
+    constraint from the second test onwards.
+    """
+
+    TENANT_ENTRY = {
+        "model": "x_botify_test_note",
+        "opClasses": ["read", "normal_write"],
+        "createOpClass": "normal_write",
+        "writeOpClass": "normal_write",
+        "sensitive": False,
+    }
+
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        from ._helpers import user_group_field
+
+        cls.employee = cls.env["res.users"].create({
+            "name": "Custom Model Employee",
+            "login": "botify.custommodel@example.com",
+            user_group_field(cls.env): [(6, 0, [cls.env.ref("base.group_user").id])],
+        })
+
+        # Odoo creates the `x_name` display-name field automatically for a
+        # manual model, so declaring it here would collide on
+        # ir_model_fields' UNIQUE(model, name).
+        custom_model = cls.env["ir.model"].create({
+            "name": "Botify Test Note",
+            "model": "x_botify_test_note",
+            "state": "manual",
+        })
+        cls.env["ir.model.access"].create({
+            "name": "x_botify_test_note all",
+            "model_id": custom_model.id,
+            "group_id": cls.env.ref("base.group_user").id,
+            "perm_read": True,
+            "perm_write": True,
+            "perm_create": True,
+            "perm_unlink": True,
+        })
+
+    def setUp(self):
+        super().setUp()
+        params = self.env["ir.config_parameter"].sudo()
+        params.set_param("botify_agent.enabled", "True")
+        params.set_param("botify_agent.base_url", "https://api.example.test")
+        params.set_param("botify_agent.agent_id", AGENT_ID)
+        params.set_param("botify_agent.installation_id", INSTALLATION_ID)
+        params.set_param("botify_agent.shared_secret", SECRET)
+        params.set_param("botify_agent.grant_ttl", "90")
+        params.set_param("botify_agent.allow_custom_models", "False")
+
+    # Reuse the signing/minting helpers from the flow test above.
+    _signed_post = TestGrantAndRpcFlow._signed_post
+    _request_grant = TestGrantAndRpcFlow._request_grant
+    _rpc = TestGrantAndRpcFlow._rpc
+
+    def _mint_delegation(self):
+        self.authenticate("botify.custommodel@example.com", "botify.custommodel@example.com")
+        resp = self.url_open(
+            "/botify_agent/identity",
+            data=json.dumps({"jsonrpc": "2.0", "method": "call", "params": {}}),
+            headers={"Content-Type": "application/json"},
+        )
+        return resp.json()["result"]
+
+    def _allow_custom_models(self):
+        self.env["ir.config_parameter"].sudo().set_param(
+            "botify_agent.allow_custom_models", "True"
+        )
+
+    def test_custom_model_write_denied_without_classification(self):
+        """No classification sent at all -> unchanged deny-by-default."""
+        self._allow_custom_models()
+        delegation = self._mint_delegation()
+        resp = self._request_grant(
+            delegation, "x_botify_test_note", "create", kwargs={"vals_list": [{"x_name": "n"}]}
+        )
+        self.assertEqual(resp.status_code, 403)
+        self.assertEqual(resp.json()["error"]["name"], "model_unclassified")
+
+    def test_custom_model_write_denied_when_odoo_switch_is_off(self):
+        """Classification supplied, but this database has not consented."""
+        delegation = self._mint_delegation()
+        resp = self._request_grant(
+            delegation,
+            "x_botify_test_note",
+            "create",
+            kwargs={"vals_list": [{"x_name": "n"}]},
+            tenant_model=self.TENANT_ENTRY,
+        )
+        self.assertEqual(resp.status_code, 403)
+        self.assertEqual(resp.json()["error"]["name"], "model_unclassified")
+
+    def test_custom_model_write_allowed_when_classified_and_consented(self):
+        self._allow_custom_models()
+        delegation = self._mint_delegation()
+        grant_resp = self._request_grant(
+            delegation,
+            "x_botify_test_note",
+            "create",
+            kwargs={"vals_list": [{"x_name": "Written by the assistant"}]},
+            tenant_model=self.TENANT_ENTRY,
+        )
+        self.assertEqual(grant_resp.status_code, 200, grant_resp.text)
+        grant = grant_resp.json()
+        self.assertEqual(grant["op_class"], "normal_write")
+
+        rpc_resp = self._rpc(
+            grant["grant"],
+            "x_botify_test_note",
+            "create",
+            kwargs={"vals_list": [{"x_name": "Written by the assistant"}]},
+        )
+        result = rpc_resp.json()
+        self.assertIn("result", result, result)
+        created = self.env["x_botify_test_note"].browse(result["result"])
+        self.assertEqual(created.x_name, "Written by the assistant")
+
+    def test_classification_cannot_reclassify_a_standard_model(self):
+        """Global manifest supremacy at the authoritative enforcement point.
+
+        A hostile classification claiming res.users is a freely-writable custom
+        model must be inert even with the Odoo-side switch on.
+        """
+        self._allow_custom_models()
+        delegation = self._mint_delegation()
+        resp = self._request_grant(
+            delegation,
+            "res.users",
+            "write",
+            ids=[self.employee.id],
+            kwargs={"vals": {"name": "escalated"}},
+            tenant_model={
+                "model": "res.users",
+                "opClasses": ["read", "normal_write"],
+                "createOpClass": "normal_write",
+                "writeOpClass": "normal_write",
+                "sensitive": False,
+            },
+        )
+        self.assertEqual(resp.status_code, 403)
+        self.assertEqual(resp.json()["error"]["name"], "model_unclassified")

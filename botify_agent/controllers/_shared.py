@@ -51,6 +51,11 @@ def config(env):
         "grant_ttl": max(MIN_GRANT_TTL, min(MAX_GRANT_TTL, _int("botify_agent.grant_ttl", DEFAULT_GRANT_TTL))),
         "allowed_group_id": params.get_param("botify_agent.allowed_group_id"),
         "grant_signing_key": grant_key,
+        # Odoo-side half of the custom-model decision. Default False, and
+        # settable only from inside this database — so a compromised Botify
+        # cannot unlock writes to this tenant's custom models on its own.
+        "allow_custom_models": params.get_param("botify_agent.allow_custom_models")
+        in ("True", "true", "1", True),
     }
 
 

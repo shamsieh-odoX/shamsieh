@@ -298,6 +298,15 @@ class BotifyRpcController(http.Controller):
 
         fields_touched = _shared.extract_write_fields(method, kwargs_in)
         granted_scopes = set(claims.get("scopes") or [])
+        # Custom-model classification this grant was issued under. It comes out
+        # of the Odoo-SIGNED grant whose signature was verified above, not from
+        # the request body, so /rpc reaches the same decision as /grant without
+        # re-trusting the caller. Re-sanitized anyway (defence in depth) and
+        # re-gated on the Odoo-side master switch, so turning that switch off
+        # invalidates in-flight grants rather than letting them drain.
+        tenant_model = None
+        if cfg["allow_custom_models"]:
+            tenant_model = botify_policy.sanitize_tenant_model(claims.get("tmc"), model_name)
         try:
             decision = botify_policy.evaluate(
                 model_name,
@@ -305,6 +314,7 @@ class BotifyRpcController(http.Controller):
                 fields=fields_touched,
                 ids=ids,
                 granted_op_classes=granted_scopes,
+                tenant_model=tenant_model,
             )
         except botify_policy.PolicyDenied as exc:
             _logger.info("botify_agent: policy denied uid=%s %s.%s (%s)", uid, model_name, method, exc.reason)

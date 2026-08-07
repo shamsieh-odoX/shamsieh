@@ -141,6 +141,17 @@ class BotifyGrantController(http.Controller):
         if payload.get("is_batch") is True and len(ids) > 1:
             op_class_override = "batch_action"
 
+        # Custom-model classification supplied by Botify for THIS model only.
+        # Honoured only when the Odoo-side master switch is on, and only after
+        # sanitize_tenant_model re-checks it against this addon's own copy of
+        # the global manifest — so it can never reclassify a standard model,
+        # and a compromised Botify cannot enable it unilaterally.
+        tenant_model = None
+        if cfg["allow_custom_models"]:
+            tenant_model = botify_policy.sanitize_tenant_model(
+                payload.get("tenant_model"), model_name
+            )
+
         try:
             decision = botify_policy.evaluate(
                 model_name,
@@ -150,6 +161,7 @@ class BotifyGrantController(http.Controller):
                 batch_size=len(ids) if op_class_override else None,
                 op_class_override=op_class_override,
                 granted_op_classes=delegation_scopes & VALID_OP_CLASSES,
+                tenant_model=tenant_model,
             )
         except botify_policy.PolicyDenied as exc:
             _logger.info("botify_agent: grant denied uid=%s %s.%s (%s)", uid, model_name, method, exc.reason)
@@ -166,6 +178,14 @@ class BotifyGrantController(http.Controller):
             "sub": uid,
             "cids": sorted(requested_cids),
             "scopes": [op_class],
+            # Carry the classification this grant was issued under, so /rpc can
+            # re-evaluate identically without re-trusting Botify: the claim is
+            # inside the Odoo-signed grant, and /rpc already verifies that
+            # signature. Omitted entirely for globally-classified models.
+            # Carries the model name alongside the sanitized entry so /rpc can
+            # re-run the identical sanitize step (which binds an entry to the
+            # model it describes) rather than trusting the claim's shape.
+            **({"tmc": dict(tenant_model, model=model_name)} if tenant_model else {}),
             "oph": oph,
             "jti": botify_security.new_nonce(),
             "iat": now,

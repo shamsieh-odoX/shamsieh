@@ -54,6 +54,19 @@ class ResConfigSettings(models.TransientModel):
         config_parameter="botify_agent.enabled",
         default=False,
     )
+    botify_allow_custom_models = fields.Boolean(
+        string="Allow assistant writes to custom models",
+        config_parameter="botify_agent.allow_custom_models",
+        default=False,
+        help="Off by default. The shared policy manifest classifies standard Odoo "
+             "models only, so writes to this database's OWN custom models "
+             "(developer modules or Studio objects) are refused unless you turn "
+             "this on AND classify the specific models in Botify. This switch is "
+             "the Odoo-side half of that decision: it cannot be set from Botify, "
+             "so nothing outside this database can unlock custom-model writes on "
+             "its own. It grants nothing by itself, and Odoo's own access rights "
+             "and record rules still decide every individual operation.",
+    )
     botify_grant_ttl = fields.Integer(
         string="Grant lifetime (seconds)",
         config_parameter="botify_agent.grant_ttl",
