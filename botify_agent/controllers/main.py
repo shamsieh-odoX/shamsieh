@@ -19,7 +19,7 @@ import json
 import logging
 import time
 
-from odoo import fields, http
+from odoo import fields, http, release
 from odoo.exceptions import AccessError, UserError, ValidationError
 from odoo.http import request
 
@@ -27,6 +27,17 @@ from . import _shared
 from ..models import botify_canonical, botify_policy, botify_security
 
 _logger = logging.getLogger(__name__)
+
+# Odoo 19 renamed the JSON route type: @route(type="json") still works but emits
+# a DeprecationWarning on every import, which turns an Odoo.sh build's test
+# stage amber ("Test: Warning") even though every test passes. "jsonrpc" does
+# NOT exist before 19, and this addon still supports 18, so the type is chosen
+# from the running server's version rather than hardcoded either way.
+try:
+    _JSON_ROUTE_TYPE = "jsonrpc" if int(release.version_info[0]) >= 19 else "json"
+except (AttributeError, IndexError, TypeError, ValueError):  # pragma: no cover
+    # Unparseable version (saas builds, forks) — keep the universally accepted one.
+    _JSON_ROUTE_TYPE = "json"
 
 # Kept for the /rpc allowlist gate (defence in depth alongside the policy
 # manifest's own method map — a method absent from BOTH is refused).
@@ -60,7 +71,7 @@ class BotifyIdentityController(http.Controller):
 
     @http.route(
         "/botify_agent/identity",
-        type="json",
+        type=_JSON_ROUTE_TYPE,
         auth="user",
         methods=["POST"],
         csrf=False,

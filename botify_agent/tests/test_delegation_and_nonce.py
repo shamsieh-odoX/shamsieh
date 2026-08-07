@@ -16,11 +16,17 @@ re-run yourself:
 import datetime
 
 from odoo import fields
+from odoo.tools import mute_logger
 from odoo.tests import common, tagged
 
 
 @tagged("post_install", "-at_install", "botify_agent")
 class TestNonceUniqueness(common.TransactionCase):
+    # These two deliberately provoke a UNIQUE violation, which psycopg logs at
+    # ERROR via odoo.sql_db. The test passing IS that error happening — but an
+    # unmuted ERROR line turns an Odoo.sh build's test stage amber
+    # ("Test: Warning"), so mute the expected noise rather than the assertion.
+    @mute_logger("odoo.sql_db")
     def test_duplicate_jti_is_rejected_by_the_database(self):
         """The actual replay defence: a second INSERT of the same jti must
         fail at the database level, not merely be caught by application
@@ -37,6 +43,7 @@ class TestNonceUniqueness(common.TransactionCase):
         b = Nonce.create({"jti": "jti-b", "uid": 2})
         self.assertNotEqual(a.id, b.id)
 
+    @mute_logger("odoo.sql_db")
     def test_concurrent_consumption_only_one_wins(self):
         """Simulates two replicas racing to consume the same grant: the first
         savepoint-wrapped create() succeeds, the second must fail even though

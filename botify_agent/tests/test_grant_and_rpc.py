@@ -24,6 +24,7 @@ import time
 
 from odoo import fields
 from odoo.tests import common, tagged
+from odoo.tools import mute_logger
 
 from ..models import botify_security
 
@@ -134,6 +135,8 @@ class TestGrantAndRpcFlow(common.HttpCase):
 
     # -- replay -------------------------------------------------------------
 
+    # The replay IS the assertion; its UNIQUE violation is expected noise.
+    @mute_logger("odoo.sql_db", "odoo.addons.botify_agent.controllers.main")
     def test_grant_cannot_be_replayed(self):
         delegation = self._mint_delegation()
         grant = self._request_grant(
@@ -146,6 +149,7 @@ class TestGrantAndRpcFlow(common.HttpCase):
 
     # -- operation mismatch (tamper) ----------------------------------------
 
+    @mute_logger("odoo.addons.botify_agent.controllers.main")
     def test_tampering_the_operation_after_grant_is_rejected(self):
         delegation = self._mint_delegation()
         grant = self._request_grant(
