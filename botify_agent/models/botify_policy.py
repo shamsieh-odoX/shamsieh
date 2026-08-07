@@ -31,6 +31,20 @@ _TENANT_RESERVED_RE = re.compile(
     r"|auth_totp|change\.password|web[._]|website\.visitor|digest\.)"
 )
 
+# Stricter reserved roots for tenant classification only, mirroring
+# tenantModels.ts:TENANT_RESERVED_NAMESPACE_RE. Discovery marks a model custom
+# when a custom module defines OR EXTENDS it, so on a heavily customised
+# database the "custom" set legitimately includes standard Odoo models
+# (res.company, resource.calendar.leaves, project.update, ...). The global
+# manifest blocks the ones it classifies, but it is finite. `botify.` is here
+# because botify.agent.delegation/nonce are this addon's OWN security state
+# (delegation credentials and the grant replay guard) and must never be
+# reachable through operator-configured policy.
+_TENANT_RESERVED_ROOT_RE = re.compile(
+    r"^(res\.|resource\.|ir\.|base\.|bus\.|mail\.|web\.|website\.|report\.|botify\."
+    r"|account\.|payment\.|uom\.|auth|iap)"
+)
+
 VALID_OP_CLASSES = frozenset(
     [
         "read",
@@ -104,7 +118,7 @@ def sanitize_tenant_model(entry, model, manifest=None):
         return None
     if not _TENANT_MODEL_NAME_RE.match(model):
         return None
-    if _TENANT_RESERVED_RE.match(model):
+    if _TENANT_RESERVED_RE.match(model) or _TENANT_RESERVED_ROOT_RE.match(model):
         return None
 
     manifest = manifest or get_policy_manifest()

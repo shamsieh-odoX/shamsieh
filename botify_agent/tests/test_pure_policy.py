@@ -165,6 +165,33 @@ class TestTenantModelOverlay(unittest.TestCase):
             entry = dict(self.TODO, model=model)
             self.assertIsNone(bp.sanitize_tenant_model(entry, model), model)
 
+    def test_rejects_reserved_roots_even_if_discovery_called_them_custom(self):
+        """Found against real production data.
+
+        Discovery flags a model custom when a custom module DEFINES OR EXTENDS
+        it, so a heavily-customised database's "custom" set legitimately
+        contains standard Odoo models — and this addon's own security tables.
+        botify.agent.delegation holds per-user delegation credentials and
+        botify.agent.nonce is the grant replay guard; neither may ever be
+        reachable through operator-configured policy.
+        """
+        for model in (
+            "res.company",
+            "resource.calendar.leaves",
+            "resource.calendar.attendance",
+            "botify.agent.delegation",
+            "botify.agent.nonce",
+            "report.custom.thing",
+            "account.analytic.custom",
+        ):
+            entry = dict(self.TODO, model=model)
+            self.assertIsNone(bp.sanitize_tenant_model(entry, model), model)
+
+    def test_still_accepts_genuinely_custom_namespaces(self):
+        for model in ("shams.todo.task", "hr.employee.loan", "fingerprint.device", "x_membership"):
+            entry = dict(self.TODO, model=model)
+            self.assertIsNotNone(bp.sanitize_tenant_model(entry, model), model)
+
     def test_rejects_malformed_names_and_shapes(self):
         for model in ("Bad.Name", "todo", "_x", "shams..todo", "shams.todo.", "x_" + "a" * 70):
             entry = dict(self.TODO, model=model)
