@@ -1,0 +1,911 @@
+# Translation of Odoo Server.
+# Professional Arabic (ar) translations — Odoo-compliant format.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-07-13 11:59+0000\n"
+"PO-Revision-Date: 2026-07-13 11:59+0000\n"
+"Last-Translator: Shamsieh\n"
+"Language-Team: Arabic\n"
+"Language: ar\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=6; plural=(n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 ? 4 : 5);\n"
+
+
+#. module: hr_overtime_management
+#. odoo-python
+#: code:addons/hr_overtime_management/wizard/hr_overtime_refuse_wizard.py:0
+msgid "A refusal reason is required."
+msgstr "سبب الرفض مطلوب."
+
+#. module: hr_overtime_management
+#: model:res.groups,name:hr_overtime_management.group_overtime_admin
+msgid "Administrator: Overtime Configuration"
+msgstr "مدير: إعدادات العمل الإضافي"
+
+#. module: hr_overtime_management
+#: model:ir.ui.menu,name:hr_overtime_management.menu_hr_overtime_all_requests
+msgid "All Requests"
+msgstr "جميع الطلبات"
+
+#. module: hr_overtime_management
+#. odoo-python
+#: code:addons/hr_overtime_management/models/hr_overtime_request.py:0
+msgid "An employee must be set before submitting."
+msgstr "يجب تحديد الموظف قبل الإرسال."
+
+#. module: hr_overtime_management
+#: model:ir.model.fields,field_description:hr_overtime_management.field_res_company__overtime_default_type_id
+msgid "Applied on regular working days (Sunday–Thursday by default)."
+msgstr "يُطبّق في أيام العمل العادية (الأحد–الخميس افتراضياً)."
+
+#. module: hr_overtime_management
+#: model:ir.model.fields,field_description:hr_overtime_management.field_res_company__overtime_weekend_type_id
+msgid "Applied when overtime falls on a configured weekend day."
+msgstr "يُطبّق عندما يقع العمل الإضافي في يوم عطلة نهاية أسبوع مُعدّ."
+
+#. module: hr_overtime_management
+#: model:ir.model.fields,field_description:hr_overtime_management.field_res_company__overtime_holiday_type_id
+msgid "Applied when overtime falls on a public holiday or calendar day off."
+msgstr "يُطبّق عندما يقع العمل الإضافي في عطلة رسمية أو يوم عطلة في التقويم."
+
+#. module: hr_overtime_management
+#: model:ir.model,name:hr_overtime_management.model_hr_approval_chain_mixin
+msgid "Approval Chain Mixin"
+msgstr "Approval Chain Mixin"
+
+#. module: hr_overtime_management
+#: model:ir.model,name:hr_overtime_management.model_hr_approval_chain_service
+msgid "Approval Chain Resolution Service"
+msgstr "Approval Chain Resolution Service"
+
+#. module: hr_overtime_management
+#. odoo-python
+#: code:addons/hr_overtime_management/models/hr_overtime_request.py:0
+#. odoo-python
+#: code:addons/hr_overtime_management/views/hr_overtime_request_views.xml:0
+#: model:ir.model.fields,field_description:hr_overtime_management.field_hr_overtime_request__approval_line_ids
+#: model_terms:ir.ui.view,arch_db:hr_overtime_management.hr_overtime_request_view_form
+msgid "Approval History"
+msgstr "سجل الاعتمادات"
+
+#. module: hr_overtime_management
+#: model:ir.model.fields,field_description:hr_overtime_management.field_hr_overtime_refuse_wizard__approval_line_id
+msgid "Approval Step"
+msgstr "خطوة الاعتماد"
+
+#. module: hr_overtime_management
+#. odoo-python
+#: code:addons/hr_overtime_management/models/hr_approval_mixin.py:0
+msgid "Approval chain is incomplete: no HR stage found. "
+msgstr "سلسلة الاعتماد غير مكتملة: لم يتم العثور على مرحلة الموارد البشرية."
+
+#. module: hr_overtime_management
+#. odoo-python
+#: code:addons/hr_overtime_management/views/hr_overtime_request_views.xml:0
+#: model_terms:ir.ui.view,arch_db:hr_overtime_management.hr_overtime_request_view_form
+msgid "Approvals"
+msgstr "الموافقات"
+
+#. module: hr_overtime_management
+#. odoo-python
+#: code:addons/hr_overtime_management/views/hr_overtime_request_views.xml:0
+#: model_terms:ir.ui.view,arch_db:hr_overtime_management.hr_overtime_request_view_form
+#: model_terms:ir.ui.view,arch_db:hr_overtime_management.hr_overtime_request_view_kanban
+msgid "Approve"
+msgstr "اعتماد"
+
+#. module: hr_overtime_management
+#. odoo-python
+#: code:addons/hr_overtime_management/views/hr_overtime_request_views.xml:0
+#: model:ir.model.fields.selection,name:hr_overtime_management.selection__hr_overtime_approval_line__state__approved
+#: model:ir.model.fields.selection,name:hr_overtime_management.selection__hr_overtime_request__state__hr_approved
+#: model_terms:ir.ui.view,arch_db:hr_overtime_management.hr_overtime_request_view_search
+msgid "Approved"
+msgstr "معتمد"
+
+#. module: hr_overtime_management
+#. odoo-python
+#: code:addons/hr_overtime_management/models/hr_overtime_request.py:0
+msgid "Approved or refused requests cannot be cancelled."
+msgstr "لا يمكن إلغاء الطلبات المعتمدة أو المرفوضة."
+
+#. module: hr_overtime_management
+#: model:ir.model.fields,field_description:hr_overtime_management.field_hr_overtime_approval_line__approver_id
+msgid "Approver"
+msgstr "المعتمد"
+
+#. module: hr_overtime_management
+#. odoo-python
+#: code:addons/hr_overtime_management/views/hr_overtime_type_views.xml:0
+#: model_terms:ir.ui.view,arch_db:hr_overtime_management.hr_overtime_type_view_form
+#: model_terms:ir.ui.view,arch_db:hr_overtime_management.hr_overtime_type_view_search
+msgid "Archived"
+msgstr "مؤرشف"
+
+#. module: hr_overtime_management
+#: model:ir.model.fields,field_description:hr_overtime_management.field_hr_overtime_request__attachment_ids
+msgid "Attachments"
+msgstr "المرفقات"
+
+#. module: hr_overtime_management
+#: model:ir.model.fields,field_description:hr_overtime_management.field_hr_overtime_request__overtime_type_id
+msgid "Automatically set from the date: regular working day, weekend, or company public holiday (e.g. Eid)."
+msgstr "يُحدَّد تلقائياً من التاريخ: يوم عمل عادي، عطلة نهاية أسبوع، أو عطلة رسمية للشركة (مثل العيد)."
+
+#. module: hr_overtime_management
+#: model:ir.model.fields,field_description:hr_overtime_management.field_hr_overtime_request__date
+msgid "Calendar date derived from the start datetime (used for filters and reports)."
+msgstr "تاريخ التقويم مستخرج من تاريخ ووقت البداية (للفلاتر والتقارير)."
+
+#. module: hr_overtime_management
+#. odoo-python
+#: code:addons/hr_overtime_management/views/hr_overtime_request_views.xml:0
+#. odoo-python
+#: code:addons/hr_overtime_management/wizard/hr_overtime_refuse_wizard_views.xml:0
+#: model_terms:ir.ui.view,arch_db:hr_overtime_management.hr_overtime_refuse_wizard_view_form
+#: model_terms:ir.ui.view,arch_db:hr_overtime_management.hr_overtime_request_view_form
+msgid "Cancel"
+msgstr "إلغاء"
+
+#. module: hr_overtime_management
+#: model:ir.model.fields.selection,name:hr_overtime_management.selection__hr_overtime_request__state__cancel
+msgid "Cancelled"
+msgstr "ملغى"
+
+#. module: hr_overtime_management
+#. odoo-python
+#: code:addons/hr_overtime_management/views/hr_overtime_type_views.xml:0
+#: model:ir.model.fields,field_description:hr_overtime_management.field_hr_overtime_type__category
+#: model_terms:ir.ui.view,arch_db:hr_overtime_management.hr_overtime_type_view_search
+msgid "Category"
+msgstr "الفئة"
+
+#. module: hr_overtime_management
+#. odoo-python
+#: code:addons/hr_overtime_management/views/hr_overtime_type_views.xml:0
+#: model_terms:ir.ui.view,arch_db:hr_overtime_management.hr_overtime_type_view_form
+msgid "Category &amp; Rate"
+msgstr "الفئة والمعدل"
+
+#. module: hr_overtime_management
+#: model:ir.model.fields,field_description:hr_overtime_management.field_res_company__overtime_weekend_weekdays
+msgid "Comma-separated weekday numbers (Monday=0 … Sunday=6). "
+msgstr "أرقام أيام الأسبوع مفصولة بفواصل (الاثنين=0 … الأحد=6)."
+
+#. module: hr_overtime_management
+#: model:ir.model.fields,field_description:hr_overtime_management.field_hr_overtime_approval_line__comment
+msgid "Comment"
+msgstr "ملاحظة"
+
+#. module: hr_overtime_management
+#. odoo-python
+#: code:addons/hr_overtime_management/views/hr_overtime_type_views.xml:0
+#: model:ir.model.fields,field_description:hr_overtime_management.field_hr_overtime_request__company_id
+#: model:ir.model.fields,field_description:hr_overtime_management.field_hr_overtime_request__company_label
+#: model_terms:ir.ui.view,arch_db:hr_overtime_management.hr_overtime_type_view_search
+msgid "Company"
+msgstr "الشركة"
+
+#. module: hr_overtime_management
+#: model:ir.model.fields,field_description:hr_overtime_management.field_hr_overtime_type__company_id
+msgid "Company Branch"
+msgstr "فرع الشركة"
+
+#. module: hr_overtime_management
+#: model:ir.model.fields,field_description:hr_overtime_management.field_hr_employee__company_currency_id
+msgid "Company Currency"
+msgstr "عملة الشركة"
+
+#. module: hr_overtime_management
+#: model:ir.ui.menu,name:hr_overtime_management.menu_hr_overtime_configuration
+msgid "Configuration"
+msgstr "الإعدادات"
+
+#. module: hr_overtime_management
+#. odoo-python
+#: code:addons/hr_overtime_management/views/hr_overtime_request_views.xml:0
+#: model_terms:ir.ui.view,arch_db:hr_overtime_management.hr_overtime_request_view_form
+msgid "Cost"
+msgstr "التكلفة"
+
+#. module: hr_overtime_management
+#: model:ir.model.fields,field_description:hr_overtime_management.field_hr_overtime_request__current_approver_id
+msgid "Current Approver"
+msgstr "المعتمد الحالي"
+
+#. module: hr_overtime_management
+#. odoo-python
+#: code:addons/hr_overtime_management/views/res_config_settings_views.xml:0
+#: model_terms:ir.ui.view,arch_db:hr_overtime_management.res_config_settings_view_form_overtime
+msgid "Daily Hours Warning Cap"
+msgstr "حد تحذير الساعات اليومية"
+
+#. module: hr_overtime_management
+#: model:ir.model.fields,field_description:hr_overtime_management.field_res_company__overtime_daily_hours_cap
+msgid "Daily Overtime Hours Warning Cap"
+msgstr "حد تحذير ساعات العمل الإضافي اليومية"
+
+#. module: hr_overtime_management
+#. odoo-python
+#: code:addons/hr_overtime_management/views/hr_overtime_request_views.xml:0
+#: model:ir.model.fields,field_description:hr_overtime_management.field_hr_overtime_request__date
+#: model_terms:ir.ui.view,arch_db:hr_overtime_management.hr_overtime_request_view_search
+msgid "Date"
+msgstr "التاريخ"
+
+#. module: hr_overtime_management
+#. odoo-python
+#: code:addons/hr_overtime_management/views/hr_overtime_request_views.xml:0
+#: model_terms:ir.ui.view,arch_db:hr_overtime_management.hr_overtime_request_view_form
+msgid "Date &amp; Time"
+msgstr "التاريخ والوقت"
+
+#. module: hr_overtime_management
+#. odoo-python
+#: code:addons/hr_overtime_management/views/hr_overtime_type_views.xml:0
+#: model_terms:ir.ui.view,arch_db:hr_overtime_management.hr_overtime_type_view_search
+msgid "Day Off"
+msgstr "يوم عطلة"
+
+#. module: hr_overtime_management
+#: model:ir.model.fields.selection,name:hr_overtime_management.selection__hr_overtime_type__category__day_off
+msgid "Day Off / Public Holiday"
+msgstr "يوم عطلة / عطلة رسمية"
+
+#. module: hr_overtime_management
+#: model:hr.overtime.type,name:hr_overtime_management.overtime_type_holiday
+msgid "Day Off Overtime"
+msgstr "عمل إضافي يوم عطلة"
+
+#. module: hr_overtime_management
+#. odoo-python
+#: code:addons/hr_overtime_management/views/res_config_settings_views.xml:0
+#: model:ir.model.fields,field_description:hr_overtime_management.field_res_company__overtime_holiday_type_id
+#: model_terms:ir.ui.view,arch_db:hr_overtime_management.res_config_settings_view_form_overtime
+msgid "Day Off Overtime Type"
+msgstr "نوع العمل الإضافي (يوم عطلة)"
+
+#. module: hr_overtime_management
+#: model:ir.model.fields,field_description:hr_overtime_management.field_hr_overtime_approval_line__decision_date
+msgid "Decision Date"
+msgstr "تاريخ القرار"
+
+#. module: hr_overtime_management
+#. odoo-python
+#: code:addons/hr_overtime_management/views/hr_overtime_request_views.xml:0
+#: model:ir.model.fields,field_description:hr_overtime_management.field_hr_overtime_request__department_id
+#: model_terms:ir.ui.view,arch_db:hr_overtime_management.hr_overtime_request_view_search
+msgid "Department"
+msgstr "القسم"
+
+#. module: hr_overtime_management
+#: model:ir.model.fields.selection,name:hr_overtime_management.selection__hr_overtime_approval_line__role__dept_manager
+msgid "Department Manager"
+msgstr "مدير القسم"
+
+#. module: hr_overtime_management
+#: model:ir.model.fields,field_description:hr_overtime_management.field_hr_overtime_request__description
+msgid "Description"
+msgstr "الوصف"
+
+#. module: hr_overtime_management
+#: model:ir.model.fields,field_description:hr_overtime_management.field_res_company__overtime_daily_hours_cap
+msgid "Display a warning when a single request exceeds this number of hours."
+msgstr "عرض تحذير عندما يتجاوز طلب واحد هذا العدد من الساعات."
+
+#. module: hr_overtime_management
+#. odoo-python
+#: code:addons/hr_overtime_management/views/hr_overtime_request_views.xml:0
+#: model:ir.model.fields.selection,name:hr_overtime_management.selection__hr_overtime_request__state__draft
+#: model_terms:ir.ui.view,arch_db:hr_overtime_management.hr_overtime_request_view_search
+msgid "Draft"
+msgstr "مسودة"
+
+#. module: hr_overtime_management
+#: model:ir.model.fields,field_description:hr_overtime_management.field_hr_overtime_type__category
+msgid "Each company branch should have exactly one active type per category. "
+msgstr "يجب أن يكون لكل فرع شركة نوع نشط واحد فقط لكل فئة."
+
+#. module: hr_overtime_management
+#. odoo-python
+#: code:addons/hr_overtime_management/views/hr_overtime_request_views.xml:0
+#: model:ir.model.fields,field_description:hr_overtime_management.field_hr_overtime_request__employee_id
+#: model_terms:ir.ui.view,arch_db:hr_overtime_management.hr_overtime_request_view_form
+#: model_terms:ir.ui.view,arch_db:hr_overtime_management.hr_overtime_request_view_search
+msgid "Employee"
+msgstr "الموظف"
+
+#. module: hr_overtime_management
+#: model:ir.model.fields,field_description:hr_overtime_management.field_hr_overtime_request__employee_company_id
+msgid "Employee Company"
+msgstr "شركة الموظف"
+
+#. module: hr_overtime_management
+#: model:ir.model.fields,field_description:hr_overtime_management.field_hr_overtime_request__end_datetime
+msgid "End Date & Time"
+msgstr "تاريخ ووقت النهاية"
+
+#. module: hr_overtime_management
+#. odoo-python
+#: code:addons/hr_overtime_management/models/hr_overtime_request.py:0
+msgid "End date & time must be after start date & time."
+msgstr "يجب أن يكون تاريخ ووقت النهاية بعد تاريخ ووقت البداية."
+
+#. module: hr_overtime_management
+#: model:ir.model.fields,field_description:hr_overtime_management.field_res_company__overtime_hours_per_month
+msgid "Fallback divisor to derive hourly cost from monthly contract wage (wage / hours)."
+msgstr "مقسوم احتياطي لاشتقاق التكلفة بالساعة من الراتب الشهري (الراتب / الساعات)."
+
+#. module: hr_overtime_management
+#: model:ir.model.fields,field_description:hr_overtime_management.field_res_company__overtime_generate_analytic_line
+msgid "Generate Timesheet on Overtime Approval"
+msgstr "إنشاء جدول زمني عند اعتماد العمل الإضافي"
+
+#. module: hr_overtime_management
+#: model:ir.model.fields.selection,name:hr_overtime_management.selection__hr_overtime_approval_line__role__hr
+msgid "HR Officer"
+msgstr "مسؤول الموارد البشرية"
+
+#. module: hr_overtime_management
+#: model:ir.model.fields,field_description:hr_overtime_management.field_hr_overtime_request__hourly_cost
+msgid "Hourly Cost"
+msgstr "التكلفة بالساعة"
+
+#. module: hr_overtime_management
+#. odoo-python
+#: code:addons/hr_overtime_management/views/res_config_settings_views.xml:0
+#: model_terms:ir.ui.view,arch_db:hr_overtime_management.res_config_settings_view_form_overtime
+msgid "Hourly Cost Divisor"
+msgstr "مقسوم التكلفة بالساعة"
+
+#. module: hr_overtime_management
+#: model:ir.model.fields,field_description:hr_overtime_management.field_res_config_settings__module_hr_overtime_payroll
+msgid "Install the payroll glue module to push approved overtime costs to payslips."
+msgstr "ثبّت وحدة ربط الرواتب لإرسال تكاليف العمل الإضافي المعتمد إلى قسائم الرواتب."
+
+#. module: hr_overtime_management
+#. odoo-python
+#: code:addons/hr_overtime_management/views/hr_overtime_request_views.xml:0
+#: model_terms:ir.ui.view,arch_db:hr_overtime_management.hr_overtime_request_view_search
+msgid "Last Month"
+msgstr "الشهر الماضي"
+
+#. module: hr_overtime_management
+#: model:ir.model.fields,field_description:hr_overtime_management.field_hr_overtime_type__company_id
+msgid "Leave empty only for shared template records. Each branch should have its own set."
+msgstr "اتركه فارغاً فقط للسجلات المشتركة. يجب أن يكون لكل فرع مجموعته الخاصة."
+
+#. module: hr_overtime_management
+#: model:ir.model.fields,field_description:hr_overtime_management.field_res_config_settings__module_hr_overtime_payroll
+msgid "Link Overtime to Payroll"
+msgstr "ربط العمل الإضافي بالرواتب"
+
+#. module: hr_overtime_management
+#: model:ir.model.fields,field_description:hr_overtime_management.field_hr_overtime_request__manager_id
+msgid "Manager"
+msgstr "المدير"
+
+#. module: hr_overtime_management
+#: model:ir.model.fields.selection,name:hr_overtime_management.selection__hr_overtime_request__state__manager_approved
+msgid "Manager Approved"
+msgstr "معتمد من المدير"
+
+#. module: hr_overtime_management
+#. odoo-python
+#: code:addons/hr_overtime_management/views/hr_overtime_request_views.xml:0
+#: model_terms:ir.ui.view,arch_db:hr_overtime_management.hr_overtime_request_view_search
+msgid "My Approvals"
+msgstr "موافقاتي"
+
+#. module: hr_overtime_management
+#. odoo-python
+#: code:addons/hr_overtime_management/views/hr_overtime_request_views.xml:0
+#: model:ir.ui.menu,name:hr_overtime_management.menu_hr_overtime_requests
+#: model_terms:ir.ui.view,arch_db:hr_overtime_management.hr_overtime_request_view_search
+msgid "My Requests"
+msgstr "طلباتي"
+
+#. module: hr_overtime_management
+#. odoo-python
+#: code:addons/hr_overtime_management/models/hr_overtime_request.py:0
+msgid "New"
+msgstr "جديد"
+
+#. module: hr_overtime_management
+#. odoo-python
+#: code:addons/hr_overtime_management/models/hr_overtime_request.py:0
+msgid "No HR officer is configured for overtime approval. "
+msgstr "لم يتم إعداد مسؤول موارد بشرية لاعتماد العمل الإضافي."
+
+#. module: hr_overtime_management
+#. odoo-python
+#: code:addons/hr_overtime_management/models/hr_overtime_request.py:0
+msgid "No approval chain could be resolved for this employee."
+msgstr "تعذّر تحديد سلسلة الاعتماد لهذا الموظف."
+
+#. module: hr_overtime_management
+#. odoo-python
+#: code:addons/hr_overtime_management/models/hr_overtime_request.py:0
+msgid "No overtime type could be determined for this date. "
+msgstr "تعذر تحديد نوع العمل الإضافي لهذا التاريخ."
+
+#. module: hr_overtime_management
+#. odoo-python
+#: code:addons/hr_overtime_management/models/hr_approval_mixin.py:0
+msgid "No pending approval step found."
+msgstr "لم يُعثر على خطوة اعتماد معلّقة."
+
+#. module: hr_overtime_management
+#: model:res.groups,name:hr_overtime_management.group_overtime_hr_officer
+msgid "Officer: Overtime HR Approval"
+msgstr "مسؤول: اعتماد العمل الإضافي (الموارد البشرية)"
+
+#. module: hr_overtime_management
+#. odoo-python
+#: code:addons/hr_overtime_management/models/hr_overtime_request.py:0
+msgid "Only cancelled or refused requests can be reset to draft."
+msgstr "يمكن إعادة الطلبات الملغاة أو المرفوضة إلى المسودة فقط."
+
+#. module: hr_overtime_management
+#. odoo-python
+#: code:addons/hr_overtime_management/models/hr_overtime_request.py:0
+msgid "Only draft requests can be submitted."
+msgstr "يمكن إرسال طلبات المسودة فقط."
+
+#. module: hr_overtime_management
+#. odoo-python
+#: code:addons/hr_overtime_management/models/hr_overtime_type.py:0
+msgid "Only one active overtime type is allowed per category for %(company)s. "
+msgstr "يُسمح بنوع عمل إضافي نشط واحد فقط لكل فئة في %(company)s."
+
+#. module: hr_overtime_management
+#. odoo-javascript
+#: code:addons/hr_overtime_management/static/src/overtime_error_handler.js:0
+#. odoo-python
+#: code:addons/hr_overtime_management/views/res_config_settings_views.xml:0
+#: model:ir.ui.menu,name:hr_overtime_management.menu_hr_overtime_root
+#: model_terms:ir.ui.view,arch_db:hr_overtime_management.res_config_settings_view_form_overtime
+msgid "Overtime"
+msgstr "العمل الإضافي"
+
+#. module: hr_overtime_management
+#. odoo-python
+#: code:addons/hr_overtime_management/views/hr_overtime_request_views.xml:0
+#: model_terms:ir.ui.view,arch_db:hr_overtime_management.hr_overtime_request_view_graph
+#: model_terms:ir.ui.view,arch_db:hr_overtime_management.hr_overtime_request_view_pivot
+msgid "Overtime Analysis"
+msgstr "تحليل العمل الإضافي"
+
+#. module: hr_overtime_management
+#: model:mail.activity.type,name:hr_overtime_management.mail_activity_overtime_approval
+msgid "Overtime Approval"
+msgstr "اعتماد العمل الإضافي"
+
+#. module: hr_overtime_management
+#: model:ir.model,name:hr_overtime_management.model_hr_overtime_approval_line
+msgid "Overtime Approval Line"
+msgstr "Overtime Approval Line"
+
+#. module: hr_overtime_management
+#: model:ir.model.fields,field_description:hr_overtime_management.field_hr_employee__overtime_cost_ytd
+msgid "Overtime Cost (YTD)"
+msgstr "تكلفة العمل الإضافي (منذ بداية السنة)"
+
+#. module: hr_overtime_management
+#: model:ir.model.fields,field_description:hr_overtime_management.field_hr_overtime_request__overtime_hours
+msgid "Overtime Hours"
+msgstr "ساعات العمل الإضافي"
+
+#. module: hr_overtime_management
+#: model:ir.model.fields,field_description:hr_overtime_management.field_hr_employee__overtime_hours_ytd
+msgid "Overtime Hours (YTD)"
+msgstr "ساعات العمل الإضافي (منذ بداية السنة)"
+
+#. module: hr_overtime_management
+#: model:ir.actions.report,name:hr_overtime_management.action_report_hr_overtime_request
+#: model:ir.model,name:hr_overtime_management.model_hr_overtime_request
+#: model:ir.model.fields,field_description:hr_overtime_management.field_hr_overtime_approval_line__request_id
+#: model:ir.model.fields,field_description:hr_overtime_management.field_hr_overtime_refuse_wizard__overtime_request_id
+msgid "Overtime Request"
+msgstr "طلب عمل إضافي"
+
+#. module: hr_overtime_management
+#. odoo-python
+#: code:addons/hr_overtime_management/models/hr_employee.py:0
+#: model:ir.actions.act_window,name:hr_overtime_management.action_hr_overtime_request_window
+#: model:ir.actions.server,name:hr_overtime_management.action_hr_overtime_open_my_requests
+msgid "Overtime Requests"
+msgstr "طلبات العمل الإضافي"
+
+#. module: hr_overtime_management
+#. odoo-python
+#: code:addons/hr_overtime_management/views/hr_overtime_request_views.xml:0
+#: model:ir.model,name:hr_overtime_management.model_hr_overtime_type
+#: model:ir.model.fields,field_description:hr_overtime_management.field_hr_overtime_request__overtime_type_id
+#: model_terms:ir.ui.view,arch_db:hr_overtime_management.hr_overtime_request_view_search
+msgid "Overtime Type"
+msgstr "نوع العمل الإضافي"
+
+#. module: hr_overtime_management
+#: model:ir.actions.act_window,name:hr_overtime_management.action_hr_overtime_type
+#: model:ir.ui.menu,name:hr_overtime_management.menu_hr_overtime_types
+msgid "Overtime Types"
+msgstr "أنواع العمل الإضافي"
+
+#. module: hr_overtime_management
+#. odoo-python
+#: code:addons/hr_overtime_management/models/hr_overtime_request.py:0
+msgid "Overtime request %(ref)s requires your approval."
+msgstr "طلب العمل الإضافي %(ref)s يتطلب اعتمادك."
+
+#. module: hr_overtime_management
+#. odoo-python
+#: code:addons/hr_overtime_management/models/hr_overtime_request.py:0
+msgid "Overtime request submitted for approval."
+msgstr "تم إرسال طلب العمل الإضافي للاعتماد."
+
+#. module: hr_overtime_management
+#: model:ir.model.fields,field_description:hr_overtime_management.field_hr_overtime_type__rate_multiplier
+msgid "Pay rate multiplier applied to the base hourly cost (e.g. 1.5 for time-and-a-half)."
+msgstr "مضاعف الأجر المطبّق على التكلفة الأساسية بالساعة (مثل 1.5 لساعة ونصف)."
+
+#. module: hr_overtime_management
+#. odoo-python
+#: code:addons/hr_overtime_management/views/res_config_settings_views.xml:0
+#: model_terms:ir.ui.view,arch_db:hr_overtime_management.res_config_settings_view_form_overtime
+msgid "Payroll Integration"
+msgstr "تكامل الرواتب"
+
+#. module: hr_overtime_management
+#: model:ir.model.fields.selection,name:hr_overtime_management.selection__hr_overtime_approval_line__state__pending
+msgid "Pending"
+msgstr "قيد الانتظار"
+
+#. module: hr_overtime_management
+#. odoo-python
+#: code:addons/hr_overtime_management/views/hr_overtime_request_views.xml:0
+#: model_terms:ir.ui.view,arch_db:hr_overtime_management.hr_overtime_request_view_search
+msgid "Pending Approval"
+msgstr "بانتظار الاعتماد"
+
+#. module: hr_overtime_management
+#. odoo-python
+#: code:addons/hr_overtime_management/wizard/hr_overtime_refuse_wizard_views.xml:0
+#: model_terms:ir.ui.view,arch_db:hr_overtime_management.hr_overtime_refuse_wizard_view_form
+msgid "Please provide a reason for refusal..."
+msgstr "يرجى ذكر سبب الرفض..."
+
+#. module: hr_overtime_management
+#. odoo-python
+#: code:addons/hr_overtime_management/views/hr_overtime_request_views.xml:0
+#: model_terms:ir.ui.view,arch_db:hr_overtime_management.hr_overtime_request_view_form
+msgid "Print"
+msgstr "طباعة"
+
+#. module: hr_overtime_management
+#. odoo-python
+#: code:addons/hr_overtime_management/views/hr_overtime_request_views.xml:0
+#: model:ir.model.fields,field_description:hr_overtime_management.field_hr_overtime_request__project_id
+#: model_terms:ir.ui.view,arch_db:hr_overtime_management.hr_overtime_request_view_form
+#: model_terms:ir.ui.view,arch_db:hr_overtime_management.hr_overtime_request_view_search
+msgid "Project"
+msgstr "المشروع"
+
+#. module: hr_overtime_management
+#: model:ir.model.fields,field_description:hr_overtime_management.field_hr_overtime_type__rate_multiplier
+#: model_terms:ir.ui.view,arch_db:hr_overtime_management.hr_overtime_type_view_form
+msgid "Rate Multiplier"
+msgstr "مضاعف الأجر"
+
+#. module: hr_overtime_management
+#: model:ir.model.fields,field_description:hr_overtime_management.field_hr_overtime_refuse_wizard__reason
+msgid "Reason"
+msgstr "السبب"
+
+#. module: hr_overtime_management
+#: model:ir.model.fields,field_description:hr_overtime_management.field_hr_overtime_request__name
+msgid "Reference"
+msgstr "المرجع"
+
+#. module: hr_overtime_management
+#. odoo-python
+#: code:addons/hr_overtime_management/views/hr_overtime_request_views.xml:0
+#. odoo-python
+#: code:addons/hr_overtime_management/wizard/hr_overtime_refuse_wizard_views.xml:0
+#: model_terms:ir.ui.view,arch_db:hr_overtime_management.hr_overtime_refuse_wizard_view_form
+#: model_terms:ir.ui.view,arch_db:hr_overtime_management.hr_overtime_request_view_form
+#: model_terms:ir.ui.view,arch_db:hr_overtime_management.hr_overtime_request_view_kanban
+msgid "Refuse"
+msgstr "رفض"
+
+#. module: hr_overtime_management
+#. odoo-python
+#: code:addons/hr_overtime_management/wizard/hr_overtime_refuse_wizard_views.xml:0
+#: model:ir.model,name:hr_overtime_management.model_hr_overtime_refuse_wizard
+#: model_terms:ir.ui.view,arch_db:hr_overtime_management.hr_overtime_refuse_wizard_view_form
+msgid "Refuse Overtime Request"
+msgstr "رفض طلب العمل الإضافي"
+
+#. module: hr_overtime_management
+#. odoo-python
+#: code:addons/hr_overtime_management/models/hr_approval_mixin.py:0
+msgid "Refuse Request"
+msgstr "رفض الطلب"
+
+#. module: hr_overtime_management
+#. odoo-python
+#: code:addons/hr_overtime_management/views/hr_overtime_request_views.xml:0
+#: model:ir.model.fields.selection,name:hr_overtime_management.selection__hr_overtime_approval_line__state__refused
+#: model:ir.model.fields.selection,name:hr_overtime_management.selection__hr_overtime_request__state__refused
+#: model_terms:ir.ui.view,arch_db:hr_overtime_management.hr_overtime_request_view_search
+msgid "Refused"
+msgstr "مرفوض"
+
+#. module: hr_overtime_management
+#. odoo-python
+#: code:addons/hr_overtime_management/views/hr_overtime_type_views.xml:0
+#: model_terms:ir.ui.view,arch_db:hr_overtime_management.hr_overtime_type_view_search
+msgid "Regular"
+msgstr "يوم عمل عادي"
+
+#. module: hr_overtime_management
+#: model:hr.overtime.type,name:hr_overtime_management.overtime_type_regular
+msgid "Regular Overtime"
+msgstr "عمل إضافي يوم عادي"
+
+#. module: hr_overtime_management
+#. odoo-python
+#: code:addons/hr_overtime_management/views/res_config_settings_views.xml:0
+#: model:ir.model.fields,field_description:hr_overtime_management.field_res_company__overtime_default_type_id
+#: model_terms:ir.ui.view,arch_db:hr_overtime_management.res_config_settings_view_form_overtime
+msgid "Regular Overtime Type"
+msgstr "نوع العمل الإضافي (يوم عادي)"
+
+#. module: hr_overtime_management
+#: model:ir.model.fields.selection,name:hr_overtime_management.selection__hr_overtime_type__category__regular
+msgid "Regular Working Day"
+msgstr "يوم عمل عادي"
+
+#. module: hr_overtime_management
+#. odoo-python
+#: code:addons/hr_overtime_management/models/hr_overtime_request.py:0
+msgid "Request refused by %(user)s: %(reason)s"
+msgstr "تم رفض الطلب من قِبل %(user)s: %(reason)s"
+
+#. module: hr_overtime_management
+#. odoo-python
+#: code:addons/hr_overtime_management/views/hr_overtime_request_views.xml:0
+#: model_terms:ir.ui.view,arch_db:hr_overtime_management.hr_overtime_request_view_form
+msgid "Reset to Draft"
+msgstr "إعادة إلى مسودة"
+
+#. module: hr_overtime_management
+#. odoo-python
+#: code:addons/hr_overtime_management/models/hr_overtime_type.py:0
+msgid "Shared"
+msgstr "مشترك"
+
+#. module: hr_overtime_management
+#: model:ir.model.fields,field_description:hr_overtime_management.field_hr_overtime_request__start_datetime
+msgid "Start Date & Time"
+msgstr "تاريخ ووقت البداية"
+
+#. module: hr_overtime_management
+#. odoo-python
+#: code:addons/hr_overtime_management/views/hr_overtime_request_views.xml:0
+#: model_terms:ir.ui.view,arch_db:hr_overtime_management.hr_overtime_request_view_search
+msgid "State"
+msgstr "الحالة"
+
+#. module: hr_overtime_management
+#: model:ir.model.fields,field_description:hr_overtime_management.field_hr_overtime_approval_line__state
+#: model:ir.model.fields,field_description:hr_overtime_management.field_hr_overtime_request__state
+msgid "Status"
+msgstr "الحالة"
+
+#. module: hr_overtime_management
+#. odoo-python
+#: code:addons/hr_overtime_management/views/hr_overtime_request_views.xml:0
+#: model_terms:ir.ui.view,arch_db:hr_overtime_management.hr_overtime_request_view_form
+msgid "Submit"
+msgstr "إرسال"
+
+#. module: hr_overtime_management
+#. odoo-python
+#: code:addons/hr_overtime_management/views/hr_overtime_request_views.xml:0
+#: model:ir.model.fields.selection,name:hr_overtime_management.selection__hr_overtime_request__state__submitted
+#: model_terms:ir.ui.view,arch_db:hr_overtime_management.hr_overtime_request_view_search
+msgid "Submitted"
+msgstr "مُرسل"
+
+#. module: hr_overtime_management
+#. odoo-python
+#: code:addons/hr_overtime_management/views/hr_overtime_request_views.xml:0
+#: model:ir.model.fields,field_description:hr_overtime_management.field_hr_overtime_request__task_id
+#: model_terms:ir.ui.view,arch_db:hr_overtime_management.hr_overtime_request_view_search
+msgid "Task"
+msgstr "المهمة"
+
+#. module: hr_overtime_management
+#. odoo-python
+#: code:addons/hr_overtime_management/views/hr_overtime_type_views.xml:0
+#: model_terms:ir.ui.view,arch_db:hr_overtime_management.hr_overtime_type_view_form
+msgid "Technical"
+msgstr "تقني"
+
+#. module: hr_overtime_management
+#: model:ir.model.fields,field_description:hr_overtime_management.field_hr_overtime_type__code
+msgid "Technical code used internally (regular, weekend, holiday)."
+msgstr "رمز تقني داخلي (عادي، عطلة نهاية أسبوع، عطلة)."
+
+#. module: hr_overtime_management
+#. odoo-python
+#: code:addons/hr_overtime_management/models/hr_overtime_request.py:0
+msgid "The company must match the employee\\'s company (%(company)s)."
+msgstr "يجب أن تطابق الشركة شركة الموظف (%(company)s)."
+
+#. module: hr_overtime_management
+#. odoo-python
+#: code:addons/hr_overtime_management/models/hr_overtime_request.py:0
+msgid "The project "
+msgstr "المشروع "
+
+#. module: hr_overtime_management
+#. odoo-python
+#: code:addons/hr_overtime_management/models/hr_overtime_type.py:0
+msgid "The rate multiplier must be strictly positive."
+msgstr "يجب أن يكون مضاعف المعدل موجباً بشكل صارم."
+
+#. module: hr_overtime_management
+#. odoo-python
+#: code:addons/hr_overtime_management/wizard/hr_overtime_refuse_wizard.py:0
+msgid "The selected approval step does not belong to this request."
+msgstr "خطوة الاعتماد المحددة لا تنتمي إلى هذا الطلب."
+
+#. module: hr_overtime_management
+#. odoo-python
+#: code:addons/hr_overtime_management/models/hr_overtime_request.py:0
+msgid "The task must belong to the selected project."
+msgstr "يجب أن تنتمي المهمة إلى المشروع المحدد."
+
+#. module: hr_overtime_management
+#. odoo-python
+#: code:addons/hr_overtime_management/views/hr_overtime_request_views.xml:0
+#: model_terms:ir.ui.view,arch_db:hr_overtime_management.hr_overtime_request_view_search
+msgid "This Month"
+msgstr "هذا الشهر"
+
+#. module: hr_overtime_management
+#. odoo-javascript
+#: code:addons/hr_overtime_management/static/src/overtime_error_handler.js:0
+msgid "This overtime action is not allowed."
+msgstr "هذا الإجراء غير مسموح لطلبات العمل الإضافي."
+
+#. module: hr_overtime_management
+#. odoo-javascript
+#: code:addons/hr_overtime_management/static/src/overtime_error_handler.js:0
+msgid "This overtime record uses a company that is not in your Allowed Companies. "
+msgstr "This overtime record uses a company that is not in your Allowed Companies. "
+
+#. module: hr_overtime_management
+#. odoo-python
+#: code:addons/hr_overtime_management/views/res_config_settings_views.xml:0
+#: model_terms:ir.ui.view,arch_db:hr_overtime_management.res_config_settings_view_form_overtime
+msgid "Timesheet Integration"
+msgstr "تكامل الجداول الزمنية"
+
+#. module: hr_overtime_management
+#: model:ir.model.fields,field_description:hr_overtime_management.field_hr_overtime_request__analytic_line_id
+msgid "Timesheet Line"
+msgstr "بند الجدول الزمني"
+
+#. module: hr_overtime_management
+#: model:ir.model.fields,field_description:hr_overtime_management.field_hr_overtime_request__project_id
+msgid "Timesheet projects for your company (or shared across companies)."
+msgstr "مشاريع الجداول الزمنية لشركتك (أو مشتركة بين الشركات)."
+
+#. module: hr_overtime_management
+#: model:ir.actions.act_window,name:hr_overtime_management.action_hr_overtime_my_approvals_window
+#: model:ir.actions.server,name:hr_overtime_management.action_hr_overtime_open_my_approvals
+#: model:ir.model.fields.selection,name:hr_overtime_management.selection__hr_overtime_approval_line__state__to_approve
+#: model:ir.ui.menu,name:hr_overtime_management.menu_hr_overtime_my_approvals
+msgid "To Approve"
+msgstr "بانتظار الاعتماد"
+
+#. module: hr_overtime_management
+#: model:ir.model.fields,field_description:hr_overtime_management.field_hr_overtime_request__total_cost
+msgid "Total Cost"
+msgstr "التكلفة الإجمالية"
+
+#. module: hr_overtime_management
+#: model:ir.model.fields.selection,name:hr_overtime_management.selection__hr_overtime_approval_line__role__upper_manager
+msgid "Upper Manager"
+msgstr "المدير الأعلى"
+
+#. module: hr_overtime_management
+#: model:ir.model.fields.selection,name:hr_overtime_management.selection__hr_overtime_request__state__upper_manager_approved
+msgid "Upper Manager Approved"
+msgstr "معتمد من المدير الأعلى"
+
+#. module: hr_overtime_management
+#: model:res.groups,name:hr_overtime_management.group_overtime_user
+msgid "User: Own Overtime Requests"
+msgstr "مستخدم: طلبات العمل الإضافي الخاصة"
+
+#. module: hr_overtime_management
+#. odoo-python
+#: code:addons/hr_overtime_management/models/hr_overtime_request.py:0
+msgid "Warning: overtime hours (%.2f) exceed the daily cap (%.2f)."
+msgstr "تحذير: ساعات العمل الإضافي (%.2f) تتجاوز الحد اليومي (%.2f)."
+
+#. module: hr_overtime_management
+#. odoo-python
+#: code:addons/hr_overtime_management/views/hr_overtime_type_views.xml:0
+#: model:ir.model.fields.selection,name:hr_overtime_management.selection__hr_overtime_type__category__weekend
+#: model_terms:ir.ui.view,arch_db:hr_overtime_management.hr_overtime_type_view_search
+msgid "Weekend"
+msgstr "عطلة نهاية الأسبوع"
+
+#. module: hr_overtime_management
+#: model:hr.overtime.type,name:hr_overtime_management.overtime_type_weekend
+msgid "Weekend Overtime"
+msgstr "عمل إضافي عطلة نهاية الأسبوع"
+
+#. module: hr_overtime_management
+#. odoo-python
+#: code:addons/hr_overtime_management/views/res_config_settings_views.xml:0
+#: model:ir.model.fields,field_description:hr_overtime_management.field_res_company__overtime_weekend_type_id
+#: model_terms:ir.ui.view,arch_db:hr_overtime_management.res_config_settings_view_form_overtime
+msgid "Weekend Overtime Type"
+msgstr "نوع العمل الإضافي (عطلة نهاية الأسبوع)"
+
+#. module: hr_overtime_management
+#. odoo-python
+#: code:addons/hr_overtime_management/views/res_config_settings_views.xml:0
+#: model:ir.model.fields,field_description:hr_overtime_management.field_res_company__overtime_weekend_weekdays
+#: model_terms:ir.ui.view,arch_db:hr_overtime_management.res_config_settings_view_form_overtime
+msgid "Weekend Weekdays"
+msgstr "أيام عطلة نهاية الأسبوع"
+
+#. module: hr_overtime_management
+#: model:ir.model.fields,field_description:hr_overtime_management.field_res_company__overtime_hours_per_month
+msgid "Working Hours per Month"
+msgstr "ساعات العمل الشهرية"
+
+#. module: hr_overtime_management
+#. odoo-python
+#: code:addons/hr_overtime_management/models/hr_approval_mixin.py:0
+msgid "You are not allowed to approve this request."
+msgstr "غير مسموح لك باعتماد هذا الطلب."
+
+#. module: hr_overtime_management
+#. odoo-python
+#: code:addons/hr_overtime_management/models/hr_approval_mixin.py:0
+#. odoo-python
+#: code:addons/hr_overtime_management/wizard/hr_overtime_refuse_wizard.py:0
+msgid "You are not allowed to refuse this request."
+msgstr "غير مسموح لك برفض هذا الطلب."
+
+#. module: hr_overtime_management
+#. odoo-python
+#: code:addons/hr_overtime_management/models/hr_overtime_request.py:0
+msgid "You can only modify your own overtime requests."
+msgstr "يمكنك تعديل طلبات العمل الإضافي الخاصة بك فقط."
+
+#. module: hr_overtime_management
+#. odoo-python
+#: code:addons/hr_overtime_management/models/hr_overtime_request.py:0
+msgid "Your employee record is linked to %(company)s, but that company is not in your "
+msgstr "سجل الموظف مربوط بـ %(company)s، لكن هذه الشركة غير مدرجة في "
+
+#. module: hr_overtime_management
+#. odoo-python
+#: code:addons/hr_overtime_management/views/hr_overtime_type_views.xml:0
+#: model_terms:ir.ui.view,arch_db:hr_overtime_management.hr_overtime_type_view_form
+msgid "e.g. Regular Overtime"
+msgstr "مثال: عمل إضافي يوم عادي"

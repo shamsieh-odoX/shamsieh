@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_attendance_source_report" model="ir.actions.act_window">
+        <field name="name">Attendance Source Report</field>
+        <field name="res_model">hr.attendance</field>
+        <field name="view_mode">pivot,list,graph</field>
+        <field name="context">{'search_default_groupby_attendance_source': 1}</field>
+        <field name="search_view_id" ref="hr_attendance_custom_ext.hr_attendance_view_filter_custom"/>
+    </record>
+
+    <record id="action_fingerprint_logs_report" model="ir.actions.act_window">
+        <field name="name">Fingerprint Device Logs Report</field>
+        <field name="res_model">fingerprint.device.log</field>
+        <field name="view_mode">list,pivot,graph</field>
+        <field name="domain">[('state', 'not in', ('ignored', 'duplicate')), '|', ('punch_type', 'in', ('check_in', 'check_out')), ('state', '=', 'draft')]</field>
+        <field name="limit">200</field>
+        <field name="context">{'search_default_group_device': 1}</field>
+        <field name="search_view_id" ref="view_fingerprint_device_log_search"/>
+    </record>
+
+    <record id="action_pin_attendance_logs_report" model="ir.actions.act_window">
+        <field name="name">PIN Attendance Logs</field>
+        <field name="res_model">hr.attendance</field>
+        <field name="view_mode">list,form,pivot,graph</field>
+        <field name="domain">[('attendance_source', '=', 'pin')]</field>
+        <field name="search_view_id" ref="hr_attendance.hr_attendance_view_filter"/>
+    </record>
+
+    <record id="action_attendance_lateness_report" model="ir.actions.act_window">
+        <field name="name">Lateness Report (Attendance)</field>
+        <field name="res_model">hr.attendance</field>
+        <field name="view_mode">list,pivot,graph</field>
+        <field name="domain">[('attendance_status', '=', 'late')]</field>
+        <field name="context">{'search_default_groupby_name': 1}</field>
+        <field name="search_view_id" ref="hr_attendance.hr_attendance_view_filter"/>
+    </record>
+
+    <record id="action_attendance_missing_checkout_report" model="ir.actions.act_window">
+        <field name="name">Missing Checkout Report</field>
+        <field name="res_model">hr.attendance</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('missing_checkout', '=', True)]</field>
+        <field name="search_view_id" ref="hr_attendance.hr_attendance_view_filter"/>
+    </record>
+
+    <record id="action_attendance_missing_report" model="ir.actions.act_window">
+        <field name="name">Incomplete Attendance Report</field>
+        <field name="res_model">hr.attendance</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('attendance_status', 'in', ['incomplete', 'absent'])]</field>
+        <field name="search_view_id" ref="hr_attendance.hr_attendance_view_filter"/>
+    </record>
+</odoo>

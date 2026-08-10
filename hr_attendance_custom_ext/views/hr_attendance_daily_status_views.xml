@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_hr_attendance_daily_status_tree" model="ir.ui.view">
+        <field name="name">hr.attendance.daily.status.list</field>
+        <field name="model">hr.attendance.daily.status</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="date"/>
+                <field name="employee_id"/>
+                <field name="department_id" optional="show"/>
+                <field name="status" widget="badge"/>
+                <field name="is_on_approved_leave" optional="hide"/>
+                <field name="is_public_holiday" optional="hide"/>
+                <field name="check_in"/>
+                <field name="check_out"/>
+                <field name="late_minutes"/>
+                <field name="early_checkout_minutes"/>
+                <field name="worked_hours"/>
+                <field name="source_summary" optional="hide"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_hr_attendance_daily_status_form" model="ir.ui.view">
+        <field name="name">hr.attendance.daily.status.form</field>
+        <field name="model">hr.attendance.daily.status</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="employee_id"/>
+                            <field name="date"/>
+                            <field name="department_id"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                            <field name="calendar_id"/>
+                            <field name="status"/>
+                            <field name="is_on_approved_leave"/>
+                            <field name="is_public_holiday"/>
+                        </group>
+                        <group>
+                            <field name="check_in"/>
+                            <field name="check_out"/>
+                            <field name="late_minutes"/>
+                            <field name="early_checkout_minutes"/>
+                            <field name="worked_hours"/>
+                            <field name="source_summary"/>
+                            <field name="notes"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_hr_attendance_daily_status_search" model="ir.ui.view">
+        <field name="name">hr.attendance.daily.status.search</field>
+        <field name="model">hr.attendance.daily.status</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="employee_id"/>
+                <field name="department_id"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+                <filter string="Late" name="filter_late" domain="[('status', '=', 'late')]"/>
+                <filter string="On Leave" name="filter_on_leave" domain="[('status', '=', 'on_leave')]"/>
+                <filter string="Public Holiday" name="filter_on_holiday" domain="[('status', '=', 'on_holiday')]"/>
+                <filter string="On Approved Leave" name="filter_is_on_leave" domain="[('is_on_approved_leave', '=', True)]"/>
+                <filter string="Is Public Holiday" name="filter_is_holiday" domain="[('is_public_holiday', '=', True)]"/>
+                <filter string="Absent" name="filter_absent" domain="[('status', '=', 'absent')]"/>
+                <filter string="Incomplete" name="filter_incomplete" domain="[('status', '=', 'incomplete')]"/>
+                <filter string="This Month" name="filter_month"
+                        domain="[('date', '&gt;=', (context_today() - relativedelta(day=1)).strftime('%Y-%m-%d'))]"/>
+                <group>
+                    <filter string="Employee" name="group_employee" context="{'group_by': 'employee_id'}"/>
+                    <filter string="Department" name="group_department" context="{'group_by': 'department_id'}"/>
+                    <filter string="Status" name="group_status" context="{'group_by': 'status'}"/>
+                    <filter string="Date" name="group_date" context="{'group_by': 'date'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_hr_attendance_daily_status_pivot" model="ir.ui.view">
+        <field name="name">hr.attendance.daily.status.pivot</field>
+        <field name="model">hr.attendance.daily.status</field>
+        <field name="arch" type="xml">
+            <pivot>
+                <field name="employee_id" type="row"/>
+                <field name="date" type="col"/>
+                <field name="late_minutes" type="measure"/>
+                <field name="worked_hours" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <record id="action_hr_attendance_daily_status_list" model="ir.actions.act_window">
+        <field name="name">Daily Attendance Status</field>
+        <field name="res_model">hr.attendance.daily.status</field>
+        <field name="view_mode">list,pivot,form</field>
+    </record>
+
+    <record id="action_daily_lateness_report" model="ir.actions.act_window">
+        <field name="name">Lateness Report</field>
+        <field name="res_model">hr.attendance.daily.status</field>
+        <field name="view_mode">list,pivot,graph</field>
+        <field name="domain">[('status', '=', 'late')]</field>
+        <field name="context">{'search_default_group_employee': 1}</field>
+    </record>
+
+    <record id="action_daily_missing_report" model="ir.actions.act_window">
+        <field name="name">Missing Attendance Report</field>
+        <field name="res_model">hr.attendance.daily.status</field>
+        <field name="view_mode">list,pivot,graph</field>
+        <field name="domain">[('status', 'in', ['absent', 'incomplete'])]</field>
+        <field name="context">{'search_default_group_department': 1}</field>
+    </record>
+
+    <record id="action_department_attendance_report" model="ir.actions.act_window">
+        <field name="name">Department Attendance Report</field>
+        <field name="res_model">hr.attendance.daily.status</field>
+        <field name="view_mode">pivot,list,graph</field>
+        <field name="context">{'search_default_group_department': 1, 'search_default_group_status': 1}</field>
+    </record>
+</odoo>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="hr_hourly_departure_allocation_wizard_view_form" model="ir.ui.view">
+        <field name="name">hr.hourly.departure.allocation.wizard.form</field>
+        <field name="model">hr.hourly.departure.allocation.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Run Hourly Departure Allocation">
+                <group>
+                    <field name="company_id" groups="base.group_multi_company"/>
+                    <field name="allocation_year"/>
+                    <field name="allocation_month"/>
+                </group>
+                <footer>
+                    <button name="action_run_allocation" string="Run Allocation" type="object" class="btn-primary"/>
+                    <button string="Cancel" special="cancel" class="btn-secondary"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+</odoo>

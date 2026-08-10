@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--
+        Settings live under Settings > Botify, which is group_system-only by
+        virtue of the Settings app itself. The shared secret is stored in
+        ir.config_parameter, whose ACL is group_system too, so an ordinary
+        employee can neither see this page nor read the parameter directly.
+    -->
+    <record id="res_config_settings_view_form_botify" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.botify</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="base_setup.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form" position="inside">
+                <app data-string="Botify" string="Botify" name="botify_agent"
+                     logo="/botify_agent/static/description/icon.png">
+                    <block title="Agent" name="botify_agent_block">
+                        <setting string="Enable Botify agent"
+                                 help="Expose the assistant to employees in this database.">
+                            <field name="botify_enabled"/>
+                        </setting>
+                        <setting string="Botify API base URL">
+                            <field name="botify_base_url" placeholder="https://api.botifyarabia.ai"/>
+                        </setting>
+                        <setting string="Botify agent ID">
+                            <field name="botify_agent_id" placeholder="UUID of the agent"/>
+                        </setting>
+                        <setting string="Botify connection ID"
+                                 help="The Odoo connection record in Botify (the installation).">
+                            <field name="botify_installation_id" placeholder="UUID of the connection"/>
+                        </setting>
+                    </block>
+                    <block title="Security" name="botify_security_block">
+                        <setting string="Shared secret"
+                                 help="Signs identity assertions and authenticates Botify's calls back into this database. Paste the same value into Botify. Never share it with the browser.">
+                            <field name="botify_shared_secret" password="True"/>
+                            <button name="action_botify_generate_secret" type="object"
+                                    string="Generate new secret" class="btn-link"/>
+                        </setting>
+                        <setting string="Assertion lifetime (seconds)"
+                                 help="How long a minted identity assertion stays valid. It is single-use, so keep it short.">
+                            <field name="botify_assertion_ttl"/>
+                        </setting>
+                        <setting string="Restrict to group"
+                                 help="Optional. Only members of this group may start an agent session. This narrows who can use the agent; it never grants any data access.">
+                            <field name="botify_allowed_group_id"/>
+                        </setting>
+                        <setting string="Allow assistant writes to custom models"
+                                 help="Off by default. The shared policy manifest covers standard Odoo models only, so writes to this database's own custom or Studio models are refused unless you enable this AND classify the specific models in Botify. Enabling it grants nothing by itself: your own access rights and record rules still decide every operation.">
+                            <field name="botify_allow_custom_models"/>
+                        </setting>
+                        <setting string="Grant lifetime (seconds)"
+                                 help="How long a per-operation grant stays valid. Minted fresh per tool call; keep it short.">
+                            <field name="botify_grant_ttl"/>
+                        </setting>
+                        <setting string="Secret rotation grace window (hours)"
+                                 help="After clicking Generate new secret, both the old and new secret are accepted for this many hours so in-flight Botify replicas do not fail instantly.">
+                            <field name="botify_secret_grace_hours"/>
+                        </setting>
+                        <setting string="Previous shared secret"
+                                 help="Read-only. Set automatically on rotation; cleared once the grace window elapses.">
+                            <field name="botify_secret_previous" password="True" readonly="1"/>
+                        </setting>
+                    </block>
+                </app>
+            </xpath>
+        </field>
+    </record>
+</odoo>

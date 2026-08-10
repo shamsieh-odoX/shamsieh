@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Shamsieh uses fingerprint/face attendance; standard kiosk mode is not used. -->
+    <record id="hr_attendance.menu_action_open_form" model="ir.ui.menu">
+        <field name="active" eval="False"/>
+    </record>
+    <record id="hr_attendance.menu_hr_attendance_onboarding" model="ir.ui.menu">
+        <field name="active" eval="False"/>
+    </record>
+
+    <menuitem id="menu_hr_employee_live_status"
+              name="Live Status"
+              parent="hr_attendance.menu_hr_attendance_overview"
+              action="action_hr_employee_live_status"
+              sequence="15"
+              groups="hr_attendance.group_hr_attendance_officer"/>
+
+    <menuitem id="menu_fingerprint_devices"
+              name="Fingerprint Devices"
+              parent="hr_attendance.menu_hr_attendance_configuration"
+              action="action_fingerprint_device"
+              sequence="20"
+              groups="hr_attendance.group_hr_attendance_manager,hr_attendance_custom_ext.group_fingerprint_device_manager"/>
+
+    <menuitem id="menu_face_attendance_logs"
+              name="Face Attendance Logs"
+              parent="hr_attendance.menu_hr_attendance_reporting"
+              action="action_face_attendance_log"
+              sequence="25"
+              groups="hr_attendance.group_hr_attendance_officer"/>
+
+    <menuitem id="menu_face_templates"
+              name="Face Templates"
+              parent="hr_attendance.menu_hr_attendance_configuration"
+              action="action_hr_employee_face_template"
+              sequence="21"
+              groups="hr_attendance.group_hr_attendance_officer"/>
+
+    <menuitem id="menu_daily_attendance_status"
+              name="Daily Attendance Status"
+              parent="hr_attendance.menu_hr_attendance_reporting"
+              action="action_hr_attendance_daily_status_list"
+              sequence="28"
+              groups="hr_attendance.group_hr_attendance_officer"/>
+
+    <menuitem id="menu_lateness_report"
+              name="Lateness Report"
+              parent="hr_attendance.menu_hr_attendance_reporting"
+              action="action_daily_lateness_report"
+              sequence="30"
+              groups="hr_attendance.group_hr_attendance_officer"/>
+
+    <menuitem id="menu_missing_attendance_report"
+              name="Missing Attendance Report"
+              parent="hr_attendance.menu_hr_attendance_reporting"
+              action="action_daily_missing_report"
+              sequence="31"
+              groups="hr_attendance.group_hr_attendance_officer"/>
+
+    <menuitem id="menu_missing_checkout_report"
+              name="Missing Checkout Report"
+              parent="hr_attendance.menu_hr_attendance_reporting"
+              action="action_attendance_missing_checkout_report"
+              sequence="32"
+              groups="hr_attendance.group_hr_attendance_officer"/>
+
+    <menuitem id="menu_attendance_source_report"
+              name="Attendance Source Report"
+              parent="hr_attendance.menu_hr_attendance_reporting"
+              action="action_attendance_source_report"
+              sequence="33"
+              groups="hr_attendance.group_hr_attendance_officer"/>
+
+    <menuitem id="menu_department_attendance_report"
+              name="Department Attendance Report"
+              parent="hr_attendance.menu_hr_attendance_reporting"
+              action="action_department_attendance_report"
+              sequence="34"
+              groups="hr_attendance.group_hr_attendance_officer"/>
+
+    <menuitem id="menu_pin_attendance_logs_report"
+              name="PIN Attendance Logs"
+              parent="hr_attendance.menu_hr_attendance_reporting"
+              action="action_pin_attendance_logs_report"
+              sequence="27"
+              groups="hr_attendance.group_hr_attendance_officer"/>
+</odoo>

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="res_config_settings_view_form_sick_leave_renewal" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.hr.holidays.custom</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="hr.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//block[@name='work_organization_setting_container']" position="after">
+                <block title="Sick Leave Renewal" name="sick_leave_renewal_setting_container">
+                    <setting string="Annual Sick Leave Days" company_dependent="1"
+                             help="Number of sick leave days allocated per active employee on annual renewal.">
+                        <field name="sick_leave_days_per_year" class="text-center" style="width: 5ch;"/>
+                        <span class="ms-2">Days</span>
+                    </setting>
+                    <setting string="Last Renewal Run" company_dependent="1">
+                        <field name="sick_leave_last_renewal_date" readonly="1"/>
+                        <div invisible="not sick_leave_last_renewal_summary">
+                            <field name="sick_leave_last_renewal_summary" readonly="1" nolabel="1"/>
+                        </div>
+                    </setting>
+                    <setting string="Manual Renewal" company_dependent="1"
+                             help="Create sick leave allocations for a selected year if they are missing.">
+                        <button name="action_run_sick_leave_renewal"
+                                type="object"
+                                string="Run Now"
+                                class="btn-primary"
+                                groups="hr_holidays.group_hr_holidays_manager"/>
+                    </setting>
+                </block>
+                <block title="Annual Leave Carryover" name="annual_leave_carryover_setting_container">
+                    <setting string="Annual Leave Days" company_dependent="1"
+                             help="Fixed annual leave days granted to each active employee at year start.">
+                        <field name="annual_leave_days_per_year" class="text-center" style="width: 5ch;"/>
+                        <span class="ms-2">Days</span>
+                    </setting>
+                    <setting string="Annual Leave Type" company_dependent="1"
+                             help="Time off type used for annual grants and carryover allocations.">
+                        <field name="annual_leave_type_id"/>
+                    </setting>
+                    <setting string="Max Carryover Days" company_dependent="1"
+                             help="Maximum unused annual leave days carried into the new year per employee. Set to 0 for no limit.">
+                        <field name="annual_leave_carryover_max_days" class="text-center" style="width: 5ch;"/>
+                        <span class="ms-2">Days (0 = unlimited)</span>
+                    </setting>
+                    <setting string="Last Carryover Run" company_dependent="1">
+                        <field name="annual_leave_last_carryover_date" readonly="1"/>
+                        <div invisible="not annual_leave_last_carryover_summary">
+                            <field name="annual_leave_last_carryover_summary" readonly="1" nolabel="1"/>
+                        </div>
+                    </setting>
+                    <setting string="Manual Carryover" company_dependent="1"
+                             help="Forfeit expired carryover and create annual leave allocations for a selected year.">
+                        <button name="action_run_annual_leave_carryover"
+                                type="object"
+                                string="Run Carryover Now"
+                                class="btn-primary"
+                                groups="hr_holidays.group_hr_holidays_manager"/>
+                    </setting>
+                </block>
+                <block title="Hourly Departures (Article 11)" name="hourly_departure_setting_container">
+                    <setting string="Hourly Departure Type" company_dependent="1"
+                             help="Time off type used for short hourly departures under Article 11.">
+                        <field name="hourly_departure_type_id"/>
+                    </setting>
+                    <setting string="Max Hours Per Day" company_dependent="1"
+                             help="Maximum departure hours allowed per employee per calendar day.">
+                        <field name="hourly_departure_max_hours_day" class="text-center" style="width: 5ch;"/>
+                        <span class="ms-2">Hours</span>
+                    </setting>
+                    <setting string="Max Hours Per Month" company_dependent="1"
+                             help="Monthly allocation size and hard cap for hourly departures.">
+                        <field name="hourly_departure_max_hours_month" class="text-center" style="width: 5ch;"/>
+                        <span class="ms-2">Hours</span>
+                    </setting>
+                    <setting string="Last Monthly Allocation" company_dependent="1">
+                        <field name="hourly_departure_last_allocation_date" readonly="1"/>
+                        <div invisible="not hourly_departure_last_allocation_summary">
+                            <field name="hourly_departure_last_allocation_summary" readonly="1" nolabel="1"/>
+                        </div>
+                    </setting>
+                    <setting string="Manual Monthly Allocation" company_dependent="1"
+                             help="Create monthly hourly departure allocations for a selected month if they are missing.">
+                        <button name="action_run_hourly_departure_allocation"
+                                type="object"
+                                string="Run Allocation Now"
+                                class="btn-primary"
+                                groups="hr_holidays.group_hr_holidays_manager"/>
+                    </setting>
+                </block>
+            </xpath>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record id="crm_team_target_ksa_monthly" model="crm.team.target">
+        <field name="team_id" ref="crm_team_ksa"/>
+        <field name="period">monthly</field>
+        <field name="currency_id" ref="base.SAR"/>
+        <field name="target_amount">50000</field>
+        <field name="date_start">2026-06-01</field>
+        <field name="date_end">2026-06-30</field>
+    </record>
+    <record id="crm_team_target_jordan_monthly" model="crm.team.target">
+        <field name="team_id" ref="crm_team_jordan"/>
+        <field name="period">monthly</field>
+        <field name="currency_id" ref="base.JOD"/>
+        <field name="target_amount">20000</field>
+        <field name="date_start">2026-06-01</field>
+        <field name="date_end">2026-06-30</field>
+    </record>
+    <record id="crm_team_target_uae_monthly" model="crm.team.target">
+        <field name="team_id" ref="crm_team_uae"/>
+        <field name="period">monthly</field>
+        <field name="currency_id" ref="base.AED"/>
+        <field name="target_amount">40000</field>
+        <field name="date_start">2026-06-01</field>
+        <field name="date_end">2026-06-30</field>
+    </record>
+</odoo>

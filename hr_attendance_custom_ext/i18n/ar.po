@@ -1,0 +1,1774 @@
+# Translation of Odoo Server.
+# Professional Arabic (ar) translations — Odoo-compliant format.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-07-13 11:59+0000\n"
+"PO-Revision-Date: 2026-07-13 11:59+0000\n"
+"Last-Translator: Shamsieh\n"
+"Language-Team: Arabic\n"
+"Language: ar\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=6; plural=(n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 ? 4 : 5);\n"
+
+
+#. module: hr_attendance_custom_ext
+#. odoo-python
+#: code:addons/hr_attendance_custom_ext/models/fingerprint_device.py:0
+msgid "%(count)s event(s) have no employee mapping on device %(device)s."
+msgstr "%(count)s حدث/أحداث غير مربوطة بموظف على الجهاز %(device)s."
+
+#. module: hr_attendance_custom_ext
+#. odoo-python
+#: code:addons/hr_attendance_custom_ext/wizards/hr_employee_face_enroll_wizard.py:0
+msgid "%(message)s Install optional Python packages from requirements-face.txt."
+msgstr "%(message)s ثبّت حزم Python الاختيارية من requirements-face.txt."
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_fingerprint_device__api_type
+msgid "API Type"
+msgstr "نوع واجهة API"
+
+#. module: hr_attendance_custom_ext
+#. odoo-python
+#: code:addons/hr_attendance_custom_ext/views/hr_attendance_daily_status_views.xml:0
+#: model:ir.model.fields.selection,name:hr_attendance_custom_ext.selection__hr_attendance__attendance_status__absent
+#: model:ir.model.fields.selection,name:hr_attendance_custom_ext.selection__hr_attendance_daily_status__status__absent
+#: model_terms:ir.ui.view,arch_db:hr_attendance_custom_ext.view_hr_attendance_daily_status_search
+msgid "Absent"
+msgstr "غائب"
+
+#. module: hr_attendance_custom_ext
+#. odoo-python
+#: code:addons/hr_attendance_custom_ext/views/hr_employee_face_template_views.xml:0
+#: model_terms:ir.ui.view,arch_db:hr_attendance_custom_ext.view_hr_employee_face_template_search
+msgid "Active"
+msgstr "نشط"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_hr_employee__active_face_template_id
+msgid "Active Face Template"
+msgstr "قالب الوجه النشط"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_hr_employee__face_template_id
+msgid "Active internal face template reference."
+msgstr "مرجع قالب الوجه الداخلي النشط."
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_fingerprint_device__http_listening_allowed_ips
+msgid "Allowed Source IPs"
+msgstr "عناوين IP المسموحة"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_res_company__office_geo_radius_meters
+msgid "Allowed geolocation distance in meters from the office reference point."
+msgstr "المسافة الجغرافية المسموحة بالأمتار من نقطة مرجع المكتب."
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_hr_employee__remote_attendance_allowed
+msgid "Allows remote check-in/out via face verification (§9)."
+msgstr "يسمح بتسجيل الحضور/الانصراف عن بُعد عبر التحقق من الوجه."
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields.selection,name:hr_attendance_custom_ext.selection__fingerprint_attendance_policy__process_mode__alternating_in_out
+msgid "Alternating In / Out"
+msgstr "تناوب دخول / خروج"
+
+#. module: hr_attendance_custom_ext
+#. odoo-javascript
+#: code:addons/hr_attendance_custom_ext/static/src/components/attendance_menu/attendance_menu_patch.js:0
+msgid "Are you sure you want to check out now? You will not be able to check in again today."
+msgstr "هل أنت متأكد من تسجيل الانصراف الآن؟ لن تتمكن من تسجيل الحضور مرة أخرى اليوم."
+
+#. module: hr_attendance_custom_ext
+#. odoo-javascript
+#: code:addons/hr_attendance_custom_ext/static/src/components/attendance_menu/attendance_menu_patch.js:0
+msgid "Attendance"
+msgstr "الحضور"
+
+#. module: hr_attendance_custom_ext
+#. odoo-python
+#: code:addons/hr_attendance_custom_ext/views/hr_employee_views.xml:0
+#: model_terms:ir.ui.view,arch_db:hr_attendance_custom_ext.view_employee_form_attendance_custom
+msgid "Attendance &amp; Face Recognition"
+msgstr "الحضور والتعرف على الوجه"
+
+#. module: hr_attendance_custom_ext
+#. odoo-javascript
+#: code:addons/hr_attendance_custom_ext/static/src/components/attendance_menu/attendance_menu_patch.js:0
+msgid "Attendance Error"
+msgstr "خطأ في الحضور"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_resource_calendar_attendance__location_type
+msgid "Attendance Location"
+msgstr "موقع الحضور"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.actions.act_window,name:hr_attendance_custom_ext.action_fingerprint_attendance_policy
+#: model:ir.ui.menu,name:hr_attendance_custom_ext.menu_fingerprint_attendance_policy
+msgid "Attendance Policies"
+msgstr "سياسات الحضور"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_fingerprint_device__policy_id
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_hr_attendance__policy_id
+msgid "Attendance Policy"
+msgstr "سياسة الحضور"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model,name:hr_attendance_custom_ext.model_hr_attendance_punch_log
+msgid "Attendance Punch Log"
+msgstr "Attendance Punch Log"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_hr_employee__attendance_required
+msgid "Attendance Required"
+msgstr "الحضور إلزامي"
+
+#. module: hr_attendance_custom_ext
+#. odoo-python
+#: code:addons/hr_attendance_custom_ext/views/hr_attendance_views.xml:0
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_hr_attendance__attendance_source
+#: model_terms:ir.ui.view,arch_db:hr_attendance_custom_ext.hr_attendance_view_filter_custom
+msgid "Attendance Source"
+msgstr "مصدر الحضور"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.actions.act_window,name:hr_attendance_custom_ext.action_attendance_source_report
+#: model:ir.ui.menu,name:hr_attendance_custom_ext.menu_attendance_source_report
+msgid "Attendance Source Report"
+msgstr "تقرير مصدر الحضور"
+
+#. module: hr_attendance_custom_ext
+#. odoo-python
+#: code:addons/hr_attendance_custom_ext/views/hr_attendance_views.xml:0
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_hr_attendance__attendance_status
+#: model_terms:ir.ui.view,arch_db:hr_attendance_custom_ext.hr_attendance_view_filter_custom
+msgid "Attendance Status"
+msgstr "حالة الحضور"
+
+#. module: hr_attendance_custom_ext
+#. odoo-javascript
+#: code:addons/hr_attendance_custom_ext/static/src/components/attendance_menu/attendance_menu_patch.js:0
+msgid "Attendance punch could not be recorded."
+msgstr "تعذر تسجيل الحضور."
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_fingerprint_device__auto_sync
+msgid "Auto Sync"
+msgstr "المزامنة التلقائية"
+
+#. module: hr_attendance_custom_ext
+#. odoo-python
+#: code:addons/hr_attendance_custom_ext/views/fingerprint_device_views.xml:0
+#: model_terms:ir.ui.view,arch_db:hr_attendance_custom_ext.view_fingerprint_device_form
+msgid "Automatic Sync"
+msgstr "المزامنة التلقائية"
+
+#. module: hr_attendance_custom_ext
+#. odoo-javascript
+#: code:addons/hr_attendance_custom_ext/static/src/components/attendance_menu/attendance_menu_patch.js:0
+msgid "Before"
+msgstr "قبل"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_hr_employee__biometric_device_user_id
+msgid "Biometric Device User ID"
+msgstr "معرّف المستخدم في جهاز البصمة"
+
+#. module: hr_attendance_custom_ext
+#. odoo-javascript
+#: code:addons/hr_attendance_custom_ext/static/src/components/attendance_menu/attendance_menu_patch.js:0
+#. odoo-python
+#: code:addons/hr_attendance_custom_ext/views/hr_attendance_views.xml:0
+#: model:ir.model.fields.selection,name:hr_attendance_custom_ext.selection__hr_attendance__hikvision_punch_type__break_in
+#: model:ir.model.fields.selection,name:hr_attendance_custom_ext.selection__hr_attendance_punch_log__punch_type__break_in
+#: model_terms:ir.ui.view,arch_db:hr_attendance_custom_ext.hr_attendance_view_filter_custom
+msgid "Break In"
+msgstr "إنهاء الاستراحة / العودة للعمل"
+
+#. module: hr_attendance_custom_ext
+#. odoo-javascript
+#: code:addons/hr_attendance_custom_ext/static/src/components/attendance_menu/attendance_menu_patch.js:0
+#. odoo-python
+#: code:addons/hr_attendance_custom_ext/views/hr_attendance_views.xml:0
+#: model:ir.model.fields.selection,name:hr_attendance_custom_ext.selection__hr_attendance__hikvision_punch_type__break_out
+#: model:ir.model.fields.selection,name:hr_attendance_custom_ext.selection__hr_attendance_punch_log__punch_type__break_out
+#: model_terms:ir.ui.view,arch_db:hr_attendance_custom_ext.hr_attendance_view_filter_custom
+msgid "Break Out"
+msgstr "بدء الاستراحة"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_fingerprint_device__import_file_data
+msgid "CSV for file_import API type: external_id,device_user_id,punch_time,punch_type"
+msgstr "CSV لنوع API استيراد الملف: external_id,device_user_id,punch_time,punch_type"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_fingerprint_device__http_listening_url
+msgid "Callback URL"
+msgstr "رابط الاستقبال"
+
+#. module: hr_attendance_custom_ext
+#. odoo-javascript
+#: code:addons/hr_attendance_custom_ext/static/src/components/face_check_dialog/face_check_dialog.js:0
+msgid "Camera access is not available in this browser."
+msgstr "الوصول إلى الكاميرا غير متاح في هذا المتصفح."
+
+#. module: hr_attendance_custom_ext
+#. odoo-javascript
+#: code:addons/hr_attendance_custom_ext/static/src/components/face_check_dialog/face_check_dialog.js:0
+#. odoo-javascript
+#: code:addons/hr_attendance_custom_ext/static/src/components/home_pin_dialog/home_pin_dialog.js:0
+#. odoo-python
+#: code:addons/hr_attendance_custom_ext/views/hr_employee_face_enroll_wizard_views.xml:0
+#: model_terms:ir.ui.view,arch_db:hr_attendance_custom_ext.view_hr_employee_face_enroll_wizard_form
+msgid "Cancel"
+msgstr "إلغاء"
+
+#. module: hr_attendance_custom_ext
+#. odoo-python
+#: code:addons/hr_attendance_custom_ext/models/face_attendance_log.py:0
+msgid "Cannot perform %(action)s while employee is %(state)s."
+msgstr "لا يمكن تنفيذ %(action)s بينما الموظف في حالة %(state)s."
+
+#. module: hr_attendance_custom_ext
+#. odoo-javascript
+#: code:addons/hr_attendance_custom_ext/static/src/components/face_check_dialog/face_check_dialog.js:0
+msgid "Capture & Check In"
+msgstr "التقاط وتسجيل الحضور"
+
+#. module: hr_attendance_custom_ext
+#. odoo-javascript
+#: code:addons/hr_attendance_custom_ext/static/src/components/attendance_menu/attendance_menu_patch.js:0
+#. odoo-python
+#: code:addons/hr_attendance_custom_ext/views/fingerprint_device_log_views.xml:0
+#. odoo-python
+#: code:addons/hr_attendance_custom_ext/views/hr_attendance_views.xml:0
+#: model:ir.model.fields.selection,name:hr_attendance_custom_ext.selection__face_attendance_log__action_type__check_in
+#: model:ir.model.fields.selection,name:hr_attendance_custom_ext.selection__fingerprint_device_log__punch_type__check_in
+#: model:ir.model.fields.selection,name:hr_attendance_custom_ext.selection__hr_attendance__hikvision_punch_type__check_in
+#: model:ir.model.fields.selection,name:hr_attendance_custom_ext.selection__hr_attendance_punch_log__punch_type__check_in
+#: model_terms:ir.ui.view,arch_db:hr_attendance_custom_ext.hr_attendance_view_filter_custom
+#: model_terms:ir.ui.view,arch_db:hr_attendance_custom_ext.view_fingerprint_device_log_search
+msgid "Check In"
+msgstr "تسجيل الحضور"
+
+#. module: hr_attendance_custom_ext
+#. odoo-javascript
+#: code:addons/hr_attendance_custom_ext/static/src/components/home_pin_dialog/home_pin_dialog.js:0
+msgid "Check In with PIN"
+msgstr "تسجيل الحضور برمز PIN"
+
+#. module: hr_attendance_custom_ext
+#. odoo-javascript
+#: code:addons/hr_attendance_custom_ext/static/src/components/attendance_menu/attendance_menu_patch.js:0
+#. odoo-python
+#: code:addons/hr_attendance_custom_ext/views/fingerprint_device_log_views.xml:0
+#. odoo-python
+#: code:addons/hr_attendance_custom_ext/views/hr_attendance_views.xml:0
+#: model:ir.model.fields.selection,name:hr_attendance_custom_ext.selection__face_attendance_log__action_type__check_out
+#: model:ir.model.fields.selection,name:hr_attendance_custom_ext.selection__fingerprint_device_log__punch_type__check_out
+#: model:ir.model.fields.selection,name:hr_attendance_custom_ext.selection__hr_attendance__hikvision_punch_type__check_out
+#: model:ir.model.fields.selection,name:hr_attendance_custom_ext.selection__hr_attendance_punch_log__punch_type__check_out
+#: model_terms:ir.ui.view,arch_db:hr_attendance_custom_ext.hr_attendance_view_filter_custom
+#: model_terms:ir.ui.view,arch_db:hr_attendance_custom_ext.view_fingerprint_device_log_search
+msgid "Check Out"
+msgstr "تسجيل الانصراف"
+
+#. module: hr_attendance_custom_ext
+#. odoo-javascript
+#: code:addons/hr_attendance_custom_ext/static/src/components/attendance_menu/attendance_menu_patch.js:0
+msgid "Check out"
+msgstr "تسجيل الانصراف"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields.selection,name:hr_attendance_custom_ext.selection__hr_employee__hikvision_presence_status__checked_out
+msgid "Checked Out"
+msgstr "تم تسجيل الانصراف"
+
+#. module: hr_attendance_custom_ext
+#. odoo-javascript
+#: code:addons/hr_attendance_custom_ext/static/src/components/home_pin_dialog/home_pin_dialog.js:0
+msgid "Checking..."
+msgstr "جارٍ التحقق..."
+
+#. module: hr_attendance_custom_ext
+#. odoo-python
+#: code:addons/hr_attendance_custom_ext/views/hr_employee_views.xml:0
+#: model_terms:ir.ui.view,arch_db:hr_attendance_custom_ext.view_employee_form_attendance_custom
+msgid "Clear Home PIN"
+msgstr "مسح رمز PIN المنزلي"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_fingerprint_device__http_listening_allowed_ips
+msgid "Comma-separated IPs allowed to POST events (defaults to device IP when enabled)."
+msgstr "عناوين IP المسموح لها بإرسال الأحداث مفصولة بفواصل (افتراضياً IP الجهاز عند التفعيل)."
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_hr_attendance_daily_status__source_summary
+msgid "Comma-separated attendance sources for the day."
+msgstr "مصادر الحضور لليوم مفصولة بفواصل."
+
+#. module: hr_attendance_custom_ext
+#. odoo-python
+#: code:addons/hr_attendance_custom_ext/models/fingerprint_attendance_policy.py:0
+msgid "Company %(company)s already has a default policy (%(policy)s)."
+msgstr "الشركة %(company)s لديها سياسة افتراضية بالفعل (%(policy)s)."
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_fingerprint_attendance_policy__is_company_default
+msgid "Company Default"
+msgstr "افتراضي الشركة"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_fingerprint_device__connection_timeout
+msgid "Connection Timeout (s)"
+msgstr "مهلة الاتصال (ثانية)"
+
+#. module: hr_attendance_custom_ext
+#. odoo-javascript
+#: code:addons/hr_attendance_custom_ext/static/src/components/attendance_menu/attendance_menu_patch.js:0
+msgid "Connection lost. Attendance punch could not be recorded."
+msgstr "انقطع الاتصال. تعذر تسجيل الحضور."
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields.selection,name:hr_attendance_custom_ext.selection__fingerprint_device__api_type__custom_api
+msgid "Custom API"
+msgstr "واجهة API مخصصة"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.actions.act_window,name:hr_attendance_custom_ext.action_hr_attendance_daily_status_list
+#: model:ir.model,name:hr_attendance_custom_ext.model_hr_attendance_daily_status
+#: model:ir.ui.menu,name:hr_attendance_custom_ext.menu_daily_attendance_status
+msgid "Daily Attendance Status"
+msgstr "حالة الحضور اليومية"
+
+#. module: hr_attendance_custom_ext
+#. odoo-python
+#: code:addons/hr_attendance_custom_ext/views/hr_attendance_daily_status_views.xml:0
+#: model_terms:ir.ui.view,arch_db:hr_attendance_custom_ext.view_hr_attendance_daily_status_search
+msgid "Date"
+msgstr "التاريخ"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_hr_attendance_daily_status__is_public_holiday
+msgid "Date is a company or calendar public holiday."
+msgstr "التاريخ عطلة رسمية للشركة أو التقويم."
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_fingerprint_attendance_policy__raw_payload_retention_days
+msgid "Days to keep raw_payload on device logs before clearing (0 = keep forever)."
+msgstr "أيام الاحتفاظ بالبيانات الخام في سجلات الجهاز قبل الحذف (0 = الاحتفاظ دائماً)."
+
+#. module: hr_attendance_custom_ext
+#. odoo-python
+#: code:addons/hr_attendance_custom_ext/views/fingerprint_device_log_views.xml:0
+#: model_terms:ir.ui.view,arch_db:hr_attendance_custom_ext.view_fingerprint_device_log_form
+msgid "Debug"
+msgstr "تصحيح"
+
+#. module: hr_attendance_custom_ext
+#. odoo-python
+#: code:addons/hr_attendance_custom_ext/models/fingerprint_attendance_policy.py:0
+msgid "Default Attendance Policy"
+msgstr "سياسة الحضور الافتراضية"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_resource_calendar_attendance__location_type
+msgid "Defines where employees are expected to work for this schedule line."
+msgstr "يحدد مكان العمل المتوقع للموظفين في سطر الجدول هذا."
+
+#. module: hr_attendance_custom_ext
+#. odoo-python
+#: code:addons/hr_attendance_custom_ext/views/hr_attendance_daily_status_views.xml:0
+#: model_terms:ir.ui.view,arch_db:hr_attendance_custom_ext.view_hr_attendance_daily_status_search
+msgid "Department"
+msgstr "القسم"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.actions.act_window,name:hr_attendance_custom_ext.action_department_attendance_report
+#: model:ir.ui.menu,name:hr_attendance_custom_ext.menu_department_attendance_report
+msgid "Department Attendance Report"
+msgstr "تقرير حضور الأقسام"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_res_company__face_attendance_stub_enabled
+msgid "Development only: auto-pass face verification without external provider."
+msgstr "للتطوير فقط: اجتياز التحقق من الوجه تلقائياً دون مزود خارجي."
+
+#. module: hr_attendance_custom_ext
+#. odoo-python
+#: code:addons/hr_attendance_custom_ext/views/fingerprint_device_log_views.xml:0
+#: model_terms:ir.ui.view,arch_db:hr_attendance_custom_ext.view_fingerprint_device_log_search
+msgid "Device"
+msgstr "الجهاز"
+
+#. module: hr_attendance_custom_ext
+#. odoo-python
+#: code:addons/hr_attendance_custom_ext/models/fingerprint_device.py:0
+msgid "Device %(device)s: %(error)s"
+msgstr "الجهاز %(device)s: %(error)s"
+
+#. module: hr_attendance_custom_ext
+#. odoo-python
+#: code:addons/hr_attendance_custom_ext/views/hr_employee_views.xml:0
+#: model_terms:ir.ui.view,arch_db:hr_attendance_custom_ext.view_employee_form_attendance_custom
+msgid "Device &amp; Policy"
+msgstr "الجهاز والسياسة"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_fingerprint_device__device_ip
+msgid "Device IP"
+msgstr "عنوان IP للجهاز"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_fingerprint_device__device_timezone
+msgid "Device Timezone"
+msgstr "المنطقة الزمنية للجهاز"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_hr_attendance__device_user_id
+msgid "Device User ID"
+msgstr "معرّف المستخدم في الجهاز"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_hr_employee__attendance_home_pin_value
+msgid "Displayed PIN value configured for home attendance."
+msgstr "قيمة رمز PIN المعروضة المُعدّة للحضور من المنزل."
+
+#. module: hr_attendance_custom_ext
+#. odoo-python
+#: code:addons/hr_attendance_custom_ext/views/fingerprint_device_log_views.xml:0
+#: model:ir.model.fields.selection,name:hr_attendance_custom_ext.selection__fingerprint_device_log__state__draft
+#: model_terms:ir.ui.view,arch_db:hr_attendance_custom_ext.view_fingerprint_device_log_search
+msgid "Draft"
+msgstr "مسودة"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields.selection,name:hr_attendance_custom_ext.selection__fingerprint_device_log__state__duplicate
+msgid "Duplicate"
+msgstr "مكرر"
+
+#. module: hr_attendance_custom_ext
+#. odoo-python
+#: code:addons/hr_attendance_custom_ext/views/hr_attendance_views.xml:0
+#: model_terms:ir.ui.view,arch_db:hr_attendance_custom_ext.hr_attendance_view_filter_custom
+msgid "Early Checkout"
+msgstr "انصراف مبكر"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_hr_attendance__early_checkout_minutes
+msgid "Early Checkout Minutes"
+msgstr "دقائق الانصراف المبكر"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields.selection,name:hr_attendance_custom_ext.selection__hr_attendance__attendance_status__early_leave
+#: model:ir.model.fields.selection,name:hr_attendance_custom_ext.selection__hr_attendance_daily_status__status__early_leave
+msgid "Early Leave"
+msgstr "مغادرة مبكرة"
+
+#. module: hr_attendance_custom_ext
+#. odoo-python
+#: code:addons/hr_attendance_custom_ext/views/hr_employee_face_template_views.xml:0
+#: model_terms:ir.ui.view,arch_db:hr_attendance_custom_ext.view_hr_employee_face_template_form
+msgid "Embedding"
+msgstr "البصمة"
+
+#. module: hr_attendance_custom_ext
+#. odoo-python
+#: code:addons/hr_attendance_custom_ext/views/fingerprint_device_log_views.xml:0
+#. odoo-python
+#: code:addons/hr_attendance_custom_ext/views/hr_attendance_daily_status_views.xml:0
+#: model_terms:ir.ui.view,arch_db:hr_attendance_custom_ext.view_fingerprint_device_log_form
+#: model_terms:ir.ui.view,arch_db:hr_attendance_custom_ext.view_fingerprint_device_log_tree
+#: model_terms:ir.ui.view,arch_db:hr_attendance_custom_ext.view_hr_attendance_daily_status_search
+msgid "Employee"
+msgstr "الموظف"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model,name:hr_attendance_custom_ext.model_hr_employee_face_template
+msgid "Employee Face Template"
+msgstr "Employee Face Template"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_fingerprint_device_log__display_employee_name
+msgid "Employee Name"
+msgstr "اسم الموظف"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_hr_attendance_daily_status__is_on_approved_leave
+msgid "Employee had a validated time off request on this date."
+msgstr "كان لدى الموظف طلب إجازة معتمد في هذا التاريخ."
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_res_company__face_attendance_stub_enabled
+msgid "Enable Face Attendance Stub"
+msgstr "تفعيل محاكاة حضور الوجه"
+
+#. module: hr_attendance_custom_ext
+#. odoo-python
+#: code:addons/hr_attendance_custom_ext/views/hr_employee_face_enroll_wizard_views.xml:0
+#: model_terms:ir.ui.view,arch_db:hr_attendance_custom_ext.view_hr_employee_face_enroll_wizard_form
+msgid "Enroll"
+msgstr "تسجيل"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model,name:hr_attendance_custom_ext.model_hr_employee_face_enroll_wizard
+msgid "Enroll Employee Face Template"
+msgstr "Enroll Employee Face Template"
+
+#. module: hr_attendance_custom_ext
+#. odoo-python
+#: code:addons/hr_attendance_custom_ext/views/hr_employee_views.xml:0
+#: model_terms:ir.ui.view,arch_db:hr_attendance_custom_ext.view_employee_form_attendance_custom
+msgid "Enroll Face"
+msgstr "تسجيل الوجه"
+
+#. module: hr_attendance_custom_ext
+#. odoo-python
+#: code:addons/hr_attendance_custom_ext/views/hr_employee_face_enroll_wizard_views.xml:0
+#: model_terms:ir.ui.view,arch_db:hr_attendance_custom_ext.view_hr_employee_face_enroll_wizard_form
+msgid "Enroll Face Template"
+msgstr "تسجيل قالب الوجه"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields.selection,name:hr_attendance_custom_ext.selection__hr_employee__face_enrollment_status__enrolled
+msgid "Enrolled"
+msgstr "مسجّل"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_hr_employee__attendance_face_image_preview
+msgid "Enrolled Face Image"
+msgstr "صورة الوجه المسجّلة"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_hr_employee_face_enroll_wizard__enrollment_image
+msgid "Enrollment Image"
+msgstr "صورة التسجيل"
+
+#. module: hr_attendance_custom_ext
+#. odoo-python
+#: code:addons/hr_attendance_custom_ext/views/hr_employee_face_enroll_wizard_views.xml:0
+#: model_terms:ir.ui.view,arch_db:hr_attendance_custom_ext.view_hr_employee_face_enroll_wizard_form
+msgid "Enrollment Photo"
+msgstr "صورة التسجيل"
+
+#. module: hr_attendance_custom_ext
+#. odoo-python
+#: code:addons/hr_attendance_custom_ext/wizards/hr_employee_face_enroll_wizard.py:0
+msgid "Enrollment image is required."
+msgstr "صورة التسجيل مطلوبة."
+
+#. module: hr_attendance_custom_ext
+#. odoo-python
+#: code:addons/hr_attendance_custom_ext/views/hr_employee_views.xml:0
+#: model_terms:ir.ui.view,arch_db:hr_attendance_custom_ext.view_employee_form_attendance_custom
+msgid "Enter digits to set PIN"
+msgstr "أدخل أرقاماً لتعيين رمز PIN"
+
+#. module: hr_attendance_custom_ext
+#. odoo-javascript
+#: code:addons/hr_attendance_custom_ext/static/src/components/home_pin_dialog/home_pin_dialog.js:0
+msgid "Enter your personal home attendance PIN to complete check in."
+msgstr "أدخل رمز PIN الشخصي للحضور من المنزل لإتمام تسجيل الحضور."
+
+#. module: hr_attendance_custom_ext
+#. odoo-python
+#: code:addons/hr_attendance_custom_ext/views/fingerprint_device_log_views.xml:0
+#: model:ir.model.fields.selection,name:hr_attendance_custom_ext.selection__fingerprint_device__sync_status__error
+#: model:ir.model.fields.selection,name:hr_attendance_custom_ext.selection__fingerprint_device_log__state__error
+#: model_terms:ir.ui.view,arch_db:hr_attendance_custom_ext.view_fingerprint_device_log_search
+msgid "Error"
+msgstr "خطأ"
+
+#. module: hr_attendance_custom_ext
+#. odoo-python
+#: code:addons/hr_attendance_custom_ext/views/fingerprint_device_log_views.xml:0
+#: model_terms:ir.ui.view,arch_db:hr_attendance_custom_ext.view_fingerprint_device_log_form
+#: model_terms:ir.ui.view,arch_db:hr_attendance_custom_ext.view_fingerprint_device_log_search
+#: model_terms:ir.ui.view,arch_db:hr_attendance_custom_ext.view_fingerprint_device_log_tree
+msgid "Event"
+msgstr "الحدث"
+
+#. module: hr_attendance_custom_ext
+#. odoo-python
+#: code:addons/hr_attendance_custom_ext/views/fingerprint_device_log_views.xml:0
+#: model_terms:ir.ui.view,arch_db:hr_attendance_custom_ext.view_fingerprint_device_log_search
+msgid "Event Date"
+msgstr "تاريخ الحدث"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_hr_attendance__external_log_id
+msgid "External Log ID"
+msgstr "معرّف السجل الخارجي"
+
+#. module: hr_attendance_custom_ext
+#. odoo-python
+#: code:addons/hr_attendance_custom_ext/views/hr_attendance_views.xml:0
+#: model:ir.model.fields.selection,name:hr_attendance_custom_ext.selection__hr_attendance__attendance_source__face
+#: model:ir.model.fields.selection,name:hr_attendance_custom_ext.selection__hr_attendance_punch_log__attendance_source__face
+#: model_terms:ir.ui.view,arch_db:hr_attendance_custom_ext.hr_attendance_view_filter_custom
+msgid "Face"
+msgstr "وجه"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model,name:hr_attendance_custom_ext.model_face_attendance_log
+msgid "Face Attendance Log"
+msgstr "Face Attendance Log"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.actions.act_window,name:hr_attendance_custom_ext.action_face_attendance_log
+#: model:ir.ui.menu,name:hr_attendance_custom_ext.menu_face_attendance_logs
+msgid "Face Attendance Logs"
+msgstr "سجل حضور الوجه"
+
+#. module: hr_attendance_custom_ext
+#. odoo-python
+#: code:addons/hr_attendance_custom_ext/views/res_config_settings_views.xml:0
+#: model_terms:ir.ui.view,arch_db:hr_attendance_custom_ext.res_config_settings_view_form_attendance_custom
+msgid "Face Attendance Stub (Development)"
+msgstr "محاكاة حضور الوجه (تطوير)"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_hr_employee__face_attendance_stub_enabled
+msgid "Face Attendance Stub Enabled"
+msgstr "محاكاة حضور الوجه مفعّلة"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_hr_employee_face_template__embedding_json
+msgid "Face Embedding (JSON)"
+msgstr "بصمة الوجه (JSON)"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_hr_employee__face_enrolled_at
+msgid "Face Enrolled At"
+msgstr "تاريخ تسجيل الوجه"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_hr_employee__face_enrolled_by
+msgid "Face Enrolled By"
+msgstr "سجّل الوجه بواسطة"
+
+#. module: hr_attendance_custom_ext
+#. odoo-python
+#: code:addons/hr_attendance_custom_ext/views/hr_employee_views.xml:0
+#: model_terms:ir.ui.view,arch_db:hr_attendance_custom_ext.view_employee_form_attendance_custom
+msgid "Face Enrollment"
+msgstr "تسجيل الوجه"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_hr_employee__face_enrollment_status
+msgid "Face Enrollment Status"
+msgstr "حالة تسجيل الوجه"
+
+#. module: hr_attendance_custom_ext
+#. odoo-python
+#: code:addons/hr_attendance_custom_ext/views/res_config_settings_views.xml:0
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_res_company__face_match_threshold
+#: model_terms:ir.ui.view,arch_db:hr_attendance_custom_ext.res_config_settings_view_form_attendance_custom
+msgid "Face Match Threshold"
+msgstr "حد مطابقة الوجه"
+
+#. module: hr_attendance_custom_ext
+#. odoo-python
+#: code:addons/hr_attendance_custom_ext/views/res_config_settings_views.xml:0
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_hr_employee__face_provider
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_res_company__face_provider
+#: model_terms:ir.ui.view,arch_db:hr_attendance_custom_ext.res_config_settings_view_form_attendance_custom
+msgid "Face Provider"
+msgstr "مزود التعرف على الوجه"
+
+#. module: hr_attendance_custom_ext
+#. odoo-python
+#: code:addons/hr_attendance_custom_ext/views/res_config_settings_views.xml:0
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_res_company__face_quality_check_enabled
+#: model_terms:ir.ui.view,arch_db:hr_attendance_custom_ext.res_config_settings_view_form_attendance_custom
+msgid "Face Quality Checks"
+msgstr "فحوصات جودة الوجه"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_hr_employee__face_reference_id
+msgid "Face Reference ID"
+msgstr "معرّف مرجع الوجه"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_hr_employee__face_template_id
+msgid "Face Template ID"
+msgstr "معرّف قالب الوجه"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.actions.act_window,name:hr_attendance_custom_ext.action_hr_employee_face_template
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_hr_employee__face_template_ids
+#: model:ir.ui.menu,name:hr_attendance_custom_ext.menu_face_templates
+msgid "Face Templates"
+msgstr "قوالب الوجه"
+
+#. module: hr_attendance_custom_ext
+#. odoo-javascript
+#: code:addons/hr_attendance_custom_ext/static/src/components/face_check_dialog/face_check_dialog.js:0
+msgid "Face Verification"
+msgstr "التحقق من الوجه"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_hr_attendance__face_verified
+msgid "Face Verified"
+msgstr "تم التحقق من الوجه"
+
+#. module: hr_attendance_custom_ext
+#. odoo-python
+#: code:addons/hr_attendance_custom_ext/models/face_attendance_log.py:0
+msgid "Face match confidence %(score).2f is below threshold %(threshold).2f."
+msgstr "ثقة مطابقة الوجه %(score).2f أقل من الحد %(threshold).2f."
+
+#. module: hr_attendance_custom_ext
+#. odoo-python
+#: code:addons/hr_attendance_custom_ext/models/face_attendance_log.py:0
+#. odoo-javascript
+#: code:addons/hr_attendance_custom_ext/static/src/components/face_check_dialog/face_check_dialog.js:0
+msgid "Face verification failed."
+msgstr "فشل التحقق من الوجه."
+
+#. module: hr_attendance_custom_ext
+#. odoo-python
+#: code:addons/hr_attendance_custom_ext/models/face_attendance_log.py:0
+msgid "Face verification is only required when working from home."
+msgstr "التحقق من الوجه مطلوب فقط عند العمل عن بُعد."
+
+#. module: hr_attendance_custom_ext
+#. odoo-python
+#: code:addons/hr_attendance_custom_ext/views/face_attendance_log_views.xml:0
+#: model:ir.model.fields.selection,name:hr_attendance_custom_ext.selection__face_attendance_log__verification_status__failed
+#: model_terms:ir.ui.view,arch_db:hr_attendance_custom_ext.view_face_attendance_log_search
+msgid "Failed"
+msgstr "فاشل"
+
+#. module: hr_attendance_custom_ext
+#. odoo-python
+#: code:addons/hr_attendance_custom_ext/models/fingerprint_device.py:0
+msgid "Fetched %(fetched)s | stored %(stored)s | ignored %(ignored)s | "
+msgstr "تم جلب %(fetched)s | تخزين %(stored)s | تجاهل %(ignored)s | "
+
+#. module: hr_attendance_custom_ext
+#. odoo-python
+#: code:addons/hr_attendance_custom_ext/views/fingerprint_device_views.xml:0
+#: model_terms:ir.ui.view,arch_db:hr_attendance_custom_ext.view_fingerprint_device_form
+msgid "File Import"
+msgstr "استيراد ملف"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields.selection,name:hr_attendance_custom_ext.selection__fingerprint_device__api_type__file_import
+msgid "File Import (CSV)"
+msgstr "استيراد ملف (CSV)"
+
+#. module: hr_attendance_custom_ext
+#. odoo-python
+#: code:addons/hr_attendance_custom_ext/views/hr_attendance_views.xml:0
+#: model:ir.model.fields.selection,name:hr_attendance_custom_ext.selection__hr_attendance__attendance_source__fingerprint
+#: model:ir.model.fields.selection,name:hr_attendance_custom_ext.selection__hr_attendance_punch_log__attendance_source__fingerprint
+#: model_terms:ir.ui.view,arch_db:hr_attendance_custom_ext.hr_attendance_view_filter_custom
+msgid "Fingerprint"
+msgstr "بصمة"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model,name:hr_attendance_custom_ext.model_fingerprint_attendance_policy
+msgid "Fingerprint Attendance Policy"
+msgstr "Fingerprint Attendance Policy"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model,name:hr_attendance_custom_ext.model_fingerprint_device
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_hr_attendance__device_id
+msgid "Fingerprint Device"
+msgstr "جهاز البصمة"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model,name:hr_attendance_custom_ext.model_fingerprint_device_log
+msgid "Fingerprint Device Log"
+msgstr "سجل جهاز البصمة"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.actions.act_window,name:hr_attendance_custom_ext.action_fingerprint_logs_report
+msgid "Fingerprint Device Logs Report"
+msgstr "تقرير سجلات جهاز البصمة"
+
+#. module: hr_attendance_custom_ext
+#: model:res.groups,name:hr_attendance_custom_ext.group_fingerprint_device_manager
+msgid "Fingerprint Device Manager"
+msgstr "مدير أجهزة البصمة"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.actions.act_window,name:hr_attendance_custom_ext.action_fingerprint_device
+#: model:ir.ui.menu,name:hr_attendance_custom_ext.menu_fingerprint_devices
+msgid "Fingerprint Devices"
+msgstr "أجهزة البصمة"
+
+#. module: hr_attendance_custom_ext
+#. odoo-python
+#: code:addons/hr_attendance_custom_ext/models/fingerprint_device.py:0
+#: model:ir.actions.act_window,name:hr_attendance_custom_ext.action_fingerprint_device_log
+msgid "Fingerprint Sync Logs"
+msgstr "سجلات مزامنة البصمة"
+
+#. module: hr_attendance_custom_ext
+#. odoo-python
+#: code:addons/hr_attendance_custom_ext/models/fingerprint_device.py:0
+msgid "Fingerprint device sync failed"
+msgstr "فشلت مزامنة جهاز البصمة"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields.selection,name:hr_attendance_custom_ext.selection__fingerprint_attendance_policy__process_mode__first_last
+msgid "First / Last Scan"
+msgstr "أول / آخر مسح"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_face_attendance_log__distance_meters
+msgid "Geo Distance (m)"
+msgstr "المسافة الجغرافية (م)"
+
+#. module: hr_attendance_custom_ext
+#. odoo-python
+#: code:addons/hr_attendance_custom_ext/views/fingerprint_attendance_policy_views.xml:0
+#: model_terms:ir.ui.view,arch_db:hr_attendance_custom_ext.view_fingerprint_attendance_policy_form
+msgid "Grace and Tolerance"
+msgstr "السماح والتسامح"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_fingerprint_device__http_listening_enabled
+msgid "HTTP Listening"
+msgstr "الاستقبال عبر HTTP"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_fingerprint_device__http_listening_token
+msgid "HTTP Listening Token"
+msgstr "رمز الاستقبال HTTP"
+
+#. module: hr_attendance_custom_ext
+#. odoo-python
+#: code:addons/hr_attendance_custom_ext/models/fingerprint_device.py:0
+msgid "HTTP listening token must be at least 16 characters."
+msgstr "يجب أن يتكون رمز الاستقبال HTTP من 16 حرفاً على الأقل."
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model,name:hr_attendance_custom_ext.model_attendance_calendar_mixin
+msgid "Helpers for calendar-based attendance calculations"
+msgstr "Helpers for calendar-based attendance calculations"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields.selection,name:hr_attendance_custom_ext.selection__fingerprint_device__api_type__hikvision
+msgid "Hikvision ISAPI"
+msgstr "Hikvision ISAPI"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_hr_employee__hikvision_presence_status
+msgid "Hikvision Presence"
+msgstr "حالة الحضور Hikvision"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields.selection,name:hr_attendance_custom_ext.selection__resource_calendar_attendance__location_type__home
+msgid "Home"
+msgstr "العمل عن بُعد"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_hr_employee__attendance_home_pin_value
+msgid "Home Attendance PIN"
+msgstr "رمز PIN للحضور من المنزل"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_hr_employee__attendance_home_pin_hash
+msgid "Home Attendance PIN Hash"
+msgstr "تجزئة رمز PIN المنزلي"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_hr_employee__attendance_home_pin_set
+msgid "Home Attendance PIN Set"
+msgstr "تم تعيين رمز PIN المنزلي"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_hr_employee__attendance_home_pin_input
+msgid "Home PIN"
+msgstr "رمز PIN المنزلي"
+
+#. module: hr_attendance_custom_ext
+#. odoo-javascript
+#: code:addons/hr_attendance_custom_ext/static/src/components/home_pin_dialog/home_pin_dialog.js:0
+msgid "Home PIN Check In"
+msgstr "تسجيل الحضور برمز PIN من المنزل"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_hr_employee__attendance_home_pin_input
+msgid "Home attendance PIN. Leave unchanged on save to keep the current value."
+msgstr "رمز PIN للحضور من المنزل. اتركه دون تغيير عند الحفظ للإبقاء على القيمة الحالية."
+
+#. module: hr_attendance_custom_ext
+#: model_terms:ir.ui.view,arch_db:hr_attendance_custom_ext.res_config_settings_view_form_attendance_custom
+msgid "Hours"
+msgstr "ساعات"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_res_company__missing_checkout_tolerance_hours
+msgid "Hours after scheduled calendar end before an open attendance is flagged as missing checkout."
+msgstr "ساعات بعد نهاية الدوام المجدول قبل تمييز الحضور المفتوح كانصراف غير مسجّل."
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_fingerprint_device__sync_lookback_hours
+msgid "How many hours back to fetch access events on each sync."
+msgstr "عدد الساعات للخلف لجلب أحداث الدخول في كل مزامنة."
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_fingerprint_device__device_timezone
+msgid "IANA timezone of the device clock (e.g. Asia/Amman). "
+msgstr "المنطقة الزمنية IANA لساعة الجهاز (مثال: Asia/Amman)."
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields.selection,name:hr_attendance_custom_ext.selection__fingerprint_device__sync_status__idle
+msgid "Idle"
+msgstr "خامل"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields.selection,name:hr_attendance_custom_ext.selection__fingerprint_device_log__state__ignored
+msgid "Ignored"
+msgstr "متجاهل"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields.selection,name:hr_attendance_custom_ext.selection__hr_attendance__attendance_source__import
+msgid "Import"
+msgstr "استيراد"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_fingerprint_device__import_file_data
+msgid "Import File"
+msgstr "ملف الاستيراد"
+
+#. module: hr_attendance_custom_ext
+#. odoo-python
+#: code:addons/hr_attendance_custom_ext/views/hr_employee_face_template_views.xml:0
+#: model_terms:ir.ui.view,arch_db:hr_attendance_custom_ext.view_hr_employee_face_template_search
+msgid "Inactive"
+msgstr "غير نشط"
+
+#. module: hr_attendance_custom_ext
+#. odoo-python
+#: code:addons/hr_attendance_custom_ext/views/hr_attendance_daily_status_views.xml:0
+#: model:ir.model.fields.selection,name:hr_attendance_custom_ext.selection__hr_attendance__attendance_status__incomplete
+#: model:ir.model.fields.selection,name:hr_attendance_custom_ext.selection__hr_attendance_daily_status__status__incomplete
+#: model_terms:ir.ui.view,arch_db:hr_attendance_custom_ext.view_hr_attendance_daily_status_search
+msgid "Incomplete"
+msgstr "غير مكتمل"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.actions.act_window,name:hr_attendance_custom_ext.action_attendance_missing_report
+msgid "Incomplete Attendance Report"
+msgstr "تقرير الحضور غير المكتمل"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields.selection,name:hr_attendance_custom_ext.selection__hr_employee_face_template__provider__insightface
+msgid "InsightFace"
+msgstr "InsightFace"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields.selection,name:hr_attendance_custom_ext.selection__res_company__face_provider__insightface
+msgid "InsightFace (self-hosted)"
+msgstr "InsightFace (استضافة ذاتية)"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_hr_employee__face_provider_available
+msgid "InsightFace Available"
+msgstr "InsightFace متاح"
+
+#. module: hr_attendance_custom_ext
+#. odoo-python
+#: code:addons/hr_attendance_custom_ext/views/hr_employee_views.xml:0
+#: model_terms:ir.ui.view,arch_db:hr_attendance_custom_ext.view_employee_form_attendance_custom
+msgid "InsightFace Provider"
+msgstr "مزود InsightFace"
+
+#. module: hr_attendance_custom_ext
+#. odoo-python
+#: code:addons/hr_attendance_custom_ext/views/hr_attendance_daily_status_views.xml:0
+#. odoo-python
+#: code:addons/hr_attendance_custom_ext/views/hr_attendance_views.xml:0
+#: model_terms:ir.ui.view,arch_db:hr_attendance_custom_ext.hr_attendance_view_filter_custom
+#: model_terms:ir.ui.view,arch_db:hr_attendance_custom_ext.view_hr_attendance_daily_status_search
+msgid "Is Public Holiday"
+msgstr "عطلة رسمية"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields.selection,name:hr_attendance_custom_ext.selection__hr_attendance__attendance_source__kiosk
+#: model:ir.model.fields.selection,name:hr_attendance_custom_ext.selection__hr_attendance_punch_log__attendance_source__kiosk
+msgid "Kiosk"
+msgstr "كشك"
+
+#. module: hr_attendance_custom_ext
+#. odoo-python
+#: code:addons/hr_attendance_custom_ext/views/fingerprint_device_log_views.xml:0
+#: model_terms:ir.ui.view,arch_db:hr_attendance_custom_ext.view_fingerprint_device_log_search
+msgid "Last 7 Days"
+msgstr "آخر 7 أيام"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_fingerprint_device__http_listening_last_at
+msgid "Last HTTP Push"
+msgstr "آخر إشعار HTTP"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_fingerprint_device__last_sync_checkpoint
+msgid "Last Sync Checkpoint"
+msgstr "آخر نقطة تفتيش للمزامنة"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_hr_attendance__hikvision_punch_type
+msgid "Last punch recorded for this attendance day."
+msgstr "آخر تسجيل مسجّل ليوم الحضور هذا."
+
+#. module: hr_attendance_custom_ext
+#. odoo-python
+#: code:addons/hr_attendance_custom_ext/views/hr_attendance_daily_status_views.xml:0
+#. odoo-python
+#: code:addons/hr_attendance_custom_ext/views/hr_attendance_views.xml:0
+#: model:ir.model.fields.selection,name:hr_attendance_custom_ext.selection__hr_attendance__attendance_status__late
+#: model:ir.model.fields.selection,name:hr_attendance_custom_ext.selection__hr_attendance_daily_status__status__late
+#: model_terms:ir.ui.view,arch_db:hr_attendance_custom_ext.hr_attendance_view_filter_custom
+#: model_terms:ir.ui.view,arch_db:hr_attendance_custom_ext.view_hr_attendance_daily_status_search
+msgid "Late"
+msgstr "متأخر"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_hr_attendance__late_minutes
+msgid "Late Minutes"
+msgstr "دقائق التأخير"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.actions.act_window,name:hr_attendance_custom_ext.action_daily_lateness_report
+#: model:ir.ui.menu,name:hr_attendance_custom_ext.menu_lateness_report
+msgid "Lateness Report"
+msgstr "تقرير التأخير"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.actions.act_window,name:hr_attendance_custom_ext.action_attendance_lateness_report
+msgid "Lateness Report (Attendance)"
+msgstr "تقرير التأخير (الحضور)"
+
+#. module: hr_attendance_custom_ext
+#. odoo-python
+#: code:addons/hr_attendance_custom_ext/views/res_config_settings_views.xml:0
+#: model_terms:ir.ui.view,arch_db:hr_attendance_custom_ext.res_config_settings_view_form_attendance_custom
+msgid "Latitude"
+msgstr "خط العرض"
+
+#. module: hr_attendance_custom_ext
+#. odoo-python
+#: code:addons/hr_attendance_custom_ext/views/fingerprint_device_views.xml:0
+#: model_terms:ir.ui.view,arch_db:hr_attendance_custom_ext.view_fingerprint_device_form
+msgid "Live HTTP Listening"
+msgstr "الاستقبال المباشر عبر HTTP"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_hr_employee__hikvision_presence_status
+msgid "Live work state from the Hikvision fingerprint bridge."
+msgstr "حالة العمل المباشرة من جسر بصمة Hikvision."
+
+#. module: hr_attendance_custom_ext
+#. odoo-python
+#: code:addons/hr_attendance_custom_ext/views/res_config_settings_views.xml:0
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_res_company__face_liveness_required
+#: model_terms:ir.ui.view,arch_db:hr_attendance_custom_ext.res_config_settings_view_form_attendance_custom
+msgid "Liveness Required"
+msgstr "التحقق الحيوي مطلوب"
+
+#. module: hr_attendance_custom_ext
+#. odoo-python
+#: code:addons/hr_attendance_custom_ext/views/fingerprint_device_views.xml:0
+#: model_terms:ir.ui.view,arch_db:hr_attendance_custom_ext.view_fingerprint_device_tree
+msgid "Logs"
+msgstr "السجلات"
+
+#. module: hr_attendance_custom_ext
+#. odoo-python
+#: code:addons/hr_attendance_custom_ext/views/res_config_settings_views.xml:0
+#: model_terms:ir.ui.view,arch_db:hr_attendance_custom_ext.res_config_settings_view_form_attendance_custom
+msgid "Longitude"
+msgstr "خط الطول"
+
+#. module: hr_attendance_custom_ext
+#. odoo-python
+#: code:addons/hr_attendance_custom_ext/views/hr_attendance_views.xml:0
+#: model:ir.model.fields.selection,name:hr_attendance_custom_ext.selection__hr_attendance__attendance_source__manual
+#: model:ir.model.fields.selection,name:hr_attendance_custom_ext.selection__hr_attendance_punch_log__attendance_source__manual
+#: model_terms:ir.ui.view,arch_db:hr_attendance_custom_ext.hr_attendance_view_filter_custom
+msgid "Manual"
+msgstr "يدوي"
+
+#. module: hr_attendance_custom_ext
+#. odoo-python
+#: code:addons/hr_attendance_custom_ext/models/hr_employee.py:0
+msgid "Manual attendance is not allowed on office schedule days. "
+msgstr "التسجيل اليدوي غير مسموح في أيام العمل بالمكتب. يرجى استخدام جهاز البصمة لتسجيل الحضور والانصراف."
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_face_attendance_log__match_distance
+msgid "Match Distance"
+msgstr "مسافة المطابقة"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_res_company__face_match_threshold
+msgid "Minimum cosine similarity score required for face verification."
+msgstr "الحد الأدنى لدرجة التشابه الجيبي المطلوبة للتحقق من الوجه."
+
+#. module: hr_attendance_custom_ext
+#: model:ir.actions.act_window,name:hr_attendance_custom_ext.action_daily_missing_report
+#: model:ir.ui.menu,name:hr_attendance_custom_ext.menu_missing_attendance_report
+msgid "Missing Attendance Report"
+msgstr "تقرير الغياب"
+
+#. module: hr_attendance_custom_ext
+#. odoo-python
+#: code:addons/hr_attendance_custom_ext/views/hr_attendance_views.xml:0
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_hr_attendance__missing_checkout
+#: model_terms:ir.ui.view,arch_db:hr_attendance_custom_ext.hr_attendance_view_filter_custom
+msgid "Missing Checkout"
+msgstr "انصراف غير مسجّل"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.actions.act_window,name:hr_attendance_custom_ext.action_attendance_missing_checkout_report
+#: model:ir.ui.menu,name:hr_attendance_custom_ext.menu_missing_checkout_report
+msgid "Missing Checkout Report"
+msgstr "تقرير الانصراف غير المسجّل"
+
+#. module: hr_attendance_custom_ext
+#. odoo-python
+#: code:addons/hr_attendance_custom_ext/views/res_config_settings_views.xml:0
+#: model_terms:ir.ui.view,arch_db:hr_attendance_custom_ext.res_config_settings_view_form_attendance_custom
+msgid "Missing Checkout Tolerance"
+msgstr "سماحية الانصراف غير المسجّل"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_res_company__missing_checkout_tolerance_hours
+msgid "Missing Checkout Tolerance (hours)"
+msgstr "سماحية الانصراف غير المسجّل (ساعات)"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_fingerprint_device__last_sync_checkpoint
+msgid "Narrow event fetch window after successful sync."
+msgstr "تضييق نافذة جلب الأحداث بعد مزامنة ناجحة."
+
+#. module: hr_attendance_custom_ext
+#. odoo-python
+#: code:addons/hr_attendance_custom_ext/models/face_attendance_log.py:0
+msgid "No active face template is enrolled for this employee."
+msgstr "لا يوجد قالب وجه نشط مسجّل لهذا الموظف."
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields.selection,name:hr_attendance_custom_ext.selection__hr_employee__face_enrollment_status__none
+msgid "Not Enrolled"
+msgstr "غير مسجّل"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_fingerprint_device_log__employee_name
+msgid "Odoo employee name at sync time (not the device scanner label)."
+msgstr "اسم الموظف في Odoo وقت المزامنة (وليس تسمية الماسح في الجهاز)."
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields.selection,name:hr_attendance_custom_ext.selection__resource_calendar_attendance__location_type__office
+msgid "Office"
+msgstr "المكتب"
+
+#. module: hr_attendance_custom_ext
+#. odoo-python
+#: code:addons/hr_attendance_custom_ext/views/res_config_settings_views.xml:0
+#: model_terms:ir.ui.view,arch_db:hr_attendance_custom_ext.res_config_settings_view_form_attendance_custom
+msgid "Office Geo Radius"
+msgstr "نصف قطر الموقع الجغرافي للمكتب"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_res_company__office_geo_radius_meters
+msgid "Office Geo Radius (meters)"
+msgstr "نصف قطر الموقع الجغرافي للمكتب (متر)"
+
+#. module: hr_attendance_custom_ext
+#. odoo-python
+#: code:addons/hr_attendance_custom_ext/views/res_config_settings_views.xml:0
+#: model_terms:ir.ui.view,arch_db:hr_attendance_custom_ext.res_config_settings_view_form_attendance_custom
+msgid "Office Geo Reference Point"
+msgstr "نقطة المرجع الجغرافي للمكتب"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_res_company__office_geo_latitude
+msgid "Office Latitude"
+msgstr "خط عرض المكتب"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_res_company__office_geo_longitude
+msgid "Office Longitude"
+msgstr "خط طول المكتب"
+
+#. module: hr_attendance_custom_ext
+#. odoo-python
+#: code:addons/hr_attendance_custom_ext/models/face_attendance_log.py:0
+msgid "Office check-in requires geolocation. Use the attendance menu instead."
+msgstr "تسجيل الحضور من المكتب يتطلب الموقع الجغرافي. استخدم قائمة الحضور بدلاً من ذلك."
+
+#. module: hr_attendance_custom_ext
+#. odoo-javascript
+#: code:addons/hr_attendance_custom_ext/static/src/components/attendance_menu/attendance_menu_patch.js:0
+msgid "Office day — use the fingerprint device to check in and out."
+msgstr "يوم عمل في المكتب — استخدم جهاز البصمة لتسجيل الحضور والانصراف."
+
+#. module: hr_attendance_custom_ext
+#. odoo-javascript
+#: code:addons/hr_attendance_custom_ext/static/src/components/attendance_menu/attendance_menu_patch.js:0
+msgid "Break Out / Break In: use Odoo or the fingerprint device."
+msgstr "خروج/دخول الاستراحة: من أودو أو من جهاز البصمة."
+
+#. module: hr_attendance_custom_ext
+#. odoo-python
+#: code:addons/hr_attendance_custom_ext/models/hr_employee.py:0
+msgid "Office geolocation is not configured. Please contact HR."
+msgstr "لم يتم إعداد الموقع الجغرافي للمكتب. يرجى التواصل مع الموارد البشرية."
+
+#. module: hr_attendance_custom_ext
+#. odoo-python
+#: code:addons/hr_attendance_custom_ext/views/hr_attendance_daily_status_views.xml:0
+#. odoo-python
+#: code:addons/hr_attendance_custom_ext/views/hr_attendance_views.xml:0
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_hr_attendance__is_on_approved_leave
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_hr_attendance_daily_status__is_on_approved_leave
+#: model_terms:ir.ui.view,arch_db:hr_attendance_custom_ext.hr_attendance_view_filter_custom
+#: model_terms:ir.ui.view,arch_db:hr_attendance_custom_ext.view_hr_attendance_daily_status_search
+msgid "On Approved Leave"
+msgstr "في إجازة معتمدة"
+
+#. module: hr_attendance_custom_ext
+#. odoo-javascript
+#: code:addons/hr_attendance_custom_ext/static/src/components/attendance_menu/attendance_menu_patch.js:0
+#: model:ir.model.fields.selection,name:hr_attendance_custom_ext.selection__hr_employee__hikvision_presence_status__on_break
+msgid "On Break"
+msgstr "في استراحة"
+
+#. module: hr_attendance_custom_ext
+#. odoo-python
+#: code:addons/hr_attendance_custom_ext/views/hr_attendance_daily_status_views.xml:0
+#. odoo-python
+#: code:addons/hr_attendance_custom_ext/views/hr_attendance_views.xml:0
+#: model:ir.model.fields.selection,name:hr_attendance_custom_ext.selection__hr_attendance__attendance_status__on_leave
+#: model:ir.model.fields.selection,name:hr_attendance_custom_ext.selection__hr_attendance_daily_status__status__on_leave
+#: model_terms:ir.ui.view,arch_db:hr_attendance_custom_ext.hr_attendance_view_filter_custom
+#: model_terms:ir.ui.view,arch_db:hr_attendance_custom_ext.view_hr_attendance_daily_status_search
+msgid "On Leave"
+msgstr "في إجازة"
+
+#. module: hr_attendance_custom_ext
+#. odoo-python
+#: code:addons/hr_attendance_custom_ext/models/hr_employee_face_template.py:0
+msgid "Only one active face template is allowed per employee."
+msgstr "يُسمح بقالب وجه نشط واحد فقط لكل موظف."
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_hr_employee__face_reference_id
+msgid "Optional external face enrollment reference."
+msgstr "مرجع تسجيل وجه خارجي اختياري."
+
+#. module: hr_attendance_custom_ext
+#. odoo-python
+#: code:addons/hr_attendance_custom_ext/views/hr_employee_views.xml:0
+#: model_terms:ir.ui.view,arch_db:hr_attendance_custom_ext.view_employee_form_attendance_custom
+msgid "Optional external reference"
+msgstr "مرجع خارجي اختياري"
+
+#. module: hr_attendance_custom_ext
+#. odoo-python
+#: code:addons/hr_attendance_custom_ext/views/hr_employee_face_enroll_wizard_views.xml:0
+#: model_terms:ir.ui.view,arch_db:hr_attendance_custom_ext.view_hr_employee_face_enroll_wizard_form
+msgid "Optional notes about lighting, angle, or device used…"
+msgstr "ملاحظات اختيارية عن الإضاءة أو الزاوية أو الجهاز المستخدم…"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields.selection,name:hr_attendance_custom_ext.selection__resource_calendar_attendance__location_type__other
+msgid "Other"
+msgstr "أخرى"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields.selection,name:hr_attendance_custom_ext.selection__hr_attendance__attendance_source__pin
+#: model:ir.model.fields.selection,name:hr_attendance_custom_ext.selection__hr_attendance_punch_log__attendance_source__pin
+msgid "PIN"
+msgstr "رمز PIN"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.actions.act_window,name:hr_attendance_custom_ext.action_pin_attendance_logs_report
+#: model:ir.ui.menu,name:hr_attendance_custom_ext.menu_pin_attendance_logs_report
+msgid "PIN Attendance Logs"
+msgstr "سجل حضور رمز PIN"
+
+#. module: hr_attendance_custom_ext
+#. odoo-python
+#: code:addons/hr_attendance_custom_ext/models/hr_employee.py:0
+msgid "PIN cannot be empty."
+msgstr "لا يمكن أن يكون رمز PIN فارغاً."
+
+#. module: hr_attendance_custom_ext
+#. odoo-javascript
+#: code:addons/hr_attendance_custom_ext/static/src/components/home_pin_dialog/home_pin_dialog.js:0
+msgid "PIN check-in failed."
+msgstr "فشل تسجيل الحضور برمز PIN."
+
+#. module: hr_attendance_custom_ext
+#. odoo-javascript
+#: code:addons/hr_attendance_custom_ext/static/src/components/home_pin_dialog/home_pin_dialog.js:0
+msgid "PIN code"
+msgstr "رمز PIN"
+
+#. module: hr_attendance_custom_ext
+#. odoo-python
+#: code:addons/hr_attendance_custom_ext/models/hr_employee.py:0
+msgid "PIN must be at least 4 digits."
+msgstr "يجب أن يتكون رمز PIN من 4 أرقام على الأقل."
+
+#. module: hr_attendance_custom_ext
+#. odoo-python
+#: code:addons/hr_attendance_custom_ext/models/hr_employee.py:0
+msgid "PIN must contain digits only."
+msgstr "يجب أن يحتوي رمز PIN على أرقام فقط."
+
+#. module: hr_attendance_custom_ext
+#. odoo-python
+#: code:addons/hr_attendance_custom_ext/views/face_attendance_log_views.xml:0
+#: model:ir.model.fields.selection,name:hr_attendance_custom_ext.selection__face_attendance_log__verification_status__passed
+#: model_terms:ir.ui.view,arch_db:hr_attendance_custom_ext.view_face_attendance_log_search
+msgid "Passed"
+msgstr "ناجح"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields.selection,name:hr_attendance_custom_ext.selection__face_attendance_log__verification_status__pending
+msgid "Pending"
+msgstr "قيد الانتظار"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_fingerprint_device__auto_sync
+msgid "Poll the device over the network on a schedule. "
+msgstr "استطلاع الجهاز عبر الشبكة وفق جدول زمني."
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_fingerprint_device__sync_interval_minutes
+msgid "Polling Fallback Interval (minutes)"
+msgstr "فترة الاستطلاع الاحتياطي (دقائق)"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_fingerprint_device__device_port
+msgid "Port"
+msgstr "المنفذ"
+
+#. module: hr_attendance_custom_ext
+#. odoo-javascript
+#: code:addons/hr_attendance_custom_ext/static/src/components/face_check_dialog/face_check_dialog.js:0
+msgid "Position your face in the frame to verify your identity before checking in."
+msgstr "ضع وجهك داخل الإطار للتحقق من هويتك قبل تسجيل الحضور."
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields.selection,name:hr_attendance_custom_ext.selection__hr_attendance__attendance_status__present
+#: model:ir.model.fields.selection,name:hr_attendance_custom_ext.selection__hr_attendance_daily_status__status__present
+msgid "Present"
+msgstr "حاضر"
+
+#. module: hr_attendance_custom_ext
+#. odoo-python
+#: code:addons/hr_attendance_custom_ext/views/fingerprint_device_log_views.xml:0
+#: model:ir.model.fields.selection,name:hr_attendance_custom_ext.selection__fingerprint_device_log__state__processed
+#: model_terms:ir.ui.view,arch_db:hr_attendance_custom_ext.view_fingerprint_device_log_search
+msgid "Processed"
+msgstr "تمت المعالجة"
+
+#. module: hr_attendance_custom_ext
+#. odoo-python
+#: code:addons/hr_attendance_custom_ext/views/fingerprint_attendance_policy_views.xml:0
+#: model_terms:ir.ui.view,arch_db:hr_attendance_custom_ext.view_fingerprint_attendance_policy_form
+msgid "Processing"
+msgstr "المعالجة"
+
+#. module: hr_attendance_custom_ext
+#. odoo-python
+#: code:addons/hr_attendance_custom_ext/views/face_attendance_log_views.xml:0
+#: model_terms:ir.ui.view,arch_db:hr_attendance_custom_ext.view_face_attendance_log_form
+msgid "Provider Response"
+msgstr "استجابة المزود"
+
+#. module: hr_attendance_custom_ext
+#. odoo-python
+#: code:addons/hr_attendance_custom_ext/views/hr_attendance_daily_status_views.xml:0
+#. odoo-python
+#: code:addons/hr_attendance_custom_ext/views/hr_attendance_views.xml:0
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_hr_attendance__is_public_holiday
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_hr_attendance_daily_status__is_public_holiday
+#: model:ir.model.fields.selection,name:hr_attendance_custom_ext.selection__hr_attendance__attendance_status__on_holiday
+#: model:ir.model.fields.selection,name:hr_attendance_custom_ext.selection__hr_attendance_daily_status__status__on_holiday
+#: model_terms:ir.ui.view,arch_db:hr_attendance_custom_ext.hr_attendance_view_filter_custom
+#: model_terms:ir.ui.view,arch_db:hr_attendance_custom_ext.view_hr_attendance_daily_status_search
+msgid "Public Holiday"
+msgstr "عطلة رسمية"
+
+#. module: hr_attendance_custom_ext
+#. odoo-python
+#: code:addons/hr_attendance_custom_ext/views/hr_attendance_views.xml:0
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_hr_attendance__punch_log_ids
+#: model_terms:ir.ui.view,arch_db:hr_attendance_custom_ext.hr_attendance_view_form_custom
+msgid "Punch History"
+msgstr "سجل التسجيلات"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_fingerprint_device_log__punch_time
+msgid "Punch Time"
+msgstr "وقت التسجيل"
+
+#. module: hr_attendance_custom_ext
+#. odoo-python
+#: code:addons/hr_attendance_custom_ext/views/hr_attendance_views.xml:0
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_hr_attendance__hikvision_punch_type
+#: model_terms:ir.ui.view,arch_db:hr_attendance_custom_ext.hr_attendance_view_filter_custom
+msgid "Punch Type"
+msgstr "نوع التسجيل"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_res_company__office_geo_latitude
+msgid "Reference latitude for office check-in geofencing."
+msgstr "خط عرض المرجع لتسييج الموقع الجغرافي لتسجيل الحضور من المكتب."
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_res_company__office_geo_longitude
+msgid "Reference longitude for office check-in geofencing."
+msgstr "خط طول المرجع لتسييج الموقع الجغرافي لتسجيل الحضور من المكتب."
+
+#. module: hr_attendance_custom_ext
+#. odoo-python
+#: code:addons/hr_attendance_custom_ext/views/fingerprint_device_views.xml:0
+#: model_terms:ir.ui.view,arch_db:hr_attendance_custom_ext.view_fingerprint_device_form
+msgid "Regenerate Token"
+msgstr "إعادة إنشاء الرمز"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_res_company__face_quality_check_enabled
+msgid "Reject blurry, low-resolution, or small-face images."
+msgstr "رفض الصور الضبابية أو منخفضة الدقة أو الوجوه الصغيرة."
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_hr_employee__remote_attendance_allowed
+msgid "Remote Face Attendance Allowed"
+msgstr "السماح بالحضور عن بُعد بالوجه"
+
+#. module: hr_attendance_custom_ext
+#. odoo-python
+#: code:addons/hr_attendance_custom_ext/models/face_attendance_log.py:0
+msgid "Remote face attendance is not allowed for this employee."
+msgstr "حضور الوجه عن بُعد غير مسموح لهذا الموظف."
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_res_company__face_liveness_required
+msgid "Reserved for future advanced liveness detection."
+msgstr "محجوز للكشف الحيوي المتقدم مستقبلاً."
+
+#. module: hr_attendance_custom_ext
+#. odoo-python
+#: code:addons/hr_attendance_custom_ext/views/hr_employee_views.xml:0
+#: model:ir.model.fields.selection,name:hr_attendance_custom_ext.selection__hr_employee__face_enrollment_status__reset
+#: model_terms:ir.ui.view,arch_db:hr_attendance_custom_ext.view_employee_form_attendance_custom
+msgid "Reset"
+msgstr "إعادة تعيين"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields.selection,name:hr_attendance_custom_ext.selection__fingerprint_device__sync_status__running
+msgid "Running"
+msgstr "قيد التشغيل"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_face_attendance_log__selfie_image
+msgid "Selfie Image"
+msgstr "صورة سيلفي"
+
+#. module: hr_attendance_custom_ext
+#. odoo-python
+#: code:addons/hr_attendance_custom_ext/models/face_attendance_log.py:0
+msgid "Selfie image is required for face verification."
+msgstr "صورة السيلفي مطلوبة للتحقق من الوجه."
+
+#. module: hr_attendance_custom_ext
+#. odoo-python
+#: code:addons/hr_attendance_custom_ext/views/res_config_settings_views.xml:0
+#: model_terms:ir.ui.view,arch_db:hr_attendance_custom_ext.res_config_settings_view_form_attendance_custom
+msgid "Shamsieh Custom Attendance"
+msgstr "حضور شمسية المخصص"
+
+#. module: hr_attendance_custom_ext
+#. odoo-javascript
+#: code:addons/hr_attendance_custom_ext/static/src/components/attendance_menu/attendance_menu_patch.js:0
+msgid "Since"
+msgstr "منذ"
+
+#. module: hr_attendance_custom_ext
+#. odoo-python
+#: code:addons/hr_attendance_custom_ext/views/fingerprint_device_log_views.xml:0
+#: model_terms:ir.ui.view,arch_db:hr_attendance_custom_ext.view_fingerprint_device_log_search
+msgid "State"
+msgstr "الحالة"
+
+#. module: hr_attendance_custom_ext
+#. odoo-python
+#: code:addons/hr_attendance_custom_ext/views/hr_attendance_daily_status_views.xml:0
+#: model_terms:ir.ui.view,arch_db:hr_attendance_custom_ext.view_hr_attendance_daily_status_search
+msgid "Status"
+msgstr "الحالة"
+
+#. module: hr_attendance_custom_ext
+#. odoo-javascript
+#: code:addons/hr_attendance_custom_ext/static/src/components/attendance_menu/attendance_menu_patch.js:0
+msgid "Stay checked in"
+msgstr "البقاء مسجلاً للحضور"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_fingerprint_device__store_ignored_events
+msgid "Store All Device Events"
+msgstr "حفظ جميع أحداث الجهاز"
+
+#. module: hr_attendance_custom_ext
+#. odoo-python
+#: code:addons/hr_attendance_custom_ext/views/res_config_settings_views.xml:0
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_res_company__face_store_raw_images
+#: model_terms:ir.ui.view,arch_db:hr_attendance_custom_ext.res_config_settings_view_form_attendance_custom
+msgid "Store Raw Face Images"
+msgstr "حفظ صور الوجه الأصلية"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_fingerprint_device_log__employee_name
+msgid "Stored Employee Name"
+msgstr "اسم الموظف المخزّن"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields.selection,name:hr_attendance_custom_ext.selection__fingerprint_device__sync_status__success
+msgid "Success"
+msgstr "نجاح"
+
+#. module: hr_attendance_custom_ext
+#. odoo-python
+#: code:addons/hr_attendance_custom_ext/views/fingerprint_device_views.xml:0
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_fingerprint_device__log_ids
+#: model_terms:ir.ui.view,arch_db:hr_attendance_custom_ext.view_fingerprint_device_form
+msgid "Sync Logs"
+msgstr "سجلات المزامنة"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_fingerprint_device__sync_lookback_hours
+msgid "Sync Lookback (hours)"
+msgstr "نافذة جلب السجلات (ساعات)"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_fingerprint_device__sync_retry_count
+msgid "Sync Retries"
+msgstr "إعادة محاولات المزامنة"
+
+#. module: hr_attendance_custom_ext
+#. odoo-python
+#: code:addons/hr_attendance_custom_ext/models/fingerprint_device.py:0
+msgid "Sync failed: %s"
+msgstr "فشلت المزامنة: %s"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields.selection,name:hr_attendance_custom_ext.selection__hr_attendance__attendance_source__systray
+#: model:ir.model.fields.selection,name:hr_attendance_custom_ext.selection__hr_attendance_punch_log__attendance_source__systray
+msgid "Systray"
+msgstr "شريط النظام"
+
+#. module: hr_attendance_custom_ext
+#. odoo-python
+#: code:addons/hr_attendance_custom_ext/views/hr_attendance_daily_status_views.xml:0
+#: model_terms:ir.ui.view,arch_db:hr_attendance_custom_ext.view_hr_attendance_daily_status_search
+msgid "This Month"
+msgstr "هذا الشهر"
+
+#. module: hr_attendance_custom_ext
+#. odoo-python
+#: code:addons/hr_attendance_custom_ext/views/fingerprint_device_log_views.xml:0
+#: model_terms:ir.ui.view,arch_db:hr_attendance_custom_ext.view_fingerprint_device_log_search
+msgid "Today"
+msgstr "اليوم"
+
+#. module: hr_attendance_custom_ext
+#: model_terms:ir.ui.view,arch_db:hr_attendance_custom_ext.res_config_settings_view_form_attendance_custom
+msgid "Tolerance"
+msgstr "السماحية"
+
+#. module: hr_attendance_custom_ext
+#. odoo-javascript
+#: code:addons/hr_attendance_custom_ext/static/src/components/attendance_menu/attendance_menu_patch.js:0
+msgid "Total today"
+msgstr "إجمالي اليوم"
+
+#. module: hr_attendance_custom_ext
+#. odoo-javascript
+#: code:addons/hr_attendance_custom_ext/static/src/components/face_check_dialog/face_check_dialog.js:0
+msgid "Unable to access the camera. Please allow camera access and try again."
+msgstr "تعذر الوصول إلى الكاميرا. يرجى السماح بالوصول والمحاولة مجدداً."
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields.selection,name:hr_attendance_custom_ext.selection__fingerprint_device_log__punch_type__unknown
+msgid "Unknown"
+msgstr "غير معروف"
+
+#. module: hr_attendance_custom_ext
+#. odoo-python
+#: code:addons/hr_attendance_custom_ext/views/fingerprint_device_log_views.xml:0
+#: model_terms:ir.ui.view,arch_db:hr_attendance_custom_ext.view_fingerprint_device_log_search
+msgid "Unmapped"
+msgstr "غير مربوط"
+
+#. module: hr_attendance_custom_ext
+#. odoo-python
+#: code:addons/hr_attendance_custom_ext/models/fingerprint_device.py:0
+msgid "Unmapped fingerprint events"
+msgstr "أحداث بصمة غير مربوطة بموظف"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_hr_employee__biometric_device_user_id
+msgid "User ID on the fingerprint device; used to map device logs to this employee."
+msgstr "معرّف المستخدم في جهاز البصمة؛ يُستخدم لربط سجلات الجهاز بهذا الموظف."
+
+#. module: hr_attendance_custom_ext
+#. odoo-javascript
+#: code:addons/hr_attendance_custom_ext/static/src/components/face_check_dialog/face_check_dialog.js:0
+msgid "Verifying..."
+msgstr "جارٍ التحقق..."
+
+#. module: hr_attendance_custom_ext
+#. odoo-python
+#: code:addons/hr_attendance_custom_ext/views/hr_employee_views.xml:0
+#: model_terms:ir.ui.view,arch_db:hr_attendance_custom_ext.view_employee_form_attendance_custom
+msgid "View Templates"
+msgstr "عرض القوالب"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_fingerprint_device__sync_interval_minutes
+msgid "When HTTP listening is active and receiving events, polling is skipped. "
+msgstr "عند تفعيل الاستقبال HTTP واستقبال الأحداث، يُتخطى الاستطلاع."
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_fingerprint_device__store_ignored_events
+msgid "When enabled, door/system events are saved with state Ignored. "
+msgstr "عند التفعيل، تُحفظ أحداث الباب/النظام بحالة متجاهل."
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_res_company__face_store_raw_images
+msgid "When enabled, enrollment images may be stored as attachments."
+msgstr "عند التفعيل، قد تُحفظ صور التسجيل كمرفقات."
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_fingerprint_device__http_listening_enabled
+msgid "When enabled, the device pushes access events to Odoo in real time. "
+msgstr "عند التفعيل، يرسل الجهاز أحداث الدخول إلى Odoo في الوقت الفعلي."
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_hr_attendance__hikvision_presence_status
+msgid "Work State"
+msgstr "حالة العمل"
+
+#. module: hr_attendance_custom_ext
+#. odoo-javascript
+#: code:addons/hr_attendance_custom_ext/static/src/components/attendance_menu/attendance_menu_patch.js:0
+#: model:ir.model.fields.selection,name:hr_attendance_custom_ext.selection__hr_employee__hikvision_presence_status__working
+msgid "Working"
+msgstr "في العمل"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_hr_attendance_daily_status__calendar_id
+msgid "Working Schedule"
+msgstr "جدول العمل"
+
+#. module: hr_attendance_custom_ext
+#. odoo-python
+#: code:addons/hr_attendance_custom_ext/models/hr_employee.py:0
+msgid "You are already checked in."
+msgstr "أنت مسجّل للحضور بالفعل."
+
+#. module: hr_attendance_custom_ext
+#. odoo-python
+#: code:addons/hr_attendance_custom_ext/models/hr_employee.py:0
+msgid "You have already checked in today. Only one check-in per day is allowed."
+msgstr "لقد سجّلت حضورك اليوم بالفعل. يُسمح بتسجيل حضور واحد فقط في اليوم."
+
+#. module: hr_attendance_custom_ext
+#. odoo-python
+#: code:addons/hr_attendance_custom_ext/models/hr_employee.py:0
+msgid "You must be at the office to check in. You are %(distance).0f m away (allowed radius: %(radius)s m)."
+msgstr "يجب أن تكون في المكتب لتسجيل الحضور. أنت على بُعد %(distance).0f م (النطاق المسموح: %(radius)s م)."
+
+#. module: hr_attendance_custom_ext
+#. odoo-python
+#: code:addons/hr_attendance_custom_ext/models/hr_employee.py:0
+#. odoo-javascript
+#: code:addons/hr_attendance_custom_ext/static/src/components/attendance_menu/attendance_menu_patch.js:0
+msgid "Your device location is required to check in from the office."
+msgstr "مطلوب موقع جهازك لتسجيل الحضور من المكتب."
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields.selection,name:hr_attendance_custom_ext.selection__fingerprint_device__api_type__zkteco
+msgid "ZKTeco"
+msgstr "ZKTeco"
+
+#. module: hr_attendance_custom_ext
+#. odoo-python
+#: code:addons/hr_attendance_custom_ext/views/fingerprint_device_views.xml:0
+#: model_terms:ir.ui.view,arch_db:hr_attendance_custom_ext.view_fingerprint_device_form
+msgid "e.g. Asia/Amman"
+msgstr "مثال: Asia/Amman"
+
+#. module: hr_attendance_custom_ext
+#: model_terms:ir.ui.view,arch_db:hr_attendance_custom_ext.res_config_settings_view_form_attendance_custom
+msgid "meters"
+msgstr "أمتار"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.actions.act_window,name:hr_attendance_custom_ext.action_hr_employee_live_status
+#: model:ir.ui.menu,name:hr_attendance_custom_ext.menu_hr_employee_live_status
+#: model_terms:ir.ui.view,arch_db:hr_attendance_custom_ext.view_hr_employee_live_status_list
+#: model_terms:ir.ui.view,arch_db:hr_attendance_custom_ext.view_hr_employee_live_status_search
+msgid "Live Status"
+msgstr "الحالة المباشرة"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_hr_employee__live_check_in
+msgid "Checked In At"
+msgstr "وقت تسجيل الحضور"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_hr_employee__current_break_start
+msgid "Break Started"
+msgstr "بدء الاستراحة"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_hr_employee__current_break_hours
+msgid "Break Duration"
+msgstr "مدة الاستراحة"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields,help:hr_attendance_custom_ext.field_hr_employee__live_check_in
+msgid "Check-in time of the current open attendance."
+msgstr "وقت تسجيل الحضور للحضور المفتوح الحالي."
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields,help:hr_attendance_custom_ext.field_hr_employee__current_break_start
+msgid "Start time of the current break (when status is On Break)."
+msgstr "وقت بدء الاستراحة الحالية (عندما تكون الحالة في استراحة)."
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields,help:hr_attendance_custom_ext.field_hr_employee__current_break_hours
+msgid "Elapsed hours of the current break."
+msgstr "الساعات المنقضية من الاستراحة الحالية."
+
+#. module: hr_attendance_custom_ext
+#: model_terms:ir.actions.act_window,help:hr_attendance_custom_ext.action_hr_employee_live_status
+msgid "No employees are currently working or on break."
+msgstr "لا يوجد موظفون يعملون أو في استراحة حالياً."
+
+#. module: hr_attendance_custom_ext
+#: model_terms:ir.actions.act_window,help:hr_attendance_custom_ext.action_hr_employee_live_status
+msgid "Clear the Present filter to also see checked-out employees."
+msgstr "أزل فلتر الحاضر لعرض الموظفين المسجّل انصرافهم أيضاً."

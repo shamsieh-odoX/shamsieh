@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="group_crm_create" model="res.groups">
+        <field name="name">CRM Create</field>
+        <field name="comment">Can create CRM leads/opportunities, edit assigned records, and log activities.</field>
+        <field name="sequence">15</field>
+        <field name="privilege_id" ref="sales_team.res_groups_privilege_sales"/>
+        <field name="implied_ids" eval="[(4, ref('sales_team.group_sale_salesman')), (4, ref('crm.group_use_lead'))]"/>
+    </record>
+
+    <data noupdate="1">
+
+        <record id="sales_team.group_sale_salesman" model="res.groups">
+            <field name="implied_ids" eval="[(4, ref('crm.group_use_lead'))]"/>
+        </record>
+
+        <record id="crm.access_crm_lead" model="ir.model.access">
+            <field name="perm_write" eval="0"/>
+            <field name="perm_create" eval="0"/>
+        </record>
+
+        <record id="access_crm_lead_crm_create" model="ir.model.access">
+            <field name="name">crm.lead.crm.create</field>
+            <field name="model_id" ref="crm.model_crm_lead"/>
+            <field name="group_id" ref="group_crm_create"/>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="1"/>
+            <field name="perm_create" eval="1"/>
+            <field name="perm_unlink" eval="0"/>
+        </record>
+
+        <record id="access_crm_lead_all_leads" model="ir.model.access">
+            <field name="name">crm.lead.all.leads</field>
+            <field name="model_id" ref="crm.model_crm_lead"/>
+            <field name="group_id" ref="sales_team.group_sale_salesman_all_leads"/>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="1"/>
+            <field name="perm_create" eval="1"/>
+            <field name="perm_unlink" eval="0"/>
+        </record>
+
+        <record id="access_crm_team_target_user" model="ir.model.access">
+            <field name="name">crm.team.target.user</field>
+            <field name="model_id" ref="model_crm_team_target"/>
+            <field name="group_id" ref="sales_team.group_sale_salesman"/>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="0"/>
+            <field name="perm_create" eval="0"/>
+            <field name="perm_unlink" eval="0"/>
+        </record>
+
+        <record id="access_crm_team_target_manager" model="ir.model.access">
+            <field name="name">crm.team.target.manager</field>
+            <field name="model_id" ref="model_crm_team_target"/>
+            <field name="group_id" ref="sales_team.group_sale_manager"/>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="1"/>
+            <field name="perm_create" eval="1"/>
+            <field name="perm_unlink" eval="1"/>
+        </record>
+
+    </data>
+</odoo>

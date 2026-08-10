@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+
+    <record id="user_crm_sales_create" model="res.users">
+        <field name="name">CRM Sales User (Create)</field>
+        <field name="login">crm.sales.create</field>
+        <field name="password">crm.sales.create</field>
+        <field name="group_ids" eval="[
+            (4, ref('base.group_user')),
+            (4, ref('sales_team.group_sale_salesman')),
+            (4, ref('crm_custom_ext.group_crm_create')),
+            (4, ref('crm.group_use_lead')),
+        ]"/>
+    </record>
+
+    <record id="user_crm_sales_readonly" model="res.users">
+        <field name="name">CRM Sales User (Read Only)</field>
+        <field name="login">crm.sales.readonly</field>
+        <field name="password">crm.sales.readonly</field>
+        <field name="group_ids" eval="[
+            (4, ref('base.group_user')),
+            (4, ref('sales_team.group_sale_salesman')),
+            (4, ref('crm.group_use_lead')),
+        ]"/>
+    </record>
+
+    <record id="user_crm_sales_manager" model="res.users">
+        <field name="name">CRM Sales Manager</field>
+        <field name="login">crm.sales.manager</field>
+        <field name="password">crm.sales.manager</field>
+        <field name="group_ids" eval="[
+            (4, ref('base.group_user')),
+            (4, ref('sales_team.group_sale_manager')),
+            (4, ref('crm_custom_ext.group_crm_create')),
+            (4, ref('crm.group_use_lead')),
+        ]"/>
+    </record>
+
+</odoo>

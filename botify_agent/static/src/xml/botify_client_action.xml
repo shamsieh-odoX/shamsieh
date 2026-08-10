@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="botify_agent.Assistant">
+        <div class="o_botify_assistant d-flex flex-column h-100 p-3">
+            <div t-if="state.error" class="alert alert-warning" role="alert">
+                <t t-esc="state.error"/>
+            </div>
+
+            <div t-elif="!state.ready" class="text-muted">
+                Connecting you to the assistant…
+            </div>
+
+            <t t-else="">
+                <div class="text-muted small mb-2">
+                    Signed in as <strong t-esc="state.userName"/>.
+                    The assistant only sees what your Odoo permissions allow.
+                </div>
+
+                <div class="o_botify_messages flex-grow-1 overflow-auto mb-2">
+                    <t t-foreach="state.messages" t-as="message" t-key="message_index">
+                        <div class="mb-2"
+                             t-att-class="message.role === 'user' ? 'text-end' : 'text-start'">
+                            <span class="d-inline-block p-2 rounded"
+                                  t-att-class="message.role === 'user' ? 'bg-primary text-white' : 'bg-light'">
+                                <t t-esc="message.content"/>
+                            </span>
+                        </div>
+                    </t>
+                </div>
+
+                <div class="d-flex gap-2">
+                    <textarea class="form-control" rows="2"
+                              placeholder="Ask about your orders, customers, tasks…"
+                              t-model="state.draft"
+                              t-on-keydown="onKeydown"/>
+                    <button class="btn btn-primary align-self-end"
+                            t-att-disabled="state.sending"
+                            t-on-click="sendMessage">
+                        Send
+                    </button>
+                </div>
+            </t>
+        </div>
+    </t>
+
+</templates>

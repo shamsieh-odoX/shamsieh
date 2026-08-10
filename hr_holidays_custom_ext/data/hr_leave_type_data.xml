@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record id="hr_holidays.leave_type_sick_time_off" model="hr.leave.type">
+        <field name="active" eval="False"/>
+    </record>
+
+    <record id="leave_type_sick_leave" model="hr.leave.type">
+        <field name="name">Sick Leave</field>
+        <field name="requires_allocation" eval="True"/>
+        <field name="allocation_validation_type">no_validation</field>
+        <field name="leave_validation_type">hr</field>
+        <field name="request_unit">day</field>
+        <field name="leave_notif_subtype_id" ref="hr_holidays.mt_leave_sick"/>
+        <field name="allocation_notif_subtype_id" ref="hr_holidays.mt_leave_allocation"/>
+        <field name="responsible_ids" eval="[(4, ref('base.user_admin'))]"/>
+        <field name="support_document" eval="True"/>
+        <field name="icon_id" ref="hr_holidays.icon_21"/>
+        <field name="color">3</field>
+        <field name="company_id" eval="False"/>
+        <field name="country_id" eval="False"/>
+        <field name="sequence">2</field>
+    </record>
+
+    <record id="leave_type_hourly_departure" model="hr.leave.type">
+        <field name="name">Hourly Departure</field>
+        <field name="requires_allocation" eval="True"/>
+        <field name="allocation_validation_type">no_validation</field>
+        <field name="leave_validation_type">manager</field>
+        <field name="request_unit">hour</field>
+        <field name="is_hourly_departure" eval="True"/>
+        <field name="leave_notif_subtype_id" ref="hr_holidays.mt_leave"/>
+        <field name="allocation_notif_subtype_id" ref="hr_holidays.mt_leave_allocation"/>
+        <field name="responsible_ids" eval="[(4, ref('base.user_admin'))]"/>
+        <field name="company_id" eval="False"/>
+        <field name="country_id" eval="False"/>
+        <field name="sequence">15</field>
+        <field name="color">4</field>
+    </record>
+</odoo>

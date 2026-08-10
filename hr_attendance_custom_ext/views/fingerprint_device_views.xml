@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_fingerprint_device_tree" model="ir.ui.view">
+        <field name="name">fingerprint.device.list</field>
+        <field name="model">fingerprint.device</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="location_label" optional="show"/>
+                <field name="device_ip"/>
+                <field name="device_port" optional="hide"/>
+                <field name="api_type"/>
+                <field name="sync_status"/>
+                <field name="last_sync_at"/>
+                <field name="log_count" string="Logs"/>
+                <field name="active"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_fingerprint_device_form" model="ir.ui.view">
+        <field name="name">fingerprint.device.form</field>
+        <field name="model">fingerprint.device</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_test_connection" type="object" string="Test Connection"
+                            class="btn-secondary"
+                            groups="hr_attendance_custom_ext.group_fingerprint_device_manager"
+                            invisible="api_type != 'hikvision'"/>
+                    <button name="action_sync_now" type="object" string="Sync Now"
+                            class="btn-primary"
+                            groups="hr_attendance_custom_ext.group_fingerprint_device_manager"
+                            invisible="api_type not in ('hikvision', 'file_import')"/>
+                    <field name="sync_status" widget="statusbar" statusbar_visible="idle,running,success,error"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button class="oe_stat_button" type="object" name="action_view_logs"
+                                icon="fa-list" groups="hr_attendance.group_hr_attendance_officer">
+                            <field name="log_count" widget="statinfo" string="Sync Logs"/>
+                        </button>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="location_label" placeholder="e.g. Branch B / Warehouse"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                            <field name="policy_id"/>
+                            <field name="api_type"/>
+                            <field name="active"/>
+                            <field name="sync_lookback_hours"
+                                   invisible="api_type != 'hikvision'"/>
+                            <field name="device_timezone"
+                                   invisible="api_type not in ('hikvision', 'zkteco')"
+                                   placeholder="e.g. Asia/Amman"/>
+                            <field name="connection_timeout"
+                                   invisible="api_type != 'hikvision'"/>
+                            <field name="sync_retry_count"
+                                   invisible="api_type != 'hikvision'"/>
+                            <field name="store_ignored_events" invisible="api_type != 'hikvision'"/>
+                        </group>
+                        <group>
+                            <field name="device_ip"/>
+                            <field name="device_port" invisible="api_type == 'zkteco'"/>
+                            <field name="username" invisible="api_type == 'zkteco'"/>
+                            <field name="password" password="True"
+                                   string="Password / Comm Key"
+                                   invisible="api_type == 'zkteco'"/>
+                            <field name="zkteco_force_udp" invisible="1"/>
+                            <field name="api_key" password="True" invisible="api_type != 'custom_api'"/>
+                        </group>
+                    </group>
+                    <group string="File Import" invisible="api_type != 'file_import'">
+                        <field name="import_file_name" invisible="1"/>
+                        <field name="import_file_data" filename="import_file_name"/>
+                    </group>
+                    <group string="Real-time Punch API (like Hikvision)" invisible="api_type != 'zkteco'">
+                        <div class="text-muted" colspan="2">
+                            No Sync Now. The local live-capture bridge (or any client) POSTs each
+                            punch to this URL the moment it happens:
+                            check_in, check_out, break_out, break_in.
+                        </div>
+                        <field name="zkteco_punch_enabled"/>
+                        <field name="zkteco_punch_url" readonly="1" widget="CopyClipboardChar"/>
+                        <button name="action_regenerate_zkteco_punch_token"
+                                type="object"
+                                string="Regenerate Punch Token"
+                                class="btn-secondary"
+                                groups="hr_attendance_custom_ext.group_fingerprint_device_manager"
+                                invisible="not zkteco_punch_enabled"/>
+                        <field name="zkteco_serial_number" placeholder="e.g. SRN5244400238"/>
+                        <field name="http_listening_last_at" string="Last Punch At" readonly="1"/>
+                        <field name="last_sync_message" string="Last Punch Message" readonly="1"/>
+                    </group>
+                    <group string="Live ADMS Push (optional)" invisible="1">
+                        <field name="zkteco_adms_enabled"/>
+                        <field name="zkteco_adms_url" readonly="1"/>
+                    </group>
+                    <group string="Automatic Sync" invisible="api_type == 'zkteco'">
+                        <div class="text-muted" colspan="2">
+                            With HTTP Listening enabled (recommended for Hikvision), scans appear in
+                            Odoo within seconds via device push. Turn off Auto Sync when Odoo runs
+                            in the cloud and cannot reach the device LAN IP (Odoo.sh). Polling is
+                            only needed as a fallback on the same local network.
+                        </div>
+                        <field name="auto_sync"/>
+                        <field name="sync_interval_minutes"
+                               invisible="not auto_sync"
+                               readonly="not auto_sync"/>
+                        <field name="last_sync_at" readonly="1"/>
+                        <field name="last_sync_checkpoint" readonly="1"/>
+                        <field name="last_successful_event_serial" readonly="1"/>
+                        <field name="last_sync_message" readonly="1"/>
+                    </group>
+                    <group string="Live HTTP Listening" invisible="api_type != 'hikvision'">
+                        <div class="text-muted" colspan="2">
+                            Copy the Callback URL into the device configuration
+                            (Network / HTTP Listening). The device must be able to reach your Odoo
+                            server. When pushes are flowing, polling is skipped automatically.
+                        </div>
+                        <field name="http_listening_enabled"/>
+                        <field name="http_listening_url" readonly="1" widget="CopyClipboardChar"/>
+                        <button name="action_regenerate_http_listening_token"
+                                type="object"
+                                string="Regenerate Token"
+                                class="btn-secondary"
+                                groups="hr_attendance_custom_ext.group_fingerprint_device_manager"
+                                invisible="not http_listening_enabled"/>
+                        <field name="http_listening_allowed_ips"/>
+                        <field name="http_listening_last_at" readonly="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_fingerprint_device" model="ir.actions.act_window">
+        <field name="name">Fingerprint Devices</field>
+        <field name="res_model">fingerprint.device</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record id="ir_cron_fingerprint_sync_all" model="ir.cron">
+        <field name="name">Fingerprint: Sync All Devices</field>
+        <field name="model_id" ref="model_fingerprint_device"/>
+        <field name="state">code</field>
+        <field name="code">model._cron_sync_all()</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">minutes</field>
+        <field name="priority">1</field>
+        <field name="active" eval="True"/>
+    </record>
+
+    <record id="ir_cron_generate_daily_attendance_status" model="ir.cron">
+        <field name="name">Attendance: Generate Daily Attendance Status</field>
+        <field name="model_id" ref="model_hr_attendance_daily_status"/>
+        <field name="state">code</field>
+        <field name="code">model._cron_generate_daily_status()</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <field name="active" eval="True"/>
+    </record>
+
+    <record id="ir_cron_attendance_recompute_status" model="ir.cron">
+        <field name="name">Attendance: Recompute Late/Early Status</field>
+        <field name="model_id" ref="hr_attendance.model_hr_attendance"/>
+        <field name="state">code</field>
+        <field name="code">model._cron_recompute_status()</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <field name="active" eval="True"/>
+    </record>
+
+    <record id="ir_cron_attendance_flag_missing_checkouts" model="ir.cron">
+        <field name="name">Attendance: Flag Missing Checkouts</field>
+        <field name="model_id" ref="hr_attendance.model_hr_attendance"/>
+        <field name="state">code</field>
+        <field name="code">model._cron_flag_missing_checkouts()</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <field name="active" eval="True"/>
+    </record>
+
+    <record id="ir_cron_purge_fingerprint_raw_payload" model="ir.cron">
+        <field name="name">Fingerprint: Purge Old Raw Payloads</field>
+        <field name="model_id" ref="model_fingerprint_device_log"/>
+        <field name="state">code</field>
+        <field name="code">model._cron_purge_raw_payload()</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <field name="active" eval="True"/>
+    </record>
+</odoo>

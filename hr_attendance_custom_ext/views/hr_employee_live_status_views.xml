@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_hr_employee_live_status_list" model="ir.ui.view">
+        <field name="name">hr.employee.live.status.list</field>
+        <field name="model">hr.employee</field>
+        <field name="priority">90</field>
+        <field name="arch" type="xml">
+            <list string="Live Status"
+                  create="false"
+                  edit="false"
+                  delete="false"
+                  default_order="name"
+                  decoration-warning="hikvision_presence_status == 'on_break'"
+                  decoration-success="hikvision_presence_status == 'working'"
+                  decoration-muted="hikvision_presence_status == 'checked_out'">
+                <field name="name" string="Employee"/>
+                <field name="department_id" optional="show"/>
+                <field name="job_id" optional="hide"/>
+                <field name="hikvision_presence_status" string="Status" widget="badge"
+                       decoration-success="hikvision_presence_status == 'working'"
+                       decoration-warning="hikvision_presence_status == 'on_break'"
+                       decoration-muted="hikvision_presence_status == 'checked_out'"/>
+                <field name="live_check_in" optional="show"/>
+                <field name="current_break_start" string="Break Started"/>
+                <field name="current_break_hours" string="Total Break Time" widget="float_time"/>
+                <field name="break_count" string="Breaks"/>
+                <field name="company_id" groups="base.group_multi_company" optional="hide"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_hr_employee_live_status_search" model="ir.ui.view">
+        <field name="name">hr.employee.live.status.search</field>
+        <field name="model">hr.employee</field>
+        <field name="priority">90</field>
+        <field name="arch" type="xml">
+            <search string="Live Status">
+                <field name="name"/>
+                <field name="department_id"/>
+                <field name="job_id"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+                <filter string="Present"
+                        name="filter_present"
+                        domain="[('hikvision_presence_status', 'in', ['working', 'on_break'])]"/>
+                <filter string="On Break"
+                        name="filter_on_break"
+                        domain="[('hikvision_presence_status', '=', 'on_break')]"/>
+                <filter string="Working"
+                        name="filter_working"
+                        domain="[('hikvision_presence_status', '=', 'working')]"/>
+                <filter string="Checked Out"
+                        name="filter_checked_out"
+                        domain="[('hikvision_presence_status', '=', 'checked_out')]"/>
+                <separator/>
+                <filter string="Attendance Required"
+                        name="filter_attendance_required"
+                        domain="[('attendance_required', '=', True)]"/>
+                <group>
+                    <filter string="Status"
+                            name="group_status"
+                            context="{'group_by': 'hikvision_presence_status'}"/>
+                    <filter string="Department"
+                            name="group_department"
+                            context="{'group_by': 'department_id'}"/>
+                    <filter string="Job Position"
+                            name="group_job"
+                            context="{'group_by': 'job_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_hr_employee_live_status" model="ir.actions.act_window">
+        <field name="name">Live Status</field>
+        <field name="res_model">hr.employee</field>
+        <field name="view_mode">list</field>
+        <field name="search_view_id" ref="view_hr_employee_live_status_search"/>
+        <field name="domain">[('attendance_required', '=', True)]</field>
+        <field name="context">{
+            'search_default_filter_present': 1,
+        }</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No employees are currently working or on break.
+            </p>
+            <p>
+                Clear the Present filter to also see checked-out employees.
+            </p>
+        </field>
+    </record>
+
+    <record id="action_hr_employee_live_status_view_list" model="ir.actions.act_window.view">
+        <field name="sequence" eval="1"/>
+        <field name="view_mode">list</field>
+        <field name="view_id" ref="view_hr_employee_live_status_list"/>
+        <field name="act_window_id" ref="action_hr_employee_live_status"/>
+    </record>
+</odoo>

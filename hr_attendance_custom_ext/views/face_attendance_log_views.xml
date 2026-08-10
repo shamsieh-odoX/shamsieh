@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_face_attendance_log_tree" model="ir.ui.view">
+        <field name="name">face.attendance.log.list</field>
+        <field name="model">face.attendance.log</field>
+        <field name="arch" type="xml">
+            <list create="false" edit="false" delete="false">
+                <field name="create_date"/>
+                <field name="employee_id"/>
+                <field name="action_type"/>
+                <field name="verification_status" widget="badge"/>
+                <field name="confidence_score"/>
+                <field name="distance_meters"/>
+                <field name="provider"/>
+                <field name="attendance_id"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_face_attendance_log_form" model="ir.ui.view">
+        <field name="name">face.attendance.log.form</field>
+        <field name="model">face.attendance.log</field>
+        <field name="arch" type="xml">
+            <form create="false" edit="false" delete="false">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="employee_id"/>
+                            <field name="action_type"/>
+                            <field name="verification_status"/>
+                            <field name="confidence_score"/>
+                            <field name="match_distance"/>
+                            <field name="distance_meters"/>
+                            <field name="provider"/>
+                            <field name="attendance_id"/>
+                            <field name="external_token"/>
+                        </group>
+                        <group>
+                            <field name="latitude"/>
+                            <field name="longitude"/>
+                            <field name="ip_address"/>
+                            <field name="user_agent"/>
+                            <field name="device_info"/>
+                            <field name="face_reference_id"/>
+                            <field name="error_message"/>
+                        </group>
+                    </group>
+                    <group string="Provider Response" groups="base.group_no_one">
+                        <field name="provider_response"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_face_attendance_log_search" model="ir.ui.view">
+        <field name="name">face.attendance.log.search</field>
+        <field name="model">face.attendance.log</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="employee_id"/>
+                <field name="external_token"/>
+                <filter name="passed" string="Passed" domain="[('verification_status', '=', 'passed')]"/>
+                <filter name="failed" string="Failed" domain="[('verification_status', '=', 'failed')]"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_face_attendance_log" model="ir.actions.act_window">
+        <field name="name">Face Attendance Logs</field>
+        <field name="res_model">face.attendance.log</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>
