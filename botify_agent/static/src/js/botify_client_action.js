@@ -1,6 +1,7 @@
 /** @odoo-module **/
 
 import { registry } from "@web/core/registry";
+import { rpc as rpcRequest } from "@web/core/network/rpc";
 import { useService } from "@web/core/utils/hooks";
 import { Component, onWillStart, onWillUnmount, useState } from "@odoo/owl";
 
@@ -25,7 +26,17 @@ class BotifyAssistant extends Component {
     static props = {};
 
     setup() {
-        this.rpc = useService("rpc");
+        // Some action contexts may not bootstrap the rpc service yet.
+        // Fall back to the low-level rpc helper instead of crashing setup.
+        this.rpcService = null;
+        try {
+            this.rpcService = useService("rpc");
+        } catch {
+            this.rpcService = null;
+        }
+        this.rpc = (route, params = {}) => (
+            this.rpcService ? this.rpcService(route, params) : rpcRequest(route, params)
+        );
         this.notification = useService("notification");
         this.state = useState({
             ready: false,
