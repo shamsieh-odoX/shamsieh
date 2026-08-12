@@ -207,7 +207,11 @@ class FaceAttendanceLog(models.Model):
             'attendance_source': 'face',
             'face_verified': True,
             'external_log_id': self.external_token,
+            'hikvision_punch_type': 'check_in' if self.action_type == 'check_in' else 'check_out',
         })
+        employee.sudo().hikvision_presence_status = (
+            'working' if self.action_type == 'check_in' else 'checked_out'
+        )
         self.attendance_id = attendance.id
         return attendance
 

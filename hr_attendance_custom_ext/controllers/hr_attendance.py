@@ -65,7 +65,11 @@ class HrAttendanceCustom(HrAttendance):
             attendance = employee.with_context(
                 attendance_via_home_pin=True,
             )._attendance_action_change()
-            attendance.write({'attendance_source': 'pin'})
+            attendance.write({
+                'attendance_source': 'pin',
+                'hikvision_punch_type': 'check_in',
+            })
+            employee.sudo().hikvision_presence_status = 'working'
         except UserError as exc:
             return {'status': 'error', 'message': str(exc)}
         return {
