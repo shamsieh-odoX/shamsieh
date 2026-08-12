@@ -81,7 +81,7 @@
                 <field name="manager_id"/>
                 <field name="company_id" groups="base.group_multi_company"/>
                 <filter string="My Requests" name="filter_my_requests"
-                    domain="['|', ('employee_id.user_id', '=', uid), ('employee_id', 'in', user.employee_ids.ids)]"/>
+                    domain="[('employee_id.user_id', '=', uid)]"/>
                 <filter string="To Approve (Manager)" name="filter_manager_approve"
                     domain="[('state', '=', 'submitted'), ('manager_id', '=', uid)]"/>
                 <filter string="To Approve (HR)" name="filter_hr_approve"

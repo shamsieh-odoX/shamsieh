@@ -96,10 +96,7 @@ class HrRemoteWorkRequest(models.Model):
         user = self.env.user
         is_officer = user.has_group('hr_attendance.group_hr_attendance_officer')
         for request in self:
-            is_requester = (
-                request.employee_id.user_id == user
-                or request.employee_id in user.employee_ids
-            )
+            is_requester = request.employee_id.user_id == user
             is_manager = request.manager_id == user
             request.can_submit = request.state == 'draft' and (is_requester or is_officer)
             request.can_manager_approve = request.state == 'submitted' and (is_manager or is_officer)
@@ -177,7 +174,7 @@ class HrRemoteWorkRequest(models.Model):
         if user.has_group('hr_attendance.group_hr_attendance_officer'):
             return
         employee = self.employee_id
-        if employee.user_id == user or employee in user.employee_ids:
+        if employee.user_id == user:
             return
         raise AccessError(_('You can only manage your own remote work requests.'))
 
