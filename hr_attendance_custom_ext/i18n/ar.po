@@ -1772,3 +1772,74 @@ msgstr "لا يوجد موظفون يعملون أو في استراحة حال�
 #: model_terms:ir.actions.act_window,help:hr_attendance_custom_ext.action_hr_employee_live_status
 msgid "Clear the Present filter to also see checked-out employees."
 msgstr "أزل فلتر الحاضر لعرض الموظفين المسجّل انصرافهم أيضاً."
+
+#. module: hr_attendance_custom_ext
+#: model:ir.actions.act_window,name:hr_attendance_custom_ext.action_hr_remote_work_request
+msgid "Remote Work Requests"
+msgstr "طلبات العمل عن بُعد"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.actions.act_window,name:hr_attendance_custom_ext.action_hr_remote_work_request_manager
+msgid "Remote Work — Manager Approval"
+msgstr "العمل عن بُعد — موافقة المدير"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.actions.act_window,name:hr_attendance_custom_ext.action_hr_remote_work_request_hr
+msgid "Remote Work — HR Approval"
+msgstr "العمل عن بُعد — موافقة الموارد البشرية"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model,name:hr_attendance_custom_ext.model_hr_remote_work_request
+msgid "Remote Work Request"
+msgstr "طلب عمل من المنزل"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_hr_remote_work_request__request_date
+msgid "Remote Work Date"
+msgstr "تاريخ العمل عن بُعد"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_res_company__remote_work_requests_enabled
+msgid "Remote Work Requests"
+msgstr "طلبات العمل عن بُعد"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.ui.menu,name:hr_attendance_custom_ext.menu_hr_remote_work_request
+msgid "Remote Work Requests"
+msgstr "طلبات العمل عن بُعد"
+
+#. module: hr_attendance_custom_ext
+#: code:addons/hr_attendance_custom_ext/static/src/components/attendance_menu/attendance_menu_patch.js:0
+msgid "Remote work approved — check in from home."
+msgstr "تمت الموافقة على العمل عن بُعد — سجّل الحضور من المنزل."
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields.selection,name:hr_attendance_custom_ext.selection__hr_remote_work_request__state__draft
+msgid "Draft"
+msgstr "مسودة"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields.selection,name:hr_attendance_custom_ext.selection__hr_remote_work_request__state__submitted
+msgid "Submitted"
+msgstr "مُقدَّم"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields.selection,name:hr_attendance_custom_ext.selection__hr_remote_work_request__state__manager_approved
+msgid "Manager Approved"
+msgstr "موافقة المدير"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields.selection,name:hr_attendance_custom_ext.selection__hr_remote_work_request__state__approved
+msgid "Approved"
+msgstr "معتمد"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields.selection,name:hr_attendance_custom_ext.selection__hr_remote_work_request__state__refused
+msgid "Refused"
+msgstr "مرفوض"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields.selection,name:hr_attendance_custom_ext.selection__hr_remote_work_request__state__cancelled
+msgid "Cancelled"
+msgstr "ملغى"
+

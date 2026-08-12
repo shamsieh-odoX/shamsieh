@@ -481,15 +481,37 @@ class HrEmployee(models.Model):
         })
         return True
 
+    def _has_approved_remote_work(self, check_datetime=None):
+        self.ensure_one()
+        if not self.company_id.remote_work_requests_enabled:
+            return False
+        when = check_datetime or fields.Datetime.now()
+        target_date = fields.Date.to_date(when)
+        return bool(self.env['hr.remote.work.request']._get_approved_for_employee_date(
+            self, target_date,
+        ))
+
     def _get_attendance_scheduled_location(self, check_datetime=None):
         """Schedule-only location for attendance rules. Defaults to office."""
         self.ensure_one()
-        location = self._get_schedule_location_type(
-            check_datetime=check_datetime or fields.Datetime.now(),
-        )
+        when = check_datetime or fields.Datetime.now()
+        if self._has_approved_remote_work(when):
+            return 'home'
+        location = self._get_schedule_location_type(check_datetime=when)
         if location == 'home':
             return 'home'
         return 'office'
+
+    def _get_remote_check_in_method(self, check_datetime=None):
+        """Return face or home_pin for manual home check-in, or False when not applicable."""
+        self.ensure_one()
+        if self._get_attendance_scheduled_location(check_datetime) != 'home':
+            return False
+        if self.remote_attendance_allowed:
+            template = self.env['hr.employee.face.template'].get_active_for_employee(self)
+            if template:
+                return 'face'
+        return 'home_pin'
 
     def _manual_attendance_allowed(self, check_datetime=None):
         self.ensure_one()
@@ -521,6 +543,8 @@ class HrEmployee(models.Model):
 
     def _get_effective_work_location_type(self):
         self.ensure_one()
+        if self._has_approved_remote_work():
+            return 'home'
         schedule_location = self._get_schedule_location_type()
         if schedule_location:
             return schedule_location
@@ -814,15 +838,18 @@ class HrEmployee(models.Model):
         response = HrAttendance._get_user_attendance_data(self)
         scheduled_location = self._get_attendance_scheduled_location()
         manual_allowed = scheduled_location == 'home'
+        approved_remote_work_today = self._has_approved_remote_work()
+        check_in_method = self._get_remote_check_in_method() if manual_allowed else False
         break_allowed = self._systray_break_punch_allowed()
         policy = self.env['fingerprint.attendance.policy'].get_company_default(self.company_id)
         response.update({
             'scheduled_location': scheduled_location,
             'manual_attendance_allowed': manual_allowed,
+            'approved_remote_work_today': approved_remote_work_today,
             'break_punch_allowed': break_allowed,
             'work_location_type': scheduled_location,
-            'check_in_requires_face': False,
-            'check_in_requires_home_pin': False,
+            'check_in_requires_face': check_in_method == 'face',
+            'check_in_requires_home_pin': check_in_method == 'home_pin',
             'check_in_requires_office_geo': False,
             'office_geo_configured': self._is_office_geo_configured(),
             'single_check_in_per_day': not policy.allow_multiple_attendances_per_day,

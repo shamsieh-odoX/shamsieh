@@ -1,5 +1,6 @@
 from . import attendance_calendar_mixin
 from . import resource_calendar_attendance
+from . import hr_remote_work_request
 from . import hr_employee
 from . import hr_attendance
 from . import hr_attendance_punch_log

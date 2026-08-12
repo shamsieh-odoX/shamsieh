@@ -57,6 +57,11 @@ class ResCompany(models.Model):
         default=False,
         help='Development only: auto-pass face verification without external provider.',
     )
+    remote_work_requests_enabled = fields.Boolean(
+        string='Remote Work Requests',
+        default=True,
+        help='Allow employees to request ad-hoc work-from-home days with manager and HR approval.',
+    )
 
     @api.model_create_multi
     def create(self, vals_list):

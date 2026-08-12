@@ -84,4 +84,24 @@
               action="action_pin_attendance_logs_report"
               sequence="27"
               groups="hr_attendance.group_hr_attendance_officer"/>
+
+    <menuitem id="menu_hr_remote_work_request"
+              name="Remote Work Requests"
+              parent="hr_attendance.menu_hr_attendance_root"
+              action="action_hr_remote_work_request"
+              sequence="12"/>
+
+    <menuitem id="menu_hr_remote_work_request_manager"
+              name="Remote Work — Manager Approval"
+              parent="hr_attendance.menu_hr_attendance_overview"
+              action="action_hr_remote_work_request_manager"
+              sequence="18"
+              groups="hr_attendance.group_hr_attendance_user"/>
+
+    <menuitem id="menu_hr_remote_work_request_hr"
+              name="Remote Work — HR Approval"
+              parent="hr_attendance.menu_hr_attendance_overview"
+              action="action_hr_remote_work_request_hr"
+              sequence="19"
+              groups="hr_attendance.group_hr_attendance_officer"/>
 </odoo>

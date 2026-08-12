@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="hr_remote_work_refuse_wizard_view_form" model="ir.ui.view">
+        <field name="name">hr.remote.work.refuse.wizard.form</field>
+        <field name="model">hr.remote.work.refuse.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Refuse Remote Work Request">
+                <group>
+                    <field name="request_id" readonly="1"/>
+                    <field name="reason" placeholder="Explain why this request is refused..."/>
+                </group>
+                <footer>
+                    <button name="action_refuse" string="Refuse" type="object" class="btn-primary"/>
+                    <button string="Cancel" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+</odoo>

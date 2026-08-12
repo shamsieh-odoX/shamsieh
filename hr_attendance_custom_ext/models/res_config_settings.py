@@ -46,3 +46,7 @@ class ResConfigSettings(models.TransientModel):
         related='company_id.face_liveness_required',
         readonly=False,
     )
+    remote_work_requests_enabled = fields.Boolean(
+        related='company_id.remote_work_requests_enabled',
+        readonly=False,
+    )
