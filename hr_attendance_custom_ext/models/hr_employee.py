@@ -939,7 +939,7 @@ class HrEmployee(models.Model):
                 device_location=self.env.context.get('attendance_device_location'),
             )
         attendance = super(
-            type(self), self.with_context(attendance_employee_self_punch=True)
+            HrEmployee, self.with_context(attendance_employee_self_punch=True)
         )._attendance_action_change(geo_information=geo_information)
         if attendance and not attendance.attendance_source:
             mode_map = {
