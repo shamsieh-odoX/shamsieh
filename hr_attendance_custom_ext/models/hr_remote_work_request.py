@@ -8,7 +8,7 @@ class HrRemoteWorkRequest(models.Model):
     _name = 'hr.remote.work.request'
     _description = 'Remote Work Request'
     _inherit = ['mail.thread', 'mail.activity.mixin']
-    _order = 'request_date desc, id desc'
+    _order = 'date_from desc, id desc'
 
     name = fields.Char(
         string='Reference',
@@ -44,11 +44,22 @@ class HrRemoteWorkRequest(models.Model):
         store=True,
         readonly=False,
     )
-    request_date = fields.Date(
-        string='Remote Work Date',
+    date_from = fields.Date(
+        string='From',
         required=True,
         tracking=True,
         default=fields.Date.context_today,
+    )
+    date_to = fields.Date(
+        string='To',
+        required=True,
+        tracking=True,
+        default=fields.Date.context_today,
+    )
+    duration_days = fields.Integer(
+        string='Days',
+        compute='_compute_duration_days',
+        store=True,
     )
     reason = fields.Text(
         string='Reason',
@@ -91,6 +102,14 @@ class HrRemoteWorkRequest(models.Model):
     can_refuse = fields.Boolean(compute='_compute_approval_permissions')
     can_cancel = fields.Boolean(compute='_compute_approval_permissions')
 
+    @api.depends('date_from', 'date_to')
+    def _compute_duration_days(self):
+        for request in self:
+            if request.date_from and request.date_to:
+                request.duration_days = (request.date_to - request.date_from).days + 1
+            else:
+                request.duration_days = 0
+
     @api.depends('state', 'employee_id', 'manager_id')
     def _compute_approval_permissions(self):
         user = self.env.user
@@ -123,6 +142,11 @@ class HrRemoteWorkRequest(models.Model):
             else:
                 request.manager_id = False
 
+    @api.onchange('date_from')
+    def _onchange_date_from(self):
+        if self.date_from and (not self.date_to or self.date_to < self.date_from):
+            self.date_to = self.date_from
+
     @api.model_create_multi
     def create(self, vals_list):
         for vals in vals_list:
@@ -130,34 +154,53 @@ class HrRemoteWorkRequest(models.Model):
                 vals['name'] = self.env['ir.sequence'].next_by_code(
                     'hr.remote.work.request',
                 ) or _('New')
+            if vals.get('date_from') and not vals.get('date_to'):
+                vals['date_to'] = vals['date_from']
         return super().create(vals_list)
 
-    @api.constrains('request_date', 'state')
-    def _check_request_date(self):
+    def _get_period_label(self):
+        self.ensure_one()
+        if self.date_from == self.date_to:
+            return fields.Date.to_string(self.date_from)
+        return _(
+            '%(date_from)s to %(date_to)s',
+            date_from=self.date_from,
+            date_to=self.date_to,
+        )
+
+    @api.constrains('date_from', 'date_to')
+    def _check_date_range(self):
+        for request in self:
+            if request.date_from and request.date_to and request.date_to < request.date_from:
+                raise ValidationError(_('End date must be on or after start date.'))
+
+    @api.constrains('date_from', 'date_to', 'state')
+    def _check_request_dates(self):
         today = fields.Date.context_today(self)
         for request in self:
-            if not request.request_date or request.request_date >= today:
+            if not request.date_to or request.date_to >= today:
                 continue
             if request.state in ('approved', 'refused', 'cancelled'):
                 continue
             raise ValidationError(_(
-                'Remote work requests cannot be created for past dates.'
+                'Remote work requests cannot be created for past periods.'
             ))
 
-    @api.constrains('employee_id', 'request_date', 'state')
+    @api.constrains('employee_id', 'date_from', 'date_to', 'state')
     def _check_duplicate_request(self):
         for request in self.filtered(lambda r: r.state not in ('refused', 'cancelled')):
             duplicate = self.search([
                 ('id', '!=', request.id),
                 ('employee_id', '=', request.employee_id.id),
-                ('request_date', '=', request.request_date),
                 ('state', 'not in', ('refused', 'cancelled')),
+                ('date_from', '<=', request.date_to),
+                ('date_to', '>=', request.date_from),
             ], limit=1)
             if duplicate:
                 raise ValidationError(_(
-                    'A remote work request already exists for %(employee)s on %(day)s.',
+                    'A remote work request already exists for %(employee)s overlapping %(period)s.',
                     employee=request.employee_id.name,
-                    day=request.request_date,
+                    period=request._get_period_label(),
                 ))
 
     def _check_company_feature_enabled(self):
@@ -197,8 +240,8 @@ class HrRemoteWorkRequest(models.Model):
         for request in self:
             request._check_company_feature_enabled()
             request._check_requester()
-            if request.request_date < today:
-                raise UserError(_('Remote work requests cannot be submitted for past dates.'))
+            if request.date_to < today:
+                raise UserError(_('Remote work requests cannot be submitted for past periods.'))
             if not request.reason or not request.reason.strip():
                 raise UserError(_('A reason is required for remote work requests.'))
             if not request.manager_id:
@@ -209,7 +252,7 @@ class HrRemoteWorkRequest(models.Model):
                 ))
             request.write({'state': 'submitted'})
             request.message_post(
-                body=_('Remote work request submitted for %(day)s.', day=request.request_date),
+                body=_('Remote work request submitted for %(period)s.', period=request._get_period_label()),
                 partner_ids=request.manager_id.partner_id.ids,
             )
         return True
@@ -242,7 +285,10 @@ class HrRemoteWorkRequest(models.Model):
             })
             if request.employee_id.user_id:
                 request.message_post(
-                    body=_('Your remote work request for %(day)s has been approved.', day=request.request_date),
+                    body=_(
+                        'Your remote work request for %(period)s has been approved.',
+                        period=request._get_period_label(),
+                    ),
                     partner_ids=request.employee_id.user_id.partner_id.ids,
                 )
         return True
@@ -292,6 +338,7 @@ class HrRemoteWorkRequest(models.Model):
             return self.browse()
         return self.sudo().search([
             ('employee_id', '=', employee.id),
-            ('request_date', '=', target_date),
+            ('date_from', '<=', target_date),
+            ('date_to', '>=', target_date),
             ('state', '=', 'approved'),
         ], limit=1)

@@ -1794,9 +1794,19 @@ msgid "Remote Work Request"
 msgstr "طلب عمل من المنزل"
 
 #. module: hr_attendance_custom_ext
-#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_hr_remote_work_request__request_date
-msgid "Remote Work Date"
-msgstr "تاريخ العمل عن بُعد"
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_hr_remote_work_request__date_from
+msgid "From"
+msgstr "من"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_hr_remote_work_request__date_to
+msgid "To"
+msgstr "إلى"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_hr_remote_work_request__duration_days
+msgid "Days"
+msgstr "أيام"
 
 #. module: hr_attendance_custom_ext
 #: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_res_company__remote_work_requests_enabled

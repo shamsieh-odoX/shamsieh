@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+from datetime import timedelta
+
 from odoo import fields
 from odoo.exceptions import AccessError, UserError
 from odoo.tests import tagged
@@ -74,10 +76,12 @@ class TestRemoteWorkRequest(TransactionCase):
 
         cls.Request = cls.env['hr.remote.work.request']
 
-    def _create_request(self, state='draft'):
+    def _create_request(self, state='draft', date_from=None, date_to=None):
+        today = fields.Date.context_today(self.employee)
         request = self.Request.create({
             'employee_id': self.employee.id,
-            'request_date': fields.Date.context_today(self.employee),
+            'date_from': date_from or today,
+            'date_to': date_to or date_from or today,
             'reason': 'Family appointment at home',
         })
         if state == 'submitted':
@@ -162,3 +166,35 @@ class TestRemoteWorkRequest(TransactionCase):
         request.with_user(self.manager_user).action_process_refusal('Not enough coverage')
         self.assertEqual(request.state, 'refused')
         self.assertEqual(request.refuse_reason, 'Not enough coverage')
+
+    def test_period_request_covers_each_day(self):
+        today = fields.Date.context_today(self.employee)
+        request = self._create_request(
+            'approved',
+            date_from=today,
+            date_to=today + timedelta(days=2),
+        )
+        self.assertEqual(request.duration_days, 3)
+        self.assertTrue(self.employee._has_approved_remote_work())
+        self.assertEqual(self.employee._get_attendance_scheduled_location(), 'home')
+
+    def test_overlapping_period_rejected(self):
+        today = fields.Date.context_today(self.employee)
+        self._create_request('approved', date_from=today, date_to=today)
+        with self.assertRaises(Exception):
+            self.Request.create({
+                'employee_id': self.employee.id,
+                'date_from': today,
+                'date_to': today,
+                'reason': 'Duplicate period',
+            })
+
+    def test_date_to_before_date_from_rejected(self):
+        today = fields.Date.context_today(self.employee)
+        with self.assertRaises(Exception):
+            self.Request.create({
+                'employee_id': self.employee.id,
+                'date_from': today + timedelta(days=2),
+                'date_to': today,
+                'reason': 'Invalid range',
+            })

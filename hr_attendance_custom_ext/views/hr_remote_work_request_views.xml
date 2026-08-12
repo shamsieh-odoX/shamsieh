@@ -9,7 +9,9 @@
                 <field name="name"/>
                 <field name="employee_id" widget="many2one_avatar_employee"/>
                 <field name="company_id" groups="base.group_multi_company" optional="show"/>
-                <field name="request_date"/>
+                <field name="date_from"/>
+                <field name="date_to"/>
+                <field name="duration_days" optional="show"/>
                 <field name="manager_id" optional="hide"/>
                 <field name="state" widget="badge"
                     decoration-info="state in ('draft', 'submitted')"
@@ -55,7 +57,13 @@
                             <field name="company_id" groups="base.group_multi_company" readonly="state != 'draft'"/>
                         </group>
                         <group>
-                            <field name="request_date" readonly="state != 'draft'"/>
+                            <label for="date_from" string="Period"/>
+                            <div class="o_row">
+                                <field name="date_from" readonly="state != 'draft'" nolabel="1"/>
+                                <i class="fa fa-long-arrow-right mx-2" title="to"/>
+                                <field name="date_to" readonly="state != 'draft'" nolabel="1"/>
+                            </div>
+                            <field name="duration_days" readonly="1"/>
                             <field name="manager_id" readonly="1"/>
                             <field name="manager_approval_date" readonly="1" invisible="not manager_approval_date"/>
                             <field name="hr_approval_date" readonly="1" invisible="not hr_approval_date"/>
@@ -92,7 +100,7 @@
                     <filter string="Company" name="group_company" context="{'group_by': 'company_id'}" groups="base.group_multi_company"/>
                     <filter string="Status" name="group_state" context="{'group_by': 'state'}"/>
                     <filter string="Employee" name="group_employee" context="{'group_by': 'employee_id'}"/>
-                    <filter string="Date" name="group_date" context="{'group_by': 'request_date'}"/>
+                    <filter string="Start Date" name="group_date_from" context="{'group_by': 'date_from'}"/>
                 </group>
             </search>
         </field>
@@ -106,10 +114,10 @@
         <field name="context">{'search_default_filter_my_requests': 1}</field>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
-                Request work from home for a specific day.
+                Request work from home for one day or a period.
             </p>
             <p>
-                After manager and HR approval, you can check in from Odoo on that day
+                After manager and HR approval, you can check in from Odoo on each approved day
                 using face verification or your home PIN.
             </p>
         </field>
