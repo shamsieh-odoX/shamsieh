@@ -481,15 +481,32 @@ class HrEmployee(models.Model):
         })
         return True
 
+    def _get_remote_work_leave_type(self):
+        leave_type = self.env.ref(
+            'hr_attendance_custom_ext.leave_type_remote_work',
+            raise_if_not_found=False,
+        )
+        if leave_type:
+            return leave_type
+        return self.env['hr.leave.type'].search([
+            ('name', '=', 'Remote Work'),
+            ('active', '=', True),
+        ], limit=1)
+
     def _has_approved_remote_work(self, check_datetime=None):
         self.ensure_one()
-        if not self.company_id.remote_work_requests_enabled:
+        leave_type = self._get_remote_work_leave_type()
+        if not leave_type:
             return False
         when = check_datetime or fields.Datetime.now()
         target_date = fields.Date.to_date(when)
-        return bool(self.env['hr.remote.work.request']._get_approved_for_employee_date(
-            self, target_date,
-        ))
+        return bool(self.env['hr.leave'].sudo().search_count([
+            ('employee_id', '=', self.id),
+            ('holiday_status_id', '=', leave_type.id),
+            ('state', '=', 'validate'),
+            ('request_date_from', '<=', target_date),
+            ('request_date_to', '>=', target_date),
+        ]))
 
     def _get_attendance_scheduled_location(self, check_datetime=None):
         """Schedule-only location for attendance rules. Defaults to office."""

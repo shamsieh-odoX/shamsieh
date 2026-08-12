@@ -3,7 +3,7 @@
 from datetime import timedelta
 
 from odoo import fields
-from odoo.exceptions import AccessError, UserError
+from odoo.exceptions import UserError
 from odoo.tests import tagged
 from odoo.tests.common import TransactionCase
 
@@ -15,7 +15,6 @@ class TestRemoteWorkRequest(TransactionCase):
     def setUpClass(cls):
         super().setUpClass()
         cls.company = cls.env.company
-        cls.company.remote_work_requests_enabled = True
         cls.company.face_attendance_stub_enabled = True
 
         cls.calendar = cls.env['resource.calendar'].create({
@@ -30,105 +29,64 @@ class TestRemoteWorkRequest(TransactionCase):
                     'day_period': 'morning',
                     'location_type': 'office',
                 })
-                for day, day_name in enumerate([
-                    'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun',
-                ])
+                for day, day_name in enumerate(['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'])
             ],
         })
+        cls.leave_type = cls.env.ref('hr_attendance_custom_ext.leave_type_remote_work')
+        cls.Leave = cls.env['hr.leave']
 
-        cls.manager_user = cls.env['res.users'].create({
-            'name': 'Remote Work Manager',
-            'login': 'remote_work_mgr_test',
-            'email': 'remote_work_mgr_test@test.com',
-            'group_ids': [(6, 0, [cls.env.ref('base.group_user').id])],
-        })
-        cls.manager_employee = cls.env['hr.employee'].create({
-            'name': 'Remote Work Manager Emp',
-            'user_id': cls.manager_user.id,
-            'company_id': cls.company.id,
-        })
-
-        cls.officer_user = cls.env['res.users'].create({
-            'name': 'Remote Work Officer',
-            'login': 'remote_work_officer_test',
-            'email': 'remote_work_officer_test@test.com',
-            'group_ids': [(6, 0, [
-                cls.env.ref('base.group_user').id,
-                cls.env.ref('hr_attendance.group_hr_attendance_officer').id,
-            ])],
-        })
-
-        cls.employee_user = cls.env['res.users'].create({
-            'name': 'Remote Work Employee User',
-            'login': 'remote_work_emp_test',
-            'email': 'remote_work_emp_test@test.com',
-            'group_ids': [(6, 0, [cls.env.ref('base.group_user').id])],
-        })
         cls.employee = cls.env['hr.employee'].create({
             'name': 'Remote Work Employee',
             'company_id': cls.company.id,
             'resource_calendar_id': cls.calendar.id,
-            'leave_manager_id': cls.manager_user.id,
-            'parent_id': cls.manager_employee.id,
-            'user_id': cls.employee_user.id,
             'remote_attendance_allowed': True,
         })
 
-        cls.Request = cls.env['hr.remote.work.request']
-
-    def _create_request(self, state='draft', date_from=None, date_to=None):
-        today = fields.Date.context_today(self.employee)
-        request = self.Request.create({
+    def _create_remote_leave(self, date_from, date_to=None):
+        return self.Leave.create({
+            'name': 'Remote Work Test',
             'employee_id': self.employee.id,
-            'date_from': date_from or today,
-            'date_to': date_to or date_from or today,
-            'reason': 'Family appointment at home',
+            'holiday_status_id': self.leave_type.id,
+            'request_date_from': date_from,
+            'request_date_to': date_to or date_from,
         })
-        if state == 'submitted':
-            request.with_user(self.employee_user).action_submit()
-        elif state == 'manager_approved':
-            request.with_user(self.employee_user).action_submit()
-            request.with_user(self.manager_user).action_manager_approve()
-        elif state == 'approved':
-            request.with_user(self.employee_user).action_submit()
-            request.with_user(self.manager_user).action_manager_approve()
-            request.with_user(self.officer_user).action_hr_approve()
-        return request
 
-    def test_approval_workflow(self):
-        request = self._create_request()
-        self.assertEqual(request.state, 'draft')
-        request.with_user(self.employee_user).action_submit()
-        self.assertEqual(request.state, 'submitted')
-        request.with_user(self.manager_user).action_manager_approve()
-        self.assertEqual(request.state, 'manager_approved')
-        request.with_user(self.officer_user).action_hr_approve()
-        self.assertEqual(request.state, 'approved')
-
-    def test_manager_cannot_hr_approve_before_manager_step(self):
-        request = self._create_request('submitted')
-        with self.assertRaises(UserError):
-            request.with_user(self.officer_user).action_hr_approve()
-
-    def test_non_manager_cannot_manager_approve(self):
-        request = self._create_request('submitted')
-        with self.assertRaises(AccessError):
-            request.with_user(self.employee_user).action_manager_approve()
-
-    def test_approved_remote_work_overrides_office_schedule(self):
-        request = self._create_request('approved')
-        self.assertEqual(request.state, 'approved')
+    def test_approved_remote_leave_overrides_office_schedule(self):
+        today = fields.Date.context_today(self.employee)
+        leave = self._create_remote_leave(today)
+        self.assertEqual(leave.state, 'validate')
         self.assertEqual(self.employee._get_attendance_scheduled_location(), 'home')
         self.assertEqual(self.employee._get_effective_work_location_type(), 'home')
         self.assertTrue(self.employee._manual_attendance_allowed())
 
-    def test_without_approval_office_day_blocks_manual_check_in(self):
+    def test_pending_remote_leave_does_not_allow_manual_check_in(self):
+        today = fields.Date.context_today(self.employee)
+        pending_type = self.env['hr.leave.type'].create({
+            'name': 'Pending Remote Work',
+            'requires_allocation': False,
+            'leave_validation_type': 'manager',
+        })
+        self.Leave.create({
+            'name': 'Pending Remote Work',
+            'employee_id': self.employee.id,
+            'holiday_status_id': pending_type.id,
+            'request_date_from': today,
+            'request_date_to': today,
+        })
         self.assertEqual(self.employee._get_attendance_scheduled_location(), 'office')
         with self.assertRaises(UserError):
             self.employee._raise_if_manual_attendance_blocked()
 
+    def test_period_remote_leave_covers_each_day(self):
+        today = fields.Date.context_today(self.employee)
+        self._create_remote_leave(today, today + timedelta(days=2))
+        self.assertTrue(self.employee._has_approved_remote_work())
+        self.assertTrue(self.employee._has_approved_remote_work(fields.Datetime.now() + timedelta(days=1)))
+        self.assertEqual(self.employee._get_attendance_scheduled_location(), 'home')
+
     def test_systray_flags_face_when_enrolled(self):
-        self._create_request('approved')
+        today = fields.Date.context_today(self.employee)
+        self._create_remote_leave(today)
         self.env['hr.employee.face.template'].create({
             'employee_id': self.employee.id,
             'active': True,
@@ -142,59 +100,10 @@ class TestRemoteWorkRequest(TransactionCase):
         self.assertFalse(data['check_in_requires_home_pin'])
 
     def test_systray_flags_home_pin_without_face(self):
-        self._create_request('approved')
+        today = fields.Date.context_today(self.employee)
+        self._create_remote_leave(today)
         self.employee._set_home_attendance_pin('2468')
         data = self.employee._get_attendance_systray_user_data()
         self.assertTrue(data['manual_attendance_allowed'])
         self.assertFalse(data['check_in_requires_face'])
         self.assertTrue(data['check_in_requires_home_pin'])
-
-    def test_home_pin_allowed_on_approved_remote_work_day(self):
-        self._create_request('approved')
-        self.employee._set_home_attendance_pin('1357')
-        self.assertEqual(self.employee._get_attendance_scheduled_location(), 'home')
-        self.assertTrue(self.employee._verify_home_attendance_pin('1357'))
-
-    def test_feature_disabled_ignores_approved_request(self):
-        request = self._create_request('approved')
-        self.company.remote_work_requests_enabled = False
-        self.assertFalse(self.employee._has_approved_remote_work())
-        self.assertEqual(self.employee._get_attendance_scheduled_location(), 'office')
-
-    def test_refuse_workflow(self):
-        request = self._create_request('submitted')
-        request.with_user(self.manager_user).action_process_refusal('Not enough coverage')
-        self.assertEqual(request.state, 'refused')
-        self.assertEqual(request.refuse_reason, 'Not enough coverage')
-
-    def test_period_request_covers_each_day(self):
-        today = fields.Date.context_today(self.employee)
-        request = self._create_request(
-            'approved',
-            date_from=today,
-            date_to=today + timedelta(days=2),
-        )
-        self.assertEqual(request.duration_days, 3)
-        self.assertTrue(self.employee._has_approved_remote_work())
-        self.assertEqual(self.employee._get_attendance_scheduled_location(), 'home')
-
-    def test_overlapping_period_rejected(self):
-        today = fields.Date.context_today(self.employee)
-        self._create_request('approved', date_from=today, date_to=today)
-        with self.assertRaises(Exception):
-            self.Request.create({
-                'employee_id': self.employee.id,
-                'date_from': today,
-                'date_to': today,
-                'reason': 'Duplicate period',
-            })
-
-    def test_date_to_before_date_from_rejected(self):
-        today = fields.Date.context_today(self.employee)
-        with self.assertRaises(Exception):
-            self.Request.create({
-                'employee_id': self.employee.id,
-                'date_from': today + timedelta(days=2),
-                'date_to': today,
-                'reason': 'Invalid range',
-            })

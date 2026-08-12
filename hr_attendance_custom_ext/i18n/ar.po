@@ -1853,3 +1853,8 @@ msgstr "مرفوض"
 msgid "Cancelled"
 msgstr "ملغى"
 
+#. module: hr_attendance_custom_ext
+#: model:hr.leave.type,name:hr_attendance_custom_ext.leave_type_remote_work
+msgid "Remote Work"
+msgstr "العمل عن بُعد"
+
