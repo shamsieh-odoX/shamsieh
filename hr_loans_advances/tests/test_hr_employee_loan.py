@@ -137,3 +137,5 @@ class TestHrEmployeeLoan(TransactionCase):
             'currency_id': {},
             'employee_id': {},
         })
+        loan.action_submit()
+        self.assertEqual(loan.state, 'submitted')

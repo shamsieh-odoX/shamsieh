@@ -184,7 +184,7 @@ class HrLoansAdvancesApprovalMixin(models.AbstractModel):
             raise UserError(_('Only draft requests can be submitted.'))
         if not self.employee_id:
             raise UserError(_('An employee must be set before submitting.'))
-        chain = self._resolve_approval_chain(
+        chain = self.sudo()._resolve_approval_chain(
             self.employee_id,
             chain_builder=self._build_manager_hr_approval_chain,
             hr_group_xmlid=self._approval_hr_group_xmlid(),
