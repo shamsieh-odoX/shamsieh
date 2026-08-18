@@ -7,18 +7,32 @@
         parent="hr.menu_hr_root"
         sequence="45"/>
 
+    <record id="action_hr_employee_advance_open_mine" model="ir.actions.server">
+        <field name="name">My Salary Advances</field>
+        <field name="model_id" ref="model_hr_employee_advance"/>
+        <field name="state">code</field>
+        <field name="code">action = model.action_open_my_advances()</field>
+    </record>
+
+    <record id="action_hr_employee_loan_open_mine" model="ir.actions.server">
+        <field name="name">My Employee Loans</field>
+        <field name="model_id" ref="model_hr_employee_loan"/>
+        <field name="state">code</field>
+        <field name="code">action = model.action_open_my_loans()</field>
+    </record>
+
     <menuitem
         id="menu_hr_employee_advance"
         name="My Salary Advances"
         parent="menu_hr_loans_advances_root"
-        action="action_hr_employee_advance"
+        action="action_hr_employee_advance_open_mine"
         sequence="10"/>
 
     <menuitem
         id="menu_hr_employee_loan"
         name="My Employee Loans"
         parent="menu_hr_loans_advances_root"
-        action="action_hr_employee_loan"
+        action="action_hr_employee_loan_open_mine"
         sequence="20"/>
 
     <menuitem

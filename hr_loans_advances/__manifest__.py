@@ -1,6 +1,6 @@
 {
     'name': 'HR Loans & Advances',
-    'version': '19.0.1.0.1',
+    'version': '19.0.1.0.2',
     'category': 'Human Resources/Payroll',
     'summary': 'Employee salary advances and loans with manager/HR approval',
     'author': 'Custom',

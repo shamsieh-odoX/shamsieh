@@ -111,3 +111,29 @@ class TestHrEmployeeLoan(TransactionCase):
         self.assertEqual(loan.amount_remaining, 0.0)
         self.assertEqual(loan.state, 'done')
         self.assertEqual(loan.payment_ids[-1].amount, 200.0)
+
+    def test_employee_can_request_loan_without_company_acl(self):
+        """Employees do not need read access to every company to request a loan."""
+        other_company = self.env['res.company'].create({'name': 'Loan Branch Co'})
+        self.employee.company_id = other_company
+        Loan = self.Loan.with_user(self.employee_user).with_context(
+            allowed_company_ids=self.employee_user.company_ids.ids,
+        )
+        Loan.default_get([
+            'employee_id', 'company_id', 'currency_id',
+            'total_amount', 'monthly_installment',
+        ])
+        loan = Loan.create({
+            'employee_id': self.employee.id,
+            'total_amount': 1000.0,
+            'monthly_installment': 100.0,
+            'deduction_start_date': date(2026, 1, 1),
+            'deduction_end_date': date(2026, 12, 31),
+        })
+        self.assertEqual(loan.company_id, other_company)
+        loan.web_read({
+            'name': {},
+            'company_id': {},
+            'currency_id': {},
+            'employee_id': {},
+        })
