@@ -15,6 +15,13 @@
               sequence="15"
               groups="hr_attendance.group_hr_attendance_officer"/>
 
+    <menuitem id="menu_unworked_time_overview"
+              name="Unworked Time"
+              parent="hr_attendance.menu_hr_attendance_overview"
+              action="action_unworked_time_report"
+              sequence="16"
+              groups="hr_attendance.group_hr_attendance_officer"/>
+
     <menuitem id="menu_fingerprint_devices"
               name="Fingerprint Devices"
               parent="hr_attendance.menu_hr_attendance_configuration"
@@ -76,6 +83,13 @@
               parent="hr_attendance.menu_hr_attendance_reporting"
               action="action_department_attendance_report"
               sequence="34"
+              groups="hr_attendance.group_hr_attendance_officer"/>
+
+    <menuitem id="menu_unworked_time_report"
+              name="Unworked Time Report"
+              parent="hr_attendance.menu_hr_attendance_reporting"
+              action="action_unworked_time_report"
+              sequence="35"
               groups="hr_attendance.group_hr_attendance_officer"/>
 
     <menuitem id="menu_pin_attendance_logs_report"

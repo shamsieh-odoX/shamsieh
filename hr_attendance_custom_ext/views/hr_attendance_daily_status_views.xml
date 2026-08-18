@@ -123,6 +123,14 @@
         <field name="context">{'search_default_group_department': 1}</field>
     </record>
 
+    <record id="action_unworked_time_report" model="ir.actions.act_window">
+        <field name="name">Unworked Time</field>
+        <field name="res_model">hr.attendance.daily.status</field>
+        <field name="view_mode">list,pivot,graph,form</field>
+        <field name="domain">[('unworked_minutes', '&gt;', 0)]</field>
+        <field name="context">{'search_default_group_employee': 1}</field>
+    </record>
+
     <record id="action_department_attendance_report" model="ir.actions.act_window">
         <field name="name">Department Attendance Report</field>
         <field name="res_model">hr.attendance.daily.status</field>
