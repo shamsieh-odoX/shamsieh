@@ -46,6 +46,9 @@ class HrAttendanceDailyStatus(models.Model):
     check_out = fields.Datetime()
     late_minutes = fields.Integer()
     early_checkout_minutes = fields.Integer()
+    extra_minutes = fields.Integer()
+    billable_late_minutes = fields.Integer()
+    unworked_minutes = fields.Integer()
     worked_hours = fields.Float()
     source_summary = fields.Char(
         help='Comma-separated attendance sources for the day.',
@@ -106,6 +109,9 @@ class HrAttendanceDailyStatus(models.Model):
             'calendar_id': calendar.id if calendar else False,
             'late_minutes': 0,
             'early_checkout_minutes': 0,
+            'extra_minutes': 0,
+            'billable_late_minutes': 0,
+            'unworked_minutes': 0,
             'worked_hours': 0.0,
             'source_summary': False,
             'notes': False,
@@ -121,6 +127,9 @@ class HrAttendanceDailyStatus(models.Model):
                 'check_out': last.check_out,
                 'late_minutes': 0 if skip else sum(attendances.mapped('late_minutes')),
                 'early_checkout_minutes': 0 if skip else max(attendances.mapped('early_checkout_minutes') or [0]),
+                'extra_minutes': 0 if skip else sum(attendances.mapped('extra_minutes')),
+                'billable_late_minutes': 0 if skip else sum(attendances.mapped('billable_late_minutes')),
+                'unworked_minutes': 0 if skip else sum(attendances.mapped('unworked_minutes')),
                 'worked_hours': sum(attendances.mapped('worked_hours')),
                 'source_summary': ', '.join(sorted({
                     src for src in attendances.mapped('attendance_source') if src
@@ -173,3 +182,13 @@ class HrAttendanceDailyStatus(models.Model):
         for employee in employees:
             self._generate_for_employee_date(employee, target_date)
         return True
+
+    @api.model
+    def _sum_unworked_minutes(self, employee, date_from, date_to):
+        domain = [
+            ('employee_id', '=', employee.id),
+            ('date', '>=', date_from),
+            ('date', '<=', date_to),
+        ]
+        grouped = self.read_group(domain, ['unworked_minutes:sum'], [])
+        return int((grouped[0].get('unworked_minutes_sum') if grouped else 0) or 0)

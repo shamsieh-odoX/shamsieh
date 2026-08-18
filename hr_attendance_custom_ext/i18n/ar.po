@@ -1,3 +1,21 @@
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_hr_attendance__extra_minutes
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_hr_attendance_daily_status__extra_minutes
+msgid "Extra Minutes"
+msgstr "دقائق إضافية"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_hr_attendance__billable_late_minutes
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_hr_attendance_daily_status__billable_late_minutes
+msgid "Billable Late Minutes"
+msgstr "دقائق التأخير القابلة للخصم"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_hr_attendance__unworked_minutes
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_hr_attendance_daily_status__unworked_minutes
+msgid "Unworked Minutes"
+msgstr "دقائق غير منجزة"
+
 # Translation of Odoo Server.
 # Professional Arabic (ar) translations — Odoo-compliant format.
 #

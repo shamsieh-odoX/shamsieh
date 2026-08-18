@@ -60,6 +60,21 @@ class HrAttendance(models.Model):
         compute='_compute_attendance_status_fields',
         store=True,
     )
+    extra_minutes = fields.Integer(
+        string='Extra Minutes',
+        compute='_compute_attendance_status_fields',
+        store=True,
+    )
+    billable_late_minutes = fields.Integer(
+        string='Billable Late Minutes',
+        compute='_compute_attendance_status_fields',
+        store=True,
+    )
+    unworked_minutes = fields.Integer(
+        string='Unworked Minutes',
+        compute='_compute_attendance_status_fields',
+        store=True,
+    )
     missing_checkout = fields.Boolean(
         string='Missing Checkout',
         compute='_compute_attendance_status_fields',
@@ -215,6 +230,9 @@ class HrAttendance(models.Model):
         for attendance in self:
             attendance.late_minutes = 0
             attendance.early_checkout_minutes = 0
+            attendance.extra_minutes = 0
+            attendance.billable_late_minutes = 0
+            attendance.unworked_minutes = 0
             attendance.missing_checkout = False
             attendance.attendance_status = 'present'
             attendance.is_on_approved_leave = False
@@ -260,6 +278,9 @@ class HrAttendance(models.Model):
                     raw_early = int(delta.total_seconds() // 60)
                     grace = policy.early_checkout_grace_minutes or 0
                     attendance.early_checkout_minutes = max(0, raw_early - grace)
+                elif check_out_local and sched_end_local and check_out_local > sched_end_local:
+                    delta = check_out_local - sched_end_local
+                    attendance.extra_minutes = int(delta.total_seconds() // 60)
             else:
                 tolerance_minutes = policy.missing_checkout_tolerance_minutes
                 if not tolerance_minutes:
@@ -269,11 +290,19 @@ class HrAttendance(models.Model):
                 if now > cutoff:
                     attendance.missing_checkout = True
 
+            attendance.billable_late_minutes = max(
+                0,
+                attendance.late_minutes - attendance.extra_minutes,
+            )
+            attendance.unworked_minutes = (
+                attendance.billable_late_minutes + attendance.early_checkout_minutes
+            )
+
             if attendance.missing_checkout or not attendance.check_out:
                 attendance.attendance_status = 'incomplete'
-            elif attendance.late_minutes > 0 and attendance.early_checkout_minutes > 0:
+            elif attendance.billable_late_minutes > 0 and attendance.early_checkout_minutes > 0:
                 attendance.attendance_status = 'early_leave'
-            elif attendance.late_minutes > 0:
+            elif attendance.billable_late_minutes > 0:
                 attendance.attendance_status = 'late'
             elif attendance.early_checkout_minutes > 0:
                 attendance.attendance_status = 'early_leave'

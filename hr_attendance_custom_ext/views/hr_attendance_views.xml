@@ -28,6 +28,9 @@
                 <field name="is_public_holiday" optional="hide"/>
                 <field name="late_minutes" optional="show"/>
                 <field name="early_checkout_minutes" optional="show"/>
+                <field name="extra_minutes" optional="show"/>
+                <field name="billable_late_minutes" optional="show"/>
+                <field name="unworked_minutes" optional="show"/>
                 <field name="missing_checkout" optional="show"/>
                 <field name="face_verified" optional="hide"/>
             </xpath>
@@ -54,6 +57,9 @@
                 <field name="is_public_holiday" readonly="1"/>
                 <field name="late_minutes" readonly="1"/>
                 <field name="early_checkout_minutes" readonly="1"/>
+                <field name="extra_minutes" readonly="1"/>
+                <field name="billable_late_minutes" readonly="1"/>
+                <field name="unworked_minutes" readonly="1"/>
                 <field name="missing_checkout" readonly="1"/>
                 <field name="face_verified" readonly="1"/>
                 <field name="device_id" readonly="1"/>

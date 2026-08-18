@@ -15,6 +15,9 @@
                 <field name="check_out"/>
                 <field name="late_minutes"/>
                 <field name="early_checkout_minutes"/>
+                <field name="extra_minutes"/>
+                <field name="billable_late_minutes"/>
+                <field name="unworked_minutes"/>
                 <field name="worked_hours"/>
                 <field name="source_summary" optional="hide"/>
             </list>
@@ -43,6 +46,9 @@
                             <field name="check_out"/>
                             <field name="late_minutes"/>
                             <field name="early_checkout_minutes"/>
+                            <field name="extra_minutes"/>
+                            <field name="billable_late_minutes"/>
+                            <field name="unworked_minutes"/>
                             <field name="worked_hours"/>
                             <field name="source_summary"/>
                             <field name="notes"/>
@@ -88,6 +94,8 @@
                 <field name="employee_id" type="row"/>
                 <field name="date" type="col"/>
                 <field name="late_minutes" type="measure"/>
+                <field name="billable_late_minutes" type="measure"/>
+                <field name="unworked_minutes" type="measure"/>
                 <field name="worked_hours" type="measure"/>
             </pivot>
         </field>
