@@ -184,6 +184,31 @@ class HrAttendanceDailyStatus(models.Model):
         return True
 
     @api.model
+    def _cron_backfill_current_month_unworked_time(self):
+        """Keep current-month unworked metrics accurate for HR reporting."""
+        today = fields.Date.today()
+        month_start = today.replace(day=1)
+
+        Attendance = self.env['hr.attendance'].sudo()
+        attendances = Attendance.search([
+            ('date', '>=', month_start),
+            ('date', '<=', today),
+        ])
+        if attendances:
+            attendances._compute_attendance_status_fields()
+
+        employees = self.env['hr.employee'].sudo().search([
+            ('attendance_required', '=', True),
+            ('active', '=', True),
+        ])
+        target_date = month_start
+        while target_date <= today:
+            for employee in employees:
+                self._generate_for_employee_date(employee, target_date)
+            target_date += timedelta(days=1)
+        return True
+
+    @api.model
     def _sum_unworked_minutes(self, employee, date_from, date_to):
         domain = [
             ('employee_id', '=', employee.id),
