@@ -38,6 +38,10 @@ class ResConfigSettings(models.TransientModel):
         string='Last Carryover Summary',
         compute='_compute_annual_leave_last_carryover',
     )
+    overtime_leave_type_id = fields.Many2one(
+        related='company_id.overtime_leave_type_id',
+        readonly=False,
+    )
     hourly_departure_type_id = fields.Many2one(
         related='company_id.hourly_departure_type_id',
         readonly=False,

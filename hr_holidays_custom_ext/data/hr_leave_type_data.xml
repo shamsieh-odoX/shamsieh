@@ -36,4 +36,19 @@
         <field name="sequence">15</field>
         <field name="color">4</field>
     </record>
+
+    <record id="leave_type_overtime" model="hr.leave.type">
+        <field name="name">Overtime</field>
+        <field name="requires_allocation" eval="True"/>
+        <field name="allocation_validation_type">no_validation</field>
+        <field name="leave_validation_type">manager</field>
+        <field name="request_unit">hour</field>
+        <field name="leave_notif_subtype_id" ref="hr_holidays.mt_leave"/>
+        <field name="allocation_notif_subtype_id" ref="hr_holidays.mt_leave_allocation"/>
+        <field name="responsible_ids" eval="[(4, ref('base.user_admin'))]"/>
+        <field name="company_id" eval="False"/>
+        <field name="country_id" eval="False"/>
+        <field name="sequence">16</field>
+        <field name="color">10</field>
+    </record>
 </odoo>

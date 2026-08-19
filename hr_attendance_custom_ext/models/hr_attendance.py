@@ -269,7 +269,6 @@ class HrAttendance(models.Model):
                 raw_late = int(delta.total_seconds() // 60)
                 grace = policy.late_grace_minutes or 0
                 attendance.late_minutes = max(0, raw_late - grace)
-
             if attendance.check_out:
                 check_out_local = employee._datetime_to_employee_local(attendance.check_out)
                 sched_end_local = employee._datetime_to_employee_local(scheduled_end)

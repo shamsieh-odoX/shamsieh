@@ -13,6 +13,7 @@ class HrLeaveAllocation(models.Model):
             ('year_carryover', 'Year Carryover'),
             ('sick_renewal', 'Sick Leave Renewal'),
             ('hourly_departure_monthly', 'Hourly Departure Monthly'),
+            ('overtime_request', 'Overtime Request'),
         ],
         string='Allocation Origin',
         default='manual',
@@ -27,4 +28,11 @@ class HrLeaveAllocation(models.Model):
         string='Origin Month',
         index=True,
         help='Calendar month (1-12) this automated monthly allocation belongs to.',
+    )
+    overtime_request_id = fields.Many2one(
+        'hr.overtime.request',
+        string='Overtime Request',
+        index=True,
+        ondelete='set null',
+        help='Source overtime request that generated this allocation.',
     )

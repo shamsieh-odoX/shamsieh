@@ -11,6 +11,8 @@ from . import hr_sick_leave_renewal_log
 from . import hr_hourly_departure_balance
 from . import hr_hourly_departure_conversion
 from . import hr_hourly_departure_allocation_log
+from . import hr_overtime_leave_helper
+from . import hr_overtime_request
 from . import res_company
 from . import res_config_settings
 from . import resource_calendar_leaves
