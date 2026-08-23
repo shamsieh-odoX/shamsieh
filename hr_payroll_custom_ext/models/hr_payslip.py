@@ -9,15 +9,106 @@ _logger = logging.getLogger(__name__)
 
 DEFAULT_MONTHLY_HOURS = 173.33
 
+INPUT_TYPES = (
+    ('UNWORKED_DEDUCTION', 'Unworked Time Deduction'),
+    ('LOAN_DEDUCTION', 'Loan Installment'),
+    ('ADVANCE_DEDUCTION', 'Salary Advance Recovery'),
+)
+
+RULE_DEFINITIONS = (
+    {
+        'code': 'UNWORKED_DED',
+        'name': 'Unworked Time Deduction',
+        'sequence': 150,
+        'input_code': 'UNWORKED_DEDUCTION',
+    },
+    {
+        'code': 'LOAN_DED',
+        'name': 'Loan Installment',
+        'sequence': 160,
+        'input_code': 'LOAN_DEDUCTION',
+    },
+    {
+        'code': 'ADV_DED',
+        'name': 'Salary Advance Recovery',
+        'sequence': 170,
+        'input_code': 'ADVANCE_DEDUCTION',
+    },
+)
+
 
 class HrPayslip(models.Model):
     _inherit = 'hr.payslip'
 
     # ------------------------------------------------------------------
-    # Input auto-population (Odoo 19: sync on compute_sheet)
+    # Lazy setup (avoids fragile XML external IDs on install/upgrade)
+    # ------------------------------------------------------------------
+
+    def _ensure_payroll_custom_setup(self):
+        """Best-effort create input types + salary rules if missing."""
+        try:
+            self._ensure_input_types()
+            self._ensure_salary_rules()
+        except Exception:
+            _logger.exception(
+                'hr_payroll_custom_ext: setup of input types/rules failed'
+            )
+
+    def _ensure_input_types(self):
+        InputType = self.env['hr.payslip.input.type'].sudo()
+        for code, name in INPUT_TYPES:
+            existing = InputType.search([('code', '=', code)], limit=1)
+            if not existing:
+                InputType.create({'name': name, 'code': code})
+
+    def _ensure_salary_rules(self):
+        Category = self.env['hr.salary.rule.category'].sudo()
+        category = Category.search([('code', '=', 'CUSTOM_DED')], limit=1)
+        if not category:
+            vals = {'name': 'Custom Deductions', 'code': 'CUSTOM_DED'}
+            parent = self.env.ref('hr_payroll.DED', raise_if_not_found=False)
+            if parent:
+                vals['parent_id'] = parent.id
+            category = Category.create(vals)
+
+        Structure = self.env['hr.payroll.structure'].sudo()
+        structures = Structure.search([])
+        if not structures:
+            return
+
+        Rule = self.env['hr.salary.rule'].sudo()
+        for structure in structures:
+            for definition in RULE_DEFINITIONS:
+                existing = Rule.search([
+                    ('struct_id', '=', structure.id),
+                    ('code', '=', definition['code']),
+                ], limit=1)
+                input_code = definition['input_code']
+                vals = {
+                    'name': definition['name'],
+                    'code': definition['code'],
+                    'sequence': definition['sequence'],
+                    'category_id': category.id,
+                    'struct_id': structure.id,
+                    'condition_select': 'python',
+                    'condition_python': "result = inputs.get('%s', 0)" % input_code,
+                    'amount_select': 'code',
+                    'amount_python_compute': (
+                        "result = -(inputs.get('%s') or 0)" % input_code
+                    ),
+                    'active': True,
+                }
+                if existing:
+                    existing.write(vals)
+                else:
+                    Rule.create(vals)
+
+    # ------------------------------------------------------------------
+    # Input auto-population
     # ------------------------------------------------------------------
 
     def compute_sheet(self):
+        self._ensure_payroll_custom_setup()
         self._sync_custom_deduction_inputs()
         return super().compute_sheet()
 
@@ -29,7 +120,6 @@ class HrPayslip(models.Model):
                 payslip._upsert_input_line(code, amount, description)
 
     def _get_custom_deduction_inputs(self):
-        """Return a list of (input_type_code, amount, description) tuples."""
         self.ensure_one()
         result = []
         result += self._get_unworked_deduction_input()
@@ -68,6 +158,8 @@ class HrPayslip(models.Model):
 
     def _get_unworked_deduction_input(self):
         self.ensure_one()
+        if 'hr.attendance.daily.status' not in self.env:
+            return []
         DailyStatus = self.env['hr.attendance.daily.status'].sudo()
         statuses = DailyStatus.search([
             ('employee_id', '=', self.employee_id.id),
@@ -88,7 +180,6 @@ class HrPayslip(models.Model):
         return [('UNWORKED_DEDUCTION', amount, _('Unworked: %d min') % total_unworked)]
 
     def _loan_has_payment_for_period(self, loan):
-        """True if loan already has a monthly/payslip payment covering this payslip month."""
         as_of = self.date_to
         month_start = date(as_of.year, as_of.month, 1)
         if as_of.month == 12:
@@ -102,6 +193,8 @@ class HrPayslip(models.Model):
 
     def _get_loan_deduction_input(self):
         self.ensure_one()
+        if 'hr.employee.loan' not in self.env:
+            return []
         Loan = self.env['hr.employee.loan'].sudo()
         loans = Loan.search([
             ('employee_id', '=', self.employee_id.id),
@@ -121,6 +214,8 @@ class HrPayslip(models.Model):
 
     def _get_advance_deduction_input(self):
         self.ensure_one()
+        if 'hr.employee.advance' not in self.env:
+            return []
         Advance = self.env['hr.employee.advance'].sudo()
         advances = Advance.search([
             ('employee_id', '=', self.employee_id.id),
@@ -140,8 +235,14 @@ class HrPayslip(models.Model):
     def action_payslip_done(self):
         res = super().action_payslip_done()
         for payslip in self:
-            payslip._register_loan_payments()
-            payslip._register_advance_repayments()
+            try:
+                payslip._register_loan_payments()
+                payslip._register_advance_repayments()
+            except Exception:
+                _logger.exception(
+                    'hr_payroll_custom_ext: failed posting loan/advance for payslip %s',
+                    payslip.id,
+                )
         return res
 
     def _get_input_amount_by_code(self, code):
@@ -152,7 +253,7 @@ class HrPayslip(models.Model):
     def _register_loan_payments(self):
         self.ensure_one()
         deducted = self._get_input_amount_by_code('LOAN_DEDUCTION')
-        if deducted <= 0:
+        if deducted <= 0 or 'hr.employee.loan' not in self.env:
             return
         Loan = self.env['hr.employee.loan'].sudo()
         loans = Loan.search([
@@ -176,7 +277,7 @@ class HrPayslip(models.Model):
     def _register_advance_repayments(self):
         self.ensure_one()
         deducted = self._get_input_amount_by_code('ADVANCE_DEDUCTION')
-        if deducted <= 0:
+        if deducted <= 0 or 'hr.employee.advance' not in self.env:
             return
         Advance = self.env['hr.employee.advance'].sudo()
         advances = Advance.search([
