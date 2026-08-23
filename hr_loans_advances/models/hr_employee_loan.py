@@ -46,6 +46,7 @@ class HrEmployeeLoan(models.Model):
             ('draft', 'Draft'),
             ('submitted', 'Submitted'),
             ('manager_approved', 'Manager Approved'),
+            ('upper_manager_approved', 'Upper Manager Approved'),
             ('hr_approved', 'Active'),
             ('done', 'Paid Off'),
             ('refused', 'Refused'),
@@ -131,6 +132,14 @@ class HrEmployeeLoan(models.Model):
 
     def _approval_line_inverse_field(self):
         return 'request_id'
+
+    def _build_manager_hr_approval_chain(self, employee):
+        """Three-step loan chain: manager → upper manager → HR."""
+        service = self._get_approval_chain_service()
+        return service.build_manager_hr_chain(
+            employee.sudo(),
+            hr_group_xmlid=self._approval_hr_group_xmlid(),
+        )
 
     def _on_approval_complete(self):
         for loan in self:

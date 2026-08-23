@@ -131,7 +131,12 @@ class HrLoansAdvancesApprovalMixin(models.AbstractModel):
             record.can_refuse_request = can_approve
             record.can_cancel_request = (
                 (is_owner or is_hr_officer)
-                and record.state in ('draft', 'submitted', 'manager_approved')
+                and record.state in (
+                    'draft',
+                    'submitted',
+                    'manager_approved',
+                    'upper_manager_approved',
+                )
             )
             record.can_reset_request = (
                 (is_owner or is_hr_officer) and record.state in ('cancel', 'refused')
