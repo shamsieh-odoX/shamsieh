@@ -1,14 +1,10 @@
 {
     'name': 'HR Payroll Custom Extensions',
-    'version': '19.0.2.0.3',
+    'version': '19.0.2.1.0',
     'category': 'Human Resources/Payroll',
-    'summary': 'Auto-populate payslip deductions from attendance, loans, and salary advances',
+    'summary': 'Deprecated — uninstall this module (no longer used)',
     'author': 'Custom',
-    'depends': [
-        'hr_payroll',
-        'hr_attendance_custom_ext',
-        'hr_loans_advances',
-    ],
+    'depends': ['hr_payroll'],
     'data': [],
     'installable': True,
     'application': False,

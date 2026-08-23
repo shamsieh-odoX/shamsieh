@@ -1,3 +1,3 @@
 # -*- coding: utf-8 -*-
-
-from . import models
+# Module intentionally emptied so payslip generation works.
+# Uninstall "HR Payroll Custom Extensions" from Apps, then this folder can be deleted.
