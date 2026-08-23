@@ -155,13 +155,26 @@ class HrAttendance(models.Model):
                 Status._generate_for_employee_date(attendance.employee_id.sudo(), attendance.date)
 
     def _user_can_manage_attendance(self):
-        """Officers/managers may edit attendance; normal employees may not."""
+        """Only Manage-all / Administrator may manually edit attendance times.
+
+        Regular employees (own-reader) and Attendance Approvers (officer) can
+        still *see* records per Odoo rules, but cannot change check-in/out.
+        Device / systray punches use sudo or the attendance_*_punch context.
+        """
         user = self.env.user
         return (
             self.env.su
-            or user.has_group('hr_attendance.group_hr_attendance_officer')
+            or user.has_group('hr_attendance.group_hr_attendance_user')
             or user.has_group('hr_attendance.group_hr_attendance_manager')
         )
+
+    @api.depends('employee_id')
+    @api.depends_context('uid')
+    def _compute_is_manager(self):
+        """Drive form/list readonly: only Manage-all / Admin can edit times."""
+        can_edit = self._user_can_manage_attendance()
+        for attendance in self:
+            attendance.is_manager = can_edit
 
     def _check_manual_attendance_edit(self):
         if self._user_can_manage_attendance():
@@ -169,7 +182,7 @@ class HrAttendance(models.Model):
         raise AccessError(_(
             'You cannot create or edit attendance records. '
             'Use the fingerprint device or the attendance check-in menu. '
-            'Only Attendance Officers / Administrators can change attendance manually.'
+            'Only Attendance Administrators can change attendance manually.'
         ))
 
     @api.model_create_multi
@@ -201,7 +214,7 @@ class HrAttendance(models.Model):
             if not self._user_can_manage_attendance():
                 raise AccessError(_(
                     'You cannot delete attendance records. '
-                    'Contact an Attendance Officer / Administrator.'
+                    'Contact an Attendance Administrator.'
                 ))
         return super().unlink()
 
