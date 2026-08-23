@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="hr_attendance_date_range_wizard_view_form" model="ir.ui.view">
+        <field name="name">hr.attendance.date.range.wizard.form</field>
+        <field name="model">hr.attendance.date.range.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Attendance Date Range">
+                <group>
+                    <group>
+                        <field name="date_from"/>
+                        <field name="date_to"/>
+                    </group>
+                </group>
+                <footer>
+                    <button name="action_open_report" type="object" string="Open Report"
+                            class="btn-primary"/>
+                    <button string="Cancel" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_hr_attendance_date_range_wizard" model="ir.actions.act_window">
+        <field name="name">Report by Date Range</field>
+        <field name="res_model">hr.attendance.date.range.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+</odoo>
