@@ -105,11 +105,9 @@
         <field name="model">hr.attendance</field>
         <field name="inherit_id" ref="hr_attendance.hr_attendance_view_filter"/>
         <field name="arch" type="xml">
-            <xpath expr="//field[@name='check_in']" position="after">
-                <field name="date" string="Date From" filter_domain="[('date', '&gt;=', self)]"/>
-                <field name="date" string="Date To" filter_domain="[('date', '&lt;=', self)]"/>
-            </xpath>
-            <xpath expr="//filter[@name='check_in_filter']" position="after">
+            <!-- Replace datetime Date filter with a day-level From/To period picker. -->
+            <xpath expr="//filter[@name='check_in_filter']" position="replace">
+                <filter string="Date From / To" name="filter_attendance_date" date="date"/>
                 <separator/>
                 <filter string="Today" name="filter_today"
                         domain="[('date', '=', context_today().strftime('%Y-%m-%d'))]"/>
