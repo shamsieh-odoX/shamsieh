@@ -105,10 +105,13 @@
         <field name="model">hr.attendance</field>
         <field name="inherit_id" ref="hr_attendance.hr_attendance_view_filter"/>
         <field name="arch" type="xml">
-            <!-- Replace datetime Date filter with a day-level From/To period picker. -->
+            <!-- Real calendar From/To (not month/quarter period buckets). -->
+            <xpath expr="//field[@name='check_in']" position="before">
+                <field name="filter_date_from"/>
+                <field name="filter_date_to"/>
+            </xpath>
+            <!-- Drop the period-bucket Date filter; keep simple quick ranges only. -->
             <xpath expr="//filter[@name='check_in_filter']" position="replace">
-                <filter string="Date From / To" name="filter_attendance_date" date="date"/>
-                <separator/>
                 <filter string="Today" name="filter_today"
                         domain="[('date', '=', context_today().strftime('%Y-%m-%d'))]"/>
                 <filter string="This Week" name="filter_this_week"
@@ -141,12 +144,11 @@
         </field>
     </record>
 
-    <!-- Attendance report: allow custom date range instead of forcing Last 3 Months. -->
+    <!-- Attendance report: no forced period; use Date From / Date To calendars. -->
     <record id="hr_attendance.hr_attendance_reporting" model="ir.actions.act_window">
         <field name="context">{
             'search_default_employee': 2,
             'search_default_activeemployees': 1,
-            'search_default_filter_this_month': 1,
         }</field>
         <field name="search_view_id" ref="hr_attendance_view_filter_custom"/>
     </record>

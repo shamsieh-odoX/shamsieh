@@ -9,6 +9,18 @@ from odoo.exceptions import AccessError
 class HrAttendance(models.Model):
     _inherit = 'hr.attendance'
 
+    # Search-only helpers so Reporting can pick a real From / To calendar date.
+    filter_date_from = fields.Date(
+        string='Date From',
+        store=False,
+        search='_search_filter_date_from',
+    )
+    filter_date_to = fields.Date(
+        string='Date To',
+        store=False,
+        search='_search_filter_date_to',
+    )
+
     attendance_source = fields.Selection(
         selection=[
             ('fingerprint', 'Fingerprint'),
@@ -153,6 +165,18 @@ class HrAttendance(models.Model):
             if attendance.employee_id and attendance.date and key not in seen:
                 seen.add(key)
                 Status._generate_for_employee_date(attendance.employee_id.sudo(), attendance.date)
+
+    def _search_filter_date_from(self, operator, value):
+        """Map Date From search to attendance.date >= value."""
+        if not value:
+            return []
+        return [('date', '>=', value)]
+
+    def _search_filter_date_to(self, operator, value):
+        """Map Date To search to attendance.date <= value."""
+        if not value:
+            return []
+        return [('date', '<=', value)]
 
     def _user_can_manage_attendance(self):
         """Only Manage-all / Administrator may manually edit attendance times.
