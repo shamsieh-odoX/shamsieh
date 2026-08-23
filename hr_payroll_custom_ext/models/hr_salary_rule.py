@@ -2,7 +2,7 @@
 
 from odoo import api, models
 
-from odoo.addons.hr_payroll_custom_ext.hooks import _link_rules_to_structures
+from ..hooks import _ensure_custom_deduction_rules
 
 
 class HrSalaryRule(models.Model):
@@ -10,5 +10,5 @@ class HrSalaryRule(models.Model):
 
     @api.model
     def _link_custom_deduction_rules(self):
-        """Attach custom deduction rules to available payroll structures."""
-        _link_rules_to_structures(self.env)
+        """Create/update custom deduction rules on available structures."""
+        _ensure_custom_deduction_rules(self.env)
