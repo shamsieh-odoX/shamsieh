@@ -105,6 +105,19 @@
         <field name="model">hr.attendance</field>
         <field name="inherit_id" ref="hr_attendance.hr_attendance_view_filter"/>
         <field name="arch" type="xml">
+            <xpath expr="//field[@name='check_in']" position="after">
+                <field name="date" string="Date From" filter_domain="[('date', '&gt;=', self)]"/>
+                <field name="date" string="Date To" filter_domain="[('date', '&lt;=', self)]"/>
+            </xpath>
+            <xpath expr="//filter[@name='check_in_filter']" position="after">
+                <separator/>
+                <filter string="Today" name="filter_today"
+                        domain="[('date', '=', context_today().strftime('%Y-%m-%d'))]"/>
+                <filter string="This Week" name="filter_this_week"
+                        domain="[('date', '&gt;=', (context_today() + relativedelta(weeks=-1, weekday=0)).strftime('%Y-%m-%d'))]"/>
+                <filter string="This Month" name="filter_this_month"
+                        domain="[('date', '&gt;=', (context_today() - relativedelta(day=1)).strftime('%Y-%m-%d'))]"/>
+            </xpath>
             <xpath expr="//filter[@name='nocheckout']" position="after">
                 <filter string="Late" name="filter_late" domain="[('attendance_status', '=', 'late')]"/>
                 <filter string="On Leave" name="filter_on_leave" domain="[('attendance_status', '=', 'on_leave')]"/>
@@ -128,5 +141,15 @@
                 <filter string="Punch Type" name="groupby_hikvision_punch_type" context="{'group_by': 'hikvision_punch_type'}"/>
             </xpath>
         </field>
+    </record>
+
+    <!-- Attendance report: allow custom date range instead of forcing Last 3 Months. -->
+    <record id="hr_attendance.hr_attendance_reporting" model="ir.actions.act_window">
+        <field name="context">{
+            'search_default_employee': 2,
+            'search_default_activeemployees': 1,
+            'search_default_filter_this_month': 1,
+        }</field>
+        <field name="search_view_id" ref="hr_attendance_view_filter_custom"/>
     </record>
 </odoo>
