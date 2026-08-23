@@ -64,5 +64,33 @@
             <field name="global" eval="True"/>
         </record>
 
+        <record id="hr_remote_work_request_comp_rule" model="ir.rule">
+            <field name="name">Remote Work Request: multi-company</field>
+            <field name="model_id" ref="model_hr_remote_work_request"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+            <field name="global" eval="True"/>
+        </record>
+
+        <record id="hr_remote_work_request_rule_employee" model="ir.rule">
+            <field name="name">Remote Work Request: own</field>
+            <field name="model_id" ref="model_hr_remote_work_request"/>
+            <field name="domain_force">[('employee_id.user_id', '=', user.id)]</field>
+            <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+        </record>
+
+        <record id="hr_remote_work_request_rule_line_manager" model="ir.rule">
+            <field name="name">Remote Work Request: line manager</field>
+            <field name="model_id" ref="model_hr_remote_work_request"/>
+            <field name="domain_force">[('manager_id', '=', user.id)]</field>
+            <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+        </record>
+
+        <record id="hr_remote_work_request_rule_officer" model="ir.rule">
+            <field name="name">Remote Work Request: attendance officer</field>
+            <field name="model_id" ref="model_hr_remote_work_request"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="groups" eval="[(4, ref('hr_attendance.group_hr_attendance_officer'))]"/>
+        </record>
+
     </data>
 </odoo>

@@ -18,3 +18,7 @@ access_hr_employee_face_enroll_wizard_manager,hr.employee.face.enroll.wizard.man
 access_hr_attendance_punch_log_officer,hr.attendance.punch.log.officer,model_hr_attendance_punch_log,hr_attendance.group_hr_attendance_officer,1,0,0,0
 access_hr_attendance_punch_log_manager,hr.attendance.punch.log.manager,model_hr_attendance_punch_log,hr_attendance.group_hr_attendance_manager,1,1,1,1
 access_hr_attendance_punch_log_own,hr.attendance.punch.log.own,model_hr_attendance_punch_log,hr_attendance.group_hr_attendance_own_reader,1,0,0,0
+access_hr_remote_work_request_user,hr.remote.work.request.user,model_hr_remote_work_request,base.group_user,1,1,1,1
+access_hr_remote_work_request_officer,hr.remote.work.request.officer,model_hr_remote_work_request,hr_attendance.group_hr_attendance_officer,1,1,1,1
+access_hr_remote_work_request_manager,hr.remote.work.request.manager,model_hr_remote_work_request,hr_attendance.group_hr_attendance_manager,1,1,1,1
+access_hr_remote_work_refuse_wizard_user,hr.remote.work.refuse.wizard.user,model_hr_remote_work_refuse_wizard,base.group_user,1,1,1,1
