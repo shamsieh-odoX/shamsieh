@@ -6,13 +6,12 @@
         <field name="name">Unworked Time Deduction</field>
         <field name="code">UNWORKED_DED</field>
         <field name="category_id" ref="hr_payroll.DED"/>
-        <field name="struct_id" ref="hr_payroll.default_payroll_structure"/>
+        <field name="struct_id" ref="hr_payroll.structure_base"/>
         <field name="sequence">150</field>
         <field name="condition_select">python</field>
-        <field name="condition_python">result = inputs.get('UNWORKED_DEDUCTION') and inputs['UNWORKED_DEDUCTION'].amount > 0</field>
+        <field name="condition_python">result = inputs.get('UNWORKED_DEDUCTION', 0)</field>
         <field name="amount_select">code</field>
-        <field name="amount_python_compute">result = -inputs['UNWORKED_DEDUCTION'].amount</field>
-        <field name="appears_on_payslip" eval="True"/>
+        <field name="amount_python_compute">result = -(inputs.get('UNWORKED_DEDUCTION') or 0)</field>
     </record>
 
     <!-- Loan Installment Deduction -->
@@ -20,13 +19,12 @@
         <field name="name">Loan Installment</field>
         <field name="code">LOAN_DED</field>
         <field name="category_id" ref="hr_payroll.DED"/>
-        <field name="struct_id" ref="hr_payroll.default_payroll_structure"/>
+        <field name="struct_id" ref="hr_payroll.structure_base"/>
         <field name="sequence">160</field>
         <field name="condition_select">python</field>
-        <field name="condition_python">result = inputs.get('LOAN_DEDUCTION') and inputs['LOAN_DEDUCTION'].amount > 0</field>
+        <field name="condition_python">result = inputs.get('LOAN_DEDUCTION', 0)</field>
         <field name="amount_select">code</field>
-        <field name="amount_python_compute">result = -inputs['LOAN_DEDUCTION'].amount</field>
-        <field name="appears_on_payslip" eval="True"/>
+        <field name="amount_python_compute">result = -(inputs.get('LOAN_DEDUCTION') or 0)</field>
     </record>
 
     <!-- Salary Advance Recovery -->
@@ -34,13 +32,12 @@
         <field name="name">Salary Advance Recovery</field>
         <field name="code">ADV_DED</field>
         <field name="category_id" ref="hr_payroll.DED"/>
-        <field name="struct_id" ref="hr_payroll.default_payroll_structure"/>
+        <field name="struct_id" ref="hr_payroll.structure_base"/>
         <field name="sequence">170</field>
         <field name="condition_select">python</field>
-        <field name="condition_python">result = inputs.get('ADVANCE_DEDUCTION') and inputs['ADVANCE_DEDUCTION'].amount > 0</field>
+        <field name="condition_python">result = inputs.get('ADVANCE_DEDUCTION', 0)</field>
         <field name="amount_select">code</field>
-        <field name="amount_python_compute">result = -inputs['ADVANCE_DEDUCTION'].amount</field>
-        <field name="appears_on_payslip" eval="True"/>
+        <field name="amount_python_compute">result = -(inputs.get('ADVANCE_DEDUCTION') or 0)</field>
     </record>
 
 </odoo>

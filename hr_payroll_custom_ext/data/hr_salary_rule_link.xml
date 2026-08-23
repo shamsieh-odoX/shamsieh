@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Runs on install and upgrade so rules attach even when post_init already ran. -->
+    <function model="hr.salary.rule" name="_link_custom_deduction_rules"/>
+</odoo>
