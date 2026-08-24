@@ -1,8 +1,8 @@
 {
     'name': 'HR Payroll JO Custom Extensions (REMOVED — uninstall me)',
-    'version': '19.0.1.0.99',
+    'version': '19.0.1.1.0',
     'category': 'Hidden',
-    'summary': 'Stub so Odoo.sh can upgrade DBs that still have this module installed. Uninstall from Apps, then remove this addon.',
+    'summary': 'Stub + Studio payslip field repair. Uninstall after upgrade if unused.',
     'author': 'Custom',
     'depends': ['base'],
     'data': [],
