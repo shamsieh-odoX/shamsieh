@@ -45,8 +45,8 @@
                                  help="Optional. Only members of this group may start an agent session. This narrows who can use the agent; it never grants any data access.">
                             <field name="botify_allowed_group_id"/>
                         </setting>
-                        <setting string="Allow assistant writes to custom models"
-                                 help="Off by default. The shared policy manifest covers standard Odoo models only, so writes to this database's own custom or Studio models are refused unless you enable this AND classify the specific models in Botify. Enabling it grants nothing by itself: your own access rights and record rules still decide every operation.">
+                        <setting string="Honor Botify's classification for custom models"
+                                 help="Off by default. This database's own custom or Studio models are already reachable by the assistant like any other model your users have Odoo permission for — this switch does not block or allow that. When enabled, it additionally lets Botify's own classification of one of those models (its write operation class and a sensitivity flag for auditing) override the default. It can never reclassify a standard Odoo model, and it cannot be turned on from Botify. Enabling it grants nothing by itself: your own access rights and record rules still decide every operation.">
                             <field name="botify_allow_custom_models"/>
                         </setting>
                         <setting string="Grant lifetime (seconds)"

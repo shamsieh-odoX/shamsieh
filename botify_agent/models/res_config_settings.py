@@ -55,17 +55,21 @@ class ResConfigSettings(models.TransientModel):
         default=False,
     )
     botify_allow_custom_models = fields.Boolean(
-        string="Allow assistant writes to custom models",
+        string="Honor Botify's classification for custom models",
         config_parameter="botify_agent.allow_custom_models",
         default=False,
-        help="Off by default. The shared policy manifest classifies standard Odoo "
-             "models only, so writes to this database's OWN custom models "
-             "(developer modules or Studio objects) are refused unless you turn "
-             "this on AND classify the specific models in Botify. This switch is "
-             "the Odoo-side half of that decision: it cannot be set from Botify, "
-             "so nothing outside this database can unlock custom-model writes on "
-             "its own. It grants nothing by itself, and Odoo's own access rights "
-             "and record rules still decide every individual operation.",
+        help="Off by default. This database's OWN custom or Studio models are "
+             "already reachable by the assistant like any other model your users "
+             "have Odoo permission for — this switch does not block or allow that "
+             "reachability. When enabled, it additionally lets Botify's own "
+             "per-model classification for one of those custom models (its "
+             "declared write operation class and a sensitivity flag used for "
+             "audit logging) override the default classification. A "
+             "classification can never reclassify a standard Odoo model or reach "
+             "Odoo's own infrastructure/auth models, and it cannot be turned on "
+             "from Botify — nothing outside this database can enable it. It "
+             "grants nothing by itself, and Odoo's own access rights and record "
+             "rules still decide every individual operation.",
     )
     botify_grant_ttl = fields.Integer(
         string="Grant lifetime (seconds)",
@@ -96,6 +100,34 @@ class ResConfigSettings(models.TransientModel):
             if ttl and not (30 <= ttl <= 300):
                 raise ValidationError(
                     "Assertion lifetime must be between 30 and 300 seconds."
+                )
+
+    @api.constrains("botify_grant_ttl")
+    def _check_grant_ttl(self):
+        for record in self:
+            ttl = record.botify_grant_ttl
+            # Bounds mirror MIN_GRANT_TTL/MAX_GRANT_TTL in controllers/_shared.py,
+            # which already clamps a value outside this range at read time. That
+            # clamp is a safety net, not a substitute for telling the operator
+            # their input was ignored — fail loudly here instead, same as
+            # _check_assertion_ttl above.
+            if ttl and not (15 <= ttl <= 300):
+                raise ValidationError(
+                    "Grant lifetime must be between 15 and 300 seconds."
+                )
+
+    @api.constrains("botify_secret_grace_hours")
+    def _check_secret_grace_hours(self):
+        for record in self:
+            hours = record.botify_secret_grace_hours
+            # 0 is a legitimate choice (instant cutover, no grace window).
+            # Negative is nonsensical. An unbounded upper value defeats the
+            # point of rotating the secret at all — an old, possibly-leaked
+            # secret would keep being accepted indefinitely — so cap it at one
+            # week, generous for any realistic rollout of a new secret.
+            if hours < 0 or hours > 168:
+                raise ValidationError(
+                    "Secret rotation grace window must be between 0 and 168 hours (1 week)."
                 )
 
     def action_botify_generate_secret(self):
