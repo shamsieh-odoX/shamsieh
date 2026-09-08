@@ -2,7 +2,7 @@
 <templates xml:space="preserve">
 
 <t t-name="hr_attendance_custom_ext.HomePinDialog">
-    <Dialog t-att-title="dialogTitle" size="'sm'">
+    <Dialog title="dialogTitle" size="'sm'">
         <div class="d-flex flex-column gap-3">
             <p class="mb-0 text-muted" t-esc="instructions"/>
             <input class="form-control"

@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="hr_remote_work_request_view_list" model="ir.ui.view">
+        <field name="name">hr.remote.work.request.list</field>
+        <field name="model">hr.remote.work.request</field>
+        <field name="arch" type="xml">
+            <list decoration-danger="state == 'refused'" decoration-success="state == 'approved'">
+                <field name="name"/>
+                <field name="employee_id" widget="many2one_avatar_employee"/>
+                <field name="company_id" groups="base.group_multi_company" optional="show"/>
+                <field name="date_from"/>
+                <field name="date_to"/>
+                <field name="duration_days" optional="show"/>
+                <field name="manager_id" optional="hide"/>
+                <field name="state" widget="badge"
+                    decoration-info="state in ('draft', 'submitted')"
+                    decoration-warning="state == 'manager_approved'"
+                    decoration-success="state == 'approved'"
+                    decoration-danger="state == 'refused'"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="hr_remote_work_request_view_form" model="ir.ui.view">
+        <field name="name">hr.remote.work.request.form</field>
+        <field name="model">hr.remote.work.request</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <field name="can_submit" invisible="1"/>
+                    <field name="can_manager_approve" invisible="1"/>
+                    <field name="can_hr_approve" invisible="1"/>
+                    <field name="can_refuse" invisible="1"/>
+                    <field name="can_cancel" invisible="1"/>
+                    <button name="action_submit" string="Submit" type="object" class="btn-primary"
+                        invisible="not can_submit"/>
+                    <button name="action_manager_approve" string="Manager Approve" type="object" class="btn-primary"
+                        invisible="not can_manager_approve"/>
+                    <button name="action_hr_approve" string="HR Approve" type="object" class="btn-primary"
+                        invisible="not can_hr_approve"/>
+                    <button name="action_refuse" string="Refuse" type="object"
+                        invisible="not can_refuse"/>
+                    <button name="action_cancel" string="Cancel" type="object"
+                        invisible="not can_cancel"/>
+                    <field name="state" widget="statusbar"
+                        statusbar_visible="draft,submitted,manager_approved,approved"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="employee_id" readonly="state != 'draft'"/>
+                            <field name="department_id"/>
+                            <field name="company_id" groups="base.group_multi_company" readonly="state != 'draft'"/>
+                        </group>
+                        <group>
+                            <label for="date_from" string="Period"/>
+                            <div class="o_row">
+                                <field name="date_from" readonly="state != 'draft'" nolabel="1"/>
+                                <i class="fa fa-long-arrow-right mx-2" title="to"/>
+                                <field name="date_to" readonly="state != 'draft'" nolabel="1"/>
+                            </div>
+                            <field name="duration_days" readonly="1"/>
+                            <field name="manager_id" readonly="1"/>
+                            <field name="manager_approval_date" readonly="1" invisible="not manager_approval_date"/>
+                            <field name="hr_approval_date" readonly="1" invisible="not hr_approval_date"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="reason" readonly="state != 'draft'"/>
+                        <field name="refuse_reason" readonly="1" invisible="state != 'refused'"/>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="hr_remote_work_request_view_search" model="ir.ui.view">
+        <field name="name">hr.remote.work.request.search</field>
+        <field name="model">hr.remote.work.request</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="employee_id"/>
+                <field name="manager_id"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+                <filter string="My Requests" name="filter_my_requests"
+                    domain="[('employee_id.user_id', '=', uid)]"/>
+                <filter string="To Approve (Manager)" name="filter_manager_approve"
+                    domain="[('state', '=', 'submitted'), ('manager_id', '=', uid)]"/>
+                <filter string="To Approve (HR)" name="filter_hr_approve"
+                    domain="[('state', '=', 'manager_approved')]"/>
+                <filter string="Approved" name="filter_approved" domain="[('state', '=', 'approved')]"/>
+                <filter string="Refused" name="filter_refused" domain="[('state', '=', 'refused')]"/>
+                <group>
+                    <filter string="Company" name="group_company" context="{'group_by': 'company_id'}" groups="base.group_multi_company"/>
+                    <filter string="Status" name="group_state" context="{'group_by': 'state'}"/>
+                    <filter string="Employee" name="group_employee" context="{'group_by': 'employee_id'}"/>
+                    <filter string="Start Date" name="group_date_from" context="{'group_by': 'date_from'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_hr_remote_work_request" model="ir.actions.act_window">
+        <field name="name">Remote Work Requests</field>
+        <field name="res_model">hr.remote.work.request</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="hr_remote_work_request_view_search"/>
+        <field name="context">{'search_default_filter_my_requests': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Request work from home for one day or a period.
+            </p>
+            <p>
+                After manager and HR approval, you can check in from Odoo on each approved day
+                using face verification or your home PIN.
+            </p>
+        </field>
+    </record>
+
+    <record id="action_hr_remote_work_request_manager" model="ir.actions.act_window">
+        <field name="name">Remote Work — Manager Approval</field>
+        <field name="res_model">hr.remote.work.request</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="hr_remote_work_request_view_search"/>
+        <field name="context">{'search_default_filter_manager_approve': 1}</field>
+    </record>
+
+    <record id="action_hr_remote_work_request_hr" model="ir.actions.act_window">
+        <field name="name">Remote Work — HR Approval</field>
+        <field name="res_model">hr.remote.work.request</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="hr_remote_work_request_view_search"/>
+        <field name="context">{'search_default_filter_hr_approve': 1}</field>
+    </record>
+
+</odoo>

@@ -481,15 +481,54 @@ class HrEmployee(models.Model):
         })
         return True
 
+    def _get_remote_work_leave_type(self):
+        leave_type = self.env.ref(
+            'hr_attendance_custom_ext.leave_type_remote_work',
+            raise_if_not_found=False,
+        )
+        if leave_type:
+            return leave_type
+        return self.env['hr.leave.type'].search([
+            ('name', '=', 'Remote Work'),
+            ('active', '=', True),
+        ], limit=1)
+
+    def _has_approved_remote_work(self, check_datetime=None):
+        self.ensure_one()
+        leave_type = self._get_remote_work_leave_type()
+        if not leave_type:
+            return False
+        when = check_datetime or fields.Datetime.now()
+        target_date = fields.Date.to_date(when)
+        return bool(self.env['hr.leave'].sudo().search_count([
+            ('employee_id', '=', self.id),
+            ('holiday_status_id', '=', leave_type.id),
+            ('state', '=', 'validate'),
+            ('request_date_from', '<=', target_date),
+            ('request_date_to', '>=', target_date),
+        ]))
+
     def _get_attendance_scheduled_location(self, check_datetime=None):
         """Schedule-only location for attendance rules. Defaults to office."""
         self.ensure_one()
-        location = self._get_schedule_location_type(
-            check_datetime=check_datetime or fields.Datetime.now(),
-        )
+        when = check_datetime or fields.Datetime.now()
+        if self._has_approved_remote_work(when):
+            return 'home'
+        location = self._get_schedule_location_type(check_datetime=when)
         if location == 'home':
             return 'home'
         return 'office'
+
+    def _get_remote_check_in_method(self, check_datetime=None):
+        """Return face or home_pin for manual home check-in, or False when not applicable."""
+        self.ensure_one()
+        if self._get_attendance_scheduled_location(check_datetime) != 'home':
+            return False
+        if self.remote_attendance_allowed:
+            template = self.env['hr.employee.face.template'].get_active_for_employee(self)
+            if template:
+                return 'face'
+        return 'home_pin'
 
     def _manual_attendance_allowed(self, check_datetime=None):
         self.ensure_one()
@@ -521,6 +560,8 @@ class HrEmployee(models.Model):
 
     def _get_effective_work_location_type(self):
         self.ensure_one()
+        if self._has_approved_remote_work():
+            return 'home'
         schedule_location = self._get_schedule_location_type()
         if schedule_location:
             return schedule_location
@@ -814,15 +855,18 @@ class HrEmployee(models.Model):
         response = HrAttendance._get_user_attendance_data(self)
         scheduled_location = self._get_attendance_scheduled_location()
         manual_allowed = scheduled_location == 'home'
+        approved_remote_work_today = self._has_approved_remote_work()
+        check_in_method = self._get_remote_check_in_method() if manual_allowed else False
         break_allowed = self._systray_break_punch_allowed()
         policy = self.env['fingerprint.attendance.policy'].get_company_default(self.company_id)
         response.update({
             'scheduled_location': scheduled_location,
             'manual_attendance_allowed': manual_allowed,
+            'approved_remote_work_today': approved_remote_work_today,
             'break_punch_allowed': break_allowed,
             'work_location_type': scheduled_location,
-            'check_in_requires_face': False,
-            'check_in_requires_home_pin': False,
+            'check_in_requires_face': check_in_method == 'face',
+            'check_in_requires_home_pin': check_in_method == 'home_pin',
             'check_in_requires_office_geo': False,
             'office_geo_configured': self._is_office_geo_configured(),
             'single_check_in_per_day': not policy.allow_multiple_attendances_per_day,
@@ -895,7 +939,7 @@ class HrEmployee(models.Model):
                 device_location=self.env.context.get('attendance_device_location'),
             )
         attendance = super(
-            type(self), self.with_context(attendance_employee_self_punch=True)
+            HrEmployee, self.with_context(attendance_employee_self_punch=True)
         )._attendance_action_change(geo_information=geo_information)
         if attendance and not attendance.attendance_source:
             mode_map = {

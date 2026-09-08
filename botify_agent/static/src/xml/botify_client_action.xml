@@ -12,9 +12,27 @@
             </div>
 
             <t t-else="">
-                <div class="text-muted small mb-2">
-                    Signed in as <strong t-esc="state.userName"/>.
-                    The assistant only sees what your Odoo permissions allow.
+                <div class="text-muted small mb-2 d-flex align-items-center justify-content-between">
+                    <span>
+                        Signed in as <strong t-esc="state.userName"/>.
+                        The assistant only sees what your Odoo permissions allow.
+                    </span>
+                    <button type="button"
+                            class="btn btn-sm flex-shrink-0 ms-2"
+                            t-att-class="isVoiceActive() ? 'btn-danger' : 'btn-outline-primary'"
+                            t-att-disabled="state.voiceStatus === 'disconnecting'"
+                            t-on-click="toggleVoice"
+                            t-att-title="isVoiceActive() ? 'End voice call' : 'Start voice call'">
+                        <i class="fa" t-att-class="isVoiceActive() ? 'fa-phone-slash' : 'fa-microphone'"/>
+                        <t t-if="state.voiceStatus === 'connecting'"> Connecting…</t>
+                        <t t-elif="state.voiceStatus === 'connected'"> On call</t>
+                        <t t-elif="state.voiceStatus === 'disconnecting'"> Ending…</t>
+                        <t t-else=""> Voice</t>
+                    </button>
+                </div>
+
+                <div t-if="state.voiceError" class="alert alert-warning py-1 px-2 small mb-2" role="alert">
+                    <t t-esc="state.voiceError"/>
                 </div>
 
                 <div class="o_botify_messages flex-grow-1 overflow-auto mb-2">

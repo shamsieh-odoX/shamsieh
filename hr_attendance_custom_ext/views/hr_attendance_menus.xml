@@ -8,11 +8,25 @@
         <field name="active" eval="False"/>
     </record>
 
+    <menuitem id="menu_attendance_date_range_report"
+              name="Report by Date Range"
+              parent="hr_attendance.menu_hr_attendance_reporting"
+              action="action_hr_attendance_date_range_wizard"
+              sequence="5"
+              groups="hr_attendance.group_hr_attendance_officer"/>
+
     <menuitem id="menu_hr_employee_live_status"
               name="Live Status"
               parent="hr_attendance.menu_hr_attendance_overview"
               action="action_hr_employee_live_status"
               sequence="15"
+              groups="hr_attendance.group_hr_attendance_officer"/>
+
+    <menuitem id="menu_unworked_time_overview"
+              name="Unworked Time"
+              parent="hr_attendance.menu_hr_attendance_overview"
+              action="action_unworked_time_report"
+              sequence="16"
               groups="hr_attendance.group_hr_attendance_officer"/>
 
     <menuitem id="menu_fingerprint_devices"
@@ -78,10 +92,18 @@
               sequence="34"
               groups="hr_attendance.group_hr_attendance_officer"/>
 
+    <menuitem id="menu_unworked_time_report"
+              name="Unworked Time Report"
+              parent="hr_attendance.menu_hr_attendance_reporting"
+              action="action_unworked_time_report"
+              sequence="35"
+              groups="hr_attendance.group_hr_attendance_officer"/>
+
     <menuitem id="menu_pin_attendance_logs_report"
               name="PIN Attendance Logs"
               parent="hr_attendance.menu_hr_attendance_reporting"
               action="action_pin_attendance_logs_report"
               sequence="27"
               groups="hr_attendance.group_hr_attendance_officer"/>
+
 </odoo>

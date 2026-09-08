@@ -42,7 +42,22 @@ def _configure_hourly_departure_defaults(env):
         companies.write({'hourly_departure_type_id': departure_type.id})
 
 
+def _configure_overtime_leave_defaults(env):
+    overtime_type = env.ref(
+        'hr_holidays_custom_ext.leave_type_overtime',
+        raise_if_not_found=False,
+    )
+    if not overtime_type:
+        return
+    companies = env['res.company'].sudo().search([
+        ('overtime_leave_type_id', '=', False),
+    ])
+    if companies:
+        companies.write({'overtime_leave_type_id': overtime_type.id})
+
+
 def post_init_hook(env):
     _configure_two_step_leave_types(env)
     _configure_hourly_departure_defaults(env)
+    _configure_overtime_leave_defaults(env)
     _reload_ar_translations(env, 'hr_holidays_custom_ext')

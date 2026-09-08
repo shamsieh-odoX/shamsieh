@@ -54,6 +54,12 @@
                         <field name="face_liveness_required" readonly="1"/>
                     </setting>
                 </block>
+                <block title="Remote Work Requests" name="remote_work_requests_block">
+                    <setting string="Enable Remote Work Requests" company_dependent="1"
+                             help="Allow employees to request ad-hoc work-from-home days. Approved requests enable Odoo check-in (face or home PIN) on office calendar days.">
+                        <field name="remote_work_requests_enabled"/>
+                    </setting>
+                </block>
             </xpath>
         </field>
     </record>

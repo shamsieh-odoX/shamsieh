@@ -28,6 +28,12 @@ class ResCompany(models.Model):
         help='Maximum unused annual leave days carried into the new year per employee. '
              'Set to 0 for no limit.',
     )
+    overtime_leave_type_id = fields.Many2one(
+        'hr.leave.type',
+        string='Overtime Leave Type',
+        domain="['|', ('company_id', '=', False), ('company_id', '=', id)]",
+        help='Time off type used for overtime hours (earned from approved OT or fingerprint extra).',
+    )
     hourly_departure_type_id = fields.Many2one(
         'hr.leave.type',
         string='Hourly Departure Leave Type',
@@ -50,6 +56,15 @@ class ResCompany(models.Model):
         if self.annual_leave_type_id:
             return self.annual_leave_type_id
         return self.env.ref('hr_holidays.leave_type_paid_time_off', raise_if_not_found=False)
+
+    def _get_overtime_leave_type(self):
+        self.ensure_one()
+        if self.overtime_leave_type_id:
+            return self.overtime_leave_type_id
+        return self.env.ref(
+            'hr_holidays_custom_ext.leave_type_overtime',
+            raise_if_not_found=False,
+        )
 
     def _get_hourly_departure_type(self):
         self.ensure_one()

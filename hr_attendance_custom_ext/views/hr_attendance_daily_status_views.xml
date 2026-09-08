@@ -15,6 +15,9 @@
                 <field name="check_out"/>
                 <field name="late_minutes"/>
                 <field name="early_checkout_minutes"/>
+                <field name="extra_minutes"/>
+                <field name="billable_late_minutes"/>
+                <field name="unworked_minutes"/>
                 <field name="worked_hours"/>
                 <field name="source_summary" optional="hide"/>
             </list>
@@ -43,6 +46,9 @@
                             <field name="check_out"/>
                             <field name="late_minutes"/>
                             <field name="early_checkout_minutes"/>
+                            <field name="extra_minutes"/>
+                            <field name="billable_late_minutes"/>
+                            <field name="unworked_minutes"/>
                             <field name="worked_hours"/>
                             <field name="source_summary"/>
                             <field name="notes"/>
@@ -88,6 +94,8 @@
                 <field name="employee_id" type="row"/>
                 <field name="date" type="col"/>
                 <field name="late_minutes" type="measure"/>
+                <field name="billable_late_minutes" type="measure"/>
+                <field name="unworked_minutes" type="measure"/>
                 <field name="worked_hours" type="measure"/>
             </pivot>
         </field>
@@ -113,6 +121,14 @@
         <field name="view_mode">list,pivot,graph</field>
         <field name="domain">[('status', 'in', ['absent', 'incomplete'])]</field>
         <field name="context">{'search_default_group_department': 1}</field>
+    </record>
+
+    <record id="action_unworked_time_report" model="ir.actions.act_window">
+        <field name="name">Unworked Time</field>
+        <field name="res_model">hr.attendance.daily.status</field>
+        <field name="view_mode">list,pivot,graph,form</field>
+        <field name="domain">[('unworked_minutes', '&gt;', 0)]</field>
+        <field name="context">{'search_default_group_employee': 1}</field>
     </record>
 
     <record id="action_department_attendance_report" model="ir.actions.act_window">

@@ -57,6 +57,12 @@
                                 groups="hr_holidays.group_hr_holidays_manager"/>
                     </setting>
                 </block>
+                <block title="Overtime Time Off" name="overtime_leave_setting_container">
+                    <setting string="Overtime Leave Type" company_dependent="1"
+                             help="Time off type used for banked overtime hours (from approved OT requests and fingerprint extra/early entry).">
+                        <field name="overtime_leave_type_id"/>
+                    </setting>
+                </block>
                 <block title="Hourly Departures (Article 11)" name="hourly_departure_setting_container">
                     <setting string="Hourly Departure Type" company_dependent="1"
                              help="Time off type used for short hourly departures under Article 11.">

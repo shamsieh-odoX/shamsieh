@@ -49,16 +49,20 @@ class HrApprovalChainService(models.AbstractModel):
         """Return a representative HR user; any member of the HR group may act."""
         xmlid = hr_group_xmlid or 'hr_overtime_management.group_overtime_hr_officer'
         hr_group = self.env.ref(xmlid, raise_if_not_found=False)
-        if hr_group and hr_group.all_user_ids:
-            company_users = hr_group.all_user_ids.filtered(
-                lambda u: employee.company_id in u.company_ids or not employee.company_id
-            )
-            if company_users:
-                return company_users[0]
-            return hr_group.all_user_ids[0]
+        employee_company_id = employee.sudo().company_id.id
+        if hr_group:
+            hr_users = hr_group.sudo().all_user_ids
+            if hr_users:
+                for user in hr_users:
+                    # Compare ids via sudo so submitters are not forced to read
+                    # every company on HR users (Odoo "company rule employee").
+                    user_company_ids = user.sudo().company_ids.ids
+                    if not employee_company_id or employee_company_id in user_company_ids:
+                        return user
+                return hr_users[0]
         fallback_group = self.env.ref('hr.group_hr_user', raise_if_not_found=False)
-        if fallback_group and fallback_group.all_user_ids:
-            return fallback_group.all_user_ids[0]
+        if fallback_group and fallback_group.sudo().all_user_ids:
+            return fallback_group.sudo().all_user_ids[0]
         return self.env.ref('base.user_admin', raise_if_not_found=False)
 
     @api.model

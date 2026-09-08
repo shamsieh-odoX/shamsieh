@@ -36,6 +36,9 @@ patch(ActivityMenu.prototype, {
     get labelOfficeDayHint() {
         return _t("Office day — use the fingerprint device to check in and out.");
     },
+    get labelRemoteWorkHint() {
+        return _t("Remote work approved — check in from home.");
+    },
     get labelBreakHint() {
         return _t("Break Out / Break In: use Odoo or the fingerprint device.");
     },
@@ -128,6 +131,12 @@ patch(ActivityMenu.prototype, {
     },
 
     async _homeManualCheckIn() {
+        if (this.employee?.check_in_requires_face) {
+            return this._openFaceCheckDialog();
+        }
+        if (this.employee?.check_in_requires_home_pin) {
+            return this._openHomePinDialog();
+        }
         try {
             this.employee = await rpc("/hr_attendance/systray_check_in_out", {});
             this._searchReadEmployeeFill();

@@ -13,6 +13,15 @@
             <xpath expr="//field[@name='out_latitude']" position="replace"/>
             <xpath expr="//field[@name='out_longitude']" position="replace"/>
             <xpath expr="//field[@name='out_location']" position="replace"/>
+            <xpath expr="//field[@name='check_in']" position="before">
+                <field name="is_manager" column_invisible="1"/>
+            </xpath>
+            <xpath expr="//field[@name='check_in']" position="attributes">
+                <attribute name="readonly">not is_manager</attribute>
+            </xpath>
+            <xpath expr="//field[@name='check_out']" position="attributes">
+                <attribute name="readonly">not is_manager</attribute>
+            </xpath>
             <xpath expr="//field[@name='worked_hours']" position="after">
                 <field name="hikvision_presence_status" optional="show" widget="badge"
                        decoration-success="hikvision_presence_status == 'working'"
@@ -28,6 +37,9 @@
                 <field name="is_public_holiday" optional="hide"/>
                 <field name="late_minutes" optional="show"/>
                 <field name="early_checkout_minutes" optional="show"/>
+                <field name="extra_minutes" optional="show"/>
+                <field name="billable_late_minutes" optional="show"/>
+                <field name="unworked_minutes" optional="show"/>
                 <field name="missing_checkout" optional="show"/>
                 <field name="face_verified" optional="hide"/>
             </xpath>
@@ -39,6 +51,13 @@
         <field name="model">hr.attendance</field>
         <field name="inherit_id" ref="hr_attendance.hr_attendance_view_form"/>
         <field name="arch" type="xml">
+            <xpath expr="//field[@name='check_in']" position="attributes">
+                <attribute name="readonly">not is_manager</attribute>
+            </xpath>
+            <xpath expr="//field[@name='check_out']" position="attributes">
+                <attribute name="readonly">not is_manager</attribute>
+                <attribute name="placeholder">Currently Working</attribute>
+            </xpath>
             <xpath expr="//field[@name='worked_hours']" position="before">
                 <field name="hikvision_presence_status" readonly="1" widget="badge"
                        decoration-success="hikvision_presence_status == 'working'"
@@ -54,14 +73,14 @@
                 <field name="is_public_holiday" readonly="1"/>
                 <field name="late_minutes" readonly="1"/>
                 <field name="early_checkout_minutes" readonly="1"/>
+                <field name="extra_minutes" readonly="1"/>
+                <field name="billable_late_minutes" readonly="1"/>
+                <field name="unworked_minutes" readonly="1"/>
                 <field name="missing_checkout" readonly="1"/>
                 <field name="face_verified" readonly="1"/>
                 <field name="device_id" readonly="1"/>
                 <field name="device_user_id" readonly="1"/>
                 <field name="external_log_id" readonly="1"/>
-            </xpath>
-            <xpath expr="//field[@name='check_out']" position="attributes">
-                <attribute name="placeholder">Currently Working</attribute>
             </xpath>
             <xpath expr="//separator[@name='check_out_separator']" position="before">
                 <separator string="Punch History"/>
@@ -86,6 +105,20 @@
         <field name="model">hr.attendance</field>
         <field name="inherit_id" ref="hr_attendance.hr_attendance_view_filter"/>
         <field name="arch" type="xml">
+            <!-- Real calendar From/To (not month/quarter period buckets). -->
+            <xpath expr="//field[@name='check_in']" position="before">
+                <field name="filter_date_from"/>
+                <field name="filter_date_to"/>
+            </xpath>
+            <!-- Drop the period-bucket Date filter; keep simple quick ranges only. -->
+            <xpath expr="//filter[@name='check_in_filter']" position="replace">
+                <filter string="Today" name="filter_today"
+                        domain="[('date', '=', context_today().strftime('%Y-%m-%d'))]"/>
+                <filter string="This Week" name="filter_this_week"
+                        domain="[('date', '&gt;=', (context_today() + relativedelta(weeks=-1, weekday=0)).strftime('%Y-%m-%d'))]"/>
+                <filter string="This Month" name="filter_this_month"
+                        domain="[('date', '&gt;=', (context_today() - relativedelta(day=1)).strftime('%Y-%m-%d'))]"/>
+            </xpath>
             <xpath expr="//filter[@name='nocheckout']" position="after">
                 <filter string="Late" name="filter_late" domain="[('attendance_status', '=', 'late')]"/>
                 <filter string="On Leave" name="filter_on_leave" domain="[('attendance_status', '=', 'on_leave')]"/>
@@ -109,5 +142,14 @@
                 <filter string="Punch Type" name="groupby_hikvision_punch_type" context="{'group_by': 'hikvision_punch_type'}"/>
             </xpath>
         </field>
+    </record>
+
+    <!-- Attendance report: no forced period; use Date From / Date To calendars. -->
+    <record id="hr_attendance.hr_attendance_reporting" model="ir.actions.act_window">
+        <field name="context">{
+            'search_default_employee': 2,
+            'search_default_activeemployees': 1,
+        }</field>
+        <field name="search_view_id" ref="hr_attendance_view_filter_custom"/>
     </record>
 </odoo>

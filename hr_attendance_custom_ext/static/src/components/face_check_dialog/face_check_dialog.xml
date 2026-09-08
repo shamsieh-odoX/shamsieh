@@ -2,7 +2,7 @@
 <templates xml:space="preserve">
 
 <t t-name="hr_attendance_custom_ext.FaceCheckDialog">
-    <Dialog t-att-title="dialogTitle" size="'md'">
+    <Dialog title="dialogTitle" size="'md'">
         <div class="d-flex flex-column gap-3">
             <p class="mb-0 text-muted" t-esc="instructions"/>
             <div class="position-relative bg-dark rounded overflow-hidden" style="aspect-ratio: 4/3;">

@@ -26,13 +26,10 @@ class HrHourlyDepartureBalance(models.Model):
         help='Remainder of validated departure hours not yet converted to annual leave.',
     )
 
-    _sql_constraints = [
-        (
-            'employee_uniq',
-            'unique(employee_id)',
-            'Each employee can only have one hourly departure balance.',
-        ),
-    ]
+    _employee_uniq = models.Constraint(
+        'unique(employee_id)',
+        'Each employee can only have one hourly departure balance.',
+    )
 
     @api.model
     def _get_or_create_for_employee(self, employee):

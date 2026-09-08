@@ -1,2 +1,3 @@
 # -*- coding: utf-8 -*-
-# Stub: module removed. Uninstall from Apps, then delete this folder.
+# Module intentionally emptied so payslip generation works.
+# Uninstall "HR Payroll Custom Extensions" from Apps, then this folder can be deleted.

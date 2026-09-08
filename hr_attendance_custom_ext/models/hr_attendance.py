@@ -9,6 +9,18 @@ from odoo.exceptions import AccessError
 class HrAttendance(models.Model):
     _inherit = 'hr.attendance'
 
+    # Search-only helpers so Reporting can pick a real From / To calendar date.
+    filter_date_from = fields.Date(
+        string='Date From',
+        store=False,
+        search='_search_filter_date_from',
+    )
+    filter_date_to = fields.Date(
+        string='Date To',
+        store=False,
+        search='_search_filter_date_to',
+    )
+
     attendance_source = fields.Selection(
         selection=[
             ('fingerprint', 'Fingerprint'),
@@ -57,6 +69,21 @@ class HrAttendance(models.Model):
     )
     early_checkout_minutes = fields.Integer(
         string='Early Checkout Minutes',
+        compute='_compute_attendance_status_fields',
+        store=True,
+    )
+    extra_minutes = fields.Integer(
+        string='Extra Minutes',
+        compute='_compute_attendance_status_fields',
+        store=True,
+    )
+    billable_late_minutes = fields.Integer(
+        string='Billable Late Minutes',
+        compute='_compute_attendance_status_fields',
+        store=True,
+    )
+    unworked_minutes = fields.Integer(
+        string='Unworked Minutes',
         compute='_compute_attendance_status_fields',
         store=True,
     )
@@ -139,14 +166,39 @@ class HrAttendance(models.Model):
                 seen.add(key)
                 Status._generate_for_employee_date(attendance.employee_id.sudo(), attendance.date)
 
+    def _search_filter_date_from(self, operator, value):
+        """Map Date From search to attendance.date >= value."""
+        if not value:
+            return []
+        return [('date', '>=', value)]
+
+    def _search_filter_date_to(self, operator, value):
+        """Map Date To search to attendance.date <= value."""
+        if not value:
+            return []
+        return [('date', '<=', value)]
+
     def _user_can_manage_attendance(self):
-        """Officers/managers may edit attendance; normal employees may not."""
+        """Only Manage-all / Administrator may manually edit attendance times.
+
+        Regular employees (own-reader) and Attendance Approvers (officer) can
+        still *see* records per Odoo rules, but cannot change check-in/out.
+        Device / systray punches use sudo or the attendance_*_punch context.
+        """
         user = self.env.user
         return (
             self.env.su
-            or user.has_group('hr_attendance.group_hr_attendance_officer')
+            or user.has_group('hr_attendance.group_hr_attendance_user')
             or user.has_group('hr_attendance.group_hr_attendance_manager')
         )
+
+    @api.depends('employee_id')
+    @api.depends_context('uid')
+    def _compute_is_manager(self):
+        """Drive form/list readonly: only Manage-all / Admin can edit times."""
+        can_edit = self._user_can_manage_attendance()
+        for attendance in self:
+            attendance.is_manager = can_edit
 
     def _check_manual_attendance_edit(self):
         if self._user_can_manage_attendance():
@@ -154,7 +206,7 @@ class HrAttendance(models.Model):
         raise AccessError(_(
             'You cannot create or edit attendance records. '
             'Use the fingerprint device or the attendance check-in menu. '
-            'Only Attendance Officers / Administrators can change attendance manually.'
+            'Only Attendance Administrators can change attendance manually.'
         ))
 
     @api.model_create_multi
@@ -186,7 +238,7 @@ class HrAttendance(models.Model):
             if not self._user_can_manage_attendance():
                 raise AccessError(_(
                     'You cannot delete attendance records. '
-                    'Contact an Attendance Officer / Administrator.'
+                    'Contact an Attendance Administrator.'
                 ))
         return super().unlink()
 
@@ -215,6 +267,9 @@ class HrAttendance(models.Model):
         for attendance in self:
             attendance.late_minutes = 0
             attendance.early_checkout_minutes = 0
+            attendance.extra_minutes = 0
+            attendance.billable_late_minutes = 0
+            attendance.unworked_minutes = 0
             attendance.missing_checkout = False
             attendance.attendance_status = 'present'
             attendance.is_on_approved_leave = False
@@ -251,7 +306,6 @@ class HrAttendance(models.Model):
                 raw_late = int(delta.total_seconds() // 60)
                 grace = policy.late_grace_minutes or 0
                 attendance.late_minutes = max(0, raw_late - grace)
-
             if attendance.check_out:
                 check_out_local = employee._datetime_to_employee_local(attendance.check_out)
                 sched_end_local = employee._datetime_to_employee_local(scheduled_end)
@@ -260,6 +314,9 @@ class HrAttendance(models.Model):
                     raw_early = int(delta.total_seconds() // 60)
                     grace = policy.early_checkout_grace_minutes or 0
                     attendance.early_checkout_minutes = max(0, raw_early - grace)
+                elif check_out_local and sched_end_local and check_out_local > sched_end_local:
+                    delta = check_out_local - sched_end_local
+                    attendance.extra_minutes = int(delta.total_seconds() // 60)
             else:
                 tolerance_minutes = policy.missing_checkout_tolerance_minutes
                 if not tolerance_minutes:
@@ -269,11 +326,19 @@ class HrAttendance(models.Model):
                 if now > cutoff:
                     attendance.missing_checkout = True
 
+            attendance.billable_late_minutes = max(
+                0,
+                attendance.late_minutes - attendance.extra_minutes,
+            )
+            attendance.unworked_minutes = (
+                attendance.billable_late_minutes + attendance.early_checkout_minutes
+            )
+
             if attendance.missing_checkout or not attendance.check_out:
                 attendance.attendance_status = 'incomplete'
-            elif attendance.late_minutes > 0 and attendance.early_checkout_minutes > 0:
+            elif attendance.billable_late_minutes > 0 and attendance.early_checkout_minutes > 0:
                 attendance.attendance_status = 'early_leave'
-            elif attendance.late_minutes > 0:
+            elif attendance.billable_late_minutes > 0:
                 attendance.attendance_status = 'late'
             elif attendance.early_checkout_minutes > 0:
                 attendance.attendance_status = 'early_leave'

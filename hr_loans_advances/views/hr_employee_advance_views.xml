@@ -60,7 +60,7 @@
                         <group>
                             <field name="employee_id" readonly="state != 'draft'"/>
                             <field name="department_id"/>
-                            <field name="company_id" groups="base.group_multi_company" readonly="state != 'draft'"/>
+                            <field name="company_id" groups="base.group_multi_company" readonly="1"/>
                             <field name="request_date" readonly="state != 'draft'"/>
                         </group>
                         <group>

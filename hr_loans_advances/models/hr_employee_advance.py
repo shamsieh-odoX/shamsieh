@@ -92,10 +92,14 @@ class HrEmployeeAdvance(models.Model):
         for vals in vals_list:
             if vals.get('name', _('New')) == _('New'):
                 vals['name'] = self.env['ir.sequence'].next_by_code('hr.employee.advance') or _('New')
-            employee = self.env['hr.employee'].browse(vals.get('employee_id'))
-            if employee and employee.company_id and not vals.get('company_id'):
-                vals['company_id'] = employee.company_id.id
-        return super().create(vals_list)
+        return super(HrEmployeeAdvance, self._loans_advances_env()).create(vals_list)
+
+    @api.model
+    def action_open_my_advances(self):
+        action = self.env['ir.actions.act_window']._for_xml_id(
+            'hr_loans_advances.action_hr_employee_advance',
+        )
+        return self._merge_action_context(action, {'search_default_my_advances': 1})
 
     def _protected_write_fields(self):
         return {'employee_id', 'company_id', 'request_date', 'amount', 'reason', 'deduct_from_next_payslip'}

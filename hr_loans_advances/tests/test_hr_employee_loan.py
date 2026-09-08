@@ -30,6 +30,12 @@ class TestHrEmployeeLoan(TransactionCase):
             'email': 'loan_manager@test.com',
             'group_ids': [(6, 0, [cls.env.ref('base.group_user').id])],
         })
+        cls.upper_manager_user = cls.env['res.users'].create({
+            'name': 'Loan Upper Manager',
+            'login': 'loan_upper_manager',
+            'email': 'loan_upper_manager@test.com',
+            'group_ids': [(6, 0, [cls.env.ref('base.group_user').id])],
+        })
         cls.employee_user = cls.env['res.users'].create({
             'name': 'Loan Employee',
             'login': 'loan_employee',
@@ -37,9 +43,14 @@ class TestHrEmployeeLoan(TransactionCase):
             'group_ids': [(6, 0, [cls.env.ref('base.group_user').id])],
         })
 
+        cls.upper_manager = cls.env['hr.employee'].create({
+            'name': 'Loan Upper Manager Emp',
+            'user_id': cls.upper_manager_user.id,
+        })
         cls.manager = cls.env['hr.employee'].create({
             'name': 'Loan Manager Emp',
             'user_id': cls.manager_user.id,
+            'parent_id': cls.upper_manager.id,
         })
         cls.employee = cls.env['hr.employee'].create({
             'name': 'Loan Employee Emp',
@@ -59,7 +70,18 @@ class TestHrEmployeeLoan(TransactionCase):
     def _approve_loan(self, loan):
         loan.with_user(self.employee_user).action_submit()
         loan.with_user(self.manager_user).action_approve()
+        self.assertEqual(loan.state, 'manager_approved')
+        loan.with_user(self.upper_manager_user).action_approve()
+        self.assertEqual(loan.state, 'upper_manager_approved')
         loan.with_user(self.hr_user).action_approve()
+
+    def test_loan_three_step_approval_chain(self):
+        loan = self._create_loan()
+        loan.with_user(self.employee_user).action_submit()
+        roles = loan.approval_line_ids.mapped('role')
+        self.assertEqual(roles, ['dept_manager', 'upper_manager', 'hr'])
+        self._approve_loan(loan)
+        self.assertEqual(loan.state, 'hr_approved')
 
     def test_loan_creation(self):
         loan = self._create_loan()
@@ -111,3 +133,31 @@ class TestHrEmployeeLoan(TransactionCase):
         self.assertEqual(loan.amount_remaining, 0.0)
         self.assertEqual(loan.state, 'done')
         self.assertEqual(loan.payment_ids[-1].amount, 200.0)
+
+    def test_employee_can_request_loan_without_company_acl(self):
+        """Employees do not need read access to every company to request a loan."""
+        other_company = self.env['res.company'].create({'name': 'Loan Branch Co'})
+        self.employee.company_id = other_company
+        Loan = self.Loan.with_user(self.employee_user).with_context(
+            allowed_company_ids=self.employee_user.company_ids.ids,
+        )
+        Loan.default_get([
+            'employee_id', 'company_id', 'currency_id',
+            'total_amount', 'monthly_installment',
+        ])
+        loan = Loan.create({
+            'employee_id': self.employee.id,
+            'total_amount': 1000.0,
+            'monthly_installment': 100.0,
+            'deduction_start_date': date(2026, 1, 1),
+            'deduction_end_date': date(2026, 12, 31),
+        })
+        self.assertEqual(loan.company_id, other_company)
+        loan.web_read({
+            'name': {},
+            'company_id': {},
+            'currency_id': {},
+            'employee_id': {},
+        })
+        loan.action_submit()
+        self.assertEqual(loan.state, 'submitted')

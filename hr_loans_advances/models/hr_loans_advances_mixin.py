@@ -1,5 +1,7 @@
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 
+from ast import literal_eval
+
 from odoo import _, api, fields, models
 from odoo.exceptions import AccessError, UserError
 
@@ -26,13 +28,15 @@ class HrLoansAdvancesApprovalMixin(models.AbstractModel):
     company_id = fields.Many2one(
         'res.company',
         string='Company',
-        required=True,
-        default=lambda self: self.env.company,
+        compute='_compute_company_and_currency',
+        store=True,
+        readonly=True,
+        index=True,
         tracking=True,
     )
     currency_id = fields.Many2one(
         'res.currency',
-        related='company_id.currency_id',
+        compute='_compute_company_and_currency',
         store=True,
         readonly=True,
     )
@@ -48,6 +52,51 @@ class HrLoansAdvancesApprovalMixin(models.AbstractModel):
     can_refuse_request = fields.Boolean(compute='_compute_request_permissions')
     can_cancel_request = fields.Boolean(compute='_compute_request_permissions')
     can_reset_request = fields.Boolean(compute='_compute_request_permissions')
+
+    @api.depends('employee_id', 'employee_id.company_id')
+    def _compute_company_and_currency(self):
+        """Take company/currency from the employee without requiring res.company ACL."""
+        for record in self:
+            company = False
+            if record.employee_id:
+                company = record.employee_id.sudo().company_id.sudo()
+            record.company_id = company
+            record.currency_id = company.currency_id if company else False
+
+    @api.model
+    def _loans_advances_env(self):
+        return self.with_context(check_company=False, mail_create_nosubscribe=True)
+
+    @api.model
+    def default_get(self, fields_list):
+        values = super(HrLoansAdvancesApprovalMixin, self._loans_advances_env()).default_get(
+            fields_list
+        )
+        employee = self.env.user.employee_id
+        if employee:
+            values['employee_id'] = employee.id
+        values.pop('company_id', None)
+        return values
+
+    @api.readonly
+    def web_read(self, specification):
+        # Form display of company_id/currency must not require read access on res.company.
+        return super(
+            HrLoansAdvancesApprovalMixin,
+            self.sudo().with_context(check_company=False),
+        ).web_read(specification)
+
+    @api.model
+    def _merge_action_context(self, action, extra_context=None):
+        action_context = literal_eval(action.get('context') or '{}')
+        action['context'] = {
+            **self.env.context,
+            **action_context,
+            **(extra_context or {}),
+            'allowed_company_ids': self.env.user.company_ids.ids,
+            'check_company': False,
+        }
+        return action
 
     @api.depends('approval_line_ids')
     def _compute_approval_line_count(self):
@@ -82,7 +131,12 @@ class HrLoansAdvancesApprovalMixin(models.AbstractModel):
             record.can_refuse_request = can_approve
             record.can_cancel_request = (
                 (is_owner or is_hr_officer)
-                and record.state in ('draft', 'submitted', 'manager_approved')
+                and record.state in (
+                    'draft',
+                    'submitted',
+                    'manager_approved',
+                    'upper_manager_approved',
+                )
             )
             record.can_reset_request = (
                 (is_owner or is_hr_officer) and record.state in ('cancel', 'refused')
@@ -135,7 +189,7 @@ class HrLoansAdvancesApprovalMixin(models.AbstractModel):
             raise UserError(_('Only draft requests can be submitted.'))
         if not self.employee_id:
             raise UserError(_('An employee must be set before submitting.'))
-        chain = self._resolve_approval_chain(
+        chain = self.sudo()._resolve_approval_chain(
             self.employee_id,
             chain_builder=self._build_manager_hr_approval_chain,
             hr_group_xmlid=self._approval_hr_group_xmlid(),

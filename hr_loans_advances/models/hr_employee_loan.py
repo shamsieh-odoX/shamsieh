@@ -46,6 +46,7 @@ class HrEmployeeLoan(models.Model):
             ('draft', 'Draft'),
             ('submitted', 'Submitted'),
             ('manager_approved', 'Manager Approved'),
+            ('upper_manager_approved', 'Upper Manager Approved'),
             ('hr_approved', 'Active'),
             ('done', 'Paid Off'),
             ('refused', 'Refused'),
@@ -111,10 +112,14 @@ class HrEmployeeLoan(models.Model):
         for vals in vals_list:
             if vals.get('name', _('New')) == _('New'):
                 vals['name'] = self.env['ir.sequence'].next_by_code('hr.employee.loan') or _('New')
-            employee = self.env['hr.employee'].browse(vals.get('employee_id'))
-            if employee and employee.company_id and not vals.get('company_id'):
-                vals['company_id'] = employee.company_id.id
-        return super().create(vals_list)
+        return super(HrEmployeeLoan, self._loans_advances_env()).create(vals_list)
+
+    @api.model
+    def action_open_my_loans(self):
+        action = self.env['ir.actions.act_window']._for_xml_id(
+            'hr_loans_advances.action_hr_employee_loan',
+        )
+        return self._merge_action_context(action, {'search_default_my_loans': 1})
 
     def _protected_write_fields(self):
         return {
@@ -127,6 +132,14 @@ class HrEmployeeLoan(models.Model):
 
     def _approval_line_inverse_field(self):
         return 'request_id'
+
+    def _build_manager_hr_approval_chain(self, employee):
+        """Three-step loan chain: manager → upper manager → HR."""
+        service = self._get_approval_chain_service()
+        return service.build_manager_hr_chain(
+            employee.sudo(),
+            hr_group_xmlid=self._approval_hr_group_xmlid(),
+        )
 
     def _on_approval_complete(self):
         for loan in self:
