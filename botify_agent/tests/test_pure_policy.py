@@ -40,15 +40,60 @@ class TestManifestLockstep(unittest.TestCase):
 
 
 class TestEvaluate(unittest.TestCase):
-    def test_blocks_unclassified_model(self):
-        with self.assertRaises(bp.PolicyDenied) as ctx:
-            bp.evaluate("x_custom_thing", "search_read", granted_op_classes=FULL_GRANT)
-        self.assertEqual(ctx.exception.reason, "model_unclassified")
+    def test_allows_a_previously_unclassified_model_by_default(self):
+        # 2026-09 policy change: a model with no manifest entry and no
+        # per-tenant classification defaults OPEN (Odoo's own with_user()
+        # ACLs are the real gate) as long as it is not in the reserved/infra
+        # namespace. "x_custom_thing" is a plain Studio-style model name and
+        # matches no reserved pattern.
+        result = bp.evaluate("x_custom_thing", "search_read", granted_op_classes=FULL_GRANT)
+        self.assertEqual(result["opClass"], "read")
+        self.assertEqual(result["classificationSource"], "default")
 
-    def test_blocks_hr_contract_even_with_full_grant(self):
+    def test_blocks_a_reserved_infra_model_even_with_full_grant(self):
+        for model in ("res.users", "ir.config_parameter", "res.groups"):
+            with self.assertRaises(bp.PolicyDenied) as ctx:
+                bp.evaluate(model, "search_read", granted_op_classes=FULL_GRANT)
+            self.assertEqual(ctx.exception.reason, "model_reserved", model)
+
+    def test_hr_contract_write_reaches_the_odoo_permission_layer(self):
+        # 2026-09 policy change (explicitly authorized): hr.contract is a
+        # globally-classified model, so it is no longer gated by its
+        # (now-informational) opClasses list -- only by whether the
+        # connection grants financial_write. Odoo's own with_user() ACLs are
+        # what ultimately decide whether THIS user may write it.
+        result = bp.evaluate("hr.contract", "write", fields=["wage"], granted_op_classes=FULL_GRANT)
+        self.assertEqual(result["opClass"], "financial_write")
+        self.assertEqual(result["classificationSource"], "global")
+
+    def test_hr_payslip_write_reaches_the_odoo_permission_layer(self):
+        for model in ("hr.payslip", "hr.payslip.line"):
+            result = bp.evaluate(model, "write", fields=["net_wage"], granted_op_classes=FULL_GRANT)
+            self.assertEqual(result["opClass"], "financial_write", model)
+
+    def test_hr_contract_and_payslip_still_deny_write_without_the_op_class_granted(self):
+        # The manifest allowlist is gone; the connection's own granted-scope
+        # gate (an operator control, unrelated to the manifest) is not.
+        for model in ("hr.contract", "hr.payslip"):
+            with self.assertRaises(bp.PolicyDenied) as ctx:
+                bp.evaluate(model, "write", fields=["wage"], granted_op_classes=READ_ONLY)
+            self.assertEqual(ctx.exception.reason, "scope_not_granted", model)
+
+    def test_unlink_on_hr_contract_and_payslip_is_still_refused_unconditionally(self):
+        for model in ("hr.contract", "hr.payslip", "hr.payslip.line"):
+            with self.assertRaises(bp.PolicyDenied) as ctx:
+                bp.evaluate(model, "unlink", granted_op_classes=FULL_GRANT)
+            self.assertEqual(ctx.exception.reason, "method_forbidden", model)
+
+    def test_forbidden_and_workflow_fields_still_apply_to_a_globally_open_model(self):
+        # Field-level guards are independent of "which model" and must keep
+        # applying even now that the model-level allowlist is gone.
         with self.assertRaises(bp.PolicyDenied) as ctx:
-            bp.evaluate("hr.contract", "write", fields=["wage"], granted_op_classes=FULL_GRANT)
-        self.assertEqual(ctx.exception.reason, "op_class_not_permitted_for_model")
+            bp.evaluate("hr.contract", "write", fields=["hr_responsible_id", "password"], granted_op_classes=FULL_GRANT)
+        self.assertEqual(ctx.exception.reason, "field_denied")
+        with self.assertRaises(bp.PolicyDenied) as ctx:
+            bp.evaluate("hr.contract", "write", fields=["state"], granted_op_classes=FULL_GRANT)
+        self.assertEqual(ctx.exception.reason, "field_denied")
 
     def test_read_only_grant_allows_read(self):
         result = bp.evaluate("res.partner", "search_read", granted_op_classes=READ_ONLY)
@@ -224,12 +269,19 @@ class TestTenantModelOverlay(unittest.TestCase):
         self.assertEqual(decision["opClass"], "normal_write")
         self.assertEqual(decision["classificationSource"], "tenant")
 
-    def test_evaluate_still_denies_without_an_overlay(self):
-        with self.assertRaises(bp.PolicyDenied) as ctx:
-            bp.evaluate(
-                "shams.todo.task", "create", fields=["name"], granted_op_classes=FULL_GRANT
-            )
-        self.assertEqual(ctx.exception.reason, "model_unclassified")
+    def test_evaluate_defaults_open_without_an_overlay(self):
+        # 2026-09 policy change: without an explicit tenant classification,
+        # a non-reserved custom model now falls through to the same
+        # default-open classification as any other unlisted model, rather
+        # than being denied outright -- the overlay's own opClasses
+        # restriction (see test_overlay_is_still_subject_to_its_own_op_class_list)
+        # is what an operator uses when they want something narrower than
+        # this default.
+        result = bp.evaluate(
+            "shams.todo.task", "create", fields=["name"], granted_op_classes=FULL_GRANT
+        )
+        self.assertEqual(result["opClass"], "normal_write")
+        self.assertEqual(result["classificationSource"], "default")
 
     def test_overlay_never_overrides_the_global_manifest(self):
         # Even if a sanitize step were bypassed, evaluate() consults the global
@@ -256,16 +308,20 @@ class TestTenantModelOverlay(unittest.TestCase):
             )
         self.assertEqual(ctx.exception.reason, "scope_not_granted")
 
-    def test_overlay_is_still_subject_to_its_own_op_class_list(self):
+    def test_overlay_op_class_list_no_longer_gates_here_odoo_acls_do(self):
+        # 2026-09 policy change (round 2): the tenant overlay's own opClasses
+        # restriction was lifted too, matching the global/default sources --
+        # "any model, any op class except unlink" applies uniformly, and
+        # with_user()'s real Odoo ACLs are the actual gate from here.
         read_only = bp.sanitize_tenant_model(
             dict(self.TODO, opClasses=["read"]), "shams.todo.task"
         )
-        with self.assertRaises(bp.PolicyDenied) as ctx:
-            bp.evaluate(
-                "shams.todo.task", "create", fields=["name"],
-                granted_op_classes=FULL_GRANT, tenant_model=read_only,
-            )
-        self.assertEqual(ctx.exception.reason, "op_class_not_permitted_for_model")
+        decision = bp.evaluate(
+            "shams.todo.task", "create", fields=["name"],
+            granted_op_classes=FULL_GRANT, tenant_model=read_only,
+        )
+        self.assertEqual(decision["classificationSource"], "tenant")
+        self.assertEqual(decision["opClass"], read_only["createOpClass"])
 
     def test_overlay_does_not_bypass_field_and_method_rules(self):
         with self.assertRaises(bp.PolicyDenied) as ctx:

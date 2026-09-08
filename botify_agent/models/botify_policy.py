@@ -61,7 +61,40 @@ _VALID_WRITE_OP_CLASSES = frozenset(["capture_write", "normal_write", "financial
 _DATA_PATH = os.path.join(os.path.dirname(__file__), "..", "data", "policy_manifest.json")
 
 # Update in the SAME commit as any manifest edit.
-MANIFEST_SHA256 = "1b86729fa3cabdae3b18644b4fd44317db0a556102958faeecbf04316d749a9f"
+MANIFEST_SHA256 = "319c67e7432a23d5d4b9a529ebb6d107700508d2409cd59dfc6d7dc0e2a9e88b"
+
+def is_reserved_model(model):
+    """True when ``model`` is Odoo's own infrastructure/auth/messaging
+    namespace -- the ONE thing ``evaluate()`` below still refuses regardless
+    of the acting user's own Odoo permissions, once a model has no manifest
+    or per-tenant classification. Same blacklist ``sanitize_tenant_model``
+    already enforces for the tenant-model overlay; exposed as its own
+    function so ``evaluate`` can apply it to every model, not just
+    tenant-declared ones. Mirrors decision.ts:isReservedModel -- keep both in
+    lockstep.
+    """
+    return bool(_TENANT_RESERVED_RE.match(model) or _TENANT_RESERVED_ROOT_RE.match(model))
+
+
+# Applied when a model has no global manifest entry and no per-tenant
+# classification, but is not reserved either: Odoo's own with_user() ACLs are
+# the real gate from here on (see README "How it works"), so this policy
+# layer no longer refuses it outright. createOpClass/writeOpClass default to
+# normal_write -- the common case; an operator who has not granted that op
+# class on this connection still gates it via granted_op_classes in
+# evaluate(). opClasses is populated for shape consistency but unused for
+# this source (see evaluate()'s classification_source == "tenant" check).
+# sensitive=True is a deliberately conservative default for AUDIT purposes
+# only -- it does not restrict access, only how closely an operation on an
+# unknown model gets logged downstream.
+_DEFAULT_MODEL_ENTRY = {
+    "dataClass": "unclassified",
+    "sensitive": True,
+    "createOpClass": "normal_write",
+    "writeOpClass": "normal_write",
+    "opClasses": list(VALID_OP_CLASSES),
+    "sensitiveFields": [],
+}
 
 RISK_BY_OP_CLASS = {
     "read": "low",
@@ -161,14 +194,19 @@ class PolicyDenied(Exception):
 
 def evaluate(model, method, fields=None, ids=None, batch_size=None, op_class_override=None,
              granted_op_classes=None, manifest=None, tenant_model=None):
-    """Deny-by-default evaluation. Raises PolicyDenied, or returns
+    """Evaluate one operation. Raises PolicyDenied, or returns
     {"opClass": ..., "riskLevel": ..., "classificationSource": ...} on success.
     Mirrors decision.ts:evaluate.
 
-    ``tenant_model`` is an already-sanitized entry (see sanitize_tenant_model)
-    for one of this tenant's own custom models. It is consulted ONLY when the
-    global manifest has no entry for the model, which is what makes global
-    manifest supremacy structural here rather than merely validated.
+    Model classification, in order: the global manifest, then this tenant's
+    own custom-model overlay (``tenant_model``, only consulted on a global
+    miss -- what makes global manifest supremacy structural rather than
+    merely validated), then default-open for anything else that is not in
+    Odoo's reserved/infra namespace (see is_reserved_model). Only a reserved
+    model, or a model an operator explicitly restricted via the tenant
+    overlay, can still be refused purely on classification; every other
+    model's real gate is Odoo's own with_user() ACLs, evaluated after this
+    function returns.
     """
     manifest = manifest or get_policy_manifest()
     granted_op_classes = granted_op_classes if granted_op_classes is not None else set()
@@ -179,7 +217,20 @@ def evaluate(model, method, fields=None, ids=None, batch_size=None, op_class_ove
         model_entry = tenant_model
         classification_source = "tenant"
     if not model_entry:
-        raise PolicyDenied("model_unclassified", 'Model "%s" is not classified in the policy manifest.' % model)
+        # No global manifest entry and no per-tenant classification. Odoo's
+        # own infrastructure/auth/messaging namespace stays hard-blocked
+        # regardless of the acting user's own permissions (see
+        # is_reserved_model) -- everything else defaults open, matching the
+        # explicitly authorized "full access to whatever this employee's own
+        # Odoo permissions allow" policy; with_user()'s own ACLs are the real
+        # gate from here. Mirrors decision.ts -- keep both in lockstep.
+        if is_reserved_model(model):
+            raise PolicyDenied(
+                "model_reserved",
+                'Model "%s" is in a reserved Odoo namespace and cannot be reached through the assistant.' % model,
+            )
+        model_entry = _DEFAULT_MODEL_ENTRY
+        classification_source = "default"
 
     if method.startswith("_") or method in manifest["forbiddenMethods"]:
         raise PolicyDenied("method_forbidden", 'Method "%s" is never permitted.' % method)
@@ -198,12 +249,11 @@ def evaluate(model, method, fields=None, ids=None, batch_size=None, op_class_ove
         else:
             op_class = raw
 
-    if op_class not in model_entry["opClasses"]:
-        raise PolicyDenied(
-            "op_class_not_permitted_for_model",
-            'Model "%s" does not permit operation class "%s".' % (model, op_class),
-            op_class,
-        )
+    # The per-model opClasses allowlist no longer gates ANY classification
+    # source (global, tenant, or default) -- full "whatever this employee's
+    # own Odoo permissions allow" access applies uniformly, including a
+    # tenant's own custom/Studio models. with_user()'s ACLs remain the real
+    # gate. Mirrors decision.ts -- keep both in lockstep.
 
     if op_class not in granted_op_classes:
         raise PolicyDenied("scope_not_granted", 'Operation class "%s" is not granted.' % op_class, op_class)

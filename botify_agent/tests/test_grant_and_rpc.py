@@ -171,10 +171,13 @@ class TestGrantAndRpcFlow(common.HttpCase):
         )
         self.assertEqual(resp.json()["error"]["name"], "company_out_of_scope")
 
-    def test_grant_rejects_unclassified_model(self):
+    def test_grant_rejects_reserved_model(self):
+        # 2026-09 policy change: a model with no manifest entry defaults OPEN
+        # unless it is in Odoo's reserved/infra namespace. ir.config_parameter
+        # is reserved, so it stays hard-blocked regardless.
         delegation = self._mint_delegation()
         resp = self._request_grant(delegation, "ir.config_parameter", "search_read", ids=[], kwargs={})
-        self.assertEqual(resp.json()["error"]["name"], "model_unclassified")
+        self.assertEqual(resp.json()["error"]["name"], "model_reserved")
 
     def test_grant_rejects_forbidden_field(self):
         delegation = self._mint_delegation()
@@ -220,13 +223,20 @@ if __name__ == "__main__":
 
 @tagged("post_install", "-at_install", "botify_agent")
 class TestCustomModelPolicyGate(common.HttpCase):
-    """The Odoo-side half of the custom-model decision.
+    """The Odoo-side half of the custom-model classification decision.
 
-    Botify classifies which of a tenant's own custom models the assistant may
-    write to, and sends the classification for the targeted model with the
-    signed grant request. This database still has to consent via
-    `botify_agent.allow_custom_models`, which cannot be set from Botify — so a
-    compromised Botify cannot unlock custom-model writes on its own.
+    2026-09 policy change: a model with no global manifest entry and no
+    per-tenant classification now defaults OPEN (classification_source ==
+    "default") as long as it is not in Odoo's reserved/infra namespace — this
+    includes a tenant's own custom/Studio models, so `x_botify_test_note` is
+    reachable with or without a Botify-supplied classification and with or
+    without `botify_agent.allow_custom_models` on. That switch no longer gates
+    reachability; it only gates whether Botify's own RICHER classification for
+    a specific custom model (its declared write operation class, and a
+    sensitivity flag used for audit logging) is honored instead of the
+    generic default entry. It still cannot be set from Botify, so a
+    compromised Botify cannot make its own classification authoritative on
+    its own.
 
     `x_botify_test_note` is a real Studio-style manual model, so this exercises
     the genuine dot-less `x_` shape end to end rather than asserting against a
@@ -241,6 +251,18 @@ class TestCustomModelPolicyGate(common.HttpCase):
         "opClasses": ["read", "normal_write"],
         "createOpClass": "normal_write",
         "writeOpClass": "normal_write",
+        "sensitive": False,
+    }
+
+    # createOpClass deliberately differs from _DEFAULT_MODEL_ENTRY's
+    # "normal_write" so a grant's returned op_class can prove whether this
+    # classification was actually consulted, rather than the generic default
+    # entry that applies to every unclassified model regardless of consent.
+    DISTINCT_TENANT_ENTRY = {
+        "model": "x_botify_test_note",
+        "opClasses": ["read", "capture_write"],
+        "createOpClass": "capture_write",
+        "writeOpClass": "capture_write",
         "sensitive": False,
     }
 
@@ -303,28 +325,54 @@ class TestCustomModelPolicyGate(common.HttpCase):
             "botify_agent.allow_custom_models", "True"
         )
 
-    def test_custom_model_write_denied_without_classification(self):
-        """No classification sent at all -> unchanged deny-by-default."""
-        self._allow_custom_models()
+    def test_custom_model_write_allowed_without_classification_or_switch(self):
+        """No classification sent, switch off -> default-open still applies.
+
+        x_botify_test_note has no global manifest entry and (with no
+        classification sent) no tenant entry either, so it falls to
+        _DEFAULT_MODEL_ENTRY exactly like any other unclassified model —
+        `botify_agent.allow_custom_models` being off does not change that.
+        """
         delegation = self._mint_delegation()
-        resp = self._request_grant(
+        grant_resp = self._request_grant(
             delegation, "x_botify_test_note", "create", kwargs={"vals_list": [{"x_name": "n"}]}
         )
-        self.assertEqual(resp.status_code, 403)
-        self.assertEqual(resp.json()["error"]["name"], "model_unclassified")
+        self.assertEqual(grant_resp.status_code, 200, grant_resp.text)
+        self.assertEqual(grant_resp.json()["op_class"], "normal_write")
 
-    def test_custom_model_write_denied_when_odoo_switch_is_off(self):
-        """Classification supplied, but this database has not consented."""
+    def test_custom_model_classification_honored_only_when_switch_is_on(self):
+        """The switch's actual job now: whether Botify's own classification
+        for this custom model overrides the generic default entry.
+
+        Same classification (createOpClass="capture_write", distinct from the
+        default entry's "normal_write") sent both times; only the Odoo-side
+        switch differs. Off -> ignored, model falls to the default entry and
+        the grant is issued for "normal_write". On -> honored, the grant is
+        issued for the classification's own "capture_write" instead. Either
+        way the write is reachable — this switch was never what stood between
+        it and denial once a model is unclassified.
+        """
         delegation = self._mint_delegation()
-        resp = self._request_grant(
+        off_resp = self._request_grant(
             delegation,
             "x_botify_test_note",
             "create",
             kwargs={"vals_list": [{"x_name": "n"}]},
-            tenant_model=self.TENANT_ENTRY,
+            tenant_model=self.DISTINCT_TENANT_ENTRY,
         )
-        self.assertEqual(resp.status_code, 403)
-        self.assertEqual(resp.json()["error"]["name"], "model_unclassified")
+        self.assertEqual(off_resp.status_code, 200, off_resp.text)
+        self.assertEqual(off_resp.json()["op_class"], "normal_write")
+
+        self._allow_custom_models()
+        on_resp = self._request_grant(
+            delegation,
+            "x_botify_test_note",
+            "create",
+            kwargs={"vals_list": [{"x_name": "n"}]},
+            tenant_model=self.DISTINCT_TENANT_ENTRY,
+        )
+        self.assertEqual(on_resp.status_code, 200, on_resp.text)
+        self.assertEqual(on_resp.json()["op_class"], "capture_write")
 
     def test_custom_model_write_allowed_when_classified_and_consented(self):
         self._allow_custom_models()
@@ -355,7 +403,10 @@ class TestCustomModelPolicyGate(common.HttpCase):
         """Global manifest supremacy at the authoritative enforcement point.
 
         A hostile classification claiming res.users is a freely-writable custom
-        model must be inert even with the Odoo-side switch on.
+        model must be inert even with the Odoo-side switch on: res.users is in
+        Odoo's reserved/infra namespace (sanitize_tenant_model refuses to
+        classify it, so evaluate() falls through to is_reserved_model), and
+        stays hard-blocked regardless of any classification or grant.
         """
         self._allow_custom_models()
         delegation = self._mint_delegation()
@@ -374,4 +425,4 @@ class TestCustomModelPolicyGate(common.HttpCase):
             },
         )
         self.assertEqual(resp.status_code, 403)
-        self.assertEqual(resp.json()["error"]["name"], "model_unclassified")
+        self.assertEqual(resp.json()["error"]["name"], "model_reserved")
