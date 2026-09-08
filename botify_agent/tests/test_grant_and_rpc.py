@@ -426,3 +426,99 @@ class TestCustomModelPolicyGate(common.HttpCase):
         )
         self.assertEqual(resp.status_code, 403)
         self.assertEqual(resp.json()["error"]["name"], "model_reserved")
+
+
+@tagged("post_install", "-at_install", "botify_agent")
+class TestMonetaryWriteFlushesAsActingUser(common.HttpCase):
+    """Regression: a Monetary write through /rpc must actually reach the DB.
+
+    Odoo 19 pins ``transaction.default_env`` to the ``uid=None`` environment of
+    an ``auth="none"`` route (``ir_http._auth_method_none``), and
+    ``Transaction.flush()`` uses that env unconditionally. Flushing a dirty
+    Monetary field there makes ``fields_numeric.convert_to_column_insert``
+    lazily fetch ``res.currency.rounding`` under an env whose ``env.user`` is an
+    EMPTY ``res.users()`` recordset, and ``_get_group_ids()`` dies in
+    ``ensure_one()``.
+
+    The failure mode is nasty and is what this test pins: /rpc returned 200 with
+    a record id, and only THEN did the end-of-request flush blow up and roll the
+    transaction back — so the assistant reported success and nothing was
+    written. Asserting the response is not enough; the record must exist
+    afterwards with the Monetary value it was created with.
+
+    main.py fixes this by calling ``target.env.flush_all()`` (the with_user env)
+    inside the RPC handler.
+
+    NOT RUNNABLE without a Monetary-bearing model: the addon only depends on
+    base/base_setup/web, so this skips unless crm is installed. On the live
+    tenant (where the original traceback came from, crm.lead.create) it runs.
+    NEEDS A REAL ODOO 19 RUN TO CONFIRM — it cannot be exercised by the
+    stdlib-only test_pure_*.py suite.
+    """
+
+    def setUp(self):
+        super().setUp()
+        if "crm.lead" not in self.env:
+            self.skipTest("crm is not installed; no Monetary model to exercise")
+
+        params = self.env["ir.config_parameter"].sudo()
+        params.set_param("botify_agent.enabled", "True")
+        params.set_param("botify_agent.base_url", "https://api.example.test")
+        params.set_param("botify_agent.agent_id", AGENT_ID)
+        params.set_param("botify_agent.installation_id", INSTALLATION_ID)
+        params.set_param("botify_agent.shared_secret", SECRET)
+        params.set_param("botify_agent.assertion_ttl", "120")
+        params.set_param("botify_agent.grant_ttl", "90")
+
+        from ._helpers import user_group_field
+
+        groups = [self.env.ref("base.group_user").id]
+        salesman = self.env.ref("sales_team.group_sale_salesman", raise_if_not_found=False)
+        if salesman:
+            groups.append(salesman.id)
+        self.employee = self.env["res.users"].create({
+            "name": "Monetary Flush Employee",
+            "login": "botify.monetary@example.com",
+            user_group_field(self.env): [(6, 0, groups)],
+        })
+
+    # Reuse the signing/minting helpers from the flow test above.
+    _signed_post = TestGrantAndRpcFlow._signed_post
+    _request_grant = TestGrantAndRpcFlow._request_grant
+    _rpc = TestGrantAndRpcFlow._rpc
+
+    def _mint_delegation(self):
+        self.authenticate("botify.monetary@example.com", "botify.monetary@example.com")
+        resp = self.url_open(
+            "/botify_agent/identity",
+            data=json.dumps({"jsonrpc": "2.0", "method": "call", "params": {}}),
+            headers={"Content-Type": "application/json"},
+        )
+        return resp.json()["result"]
+
+    def test_monetary_create_survives_end_of_request_flush(self):
+        # The exact production sequence: /rpc's own sudo() nonce consumption,
+        # then with_user(employee), then a create() that dirties a Monetary
+        # field (crm.lead.expected_revenue) which only gets written at flush.
+        vals = {"name": "Botify Monetary Lead", "expected_revenue": 1234.5}
+        delegation = self._mint_delegation()
+        grant_resp = self._request_grant(
+            delegation, "crm.lead", "create", ids=[], kwargs={"vals_list": [vals]}
+        )
+        self.assertEqual(grant_resp.status_code, 200, grant_resp.text)
+        grant = grant_resp.json()["grant"]
+
+        rpc_resp = self._rpc(grant, "crm.lead", "create", ids=[], kwargs={"vals_list": [vals]})
+        result = rpc_resp.json()
+        self.assertIn("result", result, result)
+        lead_ids = result["result"]
+        self.assertTrue(lead_ids)
+
+        # The whole point: before the fix this passed everything above and the
+        # record was gone, because the flush that would have written it raised
+        # "Expected singleton: res.users()" after the response was sent.
+        self.env.invalidate_all()
+        lead = self.env["crm.lead"].sudo().browse(lead_ids)
+        self.assertTrue(lead.exists(), "Monetary create was rolled back after a 200 response")
+        self.assertEqual(lead.name, "Botify Monetary Lead")
+        self.assertEqual(lead.expected_revenue, 1234.5)

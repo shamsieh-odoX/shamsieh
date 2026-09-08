@@ -348,6 +348,32 @@ class BotifyRpcController(http.Controller):
                 result = getattr(records, method)(**kwargs_in)
             else:
                 result = getattr(target, method)(**kwargs_in)
+            # Flush HERE, in the ACTING USER's environment, not at end of request.
+            #
+            # Odoo 19's ir_http._auth_method_none() does:
+            #     request.env = Environment(cr, None, ctx)
+            #     request.env.transaction.default_env = request.env
+            # and Transaction.flush() (orm/environments.py) now uses that pinned
+            # default_env unconditionally. So on this auth="none" route the
+            # end-of-request cr.flush() writes THIS USER's dirty records through
+            # an env whose uid is None. For a Monetary field that is fatal:
+            # fields_numeric.convert_to_column_insert() reads the currency with
+            # sudo but then does `currency.with_env(record.env)` before
+            # `currency.round(value)`, so the lazy fetch of res.currency.rounding
+            # ACL-checks in the uid=None env -> ir.model.access._get_allowed_models
+            # -> `self.env.user._get_group_ids()` -> env.user is browse(None), an
+            # EMPTY res.users() -> ensure_one() raises "Expected singleton:
+            # res.users()". That happens AFTER this controller already returned
+            # 200, so the caller is told the write succeeded while the
+            # transaction rolls back. (Odoo 18's Transaction.flush picked the
+            # first env with an int uid instead, which is why this is 19-only.)
+            #
+            # target.env has uid=<acting user>, su=False, so the flush — and any
+            # ACL check it triggers — runs as the real user, which is also the
+            # correct authorization semantics for their own write. It also brings
+            # constraint/validation failures back inside the handlers below
+            # instead of exploding outside the request handler.
+            target.env.flush_all()
         except AccessError as exc:
             _logger.info("botify_agent: access denied for uid=%s on %s.%s", uid, model_name, method)
             return _shared.json_response(
