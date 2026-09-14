@@ -12,3 +12,9 @@ access_project_task_template_line_manager,project.task.template.line.manager,mod
 access_project_task_template_line_odoo_manager,project.task.template.line.odoo.manager,model_project_task_template_line,project.group_project_manager,1,1,1,1
 access_project_task_template_line_system,project.task.template.line.system,model_project_task_template_line,base.group_system,1,1,1,1
 access_project_project_member_write,project.project.member.write,project.model_project_project,group_project_edit_only,0,1,0,0
+access_project_product_type_user,project.product.type.user,model_project_product_type,project.group_project_user,1,0,0,0
+access_project_product_type_edit_only,project.product.type.edit.only,model_project_product_type,group_project_edit_only,1,1,1,0
+access_project_product_type_create_move,project.product.type.create.move,model_project_product_type,group_project_create_move,1,1,1,1
+access_project_product_type_manager,project.product.type.manager,model_project_product_type,group_project_custom_manager,1,1,1,1
+access_project_product_type_odoo_manager,project.product.type.odoo.manager,model_project_product_type,project.group_project_manager,1,1,1,1
+access_project_product_type_system,project.product.type.system,model_project_product_type,base.group_system,1,1,1,1

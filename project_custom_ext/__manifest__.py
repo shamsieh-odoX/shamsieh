@@ -2,7 +2,7 @@
 
     'name': 'Project Custom Extensions',
 
-    'version': '19.0.2.1.12',
+    'version': '19.0.2.1.13',
 
     'category': 'Services/Project',
 
@@ -18,7 +18,11 @@
 
         'security/ir.model.access.csv',
 
+        'data/project_product_type_data.xml',
+
         'views/project_task_template_views.xml',
+
+        'views/project_product_type_views.xml',
 
         'views/project_project_stage_views.xml',
 

@@ -31,6 +31,13 @@ class ProjectProject(models.Model):
     )
     country_id = fields.Many2one('res.country', string='Country')
     sales_team_id = fields.Many2one('crm.team', string='Sales Team')
+    product_type_id = fields.Many2one(
+        'project.product.type',
+        string='Product Type',
+        tracking=True,
+        index=True,
+        help='Classify this project by product type for reporting and filters.',
+    )
     estimated_hours = fields.Float(
         string='Estimated Hours',
         compute='_compute_progress_and_hours',

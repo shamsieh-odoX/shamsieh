@@ -28,6 +28,7 @@
             <xpath expr="//field[@name='partner_id']" position="after">
                 <field name="country_id" options="{'no_create': True}"/>
                 <field name="sales_team_id" string="Sales Team"/>
+                <field name="product_type_id" options="{'no_create_edit': True}"/>
             </xpath>
             <xpath expr="//field[@name='date']" position="after">
                 <field name="estimated_hours" widget="compact_hours" readonly="1"/>
@@ -70,6 +71,7 @@
                         <group string="Location &amp; Team">
                             <field name="country_id" placeholder="Select country" options="{'no_create': True, 'no_open': True}"/>
                             <field name="sales_team_id" string="Sales Team" placeholder="Optional"/>
+                            <field name="product_type_id" placeholder="Product type" options="{'no_create_edit': True}"/>
                         </group>
                         <group string="Workflow Template">
                             <field name="task_template_id" string="Task Template" placeholder="Choose a workflow template…" options="{'no_create': True}"/>
@@ -93,6 +95,7 @@
         <field name="arch" type="xml">
             <xpath expr="//field[@name='name']" position="after">
                 <field name="country_id" placeholder="Country" options="{'no_create': True, 'no_open': True}"/>
+                <field name="product_type_id" placeholder="Product type" options="{'no_create_edit': True}"/>
                 <field name="task_template_id" string="Template" placeholder="Workflow template" options="{'no_create': True}"/>
             </xpath>
         </field>
@@ -113,6 +116,7 @@
         <field name="arch" type="xml">
             <xpath expr="//list" position="inside">
                 <field name="task_template_id" optional="hide"/>
+                <field name="product_type_id" optional="show"/>
                 <field name="country_id" optional="show"/>
                 <field name="sales_team_id" optional="show"/>
                 <field name="progress_percentage" string="Progress %" widget="progressbar" readonly="1" options="{'editable': false}" optional="show"/>
@@ -132,10 +136,13 @@
             <xpath expr="//field[@name='partner_id']" position="after">
                 <field name="country_id"/>
                 <field name="sales_team_id"/>
+                <field name="product_type_id"/>
                 <field name="task_template_id"/>
                 <field name="progress_range"/>
             </xpath>
             <xpath expr="//filter[@name='own_projects']" position="after">
+                <separator string="Product Type"/>
+                <filter string="Has Product Type" name="has_product_type" domain="[('product_type_id', '!=', False)]"/>
                 <separator string="Progress"/>
                 <filter string="0% - 20%" name="progress_0_20" domain="[('progress_range', '=', '0_20')]"/>
                 <filter string="20% - 50%" name="progress_20_50" domain="[('progress_range', '=', '20_50')]"/>
@@ -143,6 +150,7 @@
                 <filter string="80% - 100%" name="progress_80_100" domain="[('progress_range', '=', '80_100')]"/>
             </xpath>
             <xpath expr="//group" position="inside">
+                <filter string="Product Type" name="group_product_type" context="{'group_by': 'product_type_id'}"/>
                 <filter string="Project Stage" name="group_project_stage" context="{'group_by': 'stage_id'}"/>
                 <filter string="Country" name="group_country" context="{'group_by': 'country_id'}"/>
                 <filter string="Sales Team" name="group_sales_team" context="{'group_by': 'sales_team_id'}"/>
@@ -159,8 +167,12 @@
         <field name="arch" type="xml">
             <xpath expr="//templates" position="before">
                 <field name="progress_percentage"/>
+                <field name="product_type_id"/>
             </xpath>
             <xpath expr="//div[hasclass('o_project_kanban_body')]" position="inside">
+                <div class="text-muted small" t-if="record.product_type_id.raw_value">
+                    <field name="product_type_id"/>
+                </div>
                 <div class="o_project_kanban_progress"
                      t-if="!record.is_template.raw_value"
                      t-att-data-complete="record.progress_percentage.raw_value &gt;= 100 ? '1' : '0'">
