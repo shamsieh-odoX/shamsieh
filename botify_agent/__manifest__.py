@@ -1,7 +1,7 @@
 {
     "name": "Botify Agent",
     "summary": "The Botify AI agent inside Odoo, acting as each employee with their own Odoo permissions",
-    "version": "19.0.3.0.1",
+    "version": "19.0.3.0.2",
     "category": "Productivity",
     "license": "LGPL-3",
     "author": "Botify",
