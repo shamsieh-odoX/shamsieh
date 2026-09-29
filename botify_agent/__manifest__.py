@@ -1,7 +1,7 @@
 {
     "name": "Botify Agent",
     "summary": "The Botify AI agent inside Odoo, acting as each employee with their own Odoo permissions",
-    "version": "19.0.3.0.0",
+    "version": "19.0.3.0.1",
     "category": "Productivity",
     "license": "LGPL-3",
     "author": "Botify",
@@ -16,7 +16,8 @@
     ],
     "assets": {
         "web.assets_backend": [
-            "botify_agent/static/src/**/*",
+            "botify_agent/static/src/botify_service.js",
+            "botify_agent/static/src/botify_action.xml",
         ],
     },
     "installable": True,

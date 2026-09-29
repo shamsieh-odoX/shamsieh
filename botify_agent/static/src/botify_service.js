@@ -2,6 +2,9 @@ import { browser } from '@web/core/browser/browser';
 import { router, routerBus } from '@web/core/browser/router';
 import { registry } from '@web/core/registry';
 import { user } from '@web/core/user';
+import { Component, onMounted } from '@odoo/owl';
+import { useService } from '@web/core/utils/hooks';
+import { standardActionServiceProps } from '@web/webclient/actions/action_service';
 
 /**
  * Loads the Botify assistant for employees in the "Botify Agent user" group
@@ -153,3 +156,28 @@ export const botifyAgentService = {
 };
 
 registry.category('services').add('botify_agent', botifyAgentService);
+
+/**
+ * Compatibility for the Assistant client action saved by earlier addon
+ * versions. The new addon loads the floating widget globally, so opening the
+ * legacy action simply opens that widget instead of failing action lookup.
+ */
+class BotifyAssistantAction extends Component {
+  static template = 'botify_agent.AssistantAction';
+  static props = { ...standardActionServiceProps };
+
+  setup() {
+    this.botify = useService('botify_agent');
+    onMounted(() => {
+      if (this.botify.available) {
+        this.botify.toggle();
+      }
+    });
+  }
+
+  openAssistant() {
+    this.botify.toggle();
+  }
+}
+
+registry.category('actions').add('botify_agent.assistant', BotifyAssistantAction);

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="botify_agent.AssistantAction">
+        <div class="o_botify_assistant_action p-4">
+            <h2>Botify Assistant</h2>
+            <t t-if="botify.available">
+                <p>The assistant is available in the Botify widget.</p>
+                <button type="button" class="btn btn-primary" t-on-click="openAssistant">
+                    Open assistant
+                </button>
+            </t>
+            <t t-else="">
+                <p>The Botify assistant is not enabled for this user or is not configured.</p>
+            </t>
+        </div>
+    </t>
+</templates>
