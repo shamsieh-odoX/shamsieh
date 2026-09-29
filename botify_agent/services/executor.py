@@ -163,19 +163,39 @@ def _json_safe(value):
 def _list_models(env, operation):
     query = (operation.get("query") or "")[:100]
     limit = min(int(operation.get("limit") or 30), 50)
-    domain = [("transient", "=", False)]
-    if query:
-        domain += ["|", ("model", "ilike", query), ("name", "ilike", query)]
-    found = []
-    for row in env["ir.model"].search(domain, order="model"):
-        name = row.model
-        if name.startswith(SKIPPED_MODEL_PREFIXES) or name not in env or env[name]._abstract:
-            continue
-        if env[name].has_access("read"):
-            found.append({"model": name, "name": row.name})
-        if len(found) >= limit:
-            break
-    return {"models": found}
+    needle = re.sub(r"[\W_]+", "", query.casefold())
+
+    def readable_models(search):
+        found = []
+        for name in sorted(env.registry.models):
+            if name.startswith(SKIPPED_MODEL_PREFIXES):
+                continue
+            model = env[name]
+            if model._abstract or model._transient:
+                continue
+            label = model._description or name
+            if search and (
+                search not in re.sub(r"[\W_]+", "", name.casefold())
+                and search not in re.sub(r"[\W_]+", "", label.casefold())
+            ):
+                continue
+            if not model.has_access("read"):
+                continue
+            found.append({"model": name, "name": label})
+            if len(found) >= limit:
+                break
+        return found
+
+    # ir.model records are not readable by every employee even when the
+    # business model itself is. Discover from the registry, then filter by the
+    # employee's model ACL; record rules still govern every subsequent query.
+    found = readable_models(needle)
+    if found or not query:
+        return {"models": found}
+    # Client-action names often differ from their model names (e.g. a
+    # "Shamsieh To-Do" page backed by a shams.todo.* model).
+    last_word = re.sub(r"[\W_]+", "", query.split()[-1].casefold())
+    return {"models": readable_models(last_word) if len(last_word) >= 3 else []}
 
 
 def describe_model(env, model_name):
@@ -201,7 +221,7 @@ def describe_model(env, model_name):
         {"name": row.method, "riskClass": row.risk_class, "description": row.description or row.method, "params": row.schema()}
         for row in env["botify.agent.method"].search([("model", "=", model_name), ("active", "=", True)])
     ]
-    title = env["ir.model"]._get(model_name).name or model_name
+    title = model._description or model_name
     return {"model": model_name, "name": title, "fields": described, "methods": methods}
 
 

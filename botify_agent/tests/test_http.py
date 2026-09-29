@@ -297,6 +297,17 @@ class TestBotifyAgentHttp(HttpCase):
         self.assertFalse(refused["ok"])
         self.assertNotIn("url", str(refused))
 
+    def test_discovery_uses_business_model_rights_without_ir_model_access(self):
+        # Employees need not belong to the Access Rights group to find a
+        # readable model. Client-action names may use hyphens instead of dots.
+        _payload, token = self.grant({"op": "list_models", "query": "res-partner", "limit": 10}, risk_class="read")
+        models = self.execute(token)["result"]["models"]
+        self.assertIn("res.partner", [row["model"] for row in models])
+        _payload, token = self.grant({"op": "list_models", "query": "Internal Res-Partner", "limit": 10}, risk_class="read")
+        self.assertIn("res.partner", [row["model"] for row in self.execute(token)["result"]["models"]])
+        _payload, token = self.grant({"op": "describe_model", "model": "res.partner"}, risk_class="read")
+        self.assertEqual(self.execute(token)["result"]["model"], "res.partner")
+
     def test_describe_marks_protected_fields_readonly_and_lists_allowed_methods(self):
         self.env["botify.agent.field_rule"].create({"model": "res.partner", "field": "comment", "risk_class": "financial"})
         _payload, token = self.grant({"op": "describe_model", "model": "res.partner"}, risk_class="read")
