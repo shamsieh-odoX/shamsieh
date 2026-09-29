@@ -1,159 +1,18 @@
-import time
-
-from odoo import api, fields, models
-from odoo.exceptions import ValidationError
-
-from . import botify_security
+from odoo import fields, models
 
 
 class ResConfigSettings(models.TransientModel):
     _inherit = "res.config.settings"
 
-    # Stored in ir.config_parameter, whose ACL grants access to base.group_system
-    # only (odoo/addons/base/security/ir.model.access.csv). A regular employee
-    # therefore cannot read the shared secret through the ORM or the web client,
-    # which is what keeps it out of the browser.
-    botify_base_url = fields.Char(
-        string="Botify API base URL",
-        config_parameter="botify_agent.base_url",
-        help="e.g. https://api.botifyarabia.ai",
+    botify_enabled = fields.Boolean("Botify agent", config_parameter="botify_agent.enabled")
+    botify_api_url = fields.Char("Botify API URL", config_parameter="botify_agent.api_url")
+    botify_installation_key = fields.Char("Installation key", config_parameter="botify_agent.installation_key")
+    botify_secret = fields.Char("Installation secret", config_parameter="botify_agent.secret", groups="base.group_system")
+    botify_allow_low_write = fields.Boolean("Low-risk changes", config_parameter="botify_agent.allow_low_write")
+    botify_allow_high_write = fields.Boolean("High-impact changes", config_parameter="botify_agent.allow_high_write")
+    botify_allow_financial = fields.Boolean("Financial operations", config_parameter="botify_agent.allow_financial")
+    botify_allow_destructive = fields.Boolean("Deletions and cancellations", config_parameter="botify_agent.allow_destructive")
+    botify_allow_external_communication = fields.Boolean(
+        "Messages to external people", config_parameter="botify_agent.allow_external_communication"
     )
-    botify_agent_id = fields.Char(
-        string="Botify agent ID",
-        config_parameter="botify_agent.agent_id",
-        help="UUID of the Botify agent this Odoo instance talks to.",
-    )
-    botify_installation_id = fields.Char(
-        string="Botify connection ID",
-        config_parameter="botify_agent.installation_id",
-        help="UUID of the Odoo connection record in Botify (the installation).",
-    )
-    botify_shared_secret = fields.Char(
-        string="Shared secret",
-        config_parameter="botify_agent.shared_secret",
-        help="Signs identity assertions and authenticates Botify's calls back "
-             "into this database. Never expose it to the browser.",
-    )
-    botify_assertion_ttl = fields.Integer(
-        string="Assertion lifetime (seconds)",
-        config_parameter="botify_agent.assertion_ttl",
-        default=120,
-        help="How long a minted identity assertion stays valid. Keep it short — "
-             "it is single-use and only has to survive one round trip.",
-    )
-    botify_allowed_group_id = fields.Many2one(
-        "res.groups",
-        string="Restrict to group",
-        config_parameter="botify_agent.allowed_group_id",
-        help="Optional. When set, only members of this group may obtain an "
-             "identity assertion. Use it to roll the agent out gradually — it "
-             "does NOT grant anything, it only narrows who can start a session.",
-    )
-    botify_enabled = fields.Boolean(
-        string="Enable Botify agent",
-        config_parameter="botify_agent.enabled",
-        default=False,
-    )
-    botify_allow_custom_models = fields.Boolean(
-        string="Honor Botify's classification for custom models",
-        config_parameter="botify_agent.allow_custom_models",
-        default=False,
-        help="Off by default. This database's OWN custom or Studio models are "
-             "already reachable by the assistant like any other model your users "
-             "have Odoo permission for — this switch does not block or allow that "
-             "reachability. When enabled, it additionally lets Botify's own "
-             "per-model classification for one of those custom models (its "
-             "declared write operation class and a sensitivity flag used for "
-             "audit logging) override the default classification. A "
-             "classification can never reclassify a standard Odoo model or reach "
-             "Odoo's own infrastructure/auth models, and it cannot be turned on "
-             "from Botify — nothing outside this database can enable it. It "
-             "grants nothing by itself, and Odoo's own access rights and record "
-             "rules still decide every individual operation.",
-    )
-    botify_grant_ttl = fields.Integer(
-        string="Grant lifetime (seconds)",
-        config_parameter="botify_agent.grant_ttl",
-        default=90,
-        help="How long a per-operation grant stays valid. Freshly minted per tool "
-             "call — keep it short, it only has to survive one round trip.",
-    )
-    botify_secret_previous = fields.Char(
-        string="Previous shared secret (rotation grace window)",
-        config_parameter="botify_agent.shared_secret_previous",
-        readonly=True,
-        help="Set automatically when you rotate the shared secret. Accepted "
-             "alongside the current secret until the grace window elapses.",
-    )
-    botify_secret_grace_hours = fields.Integer(
-        string="Secret rotation grace window (hours)",
-        config_parameter="botify_agent.secret_grace_hours",
-        default=24,
-    )
-
-    @api.constrains("botify_assertion_ttl")
-    def _check_assertion_ttl(self):
-        for record in self:
-            ttl = record.botify_assertion_ttl
-            # Upper bound mirrors MAX_ASSERTION_TTL_SECONDS on the Botify side;
-            # a longer one would simply be rejected there, so fail loudly here.
-            if ttl and not (30 <= ttl <= 300):
-                raise ValidationError(
-                    "Assertion lifetime must be between 30 and 300 seconds."
-                )
-
-    @api.constrains("botify_grant_ttl")
-    def _check_grant_ttl(self):
-        for record in self:
-            ttl = record.botify_grant_ttl
-            # Bounds mirror MIN_GRANT_TTL/MAX_GRANT_TTL in controllers/_shared.py,
-            # which already clamps a value outside this range at read time. That
-            # clamp is a safety net, not a substitute for telling the operator
-            # their input was ignored — fail loudly here instead, same as
-            # _check_assertion_ttl above.
-            if ttl and not (15 <= ttl <= 300):
-                raise ValidationError(
-                    "Grant lifetime must be between 15 and 300 seconds."
-                )
-
-    @api.constrains("botify_secret_grace_hours")
-    def _check_secret_grace_hours(self):
-        for record in self:
-            hours = record.botify_secret_grace_hours
-            # 0 is a legitimate choice (instant cutover, no grace window).
-            # Negative is nonsensical. An unbounded upper value defeats the
-            # point of rotating the secret at all — an old, possibly-leaked
-            # secret would keep being accepted indefinitely — so cap it at one
-            # week, generous for any realistic rollout of a new secret.
-            if hours < 0 or hours > 168:
-                raise ValidationError(
-                    "Secret rotation grace window must be between 0 and 168 hours (1 week)."
-                )
-
-    def action_botify_generate_secret(self):
-        """Rotate the shared secret with a grace window (AC-25).
-
-        Rotation procedure: the CURRENT secret moves to "previous" (with a
-        timestamp), a fresh secret becomes current, and the operator pastes
-        the new one into Botify. Until the grace window
-        (botify_agent.secret_grace_hours, default 24h) elapses,
-        /botify_agent/grant and /botify_agent/rpc accept EITHER secret—so an
-        in-flight Botify replica that hasn't picked up the new value yet does
-        not start failing every call the instant you rotate. This is
-        operator-triggered and left in Odoo's own "Settings changed" trail via
-        the normal ir.config_parameter write; a dedicated Botify-side audit
-        entry is also recorded for the connection when Botify's rotation
-        endpoint is used (see docs/odoo/runbook.md \"Key rotation\").
-        """
-        self.ensure_one()
-        params = self.env["ir.config_parameter"].sudo()
-        current = params.get_param("botify_agent.shared_secret") or ""
-        if current:
-            params.set_param("botify_agent.shared_secret_previous", current)
-            params.set_param("botify_agent.secret_rotated_at", str(int(time.time())))
-        secret = botify_security.new_nonce() + botify_security.new_nonce()
-        params.set_param("botify_agent.shared_secret", secret)
-        return {
-            "type": "ir.actions.client",
-            "tag": "reload",
-        }
+    botify_retention_days = fields.Integer("Keep the operation log (days)", config_parameter="botify_agent.retention_days", default=90)

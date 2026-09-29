@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="ir_cron_botify_operation_gc" model="ir.cron">
+        <field name="name">Botify: operation log retention</field>
+        <field name="model_id" ref="model_botify_agent_operation"/>
+        <field name="state">code</field>
+        <field name="code">model._gc()</field>
+        <field name="user_id" ref="base.user_root"/>
+        <field name="interval_number">1</field>
+        <field name="interval_type">hours</field>
+    </record>
+    <record id="ir_cron_botify_event_gc" model="ir.cron">
+        <field name="name">Botify: notification expiry and retention</field>
+        <field name="model_id" ref="model_botify_agent_event"/>
+        <field name="state">code</field>
+        <field name="code">model._gc()</field>
+        <field name="user_id" ref="base.user_root"/>
+        <field name="interval_number">1</field>
+        <field name="interval_type">hours</field>
+    </record>
+</odoo>

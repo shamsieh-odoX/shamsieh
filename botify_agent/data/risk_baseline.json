@@ -1,0 +1,102 @@
+{
+  "version": 1,
+  "financialModelPrefixes": ["account."],
+  "externalCommunicationModels": [
+    "calendar.event",
+    "mail.compose.message",
+    "mail.followers",
+    "mail.mail",
+    "mail.message",
+    "sms.composer",
+    "sms.sms"
+  ],
+  "financialFields": [
+    "amount",
+    "amount_total",
+    "amount_untaxed",
+    "currency_id",
+    "discount",
+    "journal_id",
+    "list_price",
+    "partner_bank_id",
+    "price_subtotal",
+    "price_total",
+    "price_unit",
+    "standard_price",
+    "tax_id",
+    "tax_ids"
+  ],
+  "financialFieldPrefixes": ["property_account_"],
+  "refusedFields": [
+    "__last_update",
+    "company_id",
+    "create_date",
+    "create_uid",
+    "display_name",
+    "id",
+    "state",
+    "write_date",
+    "write_uid"
+  ],
+  "fields": {
+    "crm.lead": {
+      "team_id": "high_write",
+      "user_id": "high_write"
+    },
+    "res.partner": {
+      "bank_ids": "financial",
+      "property_payment_term_id": "financial",
+      "property_supplier_payment_term_id": "financial"
+    },
+    "sale.order": {
+      "fiscal_position_id": "high_write",
+      "payment_term_id": "high_write",
+      "pricelist_id": "high_write",
+      "user_id": "high_write"
+    },
+    "stock.picking": {
+      "location_dest_id": "high_write",
+      "location_id": "high_write",
+      "picking_type_id": "high_write"
+    }
+  },
+  "methods": {
+    "account.move": {
+      "action_post": "financial",
+      "button_cancel": "financial",
+      "button_draft": "financial"
+    },
+    "crm.lead": {
+      "action_set_lost": "high_write",
+      "action_set_won": "high_write"
+    },
+    "purchase.order": {
+      "button_cancel": "destructive",
+      "button_confirm": "high_write"
+    },
+    "sale.order": {
+      "action_cancel": "destructive",
+      "action_confirm": "high_write",
+      "action_draft": "high_write"
+    },
+    "stock.picking": {
+      "action_assign": "high_write",
+      "action_cancel": "destructive",
+      "action_confirm": "high_write",
+      "button_validate": "high_write"
+    }
+  },
+  "lowRiskFieldTypes": [
+    "boolean",
+    "char",
+    "date",
+    "datetime",
+    "float",
+    "html",
+    "integer",
+    "selection",
+    "text"
+  ],
+  "stateLikeFieldPrefixes": ["stage", "state"],
+  "bulkLimit": 50
+}

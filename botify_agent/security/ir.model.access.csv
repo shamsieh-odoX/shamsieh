@@ -1,3 +1,7 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_botify_agent_delegation_system,botify.agent.delegation (system admin read),model_botify_agent_delegation,base.group_system,1,0,0,0
-access_botify_agent_nonce_system,botify.agent.nonce (system admin read),model_botify_agent_nonce,base.group_system,1,0,0,0
+access_botify_method_user,botify.agent.method user,model_botify_agent_method,group_botify_user,1,0,0,0
+access_botify_method_admin,botify.agent.method admin,model_botify_agent_method,base.group_system,1,1,1,1
+access_botify_field_rule_user,botify.agent.field_rule user,model_botify_agent_field_rule,group_botify_user,1,0,0,0
+access_botify_field_rule_admin,botify.agent.field_rule admin,model_botify_agent_field_rule,base.group_system,1,1,1,1
+access_botify_operation_admin,botify.agent.operation admin,model_botify_agent_operation,base.group_system,1,0,0,0
+access_botify_event_admin,botify.agent.event admin,model_botify_agent_event,base.group_system,1,0,0,0

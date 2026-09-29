@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Standard business actions: no arguments (the empty contract). The
+         platform baseline (risk_baseline.json) may raise their class. -->
+    <data noupdate="1">
+        <record id="method_sale_order_action_confirm" model="botify.agent.method">
+            <field name="model">sale.order</field>
+            <field name="method">action_confirm</field>
+            <field name="risk_class">high_write</field>
+            <field name="description">Confirm the quotation into a sales order</field>
+        </record>
+        <record id="method_sale_order_action_cancel" model="botify.agent.method">
+            <field name="model">sale.order</field>
+            <field name="method">action_cancel</field>
+            <field name="risk_class">destructive</field>
+            <field name="description">Cancel the sales order</field>
+        </record>
+        <record id="method_account_move_action_post" model="botify.agent.method">
+            <field name="model">account.move</field>
+            <field name="method">action_post</field>
+            <field name="risk_class">financial</field>
+            <field name="description">Post the draft invoice or entry</field>
+        </record>
+        <record id="method_account_move_button_draft" model="botify.agent.method">
+            <field name="model">account.move</field>
+            <field name="method">button_draft</field>
+            <field name="risk_class">financial</field>
+            <field name="description">Reset the entry to draft</field>
+        </record>
+        <record id="method_purchase_order_button_confirm" model="botify.agent.method">
+            <field name="model">purchase.order</field>
+            <field name="method">button_confirm</field>
+            <field name="risk_class">high_write</field>
+            <field name="description">Confirm the request for quotation into a purchase order</field>
+        </record>
+        <record id="method_stock_picking_action_assign" model="botify.agent.method">
+            <field name="model">stock.picking</field>
+            <field name="method">action_assign</field>
+            <field name="risk_class">high_write</field>
+            <field name="description">Check availability and reserve products</field>
+        </record>
+        <record id="method_stock_picking_button_validate" model="botify.agent.method">
+            <field name="model">stock.picking</field>
+            <field name="method">button_validate</field>
+            <field name="risk_class">high_write</field>
+            <field name="description">Validate the transfer</field>
+        </record>
+        <record id="method_crm_lead_action_set_won" model="botify.agent.method">
+            <field name="model">crm.lead</field>
+            <field name="method">action_set_won</field>
+            <field name="risk_class">high_write</field>
+            <field name="description">Mark the opportunity as won</field>
+        </record>
+    </data>
+</odoo>

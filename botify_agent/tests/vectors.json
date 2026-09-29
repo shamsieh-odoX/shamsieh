@@ -1,0 +1,79 @@
+{
+  "secret": "wss_vector-secret-0000000000000000000000",
+  "sid": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAArotating-part-of-the-session-id",
+  "sb": "1q_KgOogeKQLTlBkyGh6yWW-1ZMuV-3hQBlQ9sutwFA",
+  "now": 1790000000,
+  "grant": {
+    "v": 1,
+    "iss": "wsk_vector_installation01",
+    "callId": "call-1:exec",
+    "runId": "run-1",
+    "sessionId": "session-1",
+    "db": "odoo_test",
+    "uid": 2,
+    "sb": "1q_KgOogeKQLTlBkyGh6yWW-1ZMuV-3hQBlQ9sutwFA",
+    "riskClass": "low_write",
+    "approvalId": "appr-1",
+    "op": {
+      "op": "write",
+      "model": "res.partner",
+      "ids": [3],
+      "values": {
+        "phone": "+962 6 000 0000"
+      }
+    },
+    "iat": 1790000000,
+    "exp": 1790000120
+  },
+  "grantToken": "g1.eyJ2IjoxLCJpc3MiOiJ3c2tfdmVjdG9yX2luc3RhbGxhdGlvbjAxIiwiY2FsbElkIjoiY2FsbC0xOmV4ZWMiLCJydW5JZCI6InJ1bi0xIiwic2Vzc2lvbklkIjoic2Vzc2lvbi0xIiwiZGIiOiJvZG9vX3Rlc3QiLCJ1aWQiOjIsInNiIjoiMXFfS2dPb2dlS1FMVGxCa3lHaDZ5V1ctMVpNdVYtM2hRQmxROXN1dHdGQSIsInJpc2tDbGFzcyI6Imxvd193cml0ZSIsImFwcHJvdmFsSWQiOiJhcHByLTEiLCJvcCI6eyJvcCI6IndyaXRlIiwibW9kZWwiOiJyZXMucGFydG5lciIsImlkcyI6WzNdLCJ2YWx1ZXMiOnsicGhvbmUiOiIrOTYyIDYgMDAwIDAwMDAifX0sImlhdCI6MTc5MDAwMDAwMCwiZXhwIjoxNzkwMDAwMTIwfQ.9R1euz2ks-l5tYTkzwhwiKnJPNbNF5LOO4o1kS_Mrys",
+  "assertion": {
+    "iss": "wsk_vector_installation01",
+    "db": "odoo_test",
+    "uid": 2,
+    "partner_id": 3,
+    "name": "Mitchell Admin",
+    "company_id": 1,
+    "company_name": "YourCompany",
+    "allowed_company_ids": [1],
+    "sb": "1q_KgOogeKQLTlBkyGh6yWW-1ZMuV-3hQBlQ9sutwFA",
+    "iat": 1790000000,
+    "exp": 1790000060,
+    "nonce": "vector-nonce-0000000000"
+  },
+  "assertionToken": "o1.eyJpc3MiOiJ3c2tfdmVjdG9yX2luc3RhbGxhdGlvbjAxIiwiZGIiOiJvZG9vX3Rlc3QiLCJ1aWQiOjIsInBhcnRuZXJfaWQiOjMsIm5hbWUiOiJNaXRjaGVsbCBBZG1pbiIsImNvbXBhbnlfaWQiOjEsImNvbXBhbnlfbmFtZSI6IllvdXJDb21wYW55IiwiYWxsb3dlZF9jb21wYW55X2lkcyI6WzFdLCJzYiI6IjFxX0tnT29nZUtRTFRsQmt5R2g2eVdXLTFaTXVWLTNoUUJsUTlzdXR3RkEiLCJpYXQiOjE3OTAwMDAwMDAsImV4cCI6MTc5MDAwMDA2MCwibm9uY2UiOiJ2ZWN0b3Itbm9uY2UtMDAwMDAwMDAwMCJ9.vB_Z7QjYhhiYS4vl_vK8kTDdM3srDZNB-KEnN0Co7OY",
+  "event": {
+    "iss": "wsk_vector_installation01",
+    "db": "odoo_test",
+    "uid": 7,
+    "eventId": "0f8e2c1b9a7d4e5f8a6b3c2d1e0f9a8b",
+    "kind": "leave.approved",
+    "facts": {
+      "leaveId": 13,
+      "leaveType": "Paid Time Off",
+      "dateFrom": "2026-10-05",
+      "dateTo": "2026-10-08",
+      "days": 4,
+      "decidedBy": "Mitchell Admin"
+    },
+    "company": {
+      "id": 1,
+      "name": "YourCompany"
+    },
+    "createdAt": "2026-09-25T10:00:00Z",
+    "v": 1,
+    "iat": 1790000000,
+    "exp": 1790000300
+  },
+  "eventToken": "n1.eyJpc3MiOiJ3c2tfdmVjdG9yX2luc3RhbGxhdGlvbjAxIiwiZGIiOiJvZG9vX3Rlc3QiLCJ1aWQiOjcsImV2ZW50SWQiOiIwZjhlMmMxYjlhN2Q0ZTVmOGE2YjNjMmQxZTBmOWE4YiIsImtpbmQiOiJsZWF2ZS5hcHByb3ZlZCIsImZhY3RzIjp7ImxlYXZlSWQiOjEzLCJsZWF2ZVR5cGUiOiJQYWlkIFRpbWUgT2ZmIiwiZGF0ZUZyb20iOiIyMDI2LTEwLTA1IiwiZGF0ZVRvIjoiMjAyNi0xMC0wOCIsImRheXMiOjQsImRlY2lkZWRCeSI6Ik1pdGNoZWxsIEFkbWluIn0sImNvbXBhbnkiOnsiaWQiOjEsIm5hbWUiOiJZb3VyQ29tcGFueSJ9LCJjcmVhdGVkQXQiOiIyMDI2LTA5LTI1VDEwOjAwOjAwWiIsInYiOjEsImlhdCI6MTc5MDAwMDAwMCwiZXhwIjoxNzkwMDAwMzAwfQ.GupcMIkOpkkbnwQfXTKWqj4oJ_Hwj0RgjXxKYpVrx48",
+  "ackToken": "a1.eyJ2IjoxLCJpc3MiOiJ3c2tfdmVjdG9yX2luc3RhbGxhdGlvbjAxIiwiZGIiOiJvZG9vX3Rlc3QiLCJ1aWQiOjcsImV2ZW50SWQiOiIwZjhlMmMxYjlhN2Q0ZTVmOGE2YjNjMmQxZTBmOWE4YiIsIm91dGNvbWUiOiJkZWxpdmVyZWQiLCJpYXQiOjE3OTAwMDAwMDAsImV4cCI6MTc5MDAwMDMwMH0.C4xy_1VpA1WkpE_2rb7vRlWIm-sGNJ9iA3m9bU1dExM",
+  "ack": {
+    "v": 1,
+    "iss": "wsk_vector_installation01",
+    "db": "odoo_test",
+    "uid": 7,
+    "eventId": "0f8e2c1b9a7d4e5f8a6b3c2d1e0f9a8b",
+    "outcome": "delivered",
+    "iat": 1790000000,
+    "exp": 1790000300
+  }
+}
