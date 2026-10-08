@@ -1,6 +1,6 @@
 {
     'name': 'Shamsieh Website',
-    'version': '19.0.1.0.0',
+    'version': '19.0.1.0.1',
     'category': 'Website',
     'summary': 'Company website homepage matching shamsieh.com brand and content',
     'author': 'Custom',

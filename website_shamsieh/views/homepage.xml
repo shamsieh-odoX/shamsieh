@@ -1,6 +1,309 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <template id="homepage" inherit_id="website.homepage" name="Shamsieh Homepage" priority="99">
+    <!-- Standalone homepage (assigned to / via website.page) -->
+    <template id="shamsieh_homepage" name="Shamsieh Home">
+        <t t-call="website.layout" pageName.f="homepage">
+            <div id="wrap" class="oe_structure shamsieh-home">
+
+                <!-- Hero: brand-first, one composition -->
+                <section class="sh-hero" id="top">
+                    <div class="sh-hero__bg" aria-hidden="true"/>
+                    <div class="sh-hero__inner container">
+                        <p class="sh-eyebrow">Beyond Technology</p>
+                        <h1 class="sh-brand">
+                            Shamsieh
+                            <span class="sh-brand__accent">Technology</span>
+                        </h1>
+                        <p class="sh-lead">
+                            Products We Build. Platforms We Implement. Teams We Provide.
+                        </p>
+                        <div class="sh-pills" aria-label="Focus areas">
+                            <span>AI Products</span>
+                            <span>Business Platforms</span>
+                            <span>Technology Talent</span>
+                            <span>Jordan &amp; Saudi Arabia</span>
+                        </div>
+                        <div class="sh-cta-row">
+                            <a class="sh-btn sh-btn--primary" href="#products">Explore Our Solutions</a>
+                            <a class="sh-btn sh-btn--ghost" href="/contactus">Book a Consultation</a>
+                        </div>
+                        <a class="sh-scroll-hint" href="#pillars">Scroll to explore</a>
+                    </div>
+                </section>
+
+                <!-- Three pillars -->
+                <section class="sh-section sh-pillars" id="pillars">
+                    <div class="container">
+                        <ol class="sh-pillar-list">
+                            <li class="sh-reveal">
+                                <span class="sh-num">01</span>
+                                <h2>Products We Build</h2>
+                                <p>Software products designed to solve challenges in customer engagement, education, productivity, and beyond.</p>
+                                <a class="sh-text-link" href="#products">Learn more</a>
+                            </li>
+                            <li class="sh-reveal">
+                                <span class="sh-num">02</span>
+                                <h2>Platforms We Implement</h2>
+                                <p>Business platforms that help organizations manage processes, connect systems, and operate more effectively.</p>
+                                <a class="sh-text-link" href="#ecosystem">Learn more</a>
+                            </li>
+                            <li class="sh-reveal">
+                                <span class="sh-num">03</span>
+                                <h2>Teams We Provide</h2>
+                                <p>Specialized technology professionals and dedicated teams supporting software, AI, data, and digital initiatives.</p>
+                                <a class="sh-text-link" href="#talent">Learn more</a>
+                            </li>
+                        </ol>
+                    </div>
+                </section>
+
+                <!-- Who we are -->
+                <section class="sh-section sh-about" id="about">
+                    <div class="container sh-split">
+                        <div class="sh-reveal">
+                            <p class="sh-eyebrow">Who We Are</p>
+                            <h2 class="sh-h2">More Than a Technology Company</h2>
+                            <p>
+                                Shamsieh develops products, implements business platforms, and provides specialized
+                                technology talent to organizations across multiple industries.
+                            </p>
+                            <p>
+                                Since 2019, we have expanded from Jordan into Saudi Arabia, building a regional
+                                ecosystem that combines products, solutions, and execution capabilities under one umbrella.
+                            </p>
+                            <ul class="sh-check-list">
+                                <li>Regional Presence</li>
+                                <li>Business Platforms</li>
+                                <li>AI Products</li>
+                                <li>Technology Talent</li>
+                            </ul>
+                        </div>
+                        <div class="sh-about__panel sh-reveal" aria-hidden="true">
+                            <span>Products</span>
+                            <span>Platforms</span>
+                            <span>People</span>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Industries strip -->
+                <section class="sh-section sh-industries" id="industries">
+                    <div class="container">
+                        <p class="sh-eyebrow">Industries We Serve</p>
+                        <h2 class="sh-h2">Technology solutions built around operational needs</h2>
+                        <ul class="sh-industry-grid sh-reveal">
+                            <li><span>01</span>Insurance</li>
+                            <li><span>02</span>Telecommunications</li>
+                            <li><span>03</span>Education</li>
+                            <li><span>04</span>Enterprise Services</li>
+                            <li><span>05</span>Contact Centers</li>
+                            <li><span>06</span>Information Technology</li>
+                            <li><span>07</span>Digital Services</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- Products -->
+                <section class="sh-section sh-products" id="products">
+                    <div class="container">
+                        <p class="sh-eyebrow">Products We Build</p>
+                        <h2 class="sh-h2">Products created to address real operational challenges</h2>
+                        <div class="sh-product-list">
+                            <article class="sh-product sh-reveal">
+                                <span class="sh-num">01</span>
+                                <p class="sh-product__tag">Enterprise AI Operating Layer</p>
+                                <h3>Botify AI</h3>
+                                <p>An enterprise AI platform that connects people, business systems, and artificial intelligence through a single conversational experience.</p>
+                            </article>
+                            <article class="sh-product sh-reveal">
+                                <span class="sh-num">02</span>
+                                <p class="sh-product__tag">AI Campaign Management</p>
+                                <h3>Campify</h3>
+                                <p>An end-to-end platform for planning marketing campaigns, generating AI content, managing approvals, publishing across email, SMS and WhatsApp, and analyzing performance — built for Arabic and English.</p>
+                            </article>
+                            <article class="sh-product sh-reveal">
+                                <span class="sh-num">03</span>
+                                <p class="sh-product__tag">Customer Value Management for B2B</p>
+                                <h3>Connect CVM</h3>
+                                <p>A customer value management platform for B2B companies. It brings account data together, scores value, risk and growth, and gives every account manager a ranked list of next actions each morning — with the evidence behind each one.</p>
+                            </article>
+                            <article class="sh-product sh-reveal">
+                                <span class="sh-num">04</span>
+                                <p class="sh-product__tag">Appointment Management Platform</p>
+                                <h3>Mawid</h3>
+                                <p>A modern appointment management platform that simplifies booking, scheduling, reminders, and customer communication across digital channels.</p>
+                            </article>
+                            <article class="sh-product sh-reveal">
+                                <span class="sh-num">05</span>
+                                <p class="sh-product__tag">Education Discovery Platform</p>
+                                <h3>Shamsieh Education</h3>
+                                <p>A digital platform helping parents and students discover, compare, and connect with educational institutions through verified information and intelligent search tools.</p>
+                            </article>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Industry focus -->
+                <section class="sh-section sh-focus">
+                    <div class="container">
+                        <p class="sh-eyebrow">Industries We Serve</p>
+                        <h2 class="sh-h2">Every industry has different challenges</h2>
+                        <div class="sh-focus-grid">
+                            <article class="sh-reveal">
+                                <span class="sh-num">01</span>
+                                <h3>Banking &amp; Financial Services</h3>
+                                <p>We help banks and financial institutions improve operational visibility, automate workflows, enhance customer engagement, and connect business systems through intelligent platforms.</p>
+                            </article>
+                            <article class="sh-reveal">
+                                <span class="sh-num">02</span>
+                                <h3>Insurance</h3>
+                                <p>We help insurance companies improve customer experiences, streamline operations, automate business processes, and build connected digital services.</p>
+                            </article>
+                            <article class="sh-reveal">
+                                <span class="sh-num">03</span>
+                                <h3>Telecommunications</h3>
+                                <p>We help telecommunications providers modernize customer engagement, automate support operations, and improve service delivery through intelligent platforms.</p>
+                            </article>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Talent -->
+                <section class="sh-section sh-talent" id="talent">
+                    <div class="container">
+                        <p class="sh-eyebrow">Technology Services</p>
+                        <h2 class="sh-h2">Technology Talent</h2>
+                        <p class="sh-section-lead">Providing organizations with the expertise required to execute and scale technology initiatives.</p>
+                        <div class="sh-talent-grid">
+                            <article class="sh-reveal">
+                                <span class="sh-num">01</span>
+                                <p class="sh-product__tag">Service Offering</p>
+                                <h3>Dedicated Technology Teams</h3>
+                                <p>Software engineers, AI specialists, analysts, and project professionals working as an extension of your organization.</p>
+                            </article>
+                            <article class="sh-reveal">
+                                <span class="sh-num">02</span>
+                                <p class="sh-product__tag">Service Offering</p>
+                                <h3>Managed Technical Operations</h3>
+                                <p>Ongoing technical support, system administration, platform management, and operational services.</p>
+                            </article>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Ecosystem -->
+                <section class="sh-section sh-ecosystem" id="ecosystem">
+                    <div class="container">
+                        <h2 class="sh-h2">Our Ecosystem</h2>
+                        <ol class="sh-eco-list">
+                            <li class="sh-reveal"><span class="sh-num">01</span><div><h3>Products</h3><p>Software products developed and continuously enhanced by Shamsieh.</p></div></li>
+                            <li class="sh-reveal"><span class="sh-num">02</span><div><h3>Solutions</h3><p>Business platforms, enterprise implementations, and operational improvement initiatives.</p></div></li>
+                            <li class="sh-reveal"><span class="sh-num">03</span><div><h3>Talent</h3><p>Specialized professionals and dedicated teams supporting technology-driven organizations.</p></div></li>
+                            <li class="sh-reveal"><span class="sh-num">04</span><div><h3>Regional Presence</h3><p>Operations and partnerships across Jordan and Saudi Arabia.</p></div></li>
+                        </ol>
+                    </div>
+                </section>
+
+                <!-- Partners + stack -->
+                <section class="sh-section sh-partners">
+                    <div class="container">
+                        <h2 class="sh-h2">Strategic Partners</h2>
+                        <div class="sh-partner-row sh-reveal">
+                            <div>
+                                <p class="sh-product__tag">Saudi operational arm</p>
+                                <h3>Umbrella Prime</h3>
+                            </div>
+                            <div>
+                                <p class="sh-product__tag">Strategic partner · Al Safa</p>
+                                <h3>Raqmeiat</h3>
+                            </div>
+                        </div>
+                        <h2 class="sh-h2 sh-h2--spaced">Technology Ecosystem</h2>
+                        <p class="sh-section-lead">Working with leading business and technology platforms.</p>
+                        <ul class="sh-stack sh-reveal">
+                            <li><strong>Odoo ERP</strong><span>Business Applications</span></li>
+                            <li><strong>Microsoft Dynamics</strong><span>Enterprise Solutions</span></li>
+                            <li><strong>Cloud Infrastructure</strong><span>Scalable Computing Platforms</span></li>
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- How we work -->
+                <section class="sh-section sh-process">
+                    <div class="container">
+                        <h2 class="sh-h2">How We Work</h2>
+                        <p class="sh-section-lead">A practical approach focused on understanding needs, designing solutions, and delivering measurable outcomes.</p>
+                        <ol class="sh-steps">
+                            <li class="sh-reveal"><span class="sh-num">01</span><h3>Discovery</h3><p>Understanding business objectives, operational challenges, and technical requirements.</p></li>
+                            <li class="sh-reveal"><span class="sh-num">02</span><h3>Design</h3><p>Defining the right products, platforms, and implementation approach.</p></li>
+                            <li class="sh-reveal"><span class="sh-num">03</span><h3>Delivery</h3><p>Executing projects, launching solutions, and supporting long-term success.</p></li>
+                        </ol>
+                    </div>
+                </section>
+
+                <!-- CEO -->
+                <section class="sh-section sh-ceo">
+                    <div class="container sh-ceo__inner sh-reveal">
+                        <p class="sh-eyebrow">Message from the CEO</p>
+                        <blockquote>
+                            <p>We did not start Shamsieh to build software.</p>
+                            <p>We started it to solve problems.</p>
+                            <p>
+                                Every product we launch, every platform we implement, and every project we deliver
+                                is driven by a simple question:
+                            </p>
+                            <p class="sh-quote-focus">Will this make a meaningful difference for our clients?</p>
+                            <p>
+                                That mindset continues to guide our work as we build products, deliver business
+                                solutions, and support organizations across Jordan and Saudi Arabia.
+                            </p>
+                            <footer>
+                                <strong>Mohaned Salah</strong>
+                                <span>Chief Executive Officer</span>
+                            </footer>
+                        </blockquote>
+                    </div>
+                </section>
+
+                <!-- Trusted by -->
+                <section class="sh-section sh-trusted">
+                    <div class="container">
+                        <p class="sh-eyebrow">Trusted By</p>
+                        <h2 class="sh-h2">Organizations We Serve</h2>
+                        <p class="sh-section-lead">Supporting organizations across education, enterprise, financial services, technology, and the public sector.</p>
+                        <ul class="sh-logos sh-reveal">
+                            <li>Chubb</li>
+                            <li>King Faisal University</li>
+                            <li>Arab National Bank</li>
+                            <li>Ministry of Health</li>
+                            <li>Medgulf</li>
+                            <li>CCC by stc</li>
+                            <li>Bank Muscat</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- Closing CTA -->
+                <section class="sh-section sh-closing" id="contact">
+                    <div class="container sh-reveal">
+                        <h2 class="sh-h2">Ready to Discuss Your Next Initiative?</h2>
+                        <p>
+                            Whether you're implementing a business platform, launching a software product,
+                            adopting AI, or expanding your technology team, we're ready to help.
+                        </p>
+                        <div class="sh-cta-row">
+                            <a class="sh-btn sh-btn--primary" href="https://wa.me/962775999908" target="_blank" rel="noopener">WhatsApp Us</a>
+                            <a class="sh-btn sh-btn--ghost" href="/contactus">Get Started</a>
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+        </t>
+    </template>
+
+    <!-- Also inherit base homepage when no COW page redirect -->
+    <template id="homepage_inherit" inherit_id="website.homepage" name="Shamsieh Homepage Inherit" priority="99">
         <xpath expr="//div[@id='wrap']" position="replace">
             <div id="wrap" class="oe_structure shamsieh-home">
 
@@ -300,4 +603,10 @@
             </div>
         </xpath>
     </template>
+
+    <!-- Point the default home website.page at our template -->
+    <record id="website.homepage_page" model="website.page">
+        <field name="view_id" ref="shamsieh_homepage"/>
+        <field name="is_published" eval="True"/>
+    </record>
 </odoo>
