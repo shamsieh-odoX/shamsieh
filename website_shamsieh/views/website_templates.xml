@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="shamsieh_fonts" inherit_id="web.layout" name="Shamsieh Fonts">
+        <xpath expr="//head" position="inside">
+            <link rel="preconnect" href="https://fonts.googleapis.com"/>
+            <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous"/>
+            <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&amp;family=Syne:wght@600;700;800&amp;display=swap" rel="stylesheet"/>
+        </xpath>
+    </template>
+
+    <!-- Branded footer aligned with shamsieh.com contact block -->
+    <template id="footer_shamsieh" inherit_id="website.footer_custom" name="Shamsieh Footer" active="True" priority="99">
+        <xpath expr="//div[@id='footer']" position="replace">
+            <div id="footer" class="oe_structure oe_structure_solo shamsieh-footer text-break" t-ignore="true" t-if="not no_footer">
+                <section class="s_text_block" data-snippet="s_text_block">
+                    <div class="container">
+                        <div class="shamsieh-footer-inner">
+                            <div>
+                                <div class="shamsieh-footer-brand">Shamsieh</div>
+                                <p class="shamsieh-footer-copy">
+                                    Products. Platforms. People. A regional technology company building software
+                                    products, implementing business platforms, and supporting organizations with
+                                    specialized technology expertise.
+                                </p>
+                            </div>
+                            <div>
+                                <h5>Call us</h5>
+                                <ul>
+                                    <li><a href="tel:+962775999908">+962 7 7599 9908 · JO</a></li>
+                                    <li><a href="tel:+966563447279">+966 56 344 7279 · SA</a></li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h5>Address</h5>
+                                <ul>
+                                    <li>Zahran St 34, Amman, Jordan</li>
+                                    <li>Murabba 6479, Riyadh, Saudi Arabia</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="shamsieh-footer-bottom">
+                            © 2026 Shamsieh Technology Services
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </xpath>
+    </template>
+</odoo>
