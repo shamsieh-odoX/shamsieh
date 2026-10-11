@@ -59,6 +59,8 @@ class HrEmployee(models.Model):
     id_card = fields.Binary(groups=_OWN)
     driving_license = fields.Binary(groups=_OWN)
     private_car_plate = fields.Char(groups=_OWN)
+    # Loaded on employee list / tags; needed so own-data users can open Employees.
+    category_ids = fields.Many2many(groups=_OWN)
 
     def _is_own_data_only_user(self):
         user = self.env.user
