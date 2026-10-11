@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_hr_employee_own_data,hr.employee.own.data,hr.model_hr_employee,group_hr_own_data,1,1,0,0
+access_hr_version_own_data,hr.version.own.data,hr.model_hr_version,group_hr_own_data,1,1,0,0
+access_resource_resource_own_data,resource.resource.own.data,resource.model_resource_resource,group_hr_own_data,1,1,0,0

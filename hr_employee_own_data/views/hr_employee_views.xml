@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_employee_form_own_data" model="ir.ui.view">
+        <field name="name">hr.employee.form.own.data</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_form"/>
+        <field name="arch" type="xml">
+            <!-- Personal tab visible to own-data users -->
+            <xpath expr="//page[@name='personal_information']" position="attributes">
+                <attribute name="groups">hr.group_hr_user,hr_employee_own_data.group_hr_own_data</attribute>
+            </xpath>
+
+            <!-- Org fields: officers edit; own-data users see read-only -->
+            <xpath expr="//page[@name='work_information']//field[@name='department_id']" position="replace">
+                <field name="department_id" groups="hr.group_hr_user"/>
+                <field name="department_id" readonly="1" groups="hr_employee_own_data.group_hr_own_data"/>
+            </xpath>
+            <xpath expr="//page[@name='work_information']//field[@name='job_id']" position="replace">
+                <field name="job_id" string="Job Position"
+                         context="{'default_no_of_recruitment': 0, 'default_is_favorite': False}"
+                         placeholder="e.g. Sales Manager"
+                         groups="hr.group_hr_user"/>
+                <field name="job_id" string="Job Position" readonly="1"
+                         groups="hr_employee_own_data.group_hr_own_data"/>
+            </xpath>
+            <xpath expr="//page[@name='work_information']//field[@name='parent_id']" position="replace">
+                <field name="parent_id" widget="many2one_avatar_employee" groups="hr.group_hr_user"/>
+                <field name="parent_id" widget="many2one_avatar_employee" readonly="1"
+                         groups="hr_employee_own_data.group_hr_own_data"/>
+            </xpath>
+            <xpath expr="//page[@name='work_information']//field[@name='address_id']" position="replace">
+                <field name="address_id"
+                         context="{'show_address': 1}"
+                         options='{"highlight_first_line": True}'
+                         groups="hr.group_hr_user"/>
+                <field name="address_id"
+                         context="{'show_address': 1}"
+                         options='{"highlight_first_line": True}'
+                         readonly="1"
+                         groups="hr_employee_own_data.group_hr_own_data"/>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

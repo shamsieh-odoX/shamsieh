@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="group_hr_own_data" model="res.groups">
+        <field name="name">User: Manage own data</field>
+        <field name="sequence">5</field>
+        <field name="privilege_id" ref="hr.res_groups_privilege_employees"/>
+        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        <field name="comment">Employees can open their own employee record and edit Work, Resume, Personal, and Badges information.</field>
+    </record>
+
+    <data noupdate="1">
+
+        <record id="hr_employee_own_data_rule" model="ir.rule">
+            <field name="name">Employee: manage own data only</field>
+            <field name="model_id" ref="hr.model_hr_employee"/>
+            <field name="domain_force">[('user_id', '=', user.id)]</field>
+            <field name="groups" eval="[(4, ref('group_hr_own_data'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_unlink" eval="False"/>
+        </record>
+
+        <record id="hr_version_own_data_rule" model="ir.rule">
+            <field name="name">Employee version: manage own data only</field>
+            <field name="model_id" ref="hr.model_hr_version"/>
+            <field name="domain_force">[('employee_id.user_id', '=', user.id)]</field>
+            <field name="groups" eval="[(4, ref('group_hr_own_data'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_unlink" eval="False"/>
+        </record>
+
+        <record id="resource_resource_own_data_rule" model="ir.rule">
+            <field name="name">Resource: manage own employee resource</field>
+            <field name="model_id" ref="resource.model_resource_resource"/>
+            <field name="domain_force">[('user_id', '=', user.id)]</field>
+            <field name="groups" eval="[(4, ref('group_hr_own_data'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_unlink" eval="False"/>
+        </record>
+
+    </data>
+</odoo>
