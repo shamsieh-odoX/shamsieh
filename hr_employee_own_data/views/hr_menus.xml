@@ -3,7 +3,7 @@
 
     <!-- Let own-data users open Employees (record rules limit them to their own record). -->
     <record id="hr.menu_hr_employee_payroll" model="ir.ui.menu">
-        <field name="groups_id" eval="[(4, ref('group_hr_own_data'))]"/>
+        <field name="group_ids" eval="[(4, ref('group_hr_own_data'))]"/>
     </record>
 
 </odoo>
