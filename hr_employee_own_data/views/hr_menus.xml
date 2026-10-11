@@ -1,9 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-    <!-- Let own-data users open Employees (record rules limit them to their own record). -->
+    <!-- Own-data users should not use the full Employees list (would show everyone). -->
     <record id="hr.menu_hr_employee_payroll" model="ir.ui.menu">
-        <field name="group_ids" eval="[(4, ref('group_hr_own_data'))]"/>
+        <field name="group_ids" eval="[(3, ref('group_hr_own_data'))]"/>
     </record>
+
+    <record id="action_my_employee_profile" model="ir.actions.server">
+        <field name="name">My Profile</field>
+        <field name="model_id" ref="hr.model_hr_employee"/>
+        <field name="state">code</field>
+        <field name="code">action = env['hr.employee'].action_open_own_employee_profile()</field>
+    </record>
+
+    <menuitem
+        id="menu_my_employee_profile"
+        name="My Profile"
+        parent="hr.menu_hr_root"
+        action="action_my_employee_profile"
+        groups="hr_employee_own_data.group_hr_own_data"
+        sequence="2"/>
 
 </odoo>

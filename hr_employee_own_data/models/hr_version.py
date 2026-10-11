@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 from odoo import fields, models
 
+from .own_data_access import own_data_has_field_access
+
 # Officers keep full access; own-data users also see Personal / Work private fields.
 _OWN = 'hr.group_hr_user,hr_employee_own_data.group_hr_own_data'
 
@@ -9,12 +11,9 @@ class HrVersion(models.Model):
     _inherit = 'hr.version'
 
     def _has_field_access(self, field, operation):
-        if (
-            operation == 'read'
-            and not self.env.su
-            and self.env.user.has_group('hr_employee_own_data.group_hr_own_data')
-        ):
-            return True
+        forced = own_data_has_field_access(self, field, operation)
+        if forced is not None:
+            return forced
         return super()._has_field_access(field, operation)
 
     country_id = fields.Many2one(groups=_OWN)

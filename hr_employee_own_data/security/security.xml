@@ -11,34 +11,69 @@
 
     <data noupdate="1">
 
+        <!-- Read colleagues (manager, org chart). Global multi-company rule still applies. -->
+        <record id="hr_employee_own_data_rule_read" model="ir.rule">
+            <field name="name">Employee: own-data read company employees</field>
+            <field name="model_id" ref="hr.model_hr_employee"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="groups" eval="[(4, ref('group_hr_own_data'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_unlink" eval="False"/>
+        </record>
+
+        <!-- Write only own employee record -->
         <record id="hr_employee_own_data_rule" model="ir.rule">
-            <field name="name">Employee: manage own data only</field>
+            <field name="name">Employee: manage own data write</field>
             <field name="model_id" ref="hr.model_hr_employee"/>
             <field name="domain_force">[('user_id', '=', user.id)]</field>
             <field name="groups" eval="[(4, ref('group_hr_own_data'))]"/>
-            <field name="perm_read" eval="True"/>
+            <field name="perm_read" eval="False"/>
             <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_unlink" eval="False"/>
+        </record>
+
+        <record id="hr_version_own_data_rule_read" model="ir.rule">
+            <field name="name">Employee version: own-data read</field>
+            <field name="model_id" ref="hr.model_hr_version"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="groups" eval="[(4, ref('group_hr_own_data'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
             <field name="perm_create" eval="False"/>
             <field name="perm_unlink" eval="False"/>
         </record>
 
         <record id="hr_version_own_data_rule" model="ir.rule">
-            <field name="name">Employee version: manage own data only</field>
+            <field name="name">Employee version: manage own data write</field>
             <field name="model_id" ref="hr.model_hr_version"/>
             <field name="domain_force">[('employee_id.user_id', '=', user.id)]</field>
             <field name="groups" eval="[(4, ref('group_hr_own_data'))]"/>
-            <field name="perm_read" eval="True"/>
+            <field name="perm_read" eval="False"/>
             <field name="perm_write" eval="True"/>
             <field name="perm_create" eval="False"/>
             <field name="perm_unlink" eval="False"/>
         </record>
 
+        <record id="resource_resource_own_data_rule_read" model="ir.rule">
+            <field name="name">Resource: own-data read</field>
+            <field name="model_id" ref="resource.model_resource_resource"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="groups" eval="[(4, ref('group_hr_own_data'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_unlink" eval="False"/>
+        </record>
+
         <record id="resource_resource_own_data_rule" model="ir.rule">
-            <field name="name">Resource: manage own employee resource</field>
+            <field name="name">Resource: manage own employee resource write</field>
             <field name="model_id" ref="resource.model_resource_resource"/>
             <field name="domain_force">[('user_id', '=', user.id)]</field>
             <field name="groups" eval="[(4, ref('group_hr_own_data'))]"/>
-            <field name="perm_read" eval="True"/>
+            <field name="perm_read" eval="False"/>
             <field name="perm_write" eval="True"/>
             <field name="perm_create" eval="False"/>
             <field name="perm_unlink" eval="False"/>

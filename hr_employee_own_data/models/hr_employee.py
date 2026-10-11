@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
-from odoo import models, fields, _
-from odoo.exceptions import AccessError
+from odoo import api, models, fields, _
+from odoo.exceptions import AccessError, UserError
+
+from .own_data_access import own_data_has_field_access
 
 _OWN = 'hr.group_hr_user,hr_employee_own_data.group_hr_own_data'
 
@@ -70,17 +72,26 @@ class HrEmployee(models.Model):
         )
 
     def _has_field_access(self, field, operation):
-        # Own-data users may READ officer-restricted fields on their own employee
-        # record (record rules already limit them to themselves). This avoids
-        # AccessErrors from widgets/computes (Time Off, homeworking, Studio, …).
-        # WRITE still requires normal field groups + our forbidden-field checks.
-        if (
-            operation == 'read'
-            and not self.env.su
-            and self.env.user.has_group('hr_employee_own_data.group_hr_own_data')
-        ):
-            return True
+        forced = own_data_has_field_access(self, field, operation)
+        if forced is not None:
+            return forced
         return super()._has_field_access(field, operation)
+
+    @api.model
+    def action_open_own_employee_profile(self):
+        employee = self.env.user.employee_id
+        if not employee:
+            raise UserError(_("No employee is linked to your user. Please contact HR."))
+        return {
+            'type': 'ir.actions.act_window',
+            'name': _('My Profile'),
+            'res_model': 'hr.employee',
+            'res_id': employee.id,
+            'view_mode': 'form',
+            'views': [(False, 'form')],
+            'target': 'current',
+            'context': {'chat_icon': True},
+        }
 
     def write(self, vals):
         if self._is_own_data_only_user():
