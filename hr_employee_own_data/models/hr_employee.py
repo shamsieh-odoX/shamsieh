@@ -69,6 +69,19 @@ class HrEmployee(models.Model):
             and not user.has_group('hr.group_hr_user')
         )
 
+    def _has_field_access(self, field, operation):
+        # Own-data users may READ officer-restricted fields on their own employee
+        # record (record rules already limit them to themselves). This avoids
+        # AccessErrors from widgets/computes (Time Off, homeworking, Studio, …).
+        # WRITE still requires normal field groups + our forbidden-field checks.
+        if (
+            operation == 'read'
+            and not self.env.su
+            and self.env.user.has_group('hr_employee_own_data.group_hr_own_data')
+        ):
+            return True
+        return super()._has_field_access(field, operation)
+
     def write(self, vals):
         if self._is_own_data_only_user():
             if any(emp.user_id != self.env.user for emp in self):

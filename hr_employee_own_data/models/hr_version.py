@@ -8,6 +8,15 @@ _OWN = 'hr.group_hr_user,hr_employee_own_data.group_hr_own_data'
 class HrVersion(models.Model):
     _inherit = 'hr.version'
 
+    def _has_field_access(self, field, operation):
+        if (
+            operation == 'read'
+            and not self.env.su
+            and self.env.user.has_group('hr_employee_own_data.group_hr_own_data')
+        ):
+            return True
+        return super()._has_field_access(field, operation)
+
     country_id = fields.Many2one(groups=_OWN)
     identification_id = fields.Char(groups=_OWN)
     ssnid = fields.Char(groups=_OWN)
