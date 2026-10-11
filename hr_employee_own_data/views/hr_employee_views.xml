@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
+    <!-- Hide Action > Create User from normal employees (own-data / non-HR). -->
+    <record id="hr.action_hr_employee_create_users_confirmation" model="ir.actions.server">
+        <field name="group_ids" eval="[(6, 0, [ref('hr.group_hr_user')])]"/>
+    </record>
+
     <record id="view_employee_form_own_data" model="ir.ui.view">
         <field name="name">hr.employee.form.own.data</field>
         <field name="model">hr.employee</field>

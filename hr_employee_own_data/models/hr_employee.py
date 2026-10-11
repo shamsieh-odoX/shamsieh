@@ -93,6 +93,21 @@ class HrEmployee(models.Model):
             'context': {'chat_icon': True},
         }
 
+    def action_create_user(self):
+        if self._is_own_data_only_user():
+            raise AccessError(_("You are not allowed to create users."))
+        return super().action_create_user()
+
+    def action_create_users_confirmation(self):
+        if self._is_own_data_only_user():
+            raise AccessError(_("You are not allowed to create users."))
+        return super().action_create_users_confirmation()
+
+    def action_create_users(self):
+        if self._is_own_data_only_user():
+            raise AccessError(_("You are not allowed to create users."))
+        return super().action_create_users()
+
     def write(self, vals):
         if self._is_own_data_only_user():
             if any(emp.user_id != self.env.user for emp in self):
