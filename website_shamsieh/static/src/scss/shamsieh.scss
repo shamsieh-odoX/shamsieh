@@ -28,7 +28,8 @@
     }
 
     .container {
-        width: min(1120px, calc(100% - 2.5rem));
+        /* Quote so Sass does not treat min() as its own math function. */
+        width: #{"min(1120px, calc(100% - 2.5rem))"};
         margin-inline: auto;
     }
 }
