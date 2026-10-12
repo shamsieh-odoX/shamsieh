@@ -16,6 +16,10 @@ class HrVersion(models.Model):
             return forced
         return super()._has_field_access(field, operation)
 
+    # Odoo auto-writes these whenever any version field is saved.
+    last_modified_uid = fields.Many2one(groups=_OWN)
+    last_modified_date = fields.Datetime(groups=_OWN)
+
     country_id = fields.Many2one(groups=_OWN)
     identification_id = fields.Char(groups=_OWN)
     ssnid = fields.Char(groups=_OWN)
