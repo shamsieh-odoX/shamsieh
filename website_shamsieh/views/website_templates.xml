@@ -22,7 +22,7 @@
         </xpath>
     </template>
 
-    <!-- Wordmark: brand lives in placeholder_header_brand, not template_header_default -->
+    <!-- Wordmark: brand option replaces #o_fake_navbar_brand in placeholder_header_brand -->
     <template id="brand_shamsieh" inherit_id="website.option_header_brand_logo" name="Shamsieh Brand Wordmark" priority="99">
         <xpath expr="//a[contains(@t-attf-class, 'navbar-brand')]" position="replace">
             <a data-name="Navbar Logo" href="/" t-attf-class="navbar-brand logo shamsieh-wordmark #{_link_class or ''}">
@@ -31,8 +31,8 @@
         </xpath>
     </template>
 
-    <!-- In-page anchors: menu ul is defined on website.navbar via t-attf-class -->
-    <template id="navbar_menu_shamsieh" inherit_id="website.navbar" name="Shamsieh Navbar Menu" priority="99">
+    <!-- In-page anchors: top_menu ul lives on website.navbar_nav (not website.navbar) -->
+    <template id="navbar_menu_shamsieh" inherit_id="website.navbar_nav" name="Shamsieh Navbar Menu" priority="99">
         <xpath expr="//ul[contains(@t-attf-class, 'top_menu')]" position="replace">
             <ul t-att-id="not is_mobile and 'top_menu'"
                 t-attf-class="nav navbar-nav top_menu shamsieh-nav-menu #{'' if _no_autohide_menu_mobile else 'o_menu_loading'} #{is_vertical_nav and 'o_mega_menu_is_offcanvas mx-n3'} #{_nav_class} #{(_navbar_pills and not is_mobile) and 'nav-pills'} ms-auto"
