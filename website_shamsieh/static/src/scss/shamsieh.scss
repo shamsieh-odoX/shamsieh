@@ -253,7 +253,7 @@ body:has(.shamsieh-home) header.o_header_standard:not(.is-scrolled) {
 /* Brand logo in place of the old amber “ball” */
 .sh-hero__logo {
     position: absolute;
-    right: max(1rem, 4%);
+    right: #{"max(1rem, 4%)"};
     top: 50%;
     transform: translateY(-42%);
     width: #{"min(46vw, 380px)"};
