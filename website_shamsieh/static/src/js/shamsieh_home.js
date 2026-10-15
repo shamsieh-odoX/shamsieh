@@ -20,6 +20,8 @@ publicWidget.registry.ShamsiehHome = publicWidget.Widget.extend({
             nodes.forEach((node) => node.classList.add('is-visible'));
             return;
         }
+        // Arm hide-until-visible only after JS is ready (CSS defaults to visible).
+        this.el.classList.add('js-reveal');
         const observer = new IntersectionObserver(
             (entries) => {
                 entries.forEach((entry) => {
