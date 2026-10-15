@@ -56,8 +56,8 @@
 
         <!-- Who we are -->
         <section class="sh-section sh-about" id="about">
-            <div class="container sh-split">
-                <div class="sh-reveal">
+            <div class="container sh-about__grid">
+                <div class="sh-about__copy sh-reveal">
                     <p class="sh-eyebrow">Who We Are</p>
                     <h2 class="sh-h2">More Than a Technology Company</h2>
                     <p>
@@ -75,11 +75,11 @@
                         <li>Technology Talent</li>
                     </ul>
                 </div>
-                <div class="sh-about__panel sh-reveal" aria-hidden="true">
+                <aside class="sh-about__panel sh-reveal" aria-hidden="true">
                     <span>Products</span>
                     <span>Platforms</span>
                     <span>People</span>
-                </div>
+                </aside>
             </div>
         </section>
 
@@ -273,14 +273,14 @@
                 <p class="sh-eyebrow">Trusted By</p>
                 <h2 class="sh-h2">Organizations We Serve</h2>
                 <p class="sh-section-lead">Supporting organizations across education, enterprise, financial services, technology, and the public sector.</p>
-                <ul class="sh-logos sh-reveal">
-                    <li>Chubb</li>
-                    <li>King Faisal University</li>
-                    <li>Arab National Bank</li>
-                    <li>Ministry of Health</li>
-                    <li>Medgulf</li>
-                    <li>CCC by stc</li>
-                    <li>Bank Muscat</li>
+                <ul class="sh-logos sh-reveal" role="list">
+                    <li><span>Chubb</span></li>
+                    <li><span>King Faisal University</span></li>
+                    <li><span>Arab National Bank</span></li>
+                    <li><span>Ministry of Health</span></li>
+                    <li><span>Medgulf</span></li>
+                    <li><span>CCC by stc</span></li>
+                    <li><span>Bank Muscat</span></li>
                 </ul>
             </div>
         </section>
