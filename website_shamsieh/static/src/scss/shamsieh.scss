@@ -17,17 +17,21 @@
     --sh-radius: 4px;
 }
 
-/* ---------- Global header (Solar nav) ---------- */
+/* ---------- Global header (Solar nav) ----------
+ * Also target bare header.o_header_standard: production often strips our
+ * shamsieh-site / shamsieh-header QWeb class markers from wrapwrap/header.
+ */
 .shamsieh-site > header,
 header.shamsieh-header,
-header.o_header_standard.shamsieh-header {
+header.o_header_standard {
     font-family: var(--sh-font-body);
     transition: background 280ms ease, box-shadow 280ms ease, backdrop-filter 280ms ease;
 }
 
 /* Default: ink bar (safe on light inner pages) */
 .shamsieh-site > header,
-header.shamsieh-header {
+header.shamsieh-header,
+header.o_header_standard {
     background: rgba(7, 17, 31, 0.94) !important;
     backdrop-filter: blur(12px);
     box-shadow: 0 1px 0 rgba(243, 197, 107, 0.18);
@@ -45,7 +49,8 @@ header.shamsieh-header {
 }
 
 /* Homepage hero only: transparent until scrolled (.is-scrolled toggled by JS) */
-.shamsieh-site:has(.shamsieh-home) > header:not(.is-scrolled) {
+.shamsieh-site:has(.shamsieh-home) > header:not(.is-scrolled),
+body:has(.shamsieh-home) header.o_header_standard:not(.is-scrolled) {
     background: transparent !important;
     box-shadow: none !important;
     border: 0 !important;

@@ -52,11 +52,14 @@ publicWidget.registry.ShamsiehHome = publicWidget.Widget.extend({
     },
 });
 
-/** Site-wide Solar nav: transparent over homepage hero, ink bar otherwise. */
+/** Site-wide Solar nav: transparent over homepage hero, ink bar otherwise.
+ *  Bind on #wrapwrap (not .shamsieh-site) so QWeb class-marker failures still work.
+ */
 publicWidget.registry.ShamsiehNav = publicWidget.Widget.extend({
-    selector: '.shamsieh-site',
+    selector: '#wrapwrap',
 
     start() {
+        this.el.classList.add('shamsieh-site');
         this._setupNavScroll();
         return this._super(...arguments);
     },
@@ -69,7 +72,7 @@ publicWidget.registry.ShamsiehNav = publicWidget.Widget.extend({
     },
 
     _setupNavScroll() {
-        const headers = this.el.querySelectorAll(':scope > header, header.shamsieh-header, header.o_header_standard');
+        const headers = this.el.querySelectorAll(':scope > header, header.o_header_standard, header.shamsieh-header');
         if (!headers.length) {
             return;
         }

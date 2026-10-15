@@ -8,17 +8,19 @@
         </xpath>
     </template>
 
-    <!-- Site-wide mark so nav/footer Solar styles apply across header variants -->
-    <template id="shamsieh_layout_mark" inherit_id="website.layout" name="Shamsieh Layout Mark">
+    <!-- Site-wide mark so nav/footer Solar styles apply across header variants.
+         Odoo 19 uses t-attf-class on #wrapwrap (static class= is ignored / emptied). -->
+    <template id="shamsieh_layout_mark" inherit_id="website.layout" name="Shamsieh Layout Mark" priority="99">
         <xpath expr="//div[@id='wrapwrap']" position="attributes">
-            <attribute name="class" add="shamsieh-site" separator=" "/>
+            <attribute name="t-attf-class" add="shamsieh-site" separator=" "/>
         </xpath>
     </template>
 
-    <!-- Mark default header for Solar nav styling (transparent over hero) -->
-    <template id="header_shamsieh" inherit_id="website.template_header_default" name="Shamsieh Header" priority="99">
+    <!-- Mark header for Solar nav styling. Inherit website.layout (same parent
+         as header_visibility_standard) and append via t-attf-class. -->
+    <template id="header_shamsieh" inherit_id="website.layout" name="Shamsieh Header" priority="99">
         <xpath expr="//header" position="attributes">
-            <attribute name="class" add="shamsieh-header" separator=" "/>
+            <attribute name="t-attf-class" add="shamsieh-header" separator=" "/>
         </xpath>
     </template>
 
