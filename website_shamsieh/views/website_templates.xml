@@ -15,31 +15,41 @@
         </xpath>
     </template>
 
-    <!-- Branded Solar/dusk header: wordmark + in-page anchors -->
+    <!-- Mark default header for Solar nav styling (transparent over hero) -->
     <template id="header_shamsieh" inherit_id="website.template_header_default" name="Shamsieh Header" priority="99">
         <xpath expr="//header" position="attributes">
             <attribute name="class" add="shamsieh-header" separator=" "/>
         </xpath>
-        <xpath expr="//a[contains(@class, 'navbar-brand')]" position="replace">
-            <a href="/" class="navbar-brand logo shamsieh-wordmark">
+    </template>
+
+    <!-- Wordmark: brand lives in placeholder_header_brand, not template_header_default -->
+    <template id="brand_shamsieh" inherit_id="website.option_header_brand_logo" name="Shamsieh Brand Wordmark" priority="99">
+        <xpath expr="//a[contains(@t-attf-class, 'navbar-brand')]" position="replace">
+            <a data-name="Navbar Logo" href="/" t-attf-class="navbar-brand logo shamsieh-wordmark #{_link_class or ''}">
                 Shamsieh
             </a>
         </xpath>
-        <xpath expr="//ul[@id='top_menu']" position="replace">
-            <ul id="top_menu" class="nav navbar-nav top_menu o_menu_loading shamsieh-nav-menu ms-auto" role="menubar">
-                <li class="nav-item" role="none">
+    </template>
+
+    <!-- In-page anchors: menu ul is defined on website.navbar via t-attf-class -->
+    <template id="navbar_menu_shamsieh" inherit_id="website.navbar" name="Shamsieh Navbar Menu" priority="99">
+        <xpath expr="//ul[contains(@t-attf-class, 'top_menu')]" position="replace">
+            <ul t-att-id="not is_mobile and 'top_menu'"
+                t-attf-class="nav navbar-nav top_menu shamsieh-nav-menu #{'' if _no_autohide_menu_mobile else 'o_menu_loading'} #{is_vertical_nav and 'o_mega_menu_is_offcanvas mx-n3'} #{_nav_class} #{(_navbar_pills and not is_mobile) and 'nav-pills'} ms-auto"
+                role="menu">
+                <li class="nav-item" role="presentation">
                     <a href="/#about" class="nav-link" role="menuitem">About</a>
                 </li>
-                <li class="nav-item" role="none">
+                <li class="nav-item" role="presentation">
                     <a href="/#products" class="nav-link" role="menuitem">Products</a>
                 </li>
-                <li class="nav-item" role="none">
+                <li class="nav-item" role="presentation">
                     <a href="/#industries" class="nav-link" role="menuitem">Industries</a>
                 </li>
-                <li class="nav-item" role="none">
+                <li class="nav-item" role="presentation">
                     <a href="/#talent" class="nav-link" role="menuitem">Talent</a>
                 </li>
-                <li class="nav-item" role="none">
+                <li class="nav-item" role="presentation">
                     <a href="/#contact" class="nav-link" role="menuitem">Contact</a>
                 </li>
             </ul>

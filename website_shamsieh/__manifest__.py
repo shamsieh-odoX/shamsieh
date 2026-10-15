@@ -1,6 +1,6 @@
 {
     'name': 'Shamsieh Website',
-    'version': '19.0.1.1.0',
+    'version': '19.0.1.1.1',
     'category': 'Website',
     'summary': 'Shamsieh Solar/dusk brand website — products, platforms, talent',
     'author': 'Custom',
