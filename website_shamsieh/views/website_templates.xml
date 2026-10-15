@@ -4,11 +4,49 @@
         <xpath expr="//head" position="inside">
             <link rel="preconnect" href="https://fonts.googleapis.com"/>
             <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous"/>
-            <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&amp;family=Syne:wght@600;700;800&amp;display=swap" rel="stylesheet"/>
+            <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500;1,9..144,600&amp;family=Sora:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
         </xpath>
     </template>
 
-    <!-- Branded footer aligned with shamsieh.com contact block -->
+    <!-- Site-wide mark so nav/footer Solar styles apply across header variants -->
+    <template id="shamsieh_layout_mark" inherit_id="website.layout" name="Shamsieh Layout Mark">
+        <xpath expr="//div[@id='wrapwrap']" position="attributes">
+            <attribute name="class" add="shamsieh-site" separator=" "/>
+        </xpath>
+    </template>
+
+    <!-- Branded Solar/dusk header: wordmark + in-page anchors -->
+    <template id="header_shamsieh" inherit_id="website.template_header_default" name="Shamsieh Header" priority="99">
+        <xpath expr="//header" position="attributes">
+            <attribute name="class" add="shamsieh-header" separator=" "/>
+        </xpath>
+        <xpath expr="//a[contains(@class, 'navbar-brand')]" position="replace">
+            <a href="/" class="navbar-brand logo shamsieh-wordmark">
+                Shamsieh
+            </a>
+        </xpath>
+        <xpath expr="//ul[@id='top_menu']" position="replace">
+            <ul id="top_menu" class="nav navbar-nav top_menu o_menu_loading shamsieh-nav-menu ms-auto" role="menubar">
+                <li class="nav-item" role="none">
+                    <a href="/#about" class="nav-link" role="menuitem">About</a>
+                </li>
+                <li class="nav-item" role="none">
+                    <a href="/#products" class="nav-link" role="menuitem">Products</a>
+                </li>
+                <li class="nav-item" role="none">
+                    <a href="/#industries" class="nav-link" role="menuitem">Industries</a>
+                </li>
+                <li class="nav-item" role="none">
+                    <a href="/#talent" class="nav-link" role="menuitem">Talent</a>
+                </li>
+                <li class="nav-item" role="none">
+                    <a href="/#contact" class="nav-link" role="menuitem">Contact</a>
+                </li>
+            </ul>
+        </xpath>
+    </template>
+
+    <!-- Solar footer -->
     <template id="footer_shamsieh" inherit_id="website.footer_custom" name="Shamsieh Footer" active="True" priority="99">
         <xpath expr="//div[@id='footer']" position="replace">
             <div id="footer" class="oe_structure oe_structure_solo shamsieh-footer text-break" t-ignore="true" t-if="not no_footer">
@@ -16,12 +54,22 @@
                     <div class="container">
                         <div class="shamsieh-footer-inner">
                             <div>
-                                <div class="shamsieh-footer-brand">Shamsieh</div>
+                                <div class="shamsieh-footer-brand">Shamsieh <span>Technology</span></div>
                                 <p class="shamsieh-footer-copy">
                                     Products. Platforms. People. A regional technology company building software
                                     products, implementing business platforms, and supporting organizations with
                                     specialized technology expertise.
                                 </p>
+                            </div>
+                            <div>
+                                <h5>Explore</h5>
+                                <ul>
+                                    <li><a href="/#about">About</a></li>
+                                    <li><a href="/#products">Products</a></li>
+                                    <li><a href="/#industries">Industries</a></li>
+                                    <li><a href="/#talent">Talent</a></li>
+                                    <li><a href="/#contact">Contact</a></li>
+                                </ul>
                             </div>
                             <div>
                                 <h5>Call us</h5>
@@ -39,7 +87,8 @@
                             </div>
                         </div>
                         <div class="shamsieh-footer-bottom">
-                            © 2026 Shamsieh Technology Services
+                            <span>© 2026 Shamsieh Technology Services</span>
+                            <span>Jordan · Saudi Arabia</span>
                         </div>
                     </div>
                 </section>

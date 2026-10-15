@@ -52,4 +52,42 @@ publicWidget.registry.ShamsiehHome = publicWidget.Widget.extend({
     },
 });
 
+/** Site-wide Solar nav: transparent over homepage hero, ink bar otherwise. */
+publicWidget.registry.ShamsiehNav = publicWidget.Widget.extend({
+    selector: '.shamsieh-site',
+
+    start() {
+        this._setupNavScroll();
+        return this._super(...arguments);
+    },
+
+    destroy() {
+        if (this._onScroll) {
+            window.removeEventListener('scroll', this._onScroll);
+        }
+        return this._super(...arguments);
+    },
+
+    _setupNavScroll() {
+        const headers = this.el.querySelectorAll(':scope > header, header.shamsieh-header, header.o_header_standard');
+        if (!headers.length) {
+            return;
+        }
+
+        headers.forEach((header) => header.classList.add('shamsieh-header'));
+        const overHero = Boolean(this.el.querySelector('.shamsieh-home .sh-hero'));
+
+        const update = () => {
+            const scrolled = !overHero || window.scrollY > 40;
+            headers.forEach((header) => {
+                header.classList.toggle('is-scrolled', scrolled);
+            });
+        };
+
+        this._onScroll = update;
+        window.addEventListener('scroll', update, { passive: true });
+        update();
+    },
+});
+
 export default publicWidget.registry.ShamsiehHome;
