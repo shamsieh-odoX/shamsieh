@@ -48,15 +48,18 @@ header.o_top_fixed_element {
         background: transparent !important;
     }
 
+    /* Ink-bar links only — never paint dropdown panels white-on-white */
     .navbar-brand,
-    .nav-link,
+    .nav-link:not(.dropdown-item),
     .dropdown-toggle,
-    a:not(.btn):not(.btn-primary):not(.sh-btn) {
+    .o_navlink_background,
+    a.nav-link {
         color: rgba(255, 255, 255, 0.92) !important;
     }
 
     .nav-link:hover,
-    .navbar-brand:hover {
+    .navbar-brand:hover,
+    .dropdown-toggle:hover {
         color: var(--sh-amber-bright) !important;
     }
 
@@ -71,20 +74,85 @@ header.o_top_fixed_element {
         display: none !important;
     }
 
-    /* Keep search / contact readable on ink */
-    .btn,
-    .btn-primary,
-    a.btn {
+    /* Keep search / contact readable on ink — not dropdown items */
+    .btn:not(.dropdown-item),
+    .btn-primary:not(.dropdown-item),
+    a.btn:not(.dropdown-item) {
         background: var(--sh-amber) !important;
         border-color: var(--sh-amber) !important;
         color: #041016 !important;
         font-weight: 700;
     }
 
-    a.btn:hover,
-    .btn-primary:hover {
+    a.btn:not(.dropdown-item):hover,
+    .btn-primary:not(.dropdown-item):hover {
         background: var(--sh-amber-bright) !important;
         border-color: var(--sh-amber-bright) !important;
+    }
+
+    /* Language + user menus: dark text on white panels */
+    .dropdown-menu,
+    .o_dropdown_menu,
+    .js_language_selector .dropdown-menu,
+    .o_user_menu .dropdown-menu {
+        background: #ffffff !important;
+        background-color: #ffffff !important;
+        border: 1px solid rgba(15, 23, 42, 0.12) !important;
+        box-shadow: 0 12px 32px rgba(15, 23, 42, 0.16) !important;
+        color: #0f172a !important;
+        padding: 0.4rem 0;
+
+        .dropdown-item,
+        a,
+        a.dropdown-item,
+        a.btn,
+        button,
+        button.dropdown-item,
+        button.btn,
+        span,
+        .o_nav_entry,
+        .dropdown-item-text {
+            color: #0f172a !important;
+            background: transparent !important;
+            background-color: transparent !important;
+            border-color: transparent !important;
+            opacity: 1 !important;
+            font-weight: 500 !important;
+            box-shadow: none !important;
+        }
+
+        .dropdown-item:hover,
+        .dropdown-item:focus,
+        .dropdown-item.active,
+        a:hover,
+        button:hover {
+            color: #0f172a !important;
+            background: rgba(0, 188, 212, 0.14) !important;
+            background-color: rgba(0, 188, 212, 0.14) !important;
+        }
+
+        i,
+        .fa,
+        .oi,
+        svg {
+            color: #0f172a !important;
+            fill: #0f172a !important;
+            opacity: 1 !important;
+        }
+
+        .dropdown-divider {
+            border-top-color: rgba(15, 23, 42, 0.1) !important;
+        }
+    }
+}
+
+/* Also catch dropdowns portaled outside <header> (Bootstrap often appends to body) */
+.shamsieh-site .dropdown-menu,
+body:has(.shamsieh-site) .dropdown-menu.show {
+    .dropdown-item,
+    a.dropdown-item,
+    button.dropdown-item {
+        color: #0f172a !important;
     }
 }
 

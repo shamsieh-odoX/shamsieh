@@ -611,3 +611,28 @@ msgstr "© 2026 خدمات شمسية للتكنولوجيا"
 #: model_terms:ir.ui.view,arch_db:website_shamsieh.brand_shamsieh
 msgid "Shamsieh"
 msgstr "شمسية"
+
+#. module: website_shamsieh
+#: model_terms:ir.ui.view,arch_db:website_shamsieh.shamsieh_homepage_content
+msgid "Odoo ERP"
+msgstr "أودو ERP"
+
+#. module: website_shamsieh
+#: model_terms:ir.ui.view,arch_db:website_shamsieh.shamsieh_homepage_content
+msgid "Microsoft Dynamics"
+msgstr "مايكروسوفت دايناميكس"
+
+#. module: website_shamsieh
+#: model_terms:ir.ui.view,arch_db:website_shamsieh.shamsieh_homepage_content
+msgid "Mohaned Salah"
+msgstr "مهند صلاح"
+
+#. module: website_shamsieh
+#: model_terms:ir.ui.view,arch_db:website_shamsieh.shamsieh_homepage_content
+msgid "Umbrella Prime"
+msgstr "أمbrella برايم"
+
+#. module: website_shamsieh
+#: model_terms:ir.ui.view,arch_db:website_shamsieh.shamsieh_homepage_content
+msgid "Raqmeiat"
+msgstr "رقميات"

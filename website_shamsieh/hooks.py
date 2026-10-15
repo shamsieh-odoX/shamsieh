@@ -132,23 +132,43 @@ def ensure_arabic_website_language(env):
     """Activate Arabic and expose it in the website language selector."""
     lang = _arabic_lang(env)
     if not lang:
+        # Prefer Odoo 19 activate helper; fall back to language-install wizard.
         try:
             lang = env['res.lang']._activate_lang('ar_001')
         except Exception:
-            _logger.exception('website_shamsieh: could not activate Arabic (ar_001)')
-            return
+            _logger.exception('website_shamsieh: _activate_lang(ar_001) failed')
+        if not lang:
+            try:
+                Install = env['base.language.install'].sudo()
+                # Odoo 19: lang_ids Many2many of inactive langs available to install
+                available = env['res.lang'].with_context(active_test=False).search([
+                    ('code', 'in', ['ar_001', 'ar', 'ar_SY']),
+                ], limit=1)
+                if available:
+                    wiz = Install.create({'lang_ids': [(6, 0, available.ids)]})
+                    wiz.lang_install()
+                    lang = _arabic_lang(env)
+            except Exception:
+                _logger.exception('website_shamsieh: base.language.install for Arabic failed')
+                return
+    if not lang:
+        _logger.warning('website_shamsieh: Arabic language record not found after install attempts')
+        return
     if not lang.active:
-        lang.active = True
+        lang.write({'active': True})
 
     websites = env['website'].sudo().search([])
     for website in websites:
-        vals = {}
+        # Always ensure Arabic is among selectable website languages.
         if lang not in website.language_ids:
-            vals['language_ids'] = [(4, lang.id)]
-        if vals:
-            website.write(vals)
+            website.write({'language_ids': [(4, lang.id)]})
             _logger.info(
-                'website_shamsieh: added Arabic (%s) to website %s',
+                'website_shamsieh: added Arabic (%s) to website %s language selector',
+                lang.code, website.id,
+            )
+        else:
+            _logger.info(
+                'website_shamsieh: Arabic (%s) already on website %s',
                 lang.code, website.id,
             )
 
