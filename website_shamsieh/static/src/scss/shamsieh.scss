@@ -137,8 +137,8 @@ header.shamsieh-header {
 .sh-hero__bg::before {
     content: '';
     position: absolute;
-    width: min(52vw, 420px);
-    height: min(52vw, 420px);
+    width: #{"min(52vw, 420px)"};
+    height: #{"min(52vw, 420px)"};
     right: 8%;
     bottom: 12%;
     border-radius: 50%;
@@ -187,7 +187,7 @@ header.shamsieh-header {
 }
 
 .sh-brand {
-    font-size: clamp(3.4rem, 10vw, 7rem);
+    font-size: #{"clamp(3.4rem, 10vw, 7rem)"};
     font-weight: 600;
     margin: 0 0 1rem;
     max-width: 11ch;
@@ -201,7 +201,7 @@ header.shamsieh-header {
 }
 
 .sh-lead {
-    font-size: clamp(1.05rem, 2.2vw, 1.35rem);
+    font-size: #{"clamp(1.05rem, 2.2vw, 1.35rem)"};
     max-width: 34rem;
     color: rgba(255, 255, 255, 0.84);
     margin-bottom: 2rem;
@@ -271,11 +271,11 @@ header.shamsieh-header {
 
 /* ---------- Sections ---------- */
 .sh-section {
-    padding: clamp(4rem, 8vw, 6.5rem) 0;
+    padding: #{"clamp(4rem, 8vw, 6.5rem)"} 0;
 }
 
 .sh-h2 {
-    font-size: clamp(2rem, 4.5vw, 3.2rem);
+    font-size: #{"clamp(2rem, 4.5vw, 3.2rem)"};
     font-weight: 600;
     margin: 0 0 1.25rem;
     max-width: 16ch;
@@ -404,7 +404,7 @@ header.shamsieh-header {
     gap: 0.4rem;
     padding: 2.25rem;
     font-family: var(--sh-font-display);
-    font-size: clamp(2rem, 4vw, 2.9rem);
+    font-size: #{"clamp(2rem, 4vw, 2.9rem)"};
     font-weight: 600;
     color: var(--sh-white);
 
@@ -670,7 +670,7 @@ header.shamsieh-header {
 
 .sh-quote-focus {
     font-family: var(--sh-font-display);
-    font-size: clamp(1.45rem, 3vw, 2rem) !important;
+    font-size: #{"clamp(1.45rem, 3vw, 2rem)"} !important;
     font-weight: 600;
     font-style: italic;
     color: var(--sh-amber-bright) !important;
