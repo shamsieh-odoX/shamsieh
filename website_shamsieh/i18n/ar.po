@@ -1,0 +1,613 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# * website_shamsieh
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-15 10:30+0000\n"
+"PO-Revision-Date: 2026-10-15 10:30+0000\n"
+"Last-Translator: Shamsieh\n"
+"Language-Team: Arabic\n"
+"Language: ar\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=6; plural=(n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 ? 4 : 5);\n"
+
+
+#. module: website_shamsieh
+#: model_terms:ir.ui.view,arch_db:website_shamsieh.shamsieh_homepage_content
+msgid "A practical approach focused on understanding needs, designing solutions, and delivering measurable outcomes."
+msgstr "نهج عملي يركّز على فهم الاحتياجات وتصميم الحلول وتحقيق نتائج قابلة للقياس."
+
+#. module: website_shamsieh
+#: model_terms:ir.ui.view,arch_db:website_shamsieh.shamsieh_homepage_content
+msgid "About"
+msgstr "من نحن"
+
+#. module: website_shamsieh
+#: model_terms:ir.ui.view,arch_db:website_shamsieh.shamsieh_homepage_content
+msgid "Address"
+msgstr "العنوان"
+
+#. module: website_shamsieh
+#: model_terms:ir.ui.view,arch_db:website_shamsieh.shamsieh_homepage_content
+msgid "AI Campaign Management"
+msgstr "إدارة الحملات بالذكاء الاصطناعي"
+
+#. module: website_shamsieh
+#: model_terms:ir.ui.view,arch_db:website_shamsieh.shamsieh_homepage_content
+msgid "AI Products"
+msgstr "منتجات الذكاء الاصطناعي"
+
+#. module: website_shamsieh
+#: model_terms:ir.ui.view,arch_db:website_shamsieh.shamsieh_homepage_content
+msgid "An enterprise AI platform that connects people, business systems, and artificial intelligence through a single conversational experience."
+msgstr "منصة ذكاء اصطناعي مؤسسية تربط الأشخاص وأنظمة الأعمال والذكاء الاصطناعي عبر تجربة محادثة واحدة."
+
+#. module: website_shamsieh
+#: model_terms:ir.ui.view,arch_db:website_shamsieh.shamsieh_homepage_content
+msgid "Appointment Management Platform"
+msgstr "منصة إدارة المواعيد"
+
+#. module: website_shamsieh
+#: model_terms:ir.ui.view,arch_db:website_shamsieh.shamsieh_homepage_content
+msgid "Banking & Financial Services"
+msgstr "الخدمات المصرفية والمالية"
+
+#. module: website_shamsieh
+#: model_terms:ir.ui.view,arch_db:website_shamsieh.shamsieh_homepage_content
+msgid "Beyond Technology"
+msgstr "ما وراء التكنولوجيا"
+
+#. module: website_shamsieh
+#: model_terms:ir.ui.view,arch_db:website_shamsieh.shamsieh_homepage_content
+msgid "Book a Consultation"
+msgstr "احجز استشارة"
+
+#. module: website_shamsieh
+#: model_terms:ir.ui.view,arch_db:website_shamsieh.shamsieh_homepage_content
+msgid "Business Applications"
+msgstr "تطبيقات الأعمال"
+
+#. module: website_shamsieh
+#: model_terms:ir.ui.view,arch_db:website_shamsieh.shamsieh_homepage_content
+msgid "Business Platforms"
+msgstr "منصات أعمال"
+
+#. module: website_shamsieh
+#: model_terms:ir.ui.view,arch_db:website_shamsieh.shamsieh_homepage_content
+msgid "Business platforms that help organizations manage processes, connect systems, and operate more effectively."
+msgstr "منصات أعمال تساعد المنظمات على إدارة العمليات وربط الأنظمة والعمل بكفاءة أعلى."
+
+#. module: website_shamsieh
+#: model_terms:ir.ui.view,arch_db:website_shamsieh.shamsieh_homepage_content
+msgid "Business platforms, enterprise implementations, and operational improvement initiatives."
+msgstr "منصات أعمال وتنفيذات مؤسسية ومبادرات لتحسين العمليات."
+
+#. module: website_shamsieh
+#: model_terms:ir.ui.view,arch_db:website_shamsieh.shamsieh_homepage_content
+msgid "Call us"
+msgstr "اتصل بنا"
+
+#. module: website_shamsieh
+#: model_terms:ir.ui.view,arch_db:website_shamsieh.shamsieh_homepage_content
+msgid "Chief Executive Officer"
+msgstr "الرئيس التنفيذي"
+
+#. module: website_shamsieh
+#: model_terms:ir.ui.view,arch_db:website_shamsieh.shamsieh_homepage_content
+msgid "Cloud Infrastructure"
+msgstr "البنية السحابية"
+
+#. module: website_shamsieh
+#: model_terms:ir.ui.view,arch_db:website_shamsieh.shamsieh_homepage_content
+msgid "Company"
+msgstr "الشركة"
+
+#. module: website_shamsieh
+#: model_terms:ir.ui.view,arch_db:website_shamsieh.shamsieh_homepage_content
+msgid "Contact"
+msgstr "تواصل"
+
+#. module: website_shamsieh
+#: model_terms:ir.ui.view,arch_db:website_shamsieh.shamsieh_homepage_content
+msgid "Contact Centers"
+msgstr "مراكز الاتصال"
+
+#. module: website_shamsieh
+#: model_terms:ir.ui.view,arch_db:website_shamsieh.shamsieh_homepage_content
+msgid "Contact Us"
+msgstr "تواصل معنا"
+
+#. module: website_shamsieh
+#: model_terms:ir.ui.view,arch_db:website_shamsieh.shamsieh_homepage_content
+msgid "Customer Value Management for B2B"
+msgstr "إدارة قيمة العملاء للشركات"
+
+#. module: website_shamsieh
+#: model_terms:ir.ui.view,arch_db:website_shamsieh.shamsieh_homepage_content
+msgid "Dedicated Technology Teams"
+msgstr "فرق تقنية مخصّصة"
+
+#. module: website_shamsieh
+#: model_terms:ir.ui.view,arch_db:website_shamsieh.shamsieh_homepage_content
+msgid "Defining the right products, platforms, and implementation approach."
+msgstr "تحديد المنتجات والمنصات ونهج التنفيذ المناسب."
+
+#. module: website_shamsieh
+#: model_terms:ir.ui.view,arch_db:website_shamsieh.shamsieh_homepage_content
+msgid "Delivery"
+msgstr "التنفيذ"
+
+#. module: website_shamsieh
+#: model_terms:ir.ui.view,arch_db:website_shamsieh.shamsieh_homepage_content
+msgid "Design"
+msgstr "التصميم"
+
+#. module: website_shamsieh
+#: model_terms:ir.ui.view,arch_db:website_shamsieh.shamsieh_homepage_content
+msgid "Digital Services"
+msgstr "الخدمات الرقمية"
+
+#. module: website_shamsieh
+#: model_terms:ir.ui.view,arch_db:website_shamsieh.shamsieh_homepage_content
+msgid "Discovery"
+msgstr "الاكتشاف"
+
+#. module: website_shamsieh
+#: model_terms:ir.ui.view,arch_db:website_shamsieh.shamsieh_homepage_content
+msgid "Education"
+msgstr "التعليم"
+
+#. module: website_shamsieh
+#: model_terms:ir.ui.view,arch_db:website_shamsieh.shamsieh_homepage_content
+msgid "Education Discovery Platform"
+msgstr "منصة اكتشاف التعليم"
+
+#. module: website_shamsieh
+#: model_terms:ir.ui.view,arch_db:website_shamsieh.shamsieh_homepage_content
+msgid "Email"
+msgstr "البريد الإلكتروني"
+
+#. module: website_shamsieh
+#: model_terms:ir.ui.view,arch_db:website_shamsieh.shamsieh_homepage_content
+msgid "Enterprise AI Operating Layer"
+msgstr "طبقة تشغيل للذكاء الاصطناعي المؤسسي"
+
+#. module: website_shamsieh
+#: model_terms:ir.ui.view,arch_db:website_shamsieh.shamsieh_homepage_content
+msgid "Enterprise Services"
+msgstr "خدمات المؤسسات"
+
+#. module: website_shamsieh
+#: model_terms:ir.ui.view,arch_db:website_shamsieh.shamsieh_homepage_content
+msgid "Enterprise Solutions"
+msgstr "حلول المؤسسات"
+
+#. module: website_shamsieh
+#: model_terms:ir.ui.view,arch_db:website_shamsieh.shamsieh_homepage_content
+msgid "Every industry has different challenges"
+msgstr "لكل قطاع تحدياته الخاصة"
+
+#. module: website_shamsieh
+#: model_terms:ir.ui.view,arch_db:website_shamsieh.shamsieh_homepage_content
+msgid "Every product we launch, every platform we implement, and every project we deliver is driven by a simple question:"
+msgstr "كل منتج نطلقه، وكل منصة ننفّذها، وكل مشروع نقدّمه، يحركه سؤال بسيط:"
+
+#. module: website_shamsieh
+#: model_terms:ir.ui.view,arch_db:website_shamsieh.shamsieh_homepage_content
+msgid "Executing projects, launching solutions, and supporting long-term success."
+msgstr "تنفيذ المشاريع وإطلاق الحلول ودعم النجاح طويل الأمد."
+
+#. module: website_shamsieh
+#: model_terms:ir.ui.view,arch_db:website_shamsieh.shamsieh_homepage_content
+msgid "Explore"
+msgstr "استكشف"
+
+#. module: website_shamsieh
+#: model_terms:ir.ui.view,arch_db:website_shamsieh.shamsieh_homepage_content
+msgid "Explore Our Solutions"
+msgstr "استكشف حلولنا"
+
+#. module: website_shamsieh
+#: model_terms:ir.ui.view,arch_db:website_shamsieh.shamsieh_homepage_content
+msgid "Help parents and students discover, compare, and connect with schools, universities and nurseries through verified information and intelligent search."
+msgstr "ساعد أولياء الأمور والطلاب على اكتشاف المدارس والجامعات ورياض الأطفال ومقارنتها والتواصل معها عبر معلومات موثّقة وبحث ذكي."
+
+#. module: website_shamsieh
+#: model_terms:ir.ui.view,arch_db:website_shamsieh.shamsieh_homepage_content
+msgid "How can we help?"
+msgstr "كيف يمكننا المساعدة؟"
+
+#. module: website_shamsieh
+#: model_terms:ir.ui.view,arch_db:website_shamsieh.shamsieh_homepage_content
+msgid "How We Work"
+msgstr "كيف نعمل"
+
+#. module: website_shamsieh
+#: model_terms:ir.ui.view,arch_db:website_shamsieh.shamsieh_homepage_content
+msgid "Industries"
+msgstr "القطاعات"
+
+#. module: website_shamsieh
+#: model_terms:ir.ui.view,arch_db:website_shamsieh.shamsieh_homepage_content
+msgid "Industries We Serve"
+msgstr "القطاعات التي نخدمها"
+
+#. module: website_shamsieh
+#: model_terms:ir.ui.view,arch_db:website_shamsieh.shamsieh_homepage_content
+msgid "Information Technology"
+msgstr "تقنية المعلومات"
+
+#. module: website_shamsieh
+#: model_terms:ir.ui.view,arch_db:website_shamsieh.shamsieh_homepage_content
+msgid "Insurance"
+msgstr "التأمين"
+
+#. module: website_shamsieh
+#: model_terms:ir.ui.view,arch_db:website_shamsieh.shamsieh_homepage_content
+msgid "Jordan · Saudi Arabia"
+msgstr "الأردن · المملكة العربية السعودية"
+
+#. module: website_shamsieh
+#: model_terms:ir.ui.view,arch_db:website_shamsieh.shamsieh_homepage_content
+msgid "Learn more"
+msgstr "اعرف المزيد"
+
+#. module: website_shamsieh
+#: model_terms:ir.ui.view,arch_db:website_shamsieh.shamsieh_homepage_content
+msgid "Managed Technical Operations"
+msgstr "عمليات تقنية مُدارة"
+
+#. module: website_shamsieh
+#: model_terms:ir.ui.view,arch_db:website_shamsieh.shamsieh_homepage_content
+msgid "Message from the CEO"
+msgstr "رسالة من الرئيس التنفيذي"
+
+#. module: website_shamsieh
+#: model_terms:ir.ui.view,arch_db:website_shamsieh.shamsieh_homepage_content
+msgid "More Than a Technology Company"
+msgstr "أكثر من شركة تكنولوجيا"
+
+#. module: website_shamsieh
+#: model_terms:ir.ui.view,arch_db:website_shamsieh.shamsieh_homepage_content
+msgid "Murabba 6479, Riyadh, Saudi Arabia"
+msgstr "المربّع 6479، الرياض، المملكة العربية السعودية"
+
+#. module: website_shamsieh
+#: model_terms:ir.ui.view,arch_db:website_shamsieh.shamsieh_homepage_content
+msgid "Name"
+msgstr "الاسم"
+
+#. module: website_shamsieh
+#: model_terms:ir.ui.view,arch_db:website_shamsieh.shamsieh_homepage_content
+msgid "Ongoing technical support, system administration, platform management, and operational services."
+msgstr "دعم تقني مستمر وإدارة أنظمة وإدارة منصات وخدمات تشغيلية."
+
+#. module: website_shamsieh
+#: model_terms:ir.ui.view,arch_db:website_shamsieh.shamsieh_homepage_content
+msgid "Operations and partnerships across Jordan and Saudi Arabia."
+msgstr "عمليات وشراكات عبر الأردن والمملكة العربية السعودية."
+
+#. module: website_shamsieh
+#: model_terms:ir.ui.view,arch_db:website_shamsieh.shamsieh_homepage_content
+msgid "Organizations We Serve"
+msgstr "المنظمات التي نخدمها"
+
+#. module: website_shamsieh
+#: model_terms:ir.ui.view,arch_db:website_shamsieh.shamsieh_homepage_content
+msgid "Our Ecosystem"
+msgstr "منظومتنا"
+
+#. module: website_shamsieh
+#: model_terms:ir.ui.view,arch_db:website_shamsieh.shamsieh_homepage_content
+msgid "People"
+msgstr "الأشخاص"
+
+#. module: website_shamsieh
+#: model_terms:ir.ui.view,arch_db:website_shamsieh.shamsieh_homepage_content
+msgid "Phone"
+msgstr "الهاتف"
+
+#. module: website_shamsieh
+#: model_terms:ir.ui.view,arch_db:website_shamsieh.shamsieh_homepage_content
+msgid "Plan campaigns, generate bilingual AI content, manage approvals, and publish across email, SMS and WhatsApp — with performance analytics built in."
+msgstr "خطّط الحملات، وأنشئ محتوى ثنائي اللغة بالذكاء الاصطناعي، وأدر الموافقات، وانشر عبر البريد والرسائل وواتساب — مع تحليلات أداء مدمجة."
+
+#. module: website_shamsieh
+#: model_terms:ir.ui.view,arch_db:website_shamsieh.shamsieh_homepage_content
+msgid "Platforms"
+msgstr "المنصات"
+
+#. module: website_shamsieh
+#: model_terms:ir.ui.view,arch_db:website_shamsieh.shamsieh_homepage_content
+msgid "Platforms We Implement"
+msgstr "منصات ننفذها"
+
+#. module: website_shamsieh
+#: model_terms:ir.ui.view,arch_db:website_shamsieh.shamsieh_homepage_content
+msgid "Products"
+msgstr "المنتجات"
+
+#. module: website_shamsieh
+#: model_terms:ir.ui.view,arch_db:website_shamsieh.shamsieh_homepage_content
+msgid "Products created to address real operational challenges"
+msgstr "منتجات مصممة لمواجهة تحديات تشغيلية حقيقية"
+
+#. module: website_shamsieh
+#: model_terms:ir.ui.view,arch_db:website_shamsieh.shamsieh_homepage_content
+msgid "Products We Build"
+msgstr "منتجات نبنيها"
+
+#. module: website_shamsieh
+#: model_terms:ir.ui.view,arch_db:website_shamsieh.shamsieh_homepage_content
+msgid "Products We Build. Platforms We Implement. Teams We Provide."
+msgstr "منتجات نبنيها. منصات ننفذها. فرق نوفرها."
+
+#. module: website_shamsieh
+#: model_terms:ir.ui.view,arch_db:website_shamsieh.shamsieh_homepage_content
+msgid "Products. Platforms. People. A regional technology company building software products, implementing business platforms, and supporting organizations with specialized technology expertise."
+msgstr "منتجات. منصات. أشخاص. شركة تكنولوجيا إقليمية تبني المنتجات البرمجية، وتنفّذ منصات الأعمال، وتدعم المنظمات بخبرة تقنية متخصصة."
+
+#. module: website_shamsieh
+#: model_terms:ir.ui.view,arch_db:website_shamsieh.shamsieh_homepage_content
+msgid "Providing organizations with the expertise required to execute and scale technology initiatives."
+msgstr "نوفّر للمنظمات الخبرة اللازمة لتنفيذ المبادرات التقنية وتوسيعها."
+
+#. module: website_shamsieh
+#: model_terms:ir.ui.view,arch_db:website_shamsieh.shamsieh_homepage_content
+msgid "Ready to Discuss Your Next Initiative?"
+msgstr "هل أنتم مستعدون لمناقشة مبادرتكم القادمة؟"
+
+#. module: website_shamsieh
+#: model_terms:ir.ui.view,arch_db:website_shamsieh.shamsieh_homepage_content
+msgid "Regional Presence"
+msgstr "حضور إقليمي"
+
+#. module: website_shamsieh
+#: model_terms:ir.ui.view,arch_db:website_shamsieh.shamsieh_homepage_content
+msgid "Saudi operational arm"
+msgstr "الذراع التشغيلي في السعودية"
+
+#. module: website_shamsieh
+#: model_terms:ir.ui.view,arch_db:website_shamsieh.shamsieh_homepage_content
+msgid "Scalable Computing Platforms"
+msgstr "منصات حوسبة قابلة للتوسع"
+
+#. module: website_shamsieh
+#: model_terms:ir.ui.view,arch_db:website_shamsieh.shamsieh_homepage_content
+msgid "Scroll to explore"
+msgstr "مرّر للاستكشاف"
+
+#. module: website_shamsieh
+#: model_terms:ir.ui.view,arch_db:website_shamsieh.shamsieh_homepage_content
+msgid "Send message"
+msgstr "إرسال الرسالة"
+
+#. module: website_shamsieh
+#: model_terms:ir.ui.view,arch_db:website_shamsieh.shamsieh_homepage_content
+msgid "Service Offering"
+msgstr "عرض الخدمة"
+
+#. module: website_shamsieh
+#: model_terms:ir.ui.view,arch_db:website_shamsieh.shamsieh_homepage_content
+msgid "Shamsieh develops products, implements business platforms, and provides specialized technology talent to organizations across multiple industries."
+msgstr "تطوّر شمسية المنتجات، وتنفّذ منصات الأعمال، وتوفّر كفاءات تقنية متخصصة للمنظمات عبر قطاعات متعددة."
+
+#. module: website_shamsieh
+#: model_terms:ir.ui.view,arch_db:website_shamsieh.shamsieh_homepage_content
+msgid "Shamsieh home"
+msgstr "الصفحة الرئيسية لشمسية"
+
+#. module: website_shamsieh
+#: model_terms:ir.ui.view,arch_db:website_shamsieh.shamsieh_homepage_content
+msgid "Simplify booking, scheduling, reminders, and customer communication across digital channels with a modern appointment platform."
+msgstr "بسّط الحجز والجدولة والتذكيرات وتواصل العملاء عبر القنوات الرقمية بمنصة مواعيد حديثة."
+
+#. module: website_shamsieh
+#: model_terms:ir.ui.view,arch_db:website_shamsieh.shamsieh_homepage_content
+msgid "Since 2019, we have expanded from Jordan into Saudi Arabia, building a regional ecosystem that combines products, solutions, and execution capabilities under one umbrella."
+msgstr "منذ عام 2019 توسّعنا من الأردن إلى المملكة العربية السعودية، لنبني منظومة إقليمية تجمع المنتجات والحلول وقدرات التنفيذ تحت مظلة واحدة."
+
+#. module: website_shamsieh
+#: model_terms:ir.ui.view,arch_db:website_shamsieh.shamsieh_homepage_content
+msgid "Software engineers, AI specialists, analysts, and project professionals working as an extension of your organization."
+msgstr "مهندسو برمجيات ومتخصصو ذكاء اصطناعي ومحللون ومحترفو مشاريع يعملون كامتداد لمنظمتكم."
+
+#. module: website_shamsieh
+#: model_terms:ir.ui.view,arch_db:website_shamsieh.shamsieh_homepage_content
+msgid "Software products designed to solve challenges in customer engagement, education, productivity, and beyond."
+msgstr "منتجات برمجية مصممة لحل تحديات تفاعل العملاء والتعليم والإنتاجية وغيرها."
+
+#. module: website_shamsieh
+#: model_terms:ir.ui.view,arch_db:website_shamsieh.shamsieh_homepage_content
+msgid "Software products developed and continuously enhanced by Shamsieh."
+msgstr "منتجات برمجية تطوّرها شمسية وتحسّنها باستمرار."
+
+#. module: website_shamsieh
+#: model_terms:ir.ui.view,arch_db:website_shamsieh.shamsieh_homepage_content
+msgid "Solutions"
+msgstr "الحلول"
+
+#. module: website_shamsieh
+#: model_terms:ir.ui.view,arch_db:website_shamsieh.shamsieh_homepage_content
+msgid "Specialized professionals and dedicated teams supporting technology-driven organizations."
+msgstr "محترفون متخصصون وفرق مخصّصة تدعم المنظمات المعتمدة على التكنولوجيا."
+
+#. module: website_shamsieh
+#: model_terms:ir.ui.view,arch_db:website_shamsieh.shamsieh_homepage_content
+msgid "Specialized technology professionals and dedicated teams supporting software, AI, data, and digital initiatives."
+msgstr "محترفون متخصصون في التكنولوجيا وفرق مخصّصة تدعم البرمجيات والذكاء الاصطناعي والبيانات والمبادرات الرقمية."
+
+#. module: website_shamsieh
+#: model_terms:ir.ui.view,arch_db:website_shamsieh.shamsieh_homepage_content
+msgid "Strategic partner · Al Safa"
+msgstr "شريك استراتيجي · الصفا"
+
+#. module: website_shamsieh
+#: model_terms:ir.ui.view,arch_db:website_shamsieh.shamsieh_homepage_content
+msgid "Strategic Partners"
+msgstr "الشركاء الاستراتيجيون"
+
+#. module: website_shamsieh
+#: model_terms:ir.ui.view,arch_db:website_shamsieh.shamsieh_homepage_content
+msgid "Subject"
+msgstr "الموضوع"
+
+#. module: website_shamsieh
+#: model_terms:ir.ui.view,arch_db:website_shamsieh.shamsieh_homepage_content
+msgid "Supporting organizations across education, enterprise, financial services, technology, and the public sector."
+msgstr "ندعم المنظمات عبر التعليم والمؤسسات والخدمات المالية والتكنولوجيا والقطاع العام."
+
+#. module: website_shamsieh
+#: model_terms:ir.ui.view,arch_db:website_shamsieh.shamsieh_homepage_content
+msgid "Talent"
+msgstr "الكفاءات"
+
+#. module: website_shamsieh
+#: model_terms:ir.ui.view,arch_db:website_shamsieh.shamsieh_homepage_content
+msgid "Talk about Botify"
+msgstr "تحدّث عن Botify"
+
+#. module: website_shamsieh
+#: model_terms:ir.ui.view,arch_db:website_shamsieh.shamsieh_homepage_content
+msgid "Talk about Campify"
+msgstr "تحدّث عن Campify"
+
+#. module: website_shamsieh
+#: model_terms:ir.ui.view,arch_db:website_shamsieh.shamsieh_homepage_content
+msgid "Talk about Connect CVM"
+msgstr "تحدّث عن Connect CVM"
+
+#. module: website_shamsieh
+#: model_terms:ir.ui.view,arch_db:website_shamsieh.shamsieh_homepage_content
+msgid "Talk about Mawid"
+msgstr "تحدّث عن مواعيد"
+
+#. module: website_shamsieh
+#: model_terms:ir.ui.view,arch_db:website_shamsieh.shamsieh_homepage_content
+msgid "Teams We Provide"
+msgstr "فرق نوفرها"
+
+#. module: website_shamsieh
+#: model_terms:ir.ui.view,arch_db:website_shamsieh.shamsieh_homepage_content
+msgid "Technology"
+msgstr "تكنولوجيا"
+
+#. module: website_shamsieh
+#: model_terms:ir.ui.view,arch_db:website_shamsieh.shamsieh_homepage_content
+msgid "Technology Ecosystem"
+msgstr "منظومة التكنولوجيا"
+
+#. module: website_shamsieh
+#: model_terms:ir.ui.view,arch_db:website_shamsieh.shamsieh_homepage_content
+msgid "Technology Services"
+msgstr "الخدمات التقنية"
+
+#. module: website_shamsieh
+#: model_terms:ir.ui.view,arch_db:website_shamsieh.shamsieh_homepage_content
+msgid "Technology solutions built around operational needs"
+msgstr "حلول تقنية مبنية حول الاحتياجات التشغيلية"
+
+#. module: website_shamsieh
+#: model_terms:ir.ui.view,arch_db:website_shamsieh.shamsieh_homepage_content
+msgid "Technology Talent"
+msgstr "الكفاءات التقنية"
+
+#. module: website_shamsieh
+#: model_terms:ir.ui.view,arch_db:website_shamsieh.shamsieh_homepage_content
+msgid "Telecommunications"
+msgstr "الاتصالات"
+
+#. module: website_shamsieh
+#: model_terms:ir.ui.view,arch_db:website_shamsieh.shamsieh_homepage_content
+msgid "That mindset continues to guide our work as we build products, deliver business solutions, and support organizations across Jordan and Saudi Arabia."
+msgstr "هذا النهج يواصل توجيه عملنا ونحن نبني المنتجات ونقدّم حلول الأعمال وندعم المنظمات في الأردن والمملكة العربية السعودية."
+
+#. module: website_shamsieh
+#: model_terms:ir.ui.view,arch_db:website_shamsieh.shamsieh_homepage_content
+msgid "Trusted By"
+msgstr "يثق بنا"
+
+#. module: website_shamsieh
+#: model_terms:ir.ui.view,arch_db:website_shamsieh.shamsieh_homepage_content
+msgid "Understanding business objectives, operational challenges, and technical requirements."
+msgstr "فهم أهداف العمل والتحديات التشغيلية والمتطلبات التقنية."
+
+#. module: website_shamsieh
+#: model_terms:ir.ui.view,arch_db:website_shamsieh.shamsieh_homepage_content
+msgid "Unify account data, score value, risk and growth, and give every account manager a ranked list of next actions each morning — with the evidence behind each one."
+msgstr "وحّد بيانات الحسابات، وقيّم القيمة والمخاطر والنمو، وامنح كل مدير حساب قائمة مرتّبة بالإجراءات التالية كل صباح — مع الدليل خلف كل إجراء."
+
+#. module: website_shamsieh
+#: model_terms:ir.ui.view,arch_db:website_shamsieh.shamsieh_homepage_content
+msgid "Visit shamsieh.education"
+msgstr "زيارة shamsieh.education"
+
+#. module: website_shamsieh
+#: model_terms:ir.ui.view,arch_db:website_shamsieh.shamsieh_homepage_content
+msgid "We did not start Shamsieh to build software."
+msgstr "لم نؤسس شمسية لبناء البرمجيات."
+
+#. module: website_shamsieh
+#: model_terms:ir.ui.view,arch_db:website_shamsieh.shamsieh_homepage_content
+msgid "We help banks and financial institutions improve operational visibility, automate workflows, enhance customer engagement, and connect business systems through intelligent platforms."
+msgstr "نساعد البنوك والمؤسسات المالية على تحسين الرؤية التشغيلية وأتمتة سير العمل وتعزيز تفاعل العملاء وربط أنظمة الأعمال عبر منصات ذكية."
+
+#. module: website_shamsieh
+#: model_terms:ir.ui.view,arch_db:website_shamsieh.shamsieh_homepage_content
+msgid "We help insurance companies improve customer experiences, streamline operations, automate business processes, and build connected digital services."
+msgstr "نساعد شركات التأمين على تحسين تجارب العملاء وتبسيط العمليات وأتمتة إجراءات العمل وبناء خدمات رقمية مترابطة."
+
+#. module: website_shamsieh
+#: model_terms:ir.ui.view,arch_db:website_shamsieh.shamsieh_homepage_content
+msgid "We help telecommunications providers modernize customer engagement, automate support operations, and improve service delivery through intelligent platforms."
+msgstr "نساعد مزوّدي الاتصالات على تحديث تفاعل العملاء وأتمتة عمليات الدعم وتحسين تقديم الخدمة عبر منصات ذكية."
+
+#. module: website_shamsieh
+#: model_terms:ir.ui.view,arch_db:website_shamsieh.shamsieh_homepage_content
+msgid "We started it to solve problems."
+msgstr "أسسناها لحل المشكلات."
+
+#. module: website_shamsieh
+#: model_terms:ir.ui.view,arch_db:website_shamsieh.shamsieh_homepage_content
+msgid "WhatsApp Us"
+msgstr "راسلنا عبر واتساب"
+
+#. module: website_shamsieh
+#: model_terms:ir.ui.view,arch_db:website_shamsieh.shamsieh_homepage_content
+msgid "Whether you're implementing a business platform, launching a software product, adopting AI, or expanding your technology team, we're ready to help."
+msgstr "سواء كنتم تنفّذون منصة أعمال، أو تطلقون منتجاً برمجياً، أو تتبنّون الذكاء الاصطناعي، أو توسّعون فريقكم التقني — نحن مستعدون للمساعدة."
+
+#. module: website_shamsieh
+#: model_terms:ir.ui.view,arch_db:website_shamsieh.shamsieh_homepage_content
+msgid "Who We Are"
+msgstr "من نحن"
+
+#. module: website_shamsieh
+#: model_terms:ir.ui.view,arch_db:website_shamsieh.shamsieh_homepage_content
+msgid "Will this make a meaningful difference for our clients?"
+msgstr "هل سيُحدث هذا فرقاً حقيقياً لعملائنا؟"
+
+#. module: website_shamsieh
+#: model_terms:ir.ui.view,arch_db:website_shamsieh.shamsieh_homepage_content
+msgid "Working with leading business and technology platforms."
+msgstr "نعمل مع منصات أعمال وتقنية رائدة."
+
+#. module: website_shamsieh
+#: model_terms:ir.ui.view,arch_db:website_shamsieh.shamsieh_homepage_content
+msgid "Zahran St 34, Amman, Jordan"
+msgstr "شارع زهران 34، عمّان، الأردن"
+
+#. module: website_shamsieh
+#: model_terms:ir.ui.view,arch_db:website_shamsieh.shamsieh_homepage_content
+msgid "© 2026 Shamsieh Technology Services"
+msgstr "© 2026 خدمات شمسية للتكنولوجيا"
+
+#. module: website_shamsieh
+#: model_terms:ir.ui.view,arch_db:website_shamsieh.brand_shamsieh
+msgid "Shamsieh"
+msgstr "شمسية"

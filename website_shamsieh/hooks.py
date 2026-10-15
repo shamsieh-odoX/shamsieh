@@ -118,5 +118,56 @@ def force_shamsieh_homepage(env):
         pass
 
 
+def _arabic_lang(env):
+    """Return installed Arabic res.lang (Odoo 19 uses ar_001)."""
+    Lang = env['res.lang'].with_context(active_test=False)
+    for code in ('ar_001', 'ar_SY', 'ar'):
+        lang = Lang.search([('code', '=', code)], limit=1)
+        if lang:
+            return lang
+    return Lang.search([('iso_code', '=', 'ar')], limit=1)
+
+
+def ensure_arabic_website_language(env):
+    """Activate Arabic and expose it in the website language selector."""
+    lang = _arabic_lang(env)
+    if not lang:
+        try:
+            lang = env['res.lang']._activate_lang('ar_001')
+        except Exception:
+            _logger.exception('website_shamsieh: could not activate Arabic (ar_001)')
+            return
+    if not lang.active:
+        lang.active = True
+
+    websites = env['website'].sudo().search([])
+    for website in websites:
+        vals = {}
+        if lang not in website.language_ids:
+            vals['language_ids'] = [(4, lang.id)]
+        if vals:
+            website.write(vals)
+            _logger.info(
+                'website_shamsieh: added Arabic (%s) to website %s',
+                lang.code, website.id,
+            )
+
+
+def reload_website_ar_translations(env):
+    """Force-load website_shamsieh/i18n/ar.po into the active Arabic lang."""
+    lang = _arabic_lang(env)
+    if not lang:
+        return
+    mod = env['ir.module.module'].search([
+        ('name', '=', 'website_shamsieh'),
+        ('state', '=', 'installed'),
+    ], limit=1)
+    if mod:
+        mod._update_translations(filter_lang=[lang.code], overwrite=True)
+        _logger.info('website_shamsieh: reloaded Arabic translations for %s', lang.code)
+
+
 def post_init_hook(env):
     force_shamsieh_homepage(env)
+    ensure_arabic_website_language(env)
+    reload_website_ar_translations(env)

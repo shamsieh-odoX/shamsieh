@@ -1191,3 +1191,36 @@ header.o_top_fixed_element {
     justify-content: space-between;
     gap: 0.75rem;
 }
+
+/* ---------- Arabic / RTL ---------- */
+html[lang^="ar"] .shamsieh-site,
+.shamsieh-site[dir="rtl"] {
+    .sh-eyebrow {
+        letter-spacing: 0.08em;
+    }
+
+    .sh-hero__bg::before {
+        right: auto;
+        left: 6%;
+    }
+
+    .sh-hero__logo {
+        right: auto;
+        left: #{"max(1rem, 4%)"};
+
+        @media (max-width: 700px) {
+            left: 0.5rem;
+            right: auto;
+        }
+    }
+
+    .shamsieh-float-logo {
+        left: auto;
+        right: 1.1rem;
+    }
+
+    .shamsieh-footer-brand img {
+        margin-right: 0;
+        margin-left: 0.45rem;
+    }
+}

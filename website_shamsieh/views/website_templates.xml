@@ -75,7 +75,7 @@
     <!-- Solar footer -->
     <template id="footer_shamsieh" inherit_id="website.footer_custom" name="Shamsieh Footer" active="True" priority="99">
         <xpath expr="//div[@id='footer']" position="replace">
-            <div id="footer" class="oe_structure oe_structure_solo shamsieh-footer text-break" t-ignore="true" t-if="not no_footer">
+            <div id="footer" class="oe_structure oe_structure_solo shamsieh-footer text-break" t-if="not no_footer">
                 <section class="s_text_block" data-snippet="s_text_block">
                     <div class="container">
                         <div class="shamsieh-footer-inner">
