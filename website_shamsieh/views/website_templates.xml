@@ -4,7 +4,7 @@
         <xpath expr="//head" position="inside">
             <link rel="preconnect" href="https://fonts.googleapis.com"/>
             <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous"/>
-            <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500;1,9..144,600&amp;family=Sora:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+            <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700&amp;family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500;1,9..144,600&amp;display=swap" rel="stylesheet"/>
         </xpath>
     </template>
 
@@ -24,11 +24,25 @@
         </xpath>
     </template>
 
-    <!-- Wordmark: brand option replaces #o_fake_navbar_brand in placeholder_header_brand -->
+    <!-- Logo + wordmark (sun mark from shamsieh.education brand) -->
     <template id="brand_shamsieh" inherit_id="website.option_header_brand_logo" name="Shamsieh Brand Wordmark" priority="99">
         <xpath expr="//a[contains(@t-attf-class, 'navbar-brand')]" position="replace">
             <a data-name="Navbar Logo" href="/" t-attf-class="navbar-brand logo shamsieh-wordmark #{_link_class or ''}">
-                Shamsieh
+                <img class="shamsieh-wordmark__mark"
+                     src="/website_shamsieh/static/src/img/shamsieh-logo.svg"
+                     alt=""
+                     width="42"
+                     height="32"/>
+                <span class="shamsieh-wordmark__text">Shamsieh</span>
+            </a>
+        </xpath>
+    </template>
+
+    <!-- Floating logo ball (brand mark, back-to-top) -->
+    <template id="shamsieh_float_logo" inherit_id="website.layout" name="Shamsieh Float Logo" priority="99">
+        <xpath expr="//div[@id='wrapwrap']" position="inside">
+            <a href="/#top" class="shamsieh-float-logo" aria-label="Shamsieh home" title="Shamsieh">
+                <img src="/website_shamsieh/static/src/img/shamsieh-logo.svg" alt="Shamsieh" width="32" height="24"/>
             </a>
         </xpath>
     </template>
@@ -66,7 +80,10 @@
                     <div class="container">
                         <div class="shamsieh-footer-inner">
                             <div>
-                                <div class="shamsieh-footer-brand">Shamsieh <span>Technology</span></div>
+                                <div class="shamsieh-footer-brand">
+                                    <img src="/website_shamsieh/static/src/img/shamsieh-logo.svg" alt="" width="36" height="27" style="vertical-align:middle;margin-right:0.45rem;"/>
+                                    Shamsieh <span>Technology</span>
+                                </div>
                                 <p class="shamsieh-footer-copy">
                                     Products. Platforms. People. A regional technology company building software
                                     products, implementing business platforms, and supporting organizations with

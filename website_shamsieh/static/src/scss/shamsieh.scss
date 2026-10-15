@@ -1,50 +1,83 @@
 :root {
-    --sh-ink: #07111f;
-    --sh-ink-mid: #15233a;
-    --sh-ink-soft: #1e2f4a;
-    --sh-amber: #e6a23a;
-    --sh-amber-bright: #f3c56b;
-    --sh-amber-deep: #c4841f;
-    --sh-stone: #eef1f5;
-    --sh-stone-deep: #dde3eb;
-    --sh-muted: #6b7a90;
-    --sh-ink-text: #0e1a2b;
-    --sh-line: rgba(21, 35, 58, 0.12);
+    /* Brand tokens aligned with https://shamsieh.education/ */
+    --sh-ink: #0f172a;
+    --sh-ink-mid: #171c23;
+    --sh-ink-soft: #1a1a1a;
+    --sh-amber: #00bcd4;           /* primary cyan */
+    --sh-amber-bright: #00e5ff;    /* hover / accent */
+    --sh-amber-deep: #0e7490;      /* deep cyan */
+    --sh-mint: #b8dbc2;            /* logo soft stop */
+    --sh-stone: #f8fafc;
+    --sh-stone-deep: #e2e8f0;
+    --sh-muted: #475569;
+    --sh-ink-text: #0f172a;
+    --sh-line: rgba(15, 23, 42, 0.12);
     --sh-line-light: rgba(255, 255, 255, 0.14);
     --sh-white: #ffffff;
     --sh-font-display: 'Fraunces', Georgia, serif;
-    --sh-font-body: 'Sora', system-ui, sans-serif;
+    --sh-font-body: 'Cairo', 'Sora', system-ui, sans-serif;
     --sh-radius: 4px;
 }
 
-/* ---------- Global header (Solar nav) ----------
- * Also target bare header.o_header_standard: production often strips our
- * shamsieh-site / shamsieh-header QWeb class markers from wrapwrap/header.
+/* ---------- Global header ----------
+ * Force ink bar + visible nav. Editor/theme often leave a white bar with
+ * white-on-white (or missing) links — treat o_header_standard as ours.
  */
 .shamsieh-site > header,
 header.shamsieh-header,
 header.o_header_standard {
     font-family: var(--sh-font-body);
     transition: background 280ms ease, box-shadow 280ms ease, backdrop-filter 280ms ease;
-}
-
-/* Default: ink bar (safe on light inner pages) */
-.shamsieh-site > header,
-header.shamsieh-header,
-header.o_header_standard {
-    background: rgba(7, 17, 31, 0.94) !important;
+    background: rgba(15, 23, 42, 0.96) !important;
     backdrop-filter: blur(12px);
-    box-shadow: 0 1px 0 rgba(243, 197, 107, 0.18);
+    box-shadow: 0 1px 0 rgba(0, 188, 212, 0.28);
+    min-height: 4.25rem;
+    z-index: 1030;
+
+    .navbar,
+    .navbar-light,
+    .o_main_nav,
+    .o_colored_level {
+        background: transparent !important;
+    }
 
     .navbar-brand,
     .nav-link,
-    a {
+    .dropdown-toggle,
+    a:not(.btn):not(.btn-primary):not(.sh-btn) {
         color: rgba(255, 255, 255, 0.92) !important;
     }
 
     .nav-link:hover,
     .navbar-brand:hover {
         color: var(--sh-amber-bright) !important;
+    }
+
+    .navbar-toggler {
+        border-color: rgba(255, 255, 255, 0.35);
+        color: #fff;
+    }
+
+    /* Corporate site: hide cart clutter in the header strip */
+    .o_wsale_my_cart,
+    .o_navlink_background[href*="/shop/cart"] {
+        display: none !important;
+    }
+
+    /* Keep search / contact readable on ink */
+    .btn,
+    .btn-primary,
+    a.btn {
+        background: var(--sh-amber) !important;
+        border-color: var(--sh-amber) !important;
+        color: #041016 !important;
+        font-weight: 700;
+    }
+
+    a.btn:hover,
+    .btn-primary:hover {
+        background: var(--sh-amber-bright) !important;
+        border-color: var(--sh-amber-bright) !important;
     }
 }
 
@@ -60,35 +93,95 @@ body:has(.shamsieh-home) header.o_header_standard:not(.is-scrolled) {
     .o_main_nav {
         background: transparent !important;
     }
-
-    .navbar-toggler {
-        border-color: rgba(255, 255, 255, 0.35);
-        color: #fff;
-    }
 }
 
 .shamsieh-wordmark {
+    display: inline-flex !important;
+    align-items: center;
+    gap: 0.65rem;
     font-family: var(--sh-font-display) !important;
     font-weight: 600 !important;
-    font-size: 1.35rem !important;
+    font-size: 1.2rem !important;
     letter-spacing: -0.02em;
     text-decoration: none !important;
+    color: #fff !important;
+    max-height: none !important;
+}
+
+.shamsieh-wordmark__mark {
+    width: 2.1rem;
+    height: 1.6rem;
+    object-fit: contain;
+    display: block;
+    flex: 0 0 auto;
+}
+
+.shamsieh-wordmark__text {
+    line-height: 1;
 }
 
 .shamsieh-nav-menu {
+    display: flex !important;
+    flex-wrap: wrap;
+    align-items: center;
     gap: 0.15rem;
+    opacity: 1 !important;
+    visibility: visible !important;
+
+    .nav-item {
+        display: list-item !important;
+    }
 
     .nav-link {
-        font-size: 0.9rem;
-        font-weight: 500;
-        padding: 0.45rem 0.85rem !important;
+        display: block !important;
+        font-size: 0.92rem;
+        font-weight: 600;
+        padding: 0.5rem 0.9rem !important;
         border-radius: var(--sh-radius);
+        color: rgba(255, 255, 255, 0.92) !important;
+        text-decoration: none !important;
+        border-bottom: 0 !important;
+        box-shadow: none !important;
         transition: color 180ms ease, background 180ms ease;
     }
 
-    .nav-link:hover {
+    .nav-link:hover,
+    .nav-link:focus,
+    .nav-link:active {
         color: var(--sh-amber-bright) !important;
-        background: rgba(230, 162, 58, 0.1);
+        background: rgba(0, 188, 212, 0.14);
+        text-decoration: none !important;
+        border-bottom: 0 !important;
+    }
+}
+
+/* Floating brand mark (replaces the “ball” affordance with our logo) */
+.shamsieh-float-logo {
+    position: fixed;
+    left: 1.1rem;
+    bottom: 1.1rem;
+    z-index: 1040;
+    width: 3.4rem;
+    height: 3.4rem;
+    border-radius: 999px;
+    background: linear-gradient(145deg, #00bcd4 0%, #004d56 100%);
+    box-shadow: 0 10px 28px rgba(0, 188, 212, 0.35);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none !important;
+    transition: transform 180ms ease, box-shadow 180ms ease;
+
+    img {
+        width: 2rem;
+        height: 1.55rem;
+        object-fit: contain;
+        filter: brightness(1.15);
+    }
+
+    &:hover {
+        transform: translateY(-3px) scale(1.04);
+        box-shadow: 0 14px 32px rgba(0, 229, 255, 0.4);
     }
 }
 
@@ -134,28 +227,52 @@ body:has(.shamsieh-home) header.o_header_standard:not(.is-scrolled) {
     z-index: -1;
     overflow: hidden;
     background:
-        linear-gradient(180deg, rgba(7, 17, 31, 0.25) 0%, rgba(7, 17, 31, 0.55) 45%, rgba(7, 17, 31, 0.92) 100%),
-        linear-gradient(145deg, #07111f 0%, #0c1a30 38%, #15233a 68%, #1a2740 100%);
+        linear-gradient(180deg, rgba(15, 23, 42, 0.2) 0%, rgba(15, 23, 42, 0.55) 48%, rgba(15, 23, 42, 0.94) 100%),
+        linear-gradient(145deg, #0f172a 0%, #102a36 40%, #0e7490 78%, #004d56 100%);
 }
 
-/* Soft sun disk — cinematic dusk accent */
+/* Soft glow behind the hero logo mark */
 .sh-hero__bg::before {
     content: '';
     position: absolute;
     width: #{"min(52vw, 420px)"};
     height: #{"min(52vw, 420px)"};
-    right: 8%;
-    bottom: 12%;
+    right: 6%;
+    bottom: 10%;
     border-radius: 50%;
     background:
         radial-gradient(circle at 40% 40%,
-            rgba(243, 197, 107, 0.95) 0%,
-            rgba(230, 162, 58, 0.55) 35%,
-            rgba(230, 162, 58, 0.12) 62%,
-            transparent 72%);
-    filter: blur(2px);
+            rgba(0, 229, 255, 0.35) 0%,
+            rgba(0, 188, 212, 0.22) 40%,
+            transparent 70%);
+    filter: blur(8px);
     animation: sh-sun-drift 14s ease-in-out infinite alternate;
     pointer-events: none;
+}
+
+/* Brand logo in place of the old amber “ball” */
+.sh-hero__logo {
+    position: absolute;
+    right: max(1rem, 4%);
+    top: 50%;
+    transform: translateY(-42%);
+    width: #{"min(46vw, 380px)"};
+    height: auto;
+    z-index: 0;
+    opacity: 1;
+    filter: drop-shadow(0 22px 48px rgba(0, 188, 212, 0.45));
+    animation: sh-sun-drift 14s ease-in-out infinite alternate;
+    pointer-events: none;
+    user-select: none;
+
+    @media (max-width: 700px) {
+        width: #{"min(62vw, 240px)"};
+        right: 0.5rem;
+        top: auto;
+        bottom: 6%;
+        transform: none;
+        opacity: 0.7;
+    }
 }
 
 /* Horizon band */
@@ -167,8 +284,8 @@ body:has(.shamsieh-home) header.o_header_standard:not(.is-scrolled) {
     bottom: 0;
     height: 38%;
     background:
-        linear-gradient(180deg, transparent 0%, rgba(21, 35, 58, 0.4) 40%, rgba(7, 17, 31, 0.95) 100%),
-        radial-gradient(120% 80% at 50% 100%, rgba(230, 162, 58, 0.18), transparent 55%);
+        linear-gradient(180deg, transparent 0%, rgba(15, 23, 42, 0.4) 40%, rgba(15, 23, 42, 0.95) 100%),
+        radial-gradient(120% 80% at 50% 100%, rgba(0, 188, 212, 0.22), transparent 55%);
     pointer-events: none;
 }
 
@@ -310,11 +427,12 @@ body:has(.shamsieh-home) header.o_header_standard:not(.is-scrolled) {
     color: var(--sh-amber-deep);
     font-weight: 600;
     text-decoration: none !important;
-    border-bottom: 1px solid currentColor;
+    border-bottom: 0 !important;
 }
 
 .sh-text-link:hover {
     color: var(--sh-ink-mid);
+    text-decoration: none !important;
 }
 
 /* Pillars — horizontal cinema strip */
@@ -459,37 +577,79 @@ body:has(.shamsieh-home) header.o_header_standard:not(.is-scrolled) {
 
 /* Products — ink editorial band */
 .sh-products {
-    background: var(--sh-ink);
+    background:
+        radial-gradient(80% 60% at 100% 0%, rgba(0, 188, 212, 0.18), transparent 55%),
+        var(--sh-ink);
     color: #fff;
 
     .sh-eyebrow { color: var(--sh-amber-bright); }
-    .sh-h2 { color: #fff; max-width: 18ch; }
+    .sh-h2 { color: #fff; max-width: 20ch; }
     .sh-num { color: var(--sh-amber); }
-    .sh-product__tag { color: rgba(255, 255, 255, 0.5); }
-    p { color: rgba(255, 255, 255, 0.78); }
+    .sh-product__tag { color: rgba(255, 255, 255, 0.55); }
+    p { color: rgba(255, 255, 255, 0.8); }
 }
 
 .sh-product-list {
     display: grid;
-    gap: 0;
+    gap: 1rem;
+    margin-top: 2rem;
+
+    @media (min-width: 900px) {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.15rem;
+    }
 
     .sh-product {
-        padding: 2rem 0;
-        border-top: 1px solid var(--sh-line-light);
+        position: relative;
+        padding: 1.6rem 1.5rem 1.5rem;
+        border: 1px solid rgba(0, 188, 212, 0.22);
+        border-radius: 10px;
+        background: rgba(255, 255, 255, 0.03);
+        transition: border-color 200ms ease, transform 200ms ease, background 200ms ease;
+
+        &:hover {
+            border-color: rgba(0, 229, 255, 0.55);
+            background: rgba(0, 188, 212, 0.08);
+            transform: translateY(-3px);
+        }
+
+        .sh-num {
+            font-size: 1.35rem;
+            margin-bottom: 0.55rem;
+        }
 
         h3 {
-            font-size: 1.7rem;
-            margin: 0.25rem 0 0.75rem;
+            font-size: 1.55rem;
+            margin: 0.2rem 0 0.7rem;
+        }
+
+        > p:last-of-type {
+            margin-bottom: 0;
         }
     }
 }
 
 .sh-product__tag {
     margin: 0;
-    font-size: 0.78rem;
+    font-size: 0.72rem;
     text-transform: uppercase;
     letter-spacing: 0.14em;
     color: var(--sh-muted);
+}
+
+.sh-product__link {
+    display: inline-flex;
+    margin-top: 1rem;
+    color: var(--sh-amber-bright) !important;
+    font-weight: 700;
+    font-size: 0.9rem;
+    text-decoration: none !important;
+    border-bottom: 0 !important;
+}
+
+.sh-product__link:hover {
+    color: #fff !important;
+    text-decoration: none !important;
 }
 
 /* Industry focus */
@@ -586,7 +746,7 @@ body:has(.shamsieh-home) header.o_header_standard:not(.is-scrolled) {
 
     > div {
         padding: 1.5rem 0;
-        border-top: 1px solid rgba(230, 162, 58, 0.35);
+        border-top: 1px solid rgba(0, 188, 212, 0.35);
     }
 
     h3 { margin: 0.35rem 0 0; }
@@ -639,8 +799,8 @@ body:has(.shamsieh-home) header.o_header_standard:not(.is-scrolled) {
         padding-top: 0.25rem;
         border-top: 3px solid var(--sh-stone-deep);
 
-        &:nth-child(1) { border-top-color: rgba(230, 162, 58, 0.45); }
-        &:nth-child(2) { border-top-color: rgba(230, 162, 58, 0.7); }
+        &:nth-child(1) { border-top-color: rgba(0, 188, 212, 0.45); }
+        &:nth-child(2) { border-top-color: rgba(0, 188, 212, 0.7); }
         &:nth-child(3) { border-top-color: var(--sh-amber); }
     }
 
@@ -715,15 +875,109 @@ body:has(.shamsieh-home) header.o_header_standard:not(.is-scrolled) {
     }
 }
 
-/* Closing CTA */
+/* Closing CTA + Odoo contact form */
 .sh-closing {
     background:
-        radial-gradient(90% 120% at 100% 0%, rgba(230, 162, 58, 0.16), transparent 55%),
+        radial-gradient(90% 120% at 100% 0%, rgba(0, 188, 212, 0.18), transparent 55%),
         var(--sh-stone);
     text-align: left;
 
     .sh-h2 { max-width: 18ch; }
-    p { color: var(--sh-muted); max-width: 40rem; margin-bottom: 1.75rem; }
+    .sh-closing__intro > p { color: var(--sh-muted); max-width: 36rem; margin-bottom: 1.5rem; }
+}
+
+.sh-closing__grid {
+    display: grid;
+    gap: 2.5rem;
+
+    @media (min-width: 960px) {
+        grid-template-columns: 0.95fr 1.05fr;
+        gap: 3.5rem;
+        align-items: start;
+    }
+}
+
+.sh-closing__meta {
+    list-style: none;
+    padding: 0;
+    margin: 1.25rem 0 0;
+    display: grid;
+    gap: 0.45rem;
+
+    a {
+        color: var(--sh-ink-mid);
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 0.95rem;
+    }
+
+    a:hover { color: var(--sh-amber-deep); }
+}
+
+.sh-closing__form {
+    background: var(--sh-white);
+    border: 1px solid var(--sh-line);
+    border-radius: 12px;
+    padding: 1.5rem 1.35rem 1.35rem;
+    box-shadow: 0 18px 40px rgba(15, 23, 42, 0.06);
+
+    @media (min-width: 700px) {
+        padding: 1.75rem 1.75rem 1.5rem;
+    }
+}
+
+.sh-odoo-form {
+    .s_website_form_label {
+        display: block;
+        width: auto !important;
+        margin-bottom: 0.35rem;
+        font-weight: 600;
+        font-size: 0.88rem;
+        color: var(--sh-ink-text);
+    }
+
+    .s_website_form_mark { color: var(--sh-amber-deep); }
+
+    .form-control,
+    .s_website_form_input {
+        border: 1px solid rgba(15, 23, 42, 0.16);
+        border-radius: 6px;
+        padding: 0.7rem 0.85rem;
+        background: #fff;
+        color: var(--sh-ink-text);
+        box-shadow: none;
+
+        &:focus {
+            border-color: var(--sh-amber);
+            outline: 0;
+            box-shadow: 0 0 0 3px rgba(0, 188, 212, 0.18);
+        }
+    }
+
+    textarea.s_website_form_input { min-height: 7.5rem; resize: vertical; }
+
+    .s_website_form_submit {
+        text-align: start !important;
+        margin-top: 0.35rem;
+    }
+
+    .s_website_form_send,
+    a.s_website_form_send {
+        display: inline-flex !important;
+        align-items: center;
+        justify-content: center;
+        padding: 0.9rem 1.4rem !important;
+        background: var(--sh-amber) !important;
+        border: 0 !important;
+        border-radius: var(--sh-radius) !important;
+        color: #041016 !important;
+        font-weight: 700 !important;
+        text-decoration: none !important;
+    }
+
+    .s_website_form_send:hover {
+        background: var(--sh-amber-bright) !important;
+    }
 }
 
 /* ---------- Motion ---------- */
@@ -816,7 +1070,7 @@ body:has(.shamsieh-home) header.o_header_standard:not(.is-scrolled) {
 }
 
 .shamsieh-footer-bottom {
-    border-top: 1px solid rgba(230, 162, 58, 0.22);
+    border-top: 1px solid rgba(0, 188, 212, 0.22);
     padding: 1.1rem 0 1.6rem;
     color: rgba(255, 255, 255, 0.45);
     font-size: 0.88rem;

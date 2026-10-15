@@ -5,6 +5,12 @@
         <!-- Hero: brand-first, full-bleed dusk -->
         <section class="sh-hero" id="top">
             <div class="sh-hero__bg" aria-hidden="true"/>
+            <img class="sh-hero__logo"
+                 src="/website_shamsieh/static/src/img/shamsieh-logo.svg"
+                 alt=""
+                 width="420"
+                 height="316"
+                 aria-hidden="true"/>
             <div class="sh-hero__inner container">
                 <p class="sh-eyebrow">Beyond Technology</p>
                 <h1 class="sh-brand">
@@ -105,30 +111,35 @@
                         <p class="sh-product__tag">Enterprise AI Operating Layer</p>
                         <h3>Botify AI</h3>
                         <p>An enterprise AI platform that connects people, business systems, and artificial intelligence through a single conversational experience.</p>
+                        <a class="sh-product__link" href="#contact">Talk about Botify</a>
                     </article>
                     <article class="sh-product sh-reveal">
                         <span class="sh-num">02</span>
                         <p class="sh-product__tag">AI Campaign Management</p>
                         <h3>Campify</h3>
-                        <p>An end-to-end platform for planning marketing campaigns, generating AI content, managing approvals, publishing across email, SMS and WhatsApp, and analyzing performance — built for Arabic and English.</p>
+                        <p>Plan campaigns, generate bilingual AI content, manage approvals, and publish across email, SMS and WhatsApp — with performance analytics built in.</p>
+                        <a class="sh-product__link" href="#contact">Talk about Campify</a>
                     </article>
                     <article class="sh-product sh-reveal">
                         <span class="sh-num">03</span>
                         <p class="sh-product__tag">Customer Value Management for B2B</p>
                         <h3>Connect CVM</h3>
-                        <p>A customer value management platform for B2B companies. It brings account data together, scores value, risk and growth, and gives every account manager a ranked list of next actions each morning — with the evidence behind each one.</p>
+                        <p>Unify account data, score value, risk and growth, and give every account manager a ranked list of next actions each morning — with the evidence behind each one.</p>
+                        <a class="sh-product__link" href="#contact">Talk about Connect CVM</a>
                     </article>
                     <article class="sh-product sh-reveal">
                         <span class="sh-num">04</span>
                         <p class="sh-product__tag">Appointment Management Platform</p>
                         <h3>Mawid</h3>
-                        <p>A modern appointment management platform that simplifies booking, scheduling, reminders, and customer communication across digital channels.</p>
+                        <p>Simplify booking, scheduling, reminders, and customer communication across digital channels with a modern appointment platform.</p>
+                        <a class="sh-product__link" href="#contact">Talk about Mawid</a>
                     </article>
                     <article class="sh-product sh-reveal">
                         <span class="sh-num">05</span>
                         <p class="sh-product__tag">Education Discovery Platform</p>
                         <h3>Shamsieh Education</h3>
-                        <p>A digital platform helping parents and students discover, compare, and connect with educational institutions through verified information and intelligent search tools.</p>
+                        <p>Help parents and students discover, compare, and connect with schools, universities and nurseries through verified information and intelligent search.</p>
+                        <a class="sh-product__link" href="https://shamsieh.education/" target="_blank" rel="noopener">Visit shamsieh.education</a>
                     </article>
                 </div>
             </div>
@@ -274,19 +285,103 @@
             </div>
         </section>
 
-        <!-- Closing CTA -->
+        <!-- Closing CTA + native Odoo contact form -->
         <section class="sh-section sh-closing" id="contact">
-            <div class="container sh-reveal">
-                <h2 class="sh-h2">Ready to Discuss Your Next Initiative?</h2>
-                <p>
-                    Whether you're implementing a business platform, launching a software product,
-                    adopting AI, or expanding your technology team, we're ready to help.
-                </p>
-                <div class="sh-cta-row">
-                    <a class="sh-btn sh-btn--primary" href="https://wa.me/962775999908" target="_blank" rel="noopener">WhatsApp Us</a>
-                    <a class="sh-btn sh-btn--ghost" href="/contactus">Get Started</a>
+            <div class="container">
+                <div class="sh-closing__grid sh-reveal">
+                    <div class="sh-closing__intro">
+                        <p class="sh-eyebrow">Contact</p>
+                        <h2 class="sh-h2">Ready to Discuss Your Next Initiative?</h2>
+                        <p>
+                            Whether you're implementing a business platform, launching a software product,
+                            adopting AI, or expanding your technology team, we're ready to help.
+                        </p>
+                        <div class="sh-cta-row">
+                            <a class="sh-btn sh-btn--primary" href="https://wa.me/962775999908" target="_blank" rel="noopener">WhatsApp Us</a>
+                        </div>
+                        <ul class="sh-closing__meta">
+                            <li><a href="tel:+962775999908">+962 7 7599 9908 · JO</a></li>
+                            <li><a href="tel:+966563447279">+966 56 344 7279 · SA</a></li>
+                            <li><a href="mailto:info@shamsieh.com">info@shamsieh.com</a></li>
+                        </ul>
+                    </div>
+                    <div class="sh-closing__form">
+                        <t t-call="website_shamsieh.shamsieh_contact_form"/>
+                    </div>
                 </div>
             </div>
+        </section>
+    </template>
+
+    <!-- Native Odoo website form → CRM lead (same pipeline as /contactus) -->
+    <template id="shamsieh_contact_form" name="Shamsieh Contact Form">
+        <t t-set="sh_contact_form_values" t-value="{
+            'contact_name': request.params.get('contact_name', ''),
+            'phone': request.params.get('phone', ''),
+            'email_from': request.params.get('email_from', ''),
+            'partner_name': request.params.get('partner_name', ''),
+            'name': request.params.get('name', ''),
+            'description': request.params.get('description', ''),
+        }"/>
+        <span class="hidden" data-for="shamsieh_contact_form" t-att-data-values="sh_contact_form_values"/>
+        <section class="s_website_form sh-odoo-form" data-vcss="001" data-snippet="s_website_form">
+            <form id="shamsieh_contact_form"
+                  action="/website/form/"
+                  method="post"
+                  enctype="multipart/form-data"
+                  class="o_mark_required"
+                  data-mark="*"
+                  data-model_name="crm.lead"
+                  data-success-mode="redirect"
+                  data-success-page="/contactus-thank-you"
+                  data-pre-fill="true">
+                <div class="s_website_form_rows row s_col_no_bgcolor">
+                    <div class="mb-3 col-lg-6 s_website_form_field s_website_form_required" data-type="char" data-name="Field">
+                        <label class="s_website_form_label" for="sh_contact_name">
+                            <span class="s_website_form_label_content">Name</span>
+                            <span class="s_website_form_mark"> *</span>
+                        </label>
+                        <input id="sh_contact_name" type="text" class="form-control s_website_form_input" name="contact_name" required="" data-fill-with="name"/>
+                    </div>
+                    <div class="mb-3 col-lg-6 s_website_form_field" data-type="char" data-name="Field">
+                        <label class="s_website_form_label" for="sh_contact_phone">
+                            <span class="s_website_form_label_content">Phone</span>
+                        </label>
+                        <input id="sh_contact_phone" type="tel" class="form-control s_website_form_input" name="phone" data-fill-with="phone"/>
+                    </div>
+                    <div class="mb-3 col-lg-6 s_website_form_field s_website_form_required s_website_form_model_required" data-type="email" data-name="Field">
+                        <label class="s_website_form_label" for="sh_contact_email">
+                            <span class="s_website_form_label_content">Email</span>
+                            <span class="s_website_form_mark"> *</span>
+                        </label>
+                        <input id="sh_contact_email" type="email" class="form-control s_website_form_input" name="email_from" required="" data-fill-with="email"/>
+                    </div>
+                    <div class="mb-3 col-lg-6 s_website_form_field" data-type="char" data-name="Field">
+                        <label class="s_website_form_label" for="sh_contact_company">
+                            <span class="s_website_form_label_content">Company</span>
+                        </label>
+                        <input id="sh_contact_company" type="text" class="form-control s_website_form_input" name="partner_name" data-fill-with="commercial_company_name"/>
+                    </div>
+                    <div class="mb-3 col-12 s_website_form_field s_website_form_required" data-type="char" data-name="Field">
+                        <label class="s_website_form_label" for="sh_contact_subject">
+                            <span class="s_website_form_label_content">Subject</span>
+                            <span class="s_website_form_mark"> *</span>
+                        </label>
+                        <input id="sh_contact_subject" type="text" class="form-control s_website_form_input" name="name" required=""/>
+                    </div>
+                    <div class="mb-3 col-12 s_website_form_field s_website_form_required" data-type="text" data-name="Field">
+                        <label class="s_website_form_label" for="sh_contact_message">
+                            <span class="s_website_form_label_content">How can we help?</span>
+                            <span class="s_website_form_mark"> *</span>
+                        </label>
+                        <textarea id="sh_contact_message" class="form-control s_website_form_input" name="description" required="" rows="5"></textarea>
+                    </div>
+                    <div class="mb-0 col-12 s_website_form_submit s_website_form_no_submit_label" data-name="Submit Button">
+                        <a href="#" role="button" class="btn btn-primary s_website_form_send sh-btn sh-btn--primary">Send message</a>
+                        <span id="s_website_form_result"></span>
+                    </div>
+                </div>
+            </form>
         </section>
     </template>
 
