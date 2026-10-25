@@ -7,12 +7,24 @@
     <record id="hr_attendance.menu_hr_attendance_onboarding" model="ir.ui.menu">
         <field name="active" eval="False"/>
     </record>
+    <!-- Raw punch list. Monthly summary plus the four follow-up lists cover reporting. -->
+    <record id="hr_attendance.menu_hr_attendance_attendance_reporting" model="ir.ui.menu">
+        <field name="active" eval="False"/>
+    </record>
+
+    <menuitem id="menu_attendance_summary_report"
+              name="Monthly Attendance Summary"
+              parent="hr_attendance.menu_hr_attendance_reporting"
+              action="action_hr_attendance_summary_wizard"
+              sequence="4"
+              groups="hr_attendance.group_hr_attendance_officer"/>
 
     <menuitem id="menu_attendance_date_range_report"
               name="Report by Date Range"
               parent="hr_attendance.menu_hr_attendance_reporting"
               action="action_hr_attendance_date_range_wizard"
               sequence="5"
+              active="False"
               groups="hr_attendance.group_hr_attendance_officer"/>
 
     <menuitem id="menu_hr_employee_live_status"
@@ -41,6 +53,7 @@
               parent="hr_attendance.menu_hr_attendance_reporting"
               action="action_face_attendance_log"
               sequence="25"
+              active="False"
               groups="hr_attendance.group_hr_attendance_officer"/>
 
     <menuitem id="menu_face_templates"
@@ -83,6 +96,7 @@
               parent="hr_attendance.menu_hr_attendance_reporting"
               action="action_attendance_source_report"
               sequence="33"
+              active="False"
               groups="hr_attendance.group_hr_attendance_officer"/>
 
     <menuitem id="menu_department_attendance_report"
@@ -90,6 +104,7 @@
               parent="hr_attendance.menu_hr_attendance_reporting"
               action="action_department_attendance_report"
               sequence="34"
+              active="False"
               groups="hr_attendance.group_hr_attendance_officer"/>
 
     <menuitem id="menu_unworked_time_report"
@@ -97,6 +112,7 @@
               parent="hr_attendance.menu_hr_attendance_reporting"
               action="action_unworked_time_report"
               sequence="35"
+              active="False"
               groups="hr_attendance.group_hr_attendance_officer"/>
 
     <menuitem id="menu_pin_attendance_logs_report"
@@ -104,6 +120,7 @@
               parent="hr_attendance.menu_hr_attendance_reporting"
               action="action_pin_attendance_logs_report"
               sequence="27"
+              active="False"
               groups="hr_attendance.group_hr_attendance_officer"/>
 
 </odoo>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="hr_attendance_summary_wizard_view_form" model="ir.ui.view">
+        <field name="name">hr.attendance.summary.wizard.form</field>
+        <field name="model">hr.attendance.summary.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Attendance Summary">
+                <header invisible="not line_ids">
+                    <button name="action_refresh" type="object" string="Refresh"
+                            class="btn-primary"/>
+                    <button name="action_download_xlsx" type="object" string="Download Excel"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="summary_month"/>
+                            <field name="summary_year"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                    </group>
+                    <div class="text-muted mb-3" invisible="not line_ids">
+                        <field name="footnote" nolabel="1" readonly="1"/>
+                    </div>
+                    <field name="line_ids" invisible="not line_ids" nolabel="1">
+                        <list create="false" edit="false" delete="false">
+                            <field name="employee_number"/>
+                            <field name="employee_id"/>
+                            <field name="attendance_days"/>
+                            <field name="total_hours"/>
+                            <field name="average_hours"/>
+                            <field name="average_check_in"/>
+                            <field name="days_without_punch"/>
+                            <field name="error_record_count"/>
+                        </list>
+                    </field>
+                </sheet>
+                <footer invisible="line_ids">
+                    <button name="action_open_report" type="object" string="Open Report"
+                            class="btn-primary"/>
+                    <button name="action_download_xlsx" type="object" string="Download Excel"/>
+                    <button string="Cancel" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_hr_attendance_summary_wizard" model="ir.actions.act_window">
+        <field name="name">Monthly Attendance Summary</field>
+        <field name="res_model">hr.attendance.summary.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+</odoo>

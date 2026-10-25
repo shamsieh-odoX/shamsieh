@@ -506,6 +506,7 @@ msgstr "البصمة"
 #: model_terms:ir.ui.view,arch_db:hr_attendance_custom_ext.view_fingerprint_device_log_form
 #: model_terms:ir.ui.view,arch_db:hr_attendance_custom_ext.view_fingerprint_device_log_tree
 #: model_terms:ir.ui.view,arch_db:hr_attendance_custom_ext.view_hr_attendance_daily_status_search
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_hr_attendance_summary_line__employee_id
 msgid "Employee"
 msgstr "الموظف"
 
@@ -1875,4 +1876,190 @@ msgstr "ملغى"
 #: model:hr.leave.type,name:hr_attendance_custom_ext.leave_type_remote_work
 msgid "Remote Work"
 msgstr "العمل عن بُعد"
+
+#. module: hr_attendance_custom_ext
+#: code:addons/hr_attendance_custom_ext/wizards/hr_attendance_summary_wizard.py:0
+msgid "Attendance Summary"
+msgstr "ملخص الدوام"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.actions.act_window,name:hr_attendance_custom_ext.action_hr_attendance_summary_wizard
+#: model:ir.ui.menu,name:hr_attendance_custom_ext.menu_attendance_summary_report
+msgid "Monthly Attendance Summary"
+msgstr "ملخص الدوام الشهري"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model,name:hr_attendance_custom_ext.model_hr_attendance_summary_wizard
+msgid "Attendance Summary Report"
+msgstr "تقرير ملخص الدوام"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model,name:hr_attendance_custom_ext.model_hr_attendance_summary_line
+msgid "Attendance Summary Line"
+msgstr "بند ملخص الدوام"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_hr_attendance_summary_line__attendance_days
+msgid "Attendance Days"
+msgstr "أيام الحضور"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_hr_attendance_summary_line__total_hours
+msgid "Total Hours"
+msgstr "مجموع الساعات"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_hr_attendance_summary_line__average_hours
+msgid "Average Hours per Day"
+msgstr "متوسط الساعات باليوم"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_hr_attendance_summary_line__average_check_in
+msgid "Average Check-in Time"
+msgstr "متوسط وقت الحضور"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_hr_attendance_summary_line__days_without_punch
+msgid "Days Without a Punch"
+msgstr "أيام بلا بصمة"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_hr_attendance_summary_line__error_record_count
+msgid "Records with Errors"
+msgstr "سجلات بها خطأ"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields,help:hr_attendance_custom_ext.field_hr_attendance_summary_line__days_without_punch
+msgid "Days the system created an empty attendance record for (no check-in)."
+msgstr "أيام أنشأ لها النظام سجلاً فارغاً (بدون تسجيل حضور)."
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields,help:hr_attendance_custom_ext.field_hr_attendance_summary_line__error_record_count
+msgid "Fingerprint device logs in the Error state during this period."
+msgstr "سجلات جهاز البصمة بحالة خطأ خلال هذه الفترة."
+
+#. module: hr_attendance_custom_ext
+#: code:addons/hr_attendance_custom_ext/wizards/hr_attendance_summary_wizard.py:0
+msgid "%(period)s · Attendance records in Odoo · \"Days without a punch\" = days the system created an empty record for."
+msgstr "%(period)s · سجلات الحضور في Odoo · «أيام بلا بصمة» = أيام أنشأ لها النظام سجلاً فارغاً."
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_hr_attendance_summary_wizard__date_from
+msgid "Date From"
+msgstr "من تاريخ"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_hr_attendance_summary_wizard__date_to
+msgid "Date To"
+msgstr "إلى تاريخ"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_hr_attendance_summary_wizard__company_id
+msgid "Company"
+msgstr "الشركة"
+
+#. module: hr_attendance_custom_ext
+#: code:addons/hr_attendance_custom_ext/wizards/hr_attendance_summary_wizard.py:0
+msgid "Open Report"
+msgstr "فتح التقرير"
+
+#. module: hr_attendance_custom_ext
+#: code:addons/hr_attendance_custom_ext/wizards/hr_attendance_summary_wizard.py:0
+msgid "Download Excel"
+msgstr "تنزيل إكسل"
+
+#. module: hr_attendance_custom_ext
+#: code:addons/hr_attendance_custom_ext/wizards/hr_attendance_summary_wizard.py:0
+msgid "Refresh"
+msgstr "تحديث"
+
+#. module: hr_attendance_custom_ext
+#: code:addons/hr_attendance_custom_ext/wizards/hr_attendance_summary_wizard.py:0
+msgid "Date To must be on or after Date From."
+msgstr "يجب أن يكون تاريخ النهاية في نفس يوم تاريخ البداية أو بعده."
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_hr_attendance_summary_wizard__summary_month
+msgid "Month"
+msgstr "الشهر"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields,field_description:hr_attendance_custom_ext.field_hr_attendance_summary_wizard__summary_year
+msgid "Year"
+msgstr "السنة"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields.selection,name:hr_attendance_custom_ext.selection__hr_attendance_summary_wizard__summary_month__1
+msgid "January"
+msgstr "يناير"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields.selection,name:hr_attendance_custom_ext.selection__hr_attendance_summary_wizard__summary_month__2
+msgid "February"
+msgstr "فبراير"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields.selection,name:hr_attendance_custom_ext.selection__hr_attendance_summary_wizard__summary_month__3
+msgid "March"
+msgstr "مارس"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields.selection,name:hr_attendance_custom_ext.selection__hr_attendance_summary_wizard__summary_month__4
+msgid "April"
+msgstr "أبريل"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields.selection,name:hr_attendance_custom_ext.selection__hr_attendance_summary_wizard__summary_month__5
+msgid "May"
+msgstr "مايو"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields.selection,name:hr_attendance_custom_ext.selection__hr_attendance_summary_wizard__summary_month__6
+msgid "June"
+msgstr "يونيو"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields.selection,name:hr_attendance_custom_ext.selection__hr_attendance_summary_wizard__summary_month__7
+msgid "July"
+msgstr "يوليو"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields.selection,name:hr_attendance_custom_ext.selection__hr_attendance_summary_wizard__summary_month__8
+msgid "August"
+msgstr "أغسطس"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields.selection,name:hr_attendance_custom_ext.selection__hr_attendance_summary_wizard__summary_month__9
+msgid "September"
+msgstr "سبتمبر"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields.selection,name:hr_attendance_custom_ext.selection__hr_attendance_summary_wizard__summary_month__10
+msgid "October"
+msgstr "أكتوبر"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields.selection,name:hr_attendance_custom_ext.selection__hr_attendance_summary_wizard__summary_month__11
+msgid "November"
+msgstr "نوفمبر"
+
+#. module: hr_attendance_custom_ext
+#: model:ir.model.fields.selection,name:hr_attendance_custom_ext.selection__hr_attendance_summary_wizard__summary_month__12
+msgid "December"
+msgstr "ديسمبر"
+
+#. module: hr_attendance_custom_ext
+#: code:addons/hr_attendance_custom_ext/wizards/hr_attendance_summary_wizard.py:0
+msgid "Choose a month and year."
+msgstr "اختر الشهر والسنة."
+
+#. module: hr_attendance_custom_ext
+#: code:addons/hr_attendance_custom_ext/wizards/hr_attendance_summary_wizard.py:0
+msgid "Year must be between 2000 and 2100."
+msgstr "يجب أن تكون السنة بين 2000 و 2100."
+
+#. module: hr_attendance_custom_ext
+#: code:addons/hr_attendance_custom_ext/wizards/hr_attendance_summary_wizard.py:0
+msgid "Excel export needs the xlsxwriter library, which is included with Odoo."
+msgstr "تصدير إكسل يحتاج مكتبة xlsxwriter، وهي مضمّنة مع أودو."
 

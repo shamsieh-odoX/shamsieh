@@ -1,6 +1,6 @@
 {
     'name': 'HR Attendance Custom Extensions',
-    'version': '19.0.1.5.7',
+    'version': '19.0.1.5.10',
     'category': 'Human Resources/Attendances',
     'summary': 'Shamsieh attendance, fingerprint sync (Hikvision + ZKTeco), and face attendance',
     'author': 'Custom',
@@ -29,6 +29,7 @@
         'views/hr_remote_work_request_views.xml',
         'wizards/hr_remote_work_refuse_wizard_views.xml',
         'wizards/hr_attendance_date_range_wizard_views.xml',
+        'wizards/hr_attendance_summary_wizard_views.xml',
         'views/hr_attendance_menus.xml',
     ],
     'post_init_hook': 'post_init_hook',
