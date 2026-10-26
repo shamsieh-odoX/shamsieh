@@ -3,7 +3,10 @@
 import base64
 import calendar
 import io
+import zipfile
 from datetime import timedelta
+from pathlib import Path
+from xml.sax.saxutils import escape
 
 from odoo import _, api, fields, models
 from odoo.exceptions import UserError
@@ -152,6 +155,125 @@ def render_attendance_summary_xlsx(title, subtitle, headers, rows, rtl=True, she
     return buffer.getvalue()
 
 
+LETTERHEAD_PATH = Path(__file__).resolve().parents[1] / 'data' / 'shamsieh_letterhead.docx'
+DOCX_COLUMN_WIDTHS = (700, 3100, 1100, 1200, 1300, 1200, 1100, 1100)
+
+
+def _docx_run(text, bold=False, size=18, color=None):
+    color_xml = '<w:color w:val="%s"/>' % color if color else ''
+    bold_xml = '<w:b/><w:bCs/>' if bold else ''
+    return (
+        '<w:r><w:rPr>'
+        '<w:rFonts w:ascii="Arial" w:hAnsi="Arial" w:cs="Arial"/>'
+        '%s%s'
+        '<w:sz w:val="%s"/><w:szCs w:val="%s"/>'
+        '<w:rtl/>'
+        '</w:rPr><w:t xml:space="preserve">%s</w:t></w:r>'
+    ) % (bold_xml, color_xml, size, size, escape(text or ''))
+
+
+def _docx_paragraph(text, bold=False, size=18, color=None, align='center', before=60, after=60):
+    return (
+        '<w:p><w:pPr><w:bidi/><w:jc w:val="%s"/>'
+        '<w:spacing w:before="%s" w:after="%s"/></w:pPr>%s</w:p>'
+    ) % (align, before, after, _docx_run(text, bold=bold, size=size, color=color))
+
+
+def _docx_cell(text, width, header=False, align='center'):
+    fill = '4F2D56' if header else 'FFFFFF'
+    borders = (
+        '<w:tcBorders>'
+        '<w:top w:val="single" w:sz="4" w:space="0" w:color="BBBBBB"/>'
+        '<w:left w:val="single" w:sz="4" w:space="0" w:color="BBBBBB"/>'
+        '<w:bottom w:val="single" w:sz="4" w:space="0" w:color="BBBBBB"/>'
+        '<w:right w:val="single" w:sz="4" w:space="0" w:color="BBBBBB"/>'
+        '</w:tcBorders>'
+    )
+    return (
+        '<w:tc><w:tcPr>'
+        '<w:tcW w:w="%s" w:type="dxa"/>'
+        '<w:shd w:val="clear" w:color="auto" w:fill="%s"/>'
+        '%s<w:vAlign w:val="center"/>'
+        '</w:tcPr>%s</w:tc>'
+    ) % (
+        width,
+        fill,
+        borders,
+        _docx_paragraph(
+            text,
+            bold=header,
+            size=14 if header else 16,
+            color='FFFFFF' if header else '1A1A1A',
+            align=align,
+            before=40,
+            after=40,
+        ),
+    )
+
+
+def _docx_row(values, header=False):
+    cells = []
+    for index, (value, width) in enumerate(zip(values, DOCX_COLUMN_WIDTHS)):
+        align = 'right' if index == 1 and not header else 'center'
+        cells.append(_docx_cell(value, width, header=header, align=align))
+    return '<w:tr>%s</w:tr>' % ''.join(cells)
+
+
+def _summary_row_values(row):
+    return [
+        str(row['employee_number']),
+        row['employee_name'] or '',
+        str(row['attendance_days']),
+        '%.1f' % row['total_hours'],
+        '%.2f' % row['average_hours'],
+        row['average_check_in'] or '',
+        str(row['days_without_punch']),
+        str(row['error_record_count']),
+    ]
+
+
+def render_attendance_summary_docx(title, subtitle, headers, rows, template_path=None):
+    """Fill the approved Shamsieh letterhead with the monthly attendance table."""
+    path = Path(template_path or LETTERHEAD_PATH)
+    if not path.is_file():
+        raise UserError(_('The company letterhead template is missing.'))
+
+    grid = ''.join('<w:gridCol w:w="%s"/>' % width for width in DOCX_COLUMN_WIDTHS)
+    table = (
+        '<w:tbl><w:tblPr><w:bidiVisual/>'
+        '<w:tblW w:w="10800" w:type="dxa"/>'
+        '<w:jc w:val="center"/><w:tblLayout w:type="fixed"/>'
+        '</w:tblPr><w:tblGrid>%s</w:tblGrid>%s%s</w:tbl>'
+    ) % (
+        grid,
+        _docx_row(headers, header=True),
+        ''.join(_docx_row(_summary_row_values(row)) for row in rows),
+    )
+    body = (
+        _docx_paragraph(title, bold=True, size=28, align='center', before=200, after=80)
+        + _docx_paragraph(subtitle, size=16, color='555555', align='right', before=40, after=160)
+        + table
+        + _docx_paragraph('', size=16)
+    )
+
+    source = zipfile.ZipFile(path)
+    try:
+        document = source.read('word/document.xml').decode('utf-8')
+        start = document.find('<w:body>')
+        sect = document.find('<w:sectPr')
+        if start < 0 or sect < 0:
+            raise UserError(_('The company letterhead template could not be read.'))
+        document = document[:start + len('<w:body>')] + body + document[sect:]
+        buffer = io.BytesIO()
+        with zipfile.ZipFile(buffer, 'w', compression=zipfile.ZIP_DEFLATED) as target:
+            for info in source.infolist():
+                payload = document.encode('utf-8') if info.filename == 'word/document.xml' else source.read(info.filename)
+                target.writestr(info, payload)
+    finally:
+        source.close()
+    return buffer.getvalue()
+
+
 class HrAttendanceSummaryWizard(models.TransientModel):
     _name = 'hr.attendance.summary.wizard'
     _description = 'Attendance Summary Report'
@@ -209,63 +331,47 @@ class HrAttendanceSummaryWizard(models.TransientModel):
             else:
                 wizard.footnote = False
 
-    def _is_arabic(self):
-        return (self.env.lang or '').startswith('ar')
-
     def _month_year(self, day):
-        if self._is_arabic():
-            return '%s %s' % (AR_MONTHS[day.month - 1], day.year)
-        return '%s %s' % (calendar.month_name[day.month], day.year)
+        return '%s %s' % (AR_MONTHS[day.month - 1], day.year)
 
     def _report_title(self):
         self.ensure_one()
-        return '%s | %s | %s' % (
-            _('Attendance Summary'),
+        return 'ملخص الدوام | %s | %s' % (
             self._month_year(self.date_from),
             self.company_id.name or '',
         )
 
     def _report_subtitle(self):
         self.ensure_one()
-        if self._is_arabic():
-            period = 'من %s إلى %s %s' % (
-                self.date_from.day,
-                self.date_to.day,
-                self._month_year(self.date_to),
-            )
-        else:
-            period = 'From %s to %s %s' % (
-                self.date_from.day,
-                self.date_to.day,
-                self._month_year(self.date_to),
-            )
-        return _(
-            '%(period)s · Attendance records in Odoo · '
-            '"Days without a punch" = days the system created an empty record for.',
-            period=period,
+        period = 'من %s إلى %s %s' % (
+            self.date_from.day,
+            self.date_to.day,
+            self._month_year(self.date_to),
         )
+        return '%s · سجلات الحضور في Odoo · «أيام بلا بصمة» = أيام أنشأ لها النظام سجلاً فارغاً.' % period
 
     def _headers(self):
         return [
             '#',
-            _('Employee'),
-            _('Attendance Days'),
-            _('Total Hours'),
-            _('Average Hours per Day'),
-            _('Average Check-in Time'),
-            _('Days Without a Punch'),
-            _('Records with Errors'),
+            'الموظف',
+            'أيام الحضور',
+            'مجموع الساعات',
+            'متوسط الساعات باليوم',
+            'متوسط وقت الحضور',
+            'أيام بلا بصمة',
+            'سجلات بها خطأ',
         ]
 
     def _sheet_name(self):
-        self.ensure_one()
-        if self._is_arabic():
-            return 'ملخص الدوام'
-        return _('Attendance Summary')
+        return 'ملخص الدوام'
 
     def _filename(self):
         self.ensure_one()
         return 'Shamsieh-Attendance-Summary-%s.xlsx' % self.date_from.strftime('%b-%Y')
+
+    def _docx_filename(self):
+        self.ensure_one()
+        return 'Shamsieh-Attendance-Summary-%s.docx' % self.date_from.strftime('%b-%Y')
 
     def _check_dates(self):
         self.ensure_one()
@@ -411,7 +517,7 @@ class HrAttendanceSummaryWizard(models.TransientModel):
             subtitle=self._report_subtitle(),
             headers=self._headers(),
             rows=rows,
-            rtl=self._is_arabic(),
+            rtl=True,
             sheet_name=self._sheet_name(),
         )
         attachment = self.env['ir.attachment'].create({
@@ -419,6 +525,29 @@ class HrAttendanceSummaryWizard(models.TransientModel):
             'type': 'binary',
             'datas': base64.b64encode(content),
             'mimetype': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            'res_model': self._name,
+            'res_id': self.id,
+        })
+        return {
+            'type': 'ir.actions.act_url',
+            'url': '/web/content/%s?download=true' % attachment.id,
+            'target': 'new',
+        }
+
+    def action_download_docx(self):
+        self.ensure_one()
+        self._check_dates()
+        content = render_attendance_summary_docx(
+            title=self._report_title(),
+            subtitle=self._report_subtitle(),
+            headers=self._headers(),
+            rows=self._collect_rows(),
+        )
+        attachment = self.env['ir.attachment'].create({
+            'name': self._docx_filename(),
+            'type': 'binary',
+            'datas': base64.b64encode(content),
+            'mimetype': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
             'res_model': self._name,
             'res_id': self.id,
         })
@@ -440,18 +569,18 @@ class HrAttendanceSummaryLine(models.TransientModel):
         ondelete='cascade',
     )
     employee_number = fields.Integer(string='#', readonly=True)
-    employee_id = fields.Many2one('hr.employee', string='Employee', readonly=True)
-    attendance_days = fields.Integer(string='Attendance Days', readonly=True)
-    total_hours = fields.Float(string='Total Hours', digits=(16, 1), readonly=True)
-    average_hours = fields.Float(string='Average Hours per Day', digits=(16, 2), readonly=True)
-    average_check_in = fields.Char(string='Average Check-in Time', readonly=True)
+    employee_id = fields.Many2one('hr.employee', string='الموظف', readonly=True)
+    attendance_days = fields.Integer(string='أيام الحضور', readonly=True)
+    total_hours = fields.Float(string='مجموع الساعات', digits=(16, 1), readonly=True)
+    average_hours = fields.Float(string='متوسط الساعات باليوم', digits=(16, 2), readonly=True)
+    average_check_in = fields.Char(string='متوسط وقت الحضور', readonly=True)
     days_without_punch = fields.Integer(
-        string='Days Without a Punch',
+        string='أيام بلا بصمة',
         readonly=True,
-        help='Days the system created an empty attendance record for (no check-in).',
+        help='أيام أنشأ لها النظام سجلاً فارغاً (بدون تسجيل حضور).',
     )
     error_record_count = fields.Integer(
-        string='Records with Errors',
+        string='سجلات بها خطأ',
         readonly=True,
-        help='Fingerprint device logs in the Error state during this period.',
+        help='سجلات جهاز البصمة بحالة خطأ خلال هذه الفترة.',
     )

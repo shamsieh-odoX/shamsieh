@@ -4,11 +4,12 @@
         <field name="name">hr.attendance.summary.wizard.form</field>
         <field name="model">hr.attendance.summary.wizard</field>
         <field name="arch" type="xml">
-            <form string="Attendance Summary">
+            <form string="ملخص الدوام">
                 <header invisible="not line_ids">
                     <button name="action_refresh" type="object" string="Refresh"
                             class="btn-primary"/>
                     <button name="action_download_xlsx" type="object" string="Download Excel"/>
+                    <button name="action_download_docx" type="object" string="تنزيل وورد"/>
                 </header>
                 <sheet>
                     <group>
@@ -23,14 +24,14 @@
                     </div>
                     <field name="line_ids" invisible="not line_ids" nolabel="1">
                         <list create="false" edit="false" delete="false">
-                            <field name="employee_number"/>
-                            <field name="employee_id"/>
-                            <field name="attendance_days"/>
-                            <field name="total_hours"/>
-                            <field name="average_hours"/>
-                            <field name="average_check_in"/>
-                            <field name="days_without_punch"/>
-                            <field name="error_record_count"/>
+                            <field name="employee_number" string="#"/>
+                            <field name="employee_id" string="الموظف"/>
+                            <field name="attendance_days" string="أيام الحضور"/>
+                            <field name="total_hours" string="مجموع الساعات"/>
+                            <field name="average_hours" string="متوسط الساعات باليوم"/>
+                            <field name="average_check_in" string="متوسط وقت الحضور"/>
+                            <field name="days_without_punch" string="أيام بلا بصمة"/>
+                            <field name="error_record_count" string="سجلات بها خطأ"/>
                         </list>
                     </field>
                 </sheet>
@@ -38,6 +39,7 @@
                     <button name="action_open_report" type="object" string="Open Report"
                             class="btn-primary"/>
                     <button name="action_download_xlsx" type="object" string="Download Excel"/>
+                    <button name="action_download_docx" type="object" string="تنزيل وورد"/>
                     <button string="Cancel" special="cancel"/>
                 </footer>
             </form>
