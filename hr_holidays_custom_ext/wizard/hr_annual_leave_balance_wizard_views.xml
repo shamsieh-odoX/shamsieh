@@ -50,6 +50,7 @@
         <field name="res_model">hr.annual.leave.balance.wizard</field>
         <field name="view_mode">form</field>
         <field name="target">new</field>
+        <field name="groups_id" eval="[(6, 0, [ref('hr_holidays.group_hr_holidays_manager'), ref('base.group_system')])]"/>
     </record>
 
     <menuitem
@@ -57,6 +58,6 @@
         name="رصيد الإجازات السنوية"
         parent="hr_holidays.menu_hr_holidays_report"
         action="action_hr_annual_leave_balance_wizard"
-        groups="hr_holidays.group_hr_holidays_user"
+        groups="hr_holidays.group_hr_holidays_manager,base.group_system"
         sequence="4"/>
 </odoo>

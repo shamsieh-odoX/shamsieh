@@ -1,6 +1,6 @@
 {
     'name': 'HR Holidays Custom Extensions',
-    'version': '19.0.1.5.3',
+    'version': '19.0.1.5.4',
     'category': 'Human Resources/Time Off',
     'summary': 'Exceptional holidays, leave balance, sick/annual automation, and Article 11 hourly departures',
     'author': 'Custom',
