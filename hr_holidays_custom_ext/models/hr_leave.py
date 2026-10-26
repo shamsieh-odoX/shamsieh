@@ -37,6 +37,7 @@ class HrLeave(models.Model):
     is_hourly_departure_type = fields.Boolean(
         related='holiday_status_id.is_hourly_departure',
         string='Is Hourly Departure Type',
+        readonly=True,
     )
     hourly_departure_hours_applied = fields.Boolean(
         string='Hourly Departure Hours Applied',
