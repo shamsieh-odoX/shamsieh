@@ -2,6 +2,7 @@
 
 from datetime import date
 
+from odoo.exceptions import UserError
 from odoo.tests import tagged
 from odoo.tests.common import TransactionCase
 
@@ -15,13 +16,30 @@ class TestLeaveApprovalTrail(TransactionCase):
         cls.Leave = cls.env['hr.leave']
         cls.Trail = cls.env['hr.leave.approval.trail']
         cls.RefuseWizard = cls.env['hr.leave.refuse.wizard']
+        cls.company = cls.env.company
 
         cls.manager_user = cls.env['res.users'].create({
             'name': 'Leave Manager',
             'login': 'leave_mgr_test',
             'email': 'leave_mgr_test@test.com',
             'group_ids': [(6, 0, [
+                cls.env.ref('base.group_user').id,
+            ])],
+        })
+        cls.hr_user = cls.env['res.users'].create({
+            'name': 'HR Officer',
+            'login': 'leave_hr_test',
+            'email': 'leave_hr_test@test.com',
+            'group_ids': [(6, 0, [
                 cls.env.ref('hr_holidays.group_hr_holidays_user').id,
+                cls.env.ref('base.group_user').id,
+            ])],
+        })
+        cls.gm_user = cls.env['res.users'].create({
+            'name': 'GM / CEO',
+            'login': 'leave_gm_test',
+            'email': 'leave_gm_test@test.com',
+            'group_ids': [(6, 0, [
                 cls.env.ref('base.group_user').id,
             ])],
         })
@@ -33,30 +51,44 @@ class TestLeaveApprovalTrail(TransactionCase):
                 cls.env.ref('base.group_user').id,
             ])],
         })
-        cls.second_approver_user = cls.env['res.users'].create({
-            'name': 'Second Approver',
-            'login': 'leave_second_test',
-            'email': 'leave_second_test@test.com',
-            'group_ids': [(6, 0, [
-                cls.env.ref('hr_holidays.group_hr_holidays_manager').id,
-                cls.env.ref('base.group_user').id,
-            ])],
+        cls.no_mgr_user = cls.env['res.users'].create({
+            'name': 'No Manager Employee',
+            'login': 'leave_nomgr_test',
+            'email': 'leave_nomgr_test@test.com',
+            'group_ids': [(6, 0, [cls.env.ref('base.group_user').id])],
         })
 
         cls.manager_employee = cls.env['hr.employee'].create({
             'name': 'Leave Manager Emp',
             'user_id': cls.manager_user.id,
+            'company_id': cls.company.id,
         })
-        cls.second_approver = cls.env['hr.employee'].create({
-            'name': 'Second Approver Emp',
-            'user_id': cls.second_approver_user.id,
+        cls.hr_employee = cls.env['hr.employee'].create({
+            'name': 'HR Officer Emp',
+            'user_id': cls.hr_user.id,
+            'company_id': cls.company.id,
+        })
+        cls.gm_employee = cls.env['hr.employee'].create({
+            'name': 'GM Emp',
+            'user_id': cls.gm_user.id,
+            'company_id': cls.company.id,
         })
         cls.employee = cls.env['hr.employee'].create({
             'name': 'Leave Employee Emp',
             'user_id': cls.employee_user.id,
             'leave_manager_id': cls.manager_user.id,
             'parent_id': cls.manager_employee.id,
+            'company_id': cls.company.id,
         })
+        # Abrar-style: reports directly to GM/CEO → HR then GM (not manager→HR).
+        cls.employee_under_gm = cls.env['hr.employee'].create({
+            'name': 'Direct Report Of GM',
+            'user_id': cls.no_mgr_user.id,
+            'parent_id': cls.gm_employee.id,
+            'company_id': cls.company.id,
+        })
+
+        cls.company.time_off_gm_id = cls.gm_employee
 
         cls.leave_type_manager = cls.env['hr.leave.type'].create({
             'name': 'Manager Validated Leave',
@@ -69,10 +101,10 @@ class TestLeaveApprovalTrail(TransactionCase):
             'leave_validation_type': 'both',
         })
 
-    def _create_leave(self, leave_type):
+    def _create_leave(self, leave_type, employee=None):
         return self.Leave.create({
             'name': 'Approval Trail Test',
-            'employee_id': self.employee.id,
+            'employee_id': (employee or self.employee).id,
             'holiday_status_id': leave_type.id,
             'request_date_from': date(2026, 9, 1),
             'request_date_to': date(2026, 9, 2),
@@ -91,37 +123,52 @@ class TestLeaveApprovalTrail(TransactionCase):
         self.assertIn('submitted', stages)
         self.assertIn('first_approval', stages)
 
-    def test_both_validation_trail(self):
-        self.leave_type_both.responsible_ids = [(6, 0, [self.second_approver_user.id])]
+    def test_manager_then_hr_flow(self):
+        """Employee with middle manager: manager → HR."""
         leave = self._create_leave(self.leave_type_both)
+        self.assertEqual(leave.approval_flow, 'manager_hr')
+        self.assertEqual(leave.first_approver_display_id, self.manager_employee)
+        self.assertEqual(leave.second_approver_display_id, self.hr_employee)
+        self.assertTrue(leave.with_user(self.manager_user).can_approve)
+        self.assertFalse(leave.with_user(self.hr_user).can_approve)
+
         leave.with_user(self.manager_user).action_approve()
         self.assertEqual(leave.state, 'validate1')
         self.assertTrue(leave.approval_trail_ids.filtered(lambda line: line.stage == 'first_approval'))
-        # While waiting for second approval, show the Notify HR person by name.
-        self.assertEqual(leave.second_approver_display_id, self.second_approver)
-        # Manager who also has officer rights must not skip to fully approved.
+        self.assertEqual(leave.second_approver_display_id, self.hr_employee)
         self.assertFalse(leave.with_user(self.manager_user).can_validate)
-        # Second approver (GM / Time Off Admin) must see Validate / Approve.
-        self.assertTrue(leave.with_user(self.second_approver_user).can_validate)
-        leave.with_user(self.second_approver_user).action_approve()
+        self.assertTrue(leave.with_user(self.hr_user).can_validate)
+
+        leave.with_user(self.hr_user).action_approve()
         self.assertEqual(leave.state, 'validate')
-        self.assertEqual(leave.second_approver_id, self.second_approver)
-        self.assertEqual(leave.second_approver_display_id, self.second_approver)
+        self.assertEqual(leave.second_approver_id, self.hr_employee)
         self.assertTrue(leave.approval_trail_ids.filtered(lambda line: line.stage == 'second_approval'))
 
-    def test_notify_hr_responsible_can_second_approve(self):
-        self.leave_type_both.responsible_ids = [(6, 0, [self.second_approver_user.id])]
-        # Responsible without Time Off groups still second-approves via Notify HR.
-        self.second_approver_user.group_ids = [(6, 0, [self.env.ref('base.group_user').id])]
-        leave = self._create_leave(self.leave_type_both)
-        leave.with_user(self.manager_user).action_approve()
+    def test_hr_then_gm_for_direct_report_of_ceo(self):
+        """Like Abrar under Basem: HR first, then company GM."""
+        leave = self._create_leave(self.leave_type_both, employee=self.employee_under_gm)
+        self.assertEqual(leave.approval_flow, 'hr_gm')
+        self.assertEqual(leave.first_approver_display_id, self.hr_employee)
+        self.assertEqual(leave.second_approver_display_id, self.gm_employee)
+        self.assertTrue(leave.with_user(self.hr_user).can_approve)
+        self.assertFalse(leave.with_user(self.gm_user).can_approve)
+
+        leave.with_user(self.hr_user).action_approve()
         self.assertEqual(leave.state, 'validate1')
-        self.assertTrue(leave.with_user(self.second_approver_user).can_validate)
-        leave.with_user(self.second_approver_user).action_approve()
+        self.assertEqual(leave.second_approver_display_id, self.gm_employee)
+        self.assertTrue(leave.with_user(self.gm_user).can_validate)
+
+        leave.with_user(self.gm_user).action_approve()
         self.assertEqual(leave.state, 'validate')
+        self.assertEqual(leave.second_approver_id, self.gm_employee)
+
+    def test_missing_gm_raises_for_no_middle_manager(self):
+        self.company.time_off_gm_id = False
+        with self.assertRaises(UserError):
+            self._create_leave(self.leave_type_both, employee=self.employee_under_gm)
 
     def test_manager_with_officer_rights_cannot_skip_second_approval(self):
-        """Deputy GM who is Time Off Admin must still stop at first approval."""
+        """Manager who is also Time Off Admin must still stop at first approval."""
         self.manager_user.group_ids = [(4, self.env.ref('hr_holidays.group_hr_holidays_manager').id)]
         leave = self._create_leave(self.leave_type_both)
         leave.with_user(self.manager_user).action_approve()

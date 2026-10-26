@@ -19,11 +19,13 @@
                          placeholder="Special reason for this departure"/>
                 <field name="is_hourly_departure_conversion" invisible="1" readonly="1"/>
                 <field name="hourly_departure_hours_applied" invisible="1" readonly="1"/>
-                <!-- Odoo 19 form has no second_approver_id; show names for two-step leaves. -->
-                <field name="first_approver_id" string="First Approval" readonly="1"
-                         invisible="not first_approver_id"/>
+                <!-- Org-chart expected / actual approvers (per employee, not Notify HR). -->
+                <field name="first_approver_display_id" string="First Approval" readonly="1"
+                         invisible="validation_type != 'both'"/>
                 <field name="second_approver_display_id" string="Second Approval" readonly="1"
                          invisible="validation_type != 'both'"/>
+                <field name="approval_flow" string="Approval Flow" readonly="1"
+                         invisible="validation_type != 'both' or not approval_flow"/>
             </xpath>
         </field>
     </record>

@@ -90,15 +90,20 @@ class HrLeave(models.Model):
         return self.validation_type and self.validation_type != 'no_validation'
 
     def _get_org_manager_user(self):
-        """Return the direct manager user from ``parent_id``, or empty users.
+        """Return the middle-manager user from ``parent_id``, or empty users.
 
         Managers without a linked ``user_id`` are treated as missing (escalate).
+        If the parent is the company Time Off GM/CEO, treat as no middle manager
+        so the flow becomes HR → GM (e.g. Abrar under Basem).
         """
         self.ensure_one()
         manager = self.employee_id.parent_id
-        if manager and manager.user_id and manager.user_id.active:
-            return manager.user_id
-        return self.env['res.users']
+        if not manager or not manager.user_id or not manager.user_id.active:
+            return self.env['res.users']
+        gm_user = self._get_gm_user()
+        if gm_user and manager.user_id == gm_user:
+            return self.env['res.users']
+        return manager.user_id
 
     def _get_hr_officer_users(self):
         """Active Time Off Officers/Managers in the leave company."""

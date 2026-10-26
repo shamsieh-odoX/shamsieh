@@ -50,6 +50,13 @@ class ResCompany(models.Model):
         default=6.0,
         help='Maximum hourly departure hours allocated and allowed per employee per month.',
     )
+    time_off_gm_id = fields.Many2one(
+        'hr.employee',
+        string='Time Off General Manager',
+        help='Second approver when the employee has no middle manager in the org chart '
+             '(no parent, parent without a user, or parent is this GM/CEO). '
+             'Example: Abrar reports to the CEO → HR first, then this GM.',
+    )
 
     def _get_annual_leave_type(self):
         self.ensure_one()

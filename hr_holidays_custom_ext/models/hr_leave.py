@@ -23,11 +23,26 @@ class HrLeave(models.Model):
         compute='_compute_can_second_approve',
         export_string_translation=False,
     )
+    approval_flow = fields.Selection(
+        [
+            ('manager_hr', 'Manager then HR'),
+            ('hr_gm', 'HR then General Manager'),
+        ],
+        string='Approval Flow',
+        compute='_compute_org_approval_display',
+        help='Resolved from the employee org chart for two-step leave types.',
+    )
+    first_approver_display_id = fields.Many2one(
+        'hr.employee',
+        string='First Approval',
+        compute='_compute_org_approval_display',
+        help='Who did (or should do) the first approval for this employee.',
+    )
     second_approver_display_id = fields.Many2one(
         'hr.employee',
         string='Second Approval',
-        compute='_compute_second_approver_display_id',
-        help='Shows who did (or should do) the second approval.',
+        compute='_compute_org_approval_display',
+        help='Who did (or should do) the second approval for this employee.',
     )
     departure_reason = fields.Text(
         string='Departure Reason',
@@ -123,9 +138,13 @@ class HrLeave(models.Model):
     def create(self, vals_list):
         leaves = super().create(vals_list)
         leaves._log_submitted_trail()
+        for leave in leaves.filtered(lambda l: l.validation_type == 'both'):
+            # Validates GM is configured when the employee has no middle manager.
+            leave._resolve_org_approval_users()
         return leaves
 
     def _is_leave_manager(self):
+        """Legacy Time Off Approver (leave_manager_id) — used for single-step manager types."""
         self.ensure_one()
         return bool(
             self.employee_id.leave_manager_id
@@ -139,52 +158,179 @@ class HrLeave(models.Model):
             or user.has_group('hr_holidays.group_hr_holidays_manager')
         )
 
-    def _is_notify_hr_responsible(self):
-        """True when current user is on the leave type Notify HR list."""
+    def _routing_company(self):
         self.ensure_one()
-        return self.env.user in self.holiday_status_id.responsible_ids
+        return self.company_id or self.employee_id.company_id or self.env.company
+
+    def _get_gm_employee(self):
+        """Company-configured Time Off General Manager (e.g. Basem)."""
+        self.ensure_one()
+        return self._routing_company().time_off_gm_id
+
+    def _get_middle_manager_employee(self):
+        """Org-chart manager for step 1, excluding the company GM/CEO.
+
+        Direct reports of the GM (e.g. Abrar → Basem) use the HR → GM flow instead
+        of manager → HR, matching the business rule for employees without a middle manager.
+        """
+        self.ensure_one()
+        manager = self.employee_id.parent_id
+        if not manager or not manager.user_id or not manager.user_id.active:
+            return self.env['hr.employee']
+        gm = self._get_gm_employee()
+        if gm and manager == gm:
+            return self.env['hr.employee']
+        return manager
+
+    def _get_hr_officer_users(self):
+        """Active Time Off Officers/Managers in the leave company."""
+        self.ensure_one()
+        group = self.env.ref('hr_holidays.group_hr_holidays_user', raise_if_not_found=False)
+        if not group:
+            return self.env['res.users']
+        company = self._routing_company()
+        return group.user_ids.filtered(
+            lambda u: u.active and not u.share and company in u.company_ids
+        )
+
+    def _exclude_requester_users(self, users):
+        self.ensure_one()
+        requester = self.employee_id.user_id
+        if requester:
+            return users - requester
+        return users
+
+    def _resolve_org_approval_users(self):
+        """Compute step-1 / step-2 users from the org chart for two-step leaves.
+
+        * Has middle manager (``parent_id`` with user, not the company GM):
+          step 1 = that manager, step 2 = Time Off Officers (HR).
+        * No middle manager: step 1 = HR, step 2 = company Time Off GM.
+
+        :return: dict with keys flow, step1_users, step2_users, step1_employee, step2_employee
+        :raises UserError: when HR→GM is required but GM is missing / has no user
+        """
+        self.ensure_one()
+        manager = self._get_middle_manager_employee()
+        hr_users = self._get_hr_officer_users()
+        gm = self._get_gm_employee()
+        Employee = self.env['hr.employee']
+
+        if manager:
+            flow = 'manager_hr'
+            step1_users = self._exclude_requester_users(manager.user_id)
+            step2_users = self._exclude_requester_users(hr_users) - step1_users
+            step1_employee = manager if step1_users else Employee
+            step2_employee = (
+                step2_users[:1].employee_id if step2_users else Employee
+            )
+        else:
+            flow = 'hr_gm'
+            if not gm or not gm.user_id or not gm.user_id.active:
+                raise UserError(_(
+                    'Employee %(employee)s has no middle manager, and no Time Off '
+                    'General Manager is configured for company %(company)s. '
+                    'Set it under Settings → Employees → Time Off General Manager '
+                    '(e.g. Basem).',
+                    employee=self.employee_id.display_name,
+                    company=self._routing_company().display_name,
+                ))
+            step1_users = self._exclude_requester_users(hr_users)
+            step2_users = self._exclude_requester_users(gm.user_id)
+            # Same person cannot do both steps when an alternative exists.
+            if self.first_approver_id and self.first_approver_id.user_id:
+                alt = step2_users - self.first_approver_id.user_id
+                if alt:
+                    step2_users = alt
+            step1_employee = step1_users[:1].employee_id if step1_users else Employee
+            step2_employee = gm if step2_users else Employee
+
+        if self.first_approver_id and self.first_approver_id.user_id and flow == 'manager_hr':
+            alt = step2_users - self.first_approver_id.user_id
+            if alt:
+                step2_users = alt
+                step2_employee = step2_users[:1].employee_id if step2_users else step2_employee
+
+        if not step1_users:
+            raise UserError(_(
+                'No eligible first approver found for %(employee)s. '
+                'Check the org chart and Time Off Officer assignments.',
+                employee=self.employee_id.display_name,
+            ))
+        if not step2_users:
+            raise UserError(_(
+                'No eligible second approver found for %(employee)s. '
+                'Configure HR officers and/or the Time Off General Manager.',
+                employee=self.employee_id.display_name,
+            ))
+        return {
+            'flow': flow,
+            'step1_users': step1_users,
+            'step2_users': step2_users,
+            'step1_employee': step1_employee,
+            'step2_employee': step2_employee,
+        }
+
+    def _is_step1_approver(self):
+        """Current user may do first approval for this leave (org-chart step 1)."""
+        self.ensure_one()
+        if self._is_leave_requesting_user():
+            return False
+        try:
+            routing = self._resolve_org_approval_users()
+        except UserError:
+            return False
+        return self.env.user in routing['step1_users']
 
     def _is_second_approver_for_leave(self):
-        """GM / Time Off Officer / Notify HR — can do second approval."""
+        """Current user may do second approval (HR or GM depending on flow)."""
         self.ensure_one()
         if self._is_leave_requesting_user():
             return False
         if self._is_first_approver_user():
             return False
-        return self._is_time_off_officer() or self._is_notify_hr_responsible()
+        try:
+            routing = self._resolve_org_approval_users()
+        except UserError:
+            return False
+        return self.env.user in routing['step2_users']
 
     def _is_first_approver_user(self):
         self.ensure_one()
         employee = self.env.user.employee_id
         return bool(employee and self.first_approver_id and self.first_approver_id == employee)
 
-    def _get_expected_second_approver(self):
-        """Employee expected for second approval (Notify HR), excluding first approver."""
-        self.ensure_one()
-        first_user = self.first_approver_id.user_id if self.first_approver_id else False
-        for user in self.holiday_status_id.responsible_ids:
-            if first_user and user == first_user:
-                continue
-            if user.employee_id:
-                return user.employee_id
-        return self.env['hr.employee']
-
     @api.depends(
         'second_approver_id',
         'first_approver_id',
+        'employee_id',
+        'employee_id.parent_id',
+        'employee_id.parent_id.user_id',
+        'company_id',
+        'company_id.time_off_gm_id',
         'holiday_status_id',
-        'holiday_status_id.responsible_ids',
+        'holiday_status_id.leave_validation_type',
         'validation_type',
         'state',
     )
-    def _compute_second_approver_display_id(self):
+    def _compute_org_approval_display(self):
         for leave in self:
-            if leave.second_approver_id:
-                leave.second_approver_display_id = leave.second_approver_id
-            elif leave.validation_type == 'both':
-                leave.second_approver_display_id = leave._get_expected_second_approver()
-            else:
-                leave.second_approver_display_id = False
+            leave.approval_flow = False
+            leave.first_approver_display_id = False
+            leave.second_approver_display_id = False
+            if leave.validation_type != 'both' or not leave.employee_id:
+                continue
+            try:
+                routing = leave._resolve_org_approval_users()
+            except UserError:
+                continue
+            leave.approval_flow = routing['flow']
+            leave.first_approver_display_id = (
+                leave.first_approver_id or routing['step1_employee']
+            )
+            leave.second_approver_display_id = (
+                leave.second_approver_id or routing['step2_employee']
+            )
 
     @api.depends('state', 'employee_id', 'department_id', 'first_approver_id', 'holiday_status_id')
     @api.depends_context('uid')
@@ -196,7 +342,10 @@ class HrLeave(models.Model):
                 and holiday._is_second_approver_for_leave()
             )
 
-    @api.depends('state', 'employee_id', 'department_id', 'first_approver_id')
+    @api.depends(
+        'state', 'employee_id', 'department_id', 'first_approver_id',
+        'employee_id.parent_id', 'company_id.time_off_gm_id',
+    )
     @api.depends_context('uid')
     def _compute_can_approve(self):
         super()._compute_can_approve()
@@ -205,31 +354,33 @@ class HrLeave(models.Model):
                 holiday.can_approve = False
                 continue
             if holiday.validation_type == 'both':
-                # Only the employee's Time Off Approver may do first approval.
                 if holiday.state == 'confirm':
-                    holiday.can_approve = holiday._is_leave_manager()
+                    holiday.can_approve = holiday._is_step1_approver()
                 else:
                     holiday.can_approve = False
 
-    @api.depends('state', 'employee_id', 'department_id', 'first_approver_id', 'holiday_status_id')
+    @api.depends(
+        'state', 'employee_id', 'department_id', 'first_approver_id',
+        'holiday_status_id', 'employee_id.parent_id', 'company_id.time_off_gm_id',
+    )
     @api.depends_context('uid')
     def _compute_can_validate(self):
         super()._compute_can_validate()
         for holiday in self:
-            # Never allow self-approval, even if the employee is Time Off Admin.
             if holiday._is_leave_requesting_user():
                 holiday.can_validate = False
                 continue
             if holiday.validation_type != 'both':
                 continue
             if holiday.state == 'validate1':
-                # First approver cannot also validate; only GM / Notify HR.
                 holiday.can_validate = holiday._is_second_approver_for_leave()
             elif holiday.state == 'confirm':
-                # Block officers from skipping straight to validate.
                 holiday.can_validate = False
 
-    @api.depends('state', 'employee_id', 'department_id', 'first_approver_id', 'holiday_status_id')
+    @api.depends(
+        'state', 'employee_id', 'department_id', 'first_approver_id',
+        'holiday_status_id', 'employee_id.parent_id', 'company_id.time_off_gm_id',
+    )
     @api.depends_context('uid')
     def _compute_can_refuse(self):
         super()._compute_can_refuse()
@@ -240,14 +391,27 @@ class HrLeave(models.Model):
             if holiday.validation_type != 'both':
                 continue
             if holiday.state == 'confirm':
-                holiday.can_refuse = holiday._is_leave_manager()
+                holiday.can_refuse = holiday._is_step1_approver()
             elif holiday.state == 'validate1':
                 holiday.can_refuse = holiday._is_second_approver_for_leave()
             else:
                 holiday.can_refuse = False
 
+    def _get_responsible_for_approval(self):
+        """Point activities at the org-chart current-step approver(s)."""
+        self.ensure_one()
+        if self.validation_type == 'both' and self.state in ('confirm', 'validate1'):
+            try:
+                routing = self._resolve_org_approval_users()
+            except UserError:
+                return super()._get_responsible_for_approval()
+            if self.state == 'confirm':
+                return routing['step1_users']
+            return routing['step2_users']
+        return super()._get_responsible_for_approval()
+
     def _get_next_states_by_state(self):
-        """Employees may only cancel; two-step leaves follow manager then officer/GM."""
+        """Employees may only cancel; two-step leaves follow org-chart step roles."""
         state_result = super()._get_next_states_by_state()
         if self._is_leave_requesting_user():
             for source in list(state_result):
@@ -257,13 +421,12 @@ class HrLeave(models.Model):
             state_result['refuse'].add('cancel')
             return state_result
 
-        # Strict two-step: Approver = first only; Officer/GM/Notify HR = second only.
         if self.validation_type == 'both' and not self.env.is_superuser():
-            is_manager = self._is_leave_manager()
+            is_step1 = self._is_step1_approver()
             is_second = self._is_second_approver_for_leave()
             for source in list(state_result):
                 state_result[source] -= {'validate', 'validate1', 'refuse'}
-            if is_manager:
+            if is_step1:
                 state_result['confirm'].update({'validate1', 'refuse'})
             if is_second:
                 state_result['validate1'].update({'validate', 'refuse'})
@@ -278,16 +441,17 @@ class HrLeave(models.Model):
                     if raise_if_not_possible:
                         raise UserError(_(
                             'You cannot approve or refuse your own time off request. '
-                            'Wait for your manager / general manager.'
+                            'Wait for your manager / HR / general manager.'
                         ))
                     return False
                 if holiday.validation_type == 'both':
-                    is_manager = holiday._is_leave_manager()
+                    is_step1 = holiday._is_step1_approver()
                     is_second = holiday._is_second_approver_for_leave()
-                    if state == 'validate1' and not is_manager:
+                    if state == 'validate1' and not is_step1:
                         if raise_if_not_possible:
                             raise UserError(_(
-                                'Only the employee\'s Time Off Approver (manager) '
+                                'Only the employee\'s org-chart first approver '
+                                '(manager, or HR if they have no middle manager) '
                                 'can give the first approval.'
                             ))
                         return False
@@ -295,26 +459,33 @@ class HrLeave(models.Model):
                         if raise_if_not_possible:
                             raise UserError(_(
                                 'This time off type needs two approvals. '
-                                'The manager must approve first, then the General Manager / Time Off Officer.'
+                                'Complete the first approval before the second.'
                             ))
                         return False
                     if state == 'validate' and holiday.state == 'validate1' and holiday._is_first_approver_user():
                         if raise_if_not_possible:
                             raise UserError(_(
                                 'You already did the first approval. '
-                                'The General Manager / Time Off Officer must do the second approval.'
+                                'The second approver (HR or General Manager) must continue.'
                             ))
                         return False
                     if state == 'validate' and holiday.state == 'validate1' and not is_second:
                         if raise_if_not_possible:
                             raise UserError(_(
-                                'Only a Time Off Officer / General Manager can give the second approval.'
+                                'Only the current second approver (HR or General Manager) '
+                                'can give the second approval.'
                             ))
                         return False
-                    if state == 'refuse' and holiday.state == 'validate1' and not is_second and not is_manager:
+                    if state == 'refuse' and holiday.state == 'confirm' and not is_step1:
                         if raise_if_not_possible:
                             raise UserError(_(
-                                'Only the Time Off Approver or General Manager can refuse this request.'
+                                'Only the current first approver can refuse this request.'
+                            ))
+                        return False
+                    if state == 'refuse' and holiday.state == 'validate1' and not is_second:
+                        if raise_if_not_possible:
+                            raise UserError(_(
+                                'Only the current second approver can refuse this request.'
                             ))
                         return False
         return super()._check_approval_update(state, raise_if_not_possible=raise_if_not_possible)
@@ -596,11 +767,11 @@ class HrLeave(models.Model):
 
     def action_approve(self, check_state=True):
         self._assert_not_self_approval(_('approve'))
-        # Force first-step-only when the Time Off Approver also has officer rights.
+        # Force first-step-only when the org-chart step-1 approver also has officer rights.
         both_confirm = self.filtered(
             lambda leave: leave.validation_type == 'both'
             and leave.state == 'confirm'
-            and leave._is_leave_manager()
+            and leave._is_step1_approver()
         )
         other = self - both_confirm
         pre_states = {leave.id: leave.state for leave in self}
