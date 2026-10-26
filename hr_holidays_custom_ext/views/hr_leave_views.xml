@@ -18,6 +18,14 @@
                 <field name="is_hourly_departure_conversion" invisible="1"/>
                 <field name="hourly_departure_hours_applied" invisible="1"/>
             </xpath>
+            <!-- Show who should do / did second approval (standard field stays empty until validate). -->
+            <xpath expr="//field[@name='second_approver_id']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='second_approver_id']" position="after">
+                <field name="second_approver_display_id" string="Second Approval" readonly="1"
+                         invisible="validation_type != 'both'"/>
+            </xpath>
         </field>
     </record>
 

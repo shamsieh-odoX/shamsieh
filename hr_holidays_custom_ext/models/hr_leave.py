@@ -23,6 +23,12 @@ class HrLeave(models.Model):
         compute='_compute_can_second_approve',
         export_string_translation=False,
     )
+    second_approver_display_id = fields.Many2one(
+        'hr.employee',
+        string='Second Approval',
+        compute='_compute_second_approver_display_id',
+        help='Shows who did (or should do) the second approval.',
+    )
     departure_reason = fields.Text(
         string='Departure Reason',
         copy=False,
@@ -150,6 +156,34 @@ class HrLeave(models.Model):
         self.ensure_one()
         employee = self.env.user.employee_id
         return bool(employee and self.first_approver_id and self.first_approver_id == employee)
+
+    def _get_expected_second_approver(self):
+        """Employee expected for second approval (Notify HR), excluding first approver."""
+        self.ensure_one()
+        first_user = self.first_approver_id.user_id if self.first_approver_id else False
+        for user in self.holiday_status_id.responsible_ids:
+            if first_user and user == first_user:
+                continue
+            if user.employee_id:
+                return user.employee_id
+        return self.env['hr.employee']
+
+    @api.depends(
+        'second_approver_id',
+        'first_approver_id',
+        'holiday_status_id',
+        'holiday_status_id.responsible_ids',
+        'validation_type',
+        'state',
+    )
+    def _compute_second_approver_display_id(self):
+        for leave in self:
+            if leave.second_approver_id:
+                leave.second_approver_display_id = leave.second_approver_id
+            elif leave.validation_type == 'both':
+                leave.second_approver_display_id = leave._get_expected_second_approver()
+            else:
+                leave.second_approver_display_id = False
 
     @api.depends('state', 'employee_id', 'department_id', 'first_approver_id', 'holiday_status_id')
     @api.depends_context('uid')
@@ -631,9 +665,11 @@ class HrLeave(models.Model):
             if leave.state != 'validate':
                 continue
             if leave.validation_type == 'both' and pre_states[leave.id] == 'validate1':
+                if current_employee and not leave.second_approver_id:
+                    leave.second_approver_id = current_employee.id
                 leave._create_approval_trail(
                     'second_approval',
-                    approver=current_employee,
+                    approver=current_employee or leave.second_approver_id,
                     trail_state='approved',
                 )
             elif not leave._has_trail_stage('first_approval'):
