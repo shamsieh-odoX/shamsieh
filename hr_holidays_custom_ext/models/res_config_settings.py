@@ -54,6 +54,11 @@ class ResConfigSettings(models.TransientModel):
         related='company_id.hourly_departure_max_hours_month',
         readonly=False,
     )
+    time_off_hr_id = fields.Many2one(
+        related='company_id.time_off_hr_id',
+        readonly=False,
+        string='Time Off HR Approver',
+    )
     time_off_gm_id = fields.Many2one(
         related='company_id.time_off_gm_id',
         readonly=False,

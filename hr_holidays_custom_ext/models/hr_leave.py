@@ -162,16 +162,24 @@ class HrLeave(models.Model):
         self.ensure_one()
         return self.company_id or self.employee_id.company_id or self.env.company
 
+    def _get_hr_employee(self):
+        """Company-configured Time Off HR (e.g. Ozlam) — always the HR role in the chain."""
+        self.ensure_one()
+        return self._routing_company().time_off_hr_id
+
     def _get_gm_employee(self):
         """Company-configured Time Off General Manager (e.g. Basem)."""
         self.ensure_one()
         return self._routing_company().time_off_gm_id
 
     def _get_middle_manager_employee(self):
-        """Org-chart manager for step 1, excluding the company GM/CEO.
+        """Org-chart middle manager for step 1 (e.g. Abdullah for IT staff).
 
-        Direct reports of the GM (e.g. Abrar → Basem) use the HR → GM flow instead
-        of manager → HR, matching the business rule for employees without a middle manager.
+        Not a middle manager when:
+        - no ``parent_id`` / no linked user
+        - parent is the configured GM
+        - parent is the top of the org (parent has no ``parent_id``), e.g. Abrar → Basem
+        Those cases use HR → GM instead.
         """
         self.ensure_one()
         manager = self.employee_id.parent_id
@@ -180,18 +188,16 @@ class HrLeave(models.Model):
         gm = self._get_gm_employee()
         if gm and manager == gm:
             return self.env['hr.employee']
+        # Top of org chart (CEO/GM with no manager above) is not a "middle" manager.
+        if not manager.parent_id:
+            return self.env['hr.employee']
         return manager
 
-    def _get_hr_officer_users(self):
-        """Active Time Off Officers/Managers in the leave company."""
-        self.ensure_one()
-        group = self.env.ref('hr_holidays.group_hr_holidays_user', raise_if_not_found=False)
-        if not group:
-            return self.env['res.users']
-        company = self._routing_company()
-        return group.user_ids.filtered(
-            lambda u: u.active and not u.share and company in u.company_ids
-        )
+    def _user_for_employee(self, employee):
+        """Return the linked active user for an employee, or empty users."""
+        if employee and employee.user_id and employee.user_id.active:
+            return employee.user_id
+        return self.env['res.users']
 
     def _exclude_requester_users(self, users):
         self.ensure_one()
@@ -201,66 +207,77 @@ class HrLeave(models.Model):
         return users
 
     def _resolve_org_approval_users(self):
-        """Compute step-1 / step-2 users from the org chart for two-step leaves.
+        """Compute step-1 / step-2 from org chart + company HR/GM settings.
 
-        * Has middle manager (``parent_id`` with user, not the company GM):
-          step 1 = that manager, step 2 = Time Off Officers (HR).
-        * No middle manager: step 1 = HR, step 2 = company Time Off GM.
+        * Has middle manager (e.g. MohammadNoor → Abdullah):
+          step 1 = that manager, step 2 = configured HR (Ozlam) — always.
+        * No middle manager (e.g. Abrar / Abdullah → Basem at top):
+          step 1 = configured HR (Ozlam), step 2 = configured GM (Basem).
 
         :return: dict with keys flow, step1_users, step2_users, step1_employee, step2_employee
-        :raises UserError: when HR→GM is required but GM is missing / has no user
+        :raises UserError: when required HR/GM is missing or has no user
         """
         self.ensure_one()
         manager = self._get_middle_manager_employee()
-        hr_users = self._get_hr_officer_users()
+        hr = self._get_hr_employee()
         gm = self._get_gm_employee()
         Employee = self.env['hr.employee']
+        company = self._routing_company()
+
+        hr_user = self._user_for_employee(hr)
+        if not hr_user:
+            raise UserError(_(
+                'Configure Time Off HR Approver for company %(company)s '
+                '(Settings → Time Off HR Approver, e.g. Ozlam). '
+                'The employee must be linked to a user.',
+                company=company.display_name,
+            ))
 
         if manager:
             flow = 'manager_hr'
             step1_users = self._exclude_requester_users(manager.user_id)
-            step2_users = self._exclude_requester_users(hr_users) - step1_users
+            step2_users = self._exclude_requester_users(hr_user) - step1_users
             step1_employee = manager if step1_users else Employee
-            step2_employee = (
-                step2_users[:1].employee_id if step2_users else Employee
-            )
+            step2_employee = hr if step2_users else Employee
         else:
             flow = 'hr_gm'
-            if not gm or not gm.user_id or not gm.user_id.active:
+            gm_user = self._user_for_employee(gm)
+            if not gm_user:
                 raise UserError(_(
                     'Employee %(employee)s has no middle manager, and no Time Off '
                     'General Manager is configured for company %(company)s. '
-                    'Set it under Settings → Employees → Time Off General Manager '
-                    '(e.g. Basem).',
+                    'Set Time Off General Manager (e.g. Basem) under Settings.',
                     employee=self.employee_id.display_name,
-                    company=self._routing_company().display_name,
+                    company=company.display_name,
                 ))
-            step1_users = self._exclude_requester_users(hr_users)
-            step2_users = self._exclude_requester_users(gm.user_id)
-            # Same person cannot do both steps when an alternative exists.
+            step1_users = self._exclude_requester_users(hr_user)
+            step2_users = self._exclude_requester_users(gm_user)
             if self.first_approver_id and self.first_approver_id.user_id:
                 alt = step2_users - self.first_approver_id.user_id
                 if alt:
                     step2_users = alt
-            step1_employee = step1_users[:1].employee_id if step1_users else Employee
+            step1_employee = hr if step1_users else Employee
             step2_employee = gm if step2_users else Employee
 
         if self.first_approver_id and self.first_approver_id.user_id and flow == 'manager_hr':
             alt = step2_users - self.first_approver_id.user_id
             if alt:
                 step2_users = alt
-                step2_employee = step2_users[:1].employee_id if step2_users else step2_employee
+            # Display stays the configured HR even if rights were adjusted.
+            if hr_user and hr_user in step2_users:
+                step2_employee = hr
 
         if not step1_users:
             raise UserError(_(
                 'No eligible first approver found for %(employee)s. '
-                'Check the org chart and Time Off Officer assignments.',
+                'Check the org chart (Manager) and Time Off HR Approver.',
                 employee=self.employee_id.display_name,
             ))
         if not step2_users:
             raise UserError(_(
                 'No eligible second approver found for %(employee)s. '
-                'Configure HR officers and/or the Time Off General Manager.',
+                'Configure Time Off HR Approver and Time Off General Manager '
+                '(and ensure they are not the same as the requester).',
                 employee=self.employee_id.display_name,
             ))
         return {
@@ -270,7 +287,6 @@ class HrLeave(models.Model):
             'step1_employee': step1_employee,
             'step2_employee': step2_employee,
         }
-
     def _is_step1_approver(self):
         """Current user may do first approval for this leave (org-chart step 1)."""
         self.ensure_one()
@@ -307,7 +323,9 @@ class HrLeave(models.Model):
         'employee_id.parent_id',
         'employee_id.parent_id.user_id',
         'company_id',
+        'company_id.time_off_hr_id',
         'company_id.time_off_gm_id',
+        'employee_id.parent_id.parent_id',
         'holiday_status_id',
         'holiday_status_id.leave_validation_type',
         'validation_type',
