@@ -1,6 +1,6 @@
 {
     'name': 'HR Holidays Custom Extensions',
-    'version': '19.0.1.5.0',
+    'version': '19.0.1.5.1',
     'category': 'Human Resources/Time Off',
     'summary': 'Exceptional holidays, leave balance, sick/annual automation, and Article 11 hourly departures',
     'author': 'Custom',
@@ -33,6 +33,7 @@
         'wizard/hr_sick_leave_renewal_wizard_views.xml',
         'wizard/hr_annual_leave_carryover_wizard_views.xml',
         'wizard/hr_hourly_departure_allocation_wizard_views.xml',
+        'wizard/hr_annual_leave_balance_wizard_views.xml',
         'report/hr_leave_approval_report.xml',
     ],
     'installable': True,

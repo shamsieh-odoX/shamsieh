@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="hr_annual_leave_balance_wizard_view_form" model="ir.ui.view">
+        <field name="name">hr.annual.leave.balance.wizard.form</field>
+        <field name="model">hr.annual.leave.balance.wizard</field>
+        <field name="arch" type="xml">
+            <form string="رصيد الإجازات السنوية">
+                <header invisible="not line_ids">
+                    <button name="action_refresh" type="object" string="تحديث" class="btn-primary"/>
+                    <button name="action_download_xlsx" type="object" string="تنزيل إكسل"/>
+                    <button name="action_download_docx" type="object" string="تنزيل وورد"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="as_of_date"/>
+                            <field name="days_per_year"/>
+                            <field name="days_after_five_years"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                    </group>
+                    <div class="text-muted mb-3" invisible="not line_ids">
+                        <field name="footnote" nolabel="1" readonly="1"/>
+                    </div>
+                    <field name="line_ids" invisible="not line_ids" nolabel="1">
+                        <list create="false" edit="false" delete="false">
+                            <field name="sequence" string="#"/>
+                            <field name="employee_id" string="اسم الموظف"/>
+                            <field name="joining_date" string="تاريخ الالتحاق"/>
+                            <field name="service_days" string="عدد الأيام منذ الالتحاق حتى اليوم"/>
+                            <field name="service_years" string="مدة الخدمة (سنة)"/>
+                            <field name="accrued_days" string="الأيام المستحقة حتى اليوم" sum="المجموع"/>
+                            <field name="taken_days" string="الأيام المأخوذة" sum="المجموع"/>
+                            <field name="remaining_days" string="الرصيد المتبقي" sum="المجموع"/>
+                        </list>
+                    </field>
+                </sheet>
+                <footer invisible="line_ids">
+                    <button name="action_open_report" type="object" string="فتح التقرير" class="btn-primary"/>
+                    <button name="action_download_xlsx" type="object" string="تنزيل إكسل"/>
+                    <button name="action_download_docx" type="object" string="تنزيل وورد"/>
+                    <button string="إلغاء" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_hr_annual_leave_balance_wizard" model="ir.actions.act_window">
+        <field name="name">رصيد الإجازات السنوية</field>
+        <field name="res_model">hr.annual.leave.balance.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+</odoo>
