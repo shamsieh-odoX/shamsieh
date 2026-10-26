@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="hr_leave_view_form_custom_approval" model="ir.ui.view">
+        <field name="name">hr.leave.form.custom.approval</field>
+        <field name="model">hr.leave</field>
+        <field name="inherit_id" ref="hr_holidays.hr_leave_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='holiday_status_id']" position="after">
+                <field name="approval_flow" readonly="1"
+                         invisible="not approval_flow"/>
+                <field name="approval_step" readonly="1"
+                         invisible="approval_step in ('none', False)"/>
+                <field name="current_approver_display" readonly="1"
+                         invisible="not current_approver_display"/>
+                <field name="step1_user_ids" widget="many2many_tags" readonly="1"
+                         invisible="not step1_user_ids"/>
+                <field name="step2_user_ids" widget="many2many_tags" readonly="1"
+                         invisible="not step2_user_ids"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="hr_leave_view_tree_custom_approval" model="ir.ui.view">
+        <field name="name">hr.leave.list.custom.approval</field>
+        <field name="model">hr.leave</field>
+        <field name="inherit_id" ref="hr_holidays.hr_leave_view_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='state']" position="before">
+                <field name="approval_step" optional="show"/>
+                <field name="current_approver_display" string="Current Approver" optional="show"/>
+                <field name="approval_flow" optional="hide"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

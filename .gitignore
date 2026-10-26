@@ -23,3 +23,6 @@ venv/
 
 # Runtime / logs
 *.log
+
+# Local Odoo 19 reference clones (not shipped)
+_odoo19_ref/

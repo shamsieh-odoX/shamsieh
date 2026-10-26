@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="module_category_hr_holidays_custom_approval" model="ir.module.category">
+        <field name="name">Time Off Custom Approval</field>
+        <field name="description">Org-chart based Time Off approval</field>
+        <field name="sequence">26</field>
+    </record>
+
+    <!-- Informational / assignment group. Approver identity comes from company GM setting. -->
+    <record id="group_hr_holidays_gm" model="res.groups">
+        <field name="name">Time Off GM</field>
+        <field name="category_id" ref="module_category_hr_holidays_custom_approval"/>
+        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        <field name="comment">
+            Members are General Managers for Time Off second approval when the employee
+            has no org-chart manager. Configure the GM employee under Settings → Time Off.
+        </field>
+    </record>
+
+    <!-- Allow the live current-step approver to write the leave (needed when parent ≠ leave_manager). -->
+    <record id="hr_leave_rule_current_approver_update" model="ir.rule">
+        <field name="name">Time Off: current custom approver can update</field>
+        <field name="model_id" ref="hr_holidays.model_hr_leave"/>
+        <field name="domain_force">[('current_approver_user_ids', 'in', user.id)]</field>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="True"/>
+        <field name="perm_create" eval="False"/>
+        <field name="perm_unlink" eval="False"/>
+        <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+    </record>
+</odoo>
