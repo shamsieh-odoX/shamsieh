@@ -14,8 +14,8 @@
                     <group>
                         <group>
                             <field name="as_of_date"/>
-                            <field name="days_per_year"/>
-                            <field name="days_after_five_years"/>
+                            <field name="days_per_year" readonly="1"/>
+                            <field name="days_after_five_years" readonly="1"/>
                             <field name="company_id" groups="base.group_multi_company"/>
                         </group>
                     </group>

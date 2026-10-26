@@ -233,8 +233,8 @@ class HrAnnualLeaveBalanceWizard(models.TransientModel):
         required=True,
         default=fields.Date.context_today,
     )
-    days_per_year = fields.Integer(string='أيام الإجازة سنوياً', required=True, default=14)
-    days_after_five_years = fields.Integer(string='بعد 5 سنوات خدمة', required=True, default=21)
+    days_per_year = fields.Integer(string='أيام الإجازة سنوياً', required=True, readonly=True, default=14)
+    days_after_five_years = fields.Integer(string='بعد 5 سنوات خدمة', required=True, readonly=True, default=21)
     company_id = fields.Many2one(
         'res.company',
         string='الشركة',
