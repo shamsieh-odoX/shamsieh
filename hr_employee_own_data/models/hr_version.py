@@ -44,3 +44,9 @@ class HrVersion(models.Model):
     spouse_complete_name = fields.Char(groups=_OWN)
     spouse_birthdate = fields.Date(groups=_OWN)
     children = fields.Integer(groups=_OWN)
+    has_job = fields.Selection(
+        [('yes', 'Yes'), ('no', 'No')],
+        string='Has a Job',
+        groups=_OWN,
+        tracking=True,
+    )
