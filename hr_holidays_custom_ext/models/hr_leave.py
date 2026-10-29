@@ -26,7 +26,7 @@ class HrLeave(models.Model):
     approval_flow = fields.Selection(
         [
             ('manager_hr', 'Manager then HR'),
-            ('hr_gm', 'HR then General Manager'),
+            ('gm_hr', 'General Manager then HR'),
         ],
         string='Approval Flow',
         compute='_compute_org_approval_display',
@@ -173,13 +173,14 @@ class HrLeave(models.Model):
         return self._routing_company().time_off_gm_id
 
     def _get_middle_manager_employee(self):
-        """Org-chart middle manager for step 1 (e.g. Abdullah for IT staff).
+        """Org-chart middle manager for step 1 (e.g. Abdullah for MohammadNoor).
 
         Not a middle manager when:
         - no ``parent_id`` / no linked user
         - parent is the configured GM
-        - parent is the top of the org (parent has no ``parent_id``), e.g. Abrar → Basem
-        Those cases use HR → GM instead.
+        - parent is the top of the org (parent has no ``parent_id``), e.g. Abdullah/Ibraheem/Ozlam → Basem
+
+        Those cases use General Manager → HR (Basem then Ozlam).
         """
         self.ensure_one()
         manager = self.employee_id.parent_id
@@ -210,9 +211,9 @@ class HrLeave(models.Model):
         """Compute step-1 / step-2 from org chart + company HR/GM settings.
 
         * Has middle manager (e.g. MohammadNoor → Abdullah):
-          step 1 = that manager, step 2 = configured HR (Ozlam) — always.
-        * No middle manager (e.g. Abrar / Abdullah → Basem at top):
-          step 1 = configured HR (Ozlam), step 2 = configured GM (Basem).
+          step 1 = that manager, step 2 = configured HR (Ozlam).
+        * No middle manager (e.g. Abdullah / Ibraheem / Ozlam → Basem at top):
+          step 1 = configured GM (Basem), step 2 = configured HR (Ozlam).
 
         :return: dict with keys flow, step1_users, step2_users, step1_employee, step2_employee
         :raises UserError: when required HR/GM is missing or has no user
@@ -228,7 +229,7 @@ class HrLeave(models.Model):
         if not hr_user:
             raise UserError(_(
                 'Configure Time Off HR Approver for company %(company)s '
-                '(Settings → Time Off HR Approver, e.g. Ozlam). '
+                '(Settings → Employees → Time Off HR Approver, e.g. Ozlam). '
                 'The employee must be linked to a user.',
                 company=company.display_name,
             ))
@@ -240,44 +241,45 @@ class HrLeave(models.Model):
             step1_employee = manager if step1_users else Employee
             step2_employee = hr if step2_users else Employee
         else:
-            flow = 'hr_gm'
+            flow = 'gm_hr'
             gm_user = self._user_for_employee(gm)
             if not gm_user:
                 raise UserError(_(
                     'Employee %(employee)s has no middle manager, and no Time Off '
                     'General Manager is configured for company %(company)s. '
-                    'Set Time Off General Manager (e.g. Basem) under Settings.',
+                    'Set Time Off General Manager (e.g. Basem) under '
+                    'Settings → Employees.',
                     employee=self.employee_id.display_name,
                     company=company.display_name,
                 ))
-            step1_users = self._exclude_requester_users(hr_user)
-            step2_users = self._exclude_requester_users(gm_user)
+            step1_users = self._exclude_requester_users(gm_user)
+            step2_users = self._exclude_requester_users(hr_user) - step1_users
             if self.first_approver_id and self.first_approver_id.user_id:
                 alt = step2_users - self.first_approver_id.user_id
                 if alt:
                     step2_users = alt
-            step1_employee = hr if step1_users else Employee
-            step2_employee = gm if step2_users else Employee
+            step1_employee = gm if step1_users else Employee
+            step2_employee = hr if step2_users else Employee
 
-        if self.first_approver_id and self.first_approver_id.user_id and flow == 'manager_hr':
+        if self.first_approver_id and self.first_approver_id.user_id:
             alt = step2_users - self.first_approver_id.user_id
             if alt:
                 step2_users = alt
-            # Display stays the configured HR even if rights were adjusted.
             if hr_user and hr_user in step2_users:
                 step2_employee = hr
 
         if not step1_users:
             raise UserError(_(
                 'No eligible first approver found for %(employee)s. '
-                'Check the org chart (Manager) and Time Off HR Approver.',
+                'Check the org chart and Time Off General Manager / Manager.',
                 employee=self.employee_id.display_name,
             ))
         if not step2_users:
             raise UserError(_(
                 'No eligible second approver found for %(employee)s. '
-                'Configure Time Off HR Approver and Time Off General Manager '
-                '(and ensure they are not the same as the requester).',
+                'Configure Time Off HR Approver (Ozlam). If the requester is HR, '
+                'they cannot approve their own second step — assign another HR '
+                'or have a deputy.',
                 employee=self.employee_id.display_name,
             ))
         return {

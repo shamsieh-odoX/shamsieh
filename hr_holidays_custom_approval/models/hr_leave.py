@@ -4,10 +4,10 @@
 
 Flow (leave types with validation other than ``no_validation`` use ``both`` states):
 
-* Employee **has** a usable manager (``parent_id`` with ``user_id``):
-  Step 1 (``confirm``) → manager · Step 2 (``validate1``) → HR officer → ``validate``
-* Employee **has no** usable manager:
-  Step 1 (``confirm``) → HR officer · Step 2 (``validate1``) → company GM → ``validate``
+* Employee **has** a middle manager:
+  Step 1 (``confirm``) → manager · Step 2 (``validate1``) → HR → ``validate``
+* Employee **has no** middle manager (reports to CEO/GM):
+  Step 1 (``confirm``) → company GM · Step 2 (``validate1``) → HR → ``validate``
 
 **Manager change while pending:** step roles and ``current_approver_user_ids`` are
 recomputed from the live org chart / company GM for open requests (``confirm`` /

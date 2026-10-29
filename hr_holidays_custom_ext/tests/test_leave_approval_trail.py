@@ -157,28 +157,28 @@ class TestLeaveApprovalTrail(TransactionCase):
         self.assertEqual(leave.state, 'validate')
         self.assertEqual(leave.second_approver_id, self.hr_employee)
 
-    def test_hr_then_gm_for_direct_report_of_ceo(self):
-        """Abrar-style under Basem: configured HR then configured GM."""
+    def test_gm_then_hr_for_direct_report_of_ceo(self):
+        """Abdullah / Ibraheem / Abrar under Basem: GM first, then HR."""
         leave = self._create_leave(self.leave_type_both, employee=self.employee_under_gm)
-        self.assertEqual(leave.approval_flow, 'hr_gm')
-        self.assertEqual(leave.first_approver_display_id, self.hr_employee)
-        self.assertEqual(leave.second_approver_display_id, self.gm_employee)
-
-        leave.with_user(self.hr_user).action_approve()
-        self.assertEqual(leave.state, 'validate1')
-        self.assertEqual(leave.second_approver_display_id, self.gm_employee)
-        self.assertTrue(leave.with_user(self.gm_user).can_validate)
+        self.assertEqual(leave.approval_flow, 'gm_hr')
+        self.assertEqual(leave.first_approver_display_id, self.gm_employee)
+        self.assertEqual(leave.second_approver_display_id, self.hr_employee)
 
         leave.with_user(self.gm_user).action_approve()
-        self.assertEqual(leave.state, 'validate')
-        self.assertEqual(leave.second_approver_id, self.gm_employee)
+        self.assertEqual(leave.state, 'validate1')
+        self.assertEqual(leave.second_approver_display_id, self.hr_employee)
+        self.assertTrue(leave.with_user(self.hr_user).can_validate)
 
-    def test_abdullah_as_middle_manager_own_leave_is_hr_then_gm(self):
-        """Abdullah reports to Basem (top) → his own leave is Ozlam then Basem."""
+        leave.with_user(self.hr_user).action_approve()
+        self.assertEqual(leave.state, 'validate')
+        self.assertEqual(leave.second_approver_id, self.hr_employee)
+
+    def test_abdullah_own_leave_is_gm_then_hr(self):
+        """Abdullah reports to Basem (top) → Basem then Ozlam."""
         leave = self._create_leave(self.leave_type_both, employee=self.manager_employee)
-        self.assertEqual(leave.approval_flow, 'hr_gm')
-        self.assertEqual(leave.first_approver_display_id, self.hr_employee)
-        self.assertEqual(leave.second_approver_display_id, self.gm_employee)
+        self.assertEqual(leave.approval_flow, 'gm_hr')
+        self.assertEqual(leave.first_approver_display_id, self.gm_employee)
+        self.assertEqual(leave.second_approver_display_id, self.hr_employee)
 
     def test_missing_hr_raises(self):
         self.company.time_off_hr_id = False

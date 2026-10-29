@@ -53,16 +53,16 @@ class ResCompany(models.Model):
     time_off_hr_id = fields.Many2one(
         'hr.employee',
         string='Time Off HR Approver',
-        help='Always the HR person in the two-step chain (e.g. Ozlam). '
+        help='Always the HR person as second approval (e.g. Ozlam). '
              'With a middle manager: Manager → this HR. '
-             'Without a middle manager: this HR → General Manager.',
+             'Without a middle manager: General Manager → this HR.',
     )
     time_off_gm_id = fields.Many2one(
         'hr.employee',
         string='Time Off General Manager',
-        help='Second approver when the employee has no middle manager '
-             '(no parent, or parent is the top of the org / this GM). '
-             'Example: Abrar under Basem → HR first, then this GM (Basem).',
+        help='First approver when the employee has no middle manager '
+             '(reports directly to the top of the org / this GM). '
+             'Example: Abdullah / Ibraheem / Ozlam → Basem first, then HR.',
     )
 
     def _get_annual_leave_type(self):
