@@ -13,7 +13,7 @@
     </record>
 
     <menuitem id="menu_attendance_summary_report"
-              name="Monthly Attendance Summary"
+              name="Attendance Summary"
               parent="hr_attendance.menu_hr_attendance_reporting"
               action="action_hr_attendance_summary_wizard"
               sequence="4"

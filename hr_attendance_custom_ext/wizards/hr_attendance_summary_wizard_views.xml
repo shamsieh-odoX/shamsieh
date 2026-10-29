@@ -14,8 +14,8 @@
                 <sheet>
                     <group>
                         <group>
-                            <field name="summary_month"/>
-                            <field name="summary_year"/>
+                            <field name="date_from"/>
+                            <field name="date_to"/>
                             <field name="company_id" groups="base.group_multi_company"/>
                         </group>
                     </group>
@@ -47,7 +47,7 @@
     </record>
 
     <record id="action_hr_attendance_summary_wizard" model="ir.actions.act_window">
-        <field name="name">Monthly Attendance Summary</field>
+        <field name="name">Attendance Summary</field>
         <field name="res_model">hr.attendance.summary.wizard</field>
         <field name="view_mode">form</field>
         <field name="target">new</field>

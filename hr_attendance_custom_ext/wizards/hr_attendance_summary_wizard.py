@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 import base64
-import calendar
 import io
 import zipfile
 from datetime import timedelta
@@ -9,28 +8,12 @@ from pathlib import Path
 from xml.sax.saxutils import escape
 
 from odoo import _, api, fields, models
-from odoo.exceptions import UserError
+from odoo.exceptions import UserError, ValidationError
 
 AR_MONTHS = (
     'يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو',
     'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر',
 )
-SUMMARY_MONTHS = [
-    ('1', 'January'),
-    ('2', 'February'),
-    ('3', 'March'),
-    ('4', 'April'),
-    ('5', 'May'),
-    ('6', 'June'),
-    ('7', 'July'),
-    ('8', 'August'),
-    ('9', 'September'),
-    ('10', 'October'),
-    ('11', 'November'),
-    ('12', 'December'),
-]
-
-
 def format_hhmm(minutes):
     rounded = int(round(minutes)) % (24 * 60)
     return '%02d:%02d' % (rounded // 60, rounded % 60)
@@ -278,19 +261,16 @@ class HrAttendanceSummaryWizard(models.TransientModel):
     _name = 'hr.attendance.summary.wizard'
     _description = 'Attendance Summary Report'
 
-    summary_month = fields.Selection(
-        selection=SUMMARY_MONTHS,
-        string='Month',
+    date_from = fields.Date(
+        string='From',
         required=True,
-        default=lambda self: str(fields.Date.today().month),
+        default=lambda self: self._default_period()[0],
     )
-    summary_year = fields.Integer(
-        string='Year',
+    date_to = fields.Date(
+        string='To',
         required=True,
-        default=lambda self: fields.Date.today().year,
+        default=lambda self: self._default_period()[1],
     )
-    date_from = fields.Date(compute='_compute_month_bounds', store=True)
-    date_to = fields.Date(compute='_compute_month_bounds', store=True)
     company_id = fields.Many2one(
         'res.company',
         string='Company',
@@ -304,24 +284,28 @@ class HrAttendanceSummaryWizard(models.TransientModel):
         string='Summary',
     )
 
-    @api.depends('summary_year', 'summary_month')
-    def _compute_month_bounds(self):
-        for wizard in self:
-            if not wizard.summary_year or not wizard.summary_month:
-                wizard.date_from = False
-                wizard.date_to = False
-                continue
-            month = int(wizard.summary_month)
-            year = wizard.summary_year
-            last_day = calendar.monthrange(year, month)[1]
-            wizard.date_from = fields.Date.from_string('%04d-%02d-01' % (year, month))
-            wizard.date_to = fields.Date.from_string('%04d-%02d-%02d' % (year, month, last_day))
+    @api.model
+    def _default_period(self):
+        """Payroll window: the 25th through the 24th of the next month.
 
-    @api.constrains('summary_year')
-    def _check_summary_year(self):
+        On or after the 25th, the window starts this month. Before the 25th,
+        it starts on the 25th of the previous month.
+        """
+        today = fields.Date.context_today(self)
+        if today.day >= 25:
+            start = today.replace(day=25)
+        else:
+            previous = today.replace(day=1) - timedelta(days=1)
+            start = previous.replace(day=25)
+        end_year = start.year + (1 if start.month == 12 else 0)
+        end_month = 1 if start.month == 12 else start.month + 1
+        return start, start.replace(year=end_year, month=end_month, day=24)
+
+    @api.constrains('date_from', 'date_to')
+    def _check_date_range(self):
         for wizard in self:
-            if wizard.summary_year < 2000 or wizard.summary_year > 2100:
-                raise UserError(_('Year must be between 2000 and 2100.'))
+            if wizard.date_from and wizard.date_to and wizard.date_from > wizard.date_to:
+                raise ValidationError(_('The start date must be on or before the end date.'))
 
     @api.depends('date_from', 'date_to', 'company_id')
     def _compute_footnote(self):
@@ -331,24 +315,33 @@ class HrAttendanceSummaryWizard(models.TransientModel):
             else:
                 wizard.footnote = False
 
-    def _month_year(self, day):
-        return '%s %s' % (AR_MONTHS[day.month - 1], day.year)
+    def _format_ar_date(self, day):
+        return '%s %s %s' % (day.day, AR_MONTHS[day.month - 1], day.year)
+
+    def _period_label(self):
+        self.ensure_one()
+        if self.date_from.year == self.date_to.year and self.date_from.month == self.date_to.month:
+            return 'من %s إلى %s %s %s' % (
+                self.date_from.day,
+                self.date_to.day,
+                AR_MONTHS[self.date_to.month - 1],
+                self.date_to.year,
+            )
+        return 'من %s إلى %s' % (
+            self._format_ar_date(self.date_from),
+            self._format_ar_date(self.date_to),
+        )
 
     def _report_title(self):
         self.ensure_one()
         return 'ملخص الدوام | %s | %s' % (
-            self._month_year(self.date_from),
+            self._period_label(),
             self.company_id.name or '',
         )
 
     def _report_subtitle(self):
         self.ensure_one()
-        period = 'من %s إلى %s %s' % (
-            self.date_from.day,
-            self.date_to.day,
-            self._month_year(self.date_to),
-        )
-        return '%s · سجلات الحضور في Odoo · «أيام بلا بصمة» = أيام أنشأ لها النظام سجلاً فارغاً.' % period
+        return '%s · سجلات الحضور في Odoo · «أيام بلا بصمة» = أيام أنشأ لها النظام سجلاً فارغاً.' % self._period_label()
 
     def _headers(self):
         return [
@@ -367,18 +360,24 @@ class HrAttendanceSummaryWizard(models.TransientModel):
 
     def _filename(self):
         self.ensure_one()
-        return 'Shamsieh-Attendance-Summary-%s.xlsx' % self.date_from.strftime('%b-%Y')
+        return 'Shamsieh-Attendance-Summary-%s_%s.xlsx' % (
+            self.date_from.strftime('%Y-%m-%d'),
+            self.date_to.strftime('%Y-%m-%d'),
+        )
 
     def _docx_filename(self):
         self.ensure_one()
-        return 'Shamsieh-Attendance-Summary-%s.docx' % self.date_from.strftime('%b-%Y')
+        return 'Shamsieh-Attendance-Summary-%s_%s.docx' % (
+            self.date_from.strftime('%Y-%m-%d'),
+            self.date_to.strftime('%Y-%m-%d'),
+        )
 
     def _check_dates(self):
         self.ensure_one()
         if not self.date_from or not self.date_to:
-            raise UserError(_('Choose a month and year.'))
-        if self.summary_year < 2000 or self.summary_year > 2100:
-            raise UserError(_('Year must be between 2000 and 2100.'))
+            raise UserError(_('Choose a start date and an end date.'))
+        if self.date_from > self.date_to:
+            raise UserError(_('The start date must be on or before the end date.'))
 
     def _local_check_in_minutes(self, employee, check_in):
         tzname = (
