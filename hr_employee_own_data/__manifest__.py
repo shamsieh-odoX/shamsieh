@@ -1,6 +1,6 @@
 {
     'name': 'HR Employee Own Data',
-    'version': '19.0.1.0.7',
+    'version': '19.0.1.0.8',
     'category': 'Human Resources/Employees',
     'summary': 'Access right so employees can edit their own Work, Resume, Personal, and Badges data',
     'author': 'Custom',

@@ -46,7 +46,7 @@ class HrVersion(models.Model):
     children = fields.Integer(groups=_OWN)
     has_job = fields.Selection(
         [('yes', 'Yes'), ('no', 'No')],
-        string='Has a Job',
+        string='Spouse Works',
         groups=_OWN,
         tracking=True,
     )
